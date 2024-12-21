@@ -103,13 +103,10 @@ export default function ArticlePage() {
                   </span>
                 </div>
               </div>
-              <div className="prose max-w-none">
-                {blog.content.split("\n").map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-gray-700 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+              <div 
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
             </div>
           </article>
 
