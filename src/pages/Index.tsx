@@ -28,7 +28,6 @@ export default function Index() {
   const featuredArticles = blogs?.slice(0, 2) || [];
   const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
   const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
-  
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
 
