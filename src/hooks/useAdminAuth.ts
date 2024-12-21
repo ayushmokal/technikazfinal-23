@@ -28,11 +28,22 @@ export const useAdminAuth = () => {
 
     try {
       // First check if the user exists in admin_users table
-      const { data: adminCheck } = await supabase
+      const { data: adminCheck, error: adminCheckError } = await supabase
         .from("admin_users")
         .select("email")
         .eq("email", state.email)
-        .single();
+        .maybeSingle();
+
+      if (adminCheckError) {
+        console.error("Admin check error:", adminCheckError);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to verify admin status",
+        });
+        setState(prev => ({ ...prev, isLoading: false }));
+        return;
+      }
 
       if (!adminCheck) {
         toast({
