@@ -16,9 +16,10 @@ export default function GamesPage() {
   const { data: articles } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
+      console.log('Fetching games articles with platform:', platform);
       let query = supabase
         .from('blogs')
-        .select('*')
+        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at')
         .eq('category', 'GAMES')
         .order('created_at', { ascending: false });
 
@@ -29,12 +30,13 @@ export default function GamesPage() {
       
       const { data, error } = await query;
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching games articles:', error);
+        throw error;
+      }
       
-      return (data || []).map(article => ({
-        ...article,
-        upcoming: article.upcoming || false
-      }));
+      console.log('Games articles fetched successfully:', data);
+      return data;
     }
   });
 
@@ -42,7 +44,6 @@ export default function GamesPage() {
   const gridArticles = articles?.slice(1, 5) || [];
   const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles?.slice(0, 6) || [];
-  const upcomingArticles = articles?.filter(article => article.upcoming)?.slice(0, 5) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,13 +83,12 @@ export default function GamesPage() {
           <span className="text-gray-500">Ads Here</span>
         </div>
 
-        {/* Popular/Recent/Upcoming Tabs */}
+        {/* Popular/Recent Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <ArticleTabs
               popularArticles={popularArticles}
               recentArticles={recentArticles}
-              upcomingArticles={upcomingArticles}
               onTabChange={setActiveTab}
             />
           </div>
@@ -98,46 +98,6 @@ export default function GamesPage() {
             {/* Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
               <span className="text-gray-500">Ads Here</span>
-            </div>
-
-            {/* Upcoming Section */}
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-primary p-4">
-                <h2 className="text-white font-semibold">Upcomings</h2>
-                <div className="flex gap-2 mt-2">
-                  {["Games", "Phone", "Movies", "More"].map((tab) => (
-                    <Button
-                      key={tab}
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:text-primary hover:bg-white"
-                    >
-                      {tab}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="divide-y">
-                {upcomingArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="flex gap-4 p-4 hover:bg-gray-50"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-20 h-16 object-cover rounded"
-                    />
-                    <div>
-                      <h4 className="font-medium line-clamp-2">{article.title}</h4>
-                      <p className="text-sm text-gray-500">
-                        Coming {new Date(article.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
             </div>
 
             {/* Bottom Ad Space */}
