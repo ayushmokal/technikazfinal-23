@@ -21,15 +21,18 @@ export default function Index() {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
+      console.log('Fetched blogs:', data); // Debug log
       return data;
     }
   });
 
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
   const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
-  const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
+  const mobileArticles = blogs?.filter(blog => blog.category === 'GADGETS' && blog.subcategory === 'MOBILE').slice(0, 4) || [];
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
+
+  console.log('Mobile articles:', mobileArticles); // Debug log
 
   return (
     <div className="min-h-screen bg-gray-50">
