@@ -20,8 +20,8 @@ const categories = [
     subcategories: ["Movies", "Series", "Comics"],
   },
   {
-    name: "MOBILES",
-    path: "/mobiles",
+    name: "GADGETS",
+    path: "/gadgets",
     subcategories: ["Mobile", "Laptops"],
   },
   {
