@@ -22,11 +22,7 @@ export default function StocksPage() {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      
-      return (data || []).map(article => ({
-        ...article,
-        upcoming: article.upcoming || false
-      }));
+      return data || [];
     }
   });
 
@@ -34,7 +30,7 @@ export default function StocksPage() {
   const gridArticles = articles?.slice(1, 5) || [];
   const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles?.slice(0, 6) || [];
-  const upcomingArticles = articles?.filter(article => article.upcoming)?.slice(0, 5) || [];
+  const upcomingArticles = articles?.slice(0, 5) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
