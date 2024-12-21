@@ -9,6 +9,7 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,112 +28,152 @@ export default function AdminLogin() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (isLoading) {
+      toast({
+        variant: "destructive",
+        title: "Please wait",
+        description: "A request is already in progress.",
+      });
+      return;
+    }
+
     if (!validatePassword(password)) {
       return;
     }
 
-    const { data: { user }, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    setIsLoading(true);
 
-    if (signUpError) {
+    try {
+      const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (signUpError) {
+        if (signUpError.message.includes('rate_limit')) {
+          toast({
+            variant: "destructive",
+            title: "Rate Limit Exceeded",
+            description: "Please wait a moment before trying again.",
+          });
+          return;
+        }
+        throw signUpError;
+      }
+
+      if (!user) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create user",
+        });
+        return;
+      }
+
+      // Add user to admin_users table
+      const { error: adminError } = await supabase
+        .from("admin_users")
+        .insert([{ id: user.id, email: user.email }]);
+
+      if (adminError) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create admin user",
+        });
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "Admin account created successfully. Please log in.",
+      });
+      setIsSigningUp(false);
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: signUpError.message,
+        description: error.message,
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    if (!user) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to create user",
-      });
-      return;
-    }
-
-    // Add user to admin_users table
-    const { error: adminError } = await supabase
-      .from("admin_users")
-      .insert([{ id: user.id, email: user.email }]);
-
-    if (adminError) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to create admin user",
-      });
-      return;
-    }
-
-    toast({
-      title: "Success",
-      description: "Admin account created successfully. Please log in.",
-    });
-    setIsSigningUp(false);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { data: { user }, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    if (isLoading) {
+      return;
+    }
 
-    if (authError) {
+    setIsLoading(true);
+
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: authError.message,
+        });
+        return;
+      }
+
+      if (!user) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Authentication failed",
+        });
+        return;
+      }
+
+      // Check if user is an admin
+      const { data: adminData, error: adminError } = await supabase
+        .from("admin_users")
+        .select()
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (adminError) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to verify admin status",
+        });
+        await supabase.auth.signOut();
+        return;
+      }
+
+      if (!adminData) {
+        toast({
+          variant: "destructive",
+          title: "Access Denied",
+          description: "You are not authorized to access the admin panel",
+        });
+        await supabase.auth.signOut();
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "Logged in successfully",
+      });
+      navigate("/admin");
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: authError.message,
+        description: error.message,
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    if (!user) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Authentication failed",
-      });
-      return;
-    }
-
-    // Check if user is an admin
-    const { data: adminData, error: adminError } = await supabase
-      .from("admin_users")
-      .select()
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (adminError) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to verify admin status",
-      });
-      await supabase.auth.signOut();
-      return;
-    }
-
-    if (!adminData) {
-      toast({
-        variant: "destructive",
-        title: "Access Denied",
-        description: "You are not authorized to access the admin panel",
-      });
-      await supabase.auth.signOut();
-      return;
-    }
-
-    toast({
-      title: "Success",
-      description: "Logged in successfully",
-    });
-    navigate("/admin");
   };
 
   return (
@@ -157,6 +198,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -167,17 +209,19 @@ export default function AdminLogin() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
+                disabled={isLoading}
               />
             </div>
           </div>
-          <Button type="submit" className="w-full">
-            {isSigningUp ? "Sign Up" : "Sign In"}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Processing..." : (isSigningUp ? "Sign Up" : "Sign In")}
           </Button>
           <div className="text-center">
             <button
               type="button"
               onClick={() => setIsSigningUp(!isSigningUp)}
               className="text-sm text-blue-600 hover:text-blue-800"
+              disabled={isLoading}
             >
               {isSigningUp
                 ? "Already have an account? Sign in"
