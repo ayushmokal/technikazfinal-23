@@ -16,7 +16,7 @@ export interface BlogFormData {
 export const categories = {
   TECH: ["Tech Deals", "News"],
   GAMES: ["PC", "PS5", "Xbox", "Nintendo"],
-  ENTERTAINMENT: ["Movies", "TV Shows", "Music", "Anime"],
+  ENTERTAINMENT: ["MOVIES", "SERIES", "COMICS"],
   STOCKS: ["Market News", "Analysis", "IPO", "Crypto"]
 } as const;
 
