@@ -21,12 +21,17 @@ export function BlogManager() {
   const { data: blogs, refetch } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
+      console.log('Fetching blogs...');
       const { data, error } = await supabase
         .from('blogs')
-        .select('*')
+        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching blogs:', error);
+        throw error;
+      }
+      console.log('Blogs fetched successfully:', data);
       return data;
     },
   });
