@@ -1,22 +1,22 @@
 export interface BlogFormData {
-  id: string;
+  id?: string;
   title: string;
   content: string;
-  image_url: string;
   category: string;
   subcategory: string;
-  slug: string;
   author: string;
-  created_at: string;
-  updated_at: string;
-  featured: boolean;
-  popular: boolean;
+  image_url: string;
+  slug: string;
+  featured?: boolean;
+  popular?: boolean;
 }
 
 export const categories = {
-  GAMES: ["ALL", "PS5", "Xbox", "Nintendo", "PC"],
   TECH: ["Tech Deals", "News"],
-  ENTERTAINMENT: ["Movies", "Series", "Comics"],
-  GADGETS: ["Mobile", "Laptops"],
-  STOCKS: [],
-};
+  GAMES: ["PC", "PS5", "Xbox", "Nintendo"],
+  ENTERTAINMENT: ["Movies", "TV Shows", "Music", "Anime"],
+  STOCKS: ["Market News", "Analysis", "IPO", "Crypto"]
+} as const;
+
+export type Category = keyof typeof categories;
+export type Subcategory = typeof categories[Category][number];

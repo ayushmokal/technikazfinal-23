@@ -21,7 +21,8 @@ export default function TechPage() {
         .from('blogs')
         .select('*')
         .eq('category', 'TECH')
-        .eq('subcategory', subcategory);
+        .eq('subcategory', subcategory)
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching tech articles:', error);
