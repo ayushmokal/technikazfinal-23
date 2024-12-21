@@ -27,14 +27,14 @@ export const useAdminAuth = () => {
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
-      const { data: { user }, error: authError } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: state.email,
         password: state.password,
       });
 
-      if (authError) throw authError;
+      if (error) throw error;
 
-      if (!user) {
+      if (!data.user) {
         toast({
           variant: "destructive",
           title: "Error",
@@ -46,8 +46,8 @@ export const useAdminAuth = () => {
       const { data: adminData, error: adminError } = await supabase
         .from("admin_users")
         .select()
-        .eq("id", user.id)
-        .maybeSingle();
+        .eq("id", data.user.id)
+        .single();
 
       if (adminError) throw adminError;
 

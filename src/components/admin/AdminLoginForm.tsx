@@ -43,7 +43,11 @@ export const AdminLoginForm = ({
           />
         </div>
       </div>
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button 
+        type="submit" 
+        className="w-full bg-emerald-600 hover:bg-emerald-700" 
+        disabled={isLoading}
+      >
         {isLoading ? "Processing..." : "Sign In"}
       </Button>
     </form>
