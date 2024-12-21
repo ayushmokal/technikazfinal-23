@@ -13,17 +13,40 @@ export default function GamesPage() {
   const [platform, setPlatform] = useState("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
+  // Separate query for featured articles
+  const { data: featuredArticles } = useQuery({
+    queryKey: ['games-featured-articles'],
+    queryFn: async () => {
+      console.log('Fetching featured games articles');
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('category', 'GAMES')
+        .eq('featured', true)
+        .order('created_at', { ascending: false })
+        .limit(7);
+      
+      if (error) {
+        console.error('Error fetching featured games articles:', error);
+        throw error;
+      }
+      
+      console.log('Featured games articles fetched:', data);
+      return data || [];
+    }
+  });
+
+  // Regular articles query
   const { data: articles } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
       console.log('Fetching games articles with platform:', platform);
       let query = supabase
         .from('blogs')
-        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at, updated_at')
+        .select('*')
         .eq('category', 'GAMES')
         .order('created_at', { ascending: false });
 
-      // Only apply subcategory filter if not "ALL"
       if (platform !== "ALL") {
         query = query.eq('subcategory', platform);
       }
@@ -40,8 +63,8 @@ export default function GamesPage() {
     }
   });
 
-  const featuredArticle = articles?.[0];
-  const gridArticles = articles?.slice(1, 5) || [];
+  const mainFeaturedArticle = featuredArticles?.[0];
+  const gridFeaturedArticles = featuredArticles?.slice(1) || [];
   const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles?.slice(0, 6) || [];
 
@@ -72,11 +95,16 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {/* Hero Section */}
-        <CategoryHero featuredArticle={featuredArticle} gridArticles={gridArticles} />
+        {/* Featured Articles Section */}
+        {mainFeaturedArticle && (
+          <CategoryHero 
+            featuredArticle={mainFeaturedArticle} 
+            gridArticles={gridFeaturedArticles}
+          />
+        )}
 
         {/* Grid Section */}
-        <ArticleGrid articles={gridArticles} />
+        <ArticleGrid articles={articles || []} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
