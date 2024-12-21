@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
 import type { BlogFormData } from "@/types/blog";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function ArticlePage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchBlog();
@@ -19,19 +22,35 @@ export default function ArticlePage() {
         .from("blogs")
         .select("*")
         .eq("slug", slug)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      
+      if (!data) {
+        toast({
+          variant: "destructive",
+          title: "Article not found",
+          description: "The article you're looking for doesn't exist.",
+        });
+        navigate("/");
+        return;
+      }
+
       setBlog(data);
     } catch (error) {
       console.error("Error fetching blog:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load the article. Please try again later.",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (!blog) return <div>Blog not found</div>;
+  if (!blog) return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -60,7 +79,7 @@ export default function ArticlePage() {
             <div className="flex items-center text-gray-600 mb-8">
               <span className="mr-4">By {blog.author}</span>
               <span>
-                {new Date().toLocaleDateString("en-US", {
+                {new Date(blog.created_at).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
