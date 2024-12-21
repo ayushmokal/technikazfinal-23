@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -12,9 +12,25 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validatePassword = (password: string) => {
+    if (password.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Invalid Password",
+        description: "Password must be at least 6 characters long.",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!validatePassword(password)) {
+      return;
+    }
+
     const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -126,6 +142,11 @@ export default function AdminLogin() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Admin {isSigningUp ? "Sign Up" : "Login"}
           </h2>
+          {isSigningUp && (
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Password must be at least 6 characters long
+            </p>
+          )}
         </div>
         <form className="mt-8 space-y-6" onSubmit={isSigningUp ? handleSignUp : handleLogin}>
           <div className="space-y-4">
@@ -145,6 +166,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={6}
               />
             </div>
           </div>
