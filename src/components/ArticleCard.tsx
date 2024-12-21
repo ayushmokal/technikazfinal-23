@@ -30,17 +30,17 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
         />
       </div>
       <div className="p-4">
-        <div className="mb-2">
-          <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
-            {category}
-          </span>
-        </div>
         <h3 className={cn(
-          "font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors",
+          "font-bold leading-tight mb-2 group-hover:text-primary transition-colors",
           featured ? "text-2xl md:text-3xl" : "text-lg"
         )}>
           {title}
         </h3>
+        <div>
+          <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
+            {category}
+          </span>
+        </div>
       </div>
     </Link>
   );
