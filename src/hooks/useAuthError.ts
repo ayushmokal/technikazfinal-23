@@ -26,7 +26,7 @@ export const handleAuthError = (error: any, toast: Toast) => {
     toast({
       variant: "destructive",
       title: "Email Not Confirmed",
-      description: "Please check your email and confirm your account before logging in.",
+      description: "Please check your email and confirm your account, or contact the system administrator.",
     });
     return;
   }

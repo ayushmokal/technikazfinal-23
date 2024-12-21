@@ -27,6 +27,23 @@ export const useAdminAuth = () => {
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
+      // First check if the user exists in admin_users table
+      const { data: adminCheck } = await supabase
+        .from("admin_users")
+        .select("email")
+        .eq("email", state.email)
+        .single();
+
+      if (!adminCheck) {
+        toast({
+          variant: "destructive",
+          title: "Access Denied",
+          description: "This email is not registered as an admin user.",
+        });
+        setState(prev => ({ ...prev, isLoading: false }));
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: state.email,
         password: state.password,
@@ -39,28 +56,6 @@ export const useAdminAuth = () => {
           variant: "destructive",
           title: "Error",
           description: "Authentication failed",
-        });
-        return;
-      }
-
-      // Check if user is an admin
-      const { data: adminData, error: adminError } = await supabase
-        .from("admin_users")
-        .select()
-        .eq("id", data.user.id)
-        .single();
-
-      if (adminError) {
-        console.error("Admin check error:", adminError);
-        throw new Error("Failed to verify admin status");
-      }
-
-      if (!adminData) {
-        await supabase.auth.signOut();
-        toast({
-          variant: "destructive",
-          title: "Access Denied",
-          description: "You are not authorized to access the admin panel",
         });
         return;
       }
