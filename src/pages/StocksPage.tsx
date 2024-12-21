@@ -70,10 +70,13 @@ export default function StocksPage() {
         <h1 className="text-4xl font-bold text-center mb-8">Stocks</h1>
 
         {/* Hero Section */}
-        <CategoryHero featuredArticle={featuredArticle} gridArticles={gridArticles} />
+        <CategoryHero 
+          featuredArticle={mainFeaturedArticle} 
+          gridArticles={gridFeaturedArticles} 
+        />
 
         {/* Grid Section */}
-        <ArticleGrid articles={gridArticles} />
+        <ArticleGrid articles={gridFeaturedArticles} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">

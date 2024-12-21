@@ -91,12 +91,14 @@ export default function TechPage() {
         </div>
 
         {/* Hero Section */}
-        <CategoryHero featuredArticle={featuredArticle} gridArticles={gridArticles} />
+        <CategoryHero 
+          featuredArticle={mainFeaturedArticle} 
+          gridArticles={gridFeaturedArticles} 
+        />
 
         {/* Grid Section */}
-        <ArticleGrid articles={gridArticles} />
+        <ArticleGrid articles={gridFeaturedArticles} />
 
-        {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
           <span className="text-gray-500">Ads Here</span>
         </div>
