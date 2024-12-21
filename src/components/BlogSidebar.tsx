@@ -23,6 +23,8 @@ export function BlogSidebar() {
     }
   });
 
+  const categories = ["GAMES", "TECH ENTERTAINMENT", "GADGETS", "STOCKS"];
+
   return (
     <aside className="space-y-8">
       <div className="rounded-lg border-2 border-emerald-600">
@@ -32,8 +34,8 @@ export function BlogSidebar() {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex border-b border-emerald-600">
-          {["GAMES", "PHONE", "MOVIES", "MORE"].map((category) => (
+        <div className="flex flex-wrap border-b border-emerald-600">
+          {categories.map((category) => (
             <Button
               key={category}
               variant="ghost"
@@ -44,7 +46,7 @@ export function BlogSidebar() {
               }`}
               onClick={() => setSelectedCategory(category)}
             >
-              {category.charAt(0) + category.slice(1).toLowerCase()}
+              {category.split(' ').map(word => word.charAt(0) + word.slice(1).toLowerCase()).join(' ')}
             </Button>
           ))}
         </div>
