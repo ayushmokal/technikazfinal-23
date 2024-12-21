@@ -14,26 +14,45 @@ export default function AdminLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { data: { user }, error } = await supabase.auth.signInWithPassword({
+    const { data: { user }, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
+    if (authError) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: authError.message,
       });
       return;
     }
 
-    // Check if user is an admin
-    const { data: adminData } = await supabase
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Authentication failed",
+      });
+      return;
+    }
+
+    // Check if user is an admin using maybeSingle() instead of single()
+    const { data: adminData, error: adminError } = await supabase
       .from("admin_users")
       .select()
-      .eq("id", user?.id)
-      .single();
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (adminError) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to verify admin status",
+      });
+      await supabase.auth.signOut();
+      return;
+    }
 
     if (!adminData) {
       toast({
