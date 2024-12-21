@@ -54,45 +54,6 @@ export type Database = {
         }
         Relationships: []
       }
-      mobile_products: {
-        Row: {
-          battery: string
-          camera: string
-          created_at: string
-          display_specs: string
-          id: string
-          image_url: string | null
-          name: string
-          price: number
-          processor: string
-          updated_at: string
-        }
-        Insert: {
-          battery: string
-          camera: string
-          created_at?: string
-          display_specs: string
-          id?: string
-          image_url?: string | null
-          name: string
-          price: number
-          processor: string
-          updated_at?: string
-        }
-        Update: {
-          battery?: string
-          camera?: string
-          created_at?: string
-          display_specs?: string
-          id?: string
-          image_url?: string | null
-          name?: string
-          price?: number
-          processor?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
