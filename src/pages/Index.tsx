@@ -56,7 +56,7 @@ export default function Index() {
                 image={article.image_url || ''}
                 category={article.category}
                 slug={article.slug}
-                featured={index === 0} // Make the first card larger
+                featured={index === 0}
               />
             ))}
           </div>
@@ -96,7 +96,7 @@ export default function Index() {
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold">MOBILES</h2>
-              <Link to="/MOBILES" className="text-sm text-primary hover:underline">See All</Link>
+              <Link to="/gadgets?subcategory=MOBILE" className="text-sm text-primary hover:underline">See All</Link>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon">
