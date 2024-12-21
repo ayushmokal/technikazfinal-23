@@ -9,6 +9,8 @@ export interface BlogFormData {
   slug: string;
   featured?: boolean;
   popular?: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export const categories = {
