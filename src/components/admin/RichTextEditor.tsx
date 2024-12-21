@@ -21,7 +21,8 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     },
   });
 
-  const addImage = () => {
+  const addImage = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
     const url = window.prompt('Enter the URL of the image:');
     if (url && editor) {
       editor.chain().focus().setImage({ src: url }).run();
@@ -36,38 +37,55 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     <div className="border rounded-md">
       <div className="border-b p-2 flex gap-2 bg-secondary">
         <Button
+          type="button" // Explicitly set button type
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleBold().run()}
+          onClick={(e) => {
+            e.preventDefault(); // Prevent form submission
+            editor.chain().focus().toggleBold().run();
+          }}
           className={editor.isActive('bold') ? 'bg-muted' : ''}
         >
           <Bold className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
+          onClick={(e) => {
+            e.preventDefault();
+            editor.chain().focus().toggleItalic().run();
+          }}
           className={editor.isActive('italic') ? 'bg-muted' : ''}
         >
           <Italic className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          onClick={(e) => {
+            e.preventDefault();
+            editor.chain().focus().toggleBulletList().run();
+          }}
           className={editor.isActive('bulletList') ? 'bg-muted' : ''}
         >
           <List className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          onClick={(e) => {
+            e.preventDefault();
+            editor.chain().focus().toggleOrderedList().run();
+          }}
           className={editor.isActive('orderedList') ? 'bg-muted' : ''}
         >
           <ListOrdered className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={addImage}
