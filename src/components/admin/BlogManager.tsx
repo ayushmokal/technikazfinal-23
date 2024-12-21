@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Star, Trash2 } from "lucide-react";
 import { categories } from "@/types/blog";
 
 export function BlogManager() {
@@ -56,6 +56,28 @@ export function BlogManager() {
     console.log("Edit blog:", slug);
   };
 
+  const togglePopular = async (id: string, currentValue: boolean) => {
+    const { error } = await supabase
+      .from('blogs')
+      .update({ popular: !currentValue })
+      .eq('id', id);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update blog status",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Blog status updated successfully",
+    });
+    refetch();
+  };
+
   return (
     <div className="space-y-4">
       {Object.keys(categories).map((category) => (
@@ -69,7 +91,7 @@ export function BlogManager() {
                   <TableHead>Subcategory</TableHead>
                   <TableHead>Author</TableHead>
                   <TableHead>Created At</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead className="w-[150px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -85,6 +107,13 @@ export function BlogManager() {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => togglePopular(blog.id, blog.popular || false)}
+                          >
+                            <Star className={`h-4 w-4 ${blog.popular ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"

@@ -7,8 +7,11 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Index() {
+  const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
+
   const { data: blogs } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
@@ -25,6 +28,8 @@ export default function Index() {
   const featuredArticles = blogs?.slice(0, 2) || [];
   const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
   const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
+  
+  const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
 
   return (
@@ -110,14 +115,26 @@ export default function Index() {
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Recent Articles */}
+          {/* Popular/Recent Articles */}
           <div className="lg:col-span-2">
             <div className="flex gap-4 mb-6">
-              <Button variant="outline" className="rounded-full">Popular</Button>
-              <Button variant="outline" className="rounded-full">Recent</Button>
+              <Button 
+                variant={activeTab === 'popular' ? 'default' : 'outline'} 
+                className="rounded-full"
+                onClick={() => setActiveTab('popular')}
+              >
+                Popular
+              </Button>
+              <Button 
+                variant={activeTab === 'recent' ? 'default' : 'outline'} 
+                className="rounded-full"
+                onClick={() => setActiveTab('recent')}
+              >
+                Recent
+              </Button>
             </div>
             <div className="space-y-6">
-              {recentArticles.map((article) => (
+              {(activeTab === 'popular' ? popularArticles : recentArticles).map((article) => (
                 <Link 
                   to={`/article/${article.slug}`}
                   key={article.slug} 
