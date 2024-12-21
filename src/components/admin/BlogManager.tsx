@@ -24,7 +24,7 @@ export function BlogManager() {
       console.log('Fetching blogs...');
       const { data, error } = await supabase
         .from('blogs')
-        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at')
+        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at, updated_at')
         .order('created_at', { ascending: false });
 
       if (error) {
