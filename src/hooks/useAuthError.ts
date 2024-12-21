@@ -1,4 +1,5 @@
-import { Toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
+type Toast = ReturnType<typeof useToast>["toast"];
 
 export const handleAuthError = (error: any, toast: Toast) => {
   if (error.message.includes('rate_limit')) {
@@ -15,6 +16,15 @@ export const handleAuthError = (error: any, toast: Toast) => {
       variant: "destructive",
       title: "Email Not Confirmed",
       description: "Please check your email and confirm your account before logging in. Check your spam folder if you don't see the email.",
+    });
+    return;
+  }
+
+  if (error.message.includes('invalid_credentials')) {
+    toast({
+      variant: "destructive",
+      title: "Invalid Credentials",
+      description: "The email or password you entered is incorrect. Please try again.",
     });
     return;
   }

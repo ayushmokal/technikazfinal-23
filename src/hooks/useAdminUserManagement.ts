@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { Toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
+type Toast = ReturnType<typeof useToast>["toast"];
 
 export const handleAdminUserCreation = async (
   user: User,

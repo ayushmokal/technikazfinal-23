@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AdminAuthState } from "@/hooks/useAdminAuth";
+import { AdminAuthState } from "@/hooks/useAuthTypes";
 
 interface AdminLoginFormProps extends AdminAuthState {
   onSubmit: (e: React.FormEvent) => Promise<void>;
