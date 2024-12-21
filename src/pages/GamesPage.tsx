@@ -19,7 +19,7 @@ export default function GamesPage() {
       console.log('Fetching games articles with platform:', platform);
       let query = supabase
         .from('blogs')
-        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at')
+        .select('id, title, content, category, subcategory, author, image_url, slug, featured, popular, created_at, updated_at')
         .eq('category', 'GAMES')
         .order('created_at', { ascending: false });
 
