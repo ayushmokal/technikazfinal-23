@@ -15,7 +15,7 @@ export interface BlogFormData {
 }
 
 export const categories = {
-  GAMES: ["PS5", "Xbox", "Nintendo", "PC"],
+  GAMES: ["ALL", "PS5", "Xbox", "Nintendo", "PC"],
   TECH: ["Tech Deals", "News"],
   ENTERTAINMENT: ["Movies", "Series", "Comics"],
   GADGETS: ["Mobile", "Laptops"],
