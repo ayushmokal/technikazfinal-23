@@ -8,9 +8,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { categories } from "@/types/blog";
+import type { Subcategory } from "@/types/blog";
 
 export default function EntertainmentPage() {
-  const [subcategory, setSubcategory] = useState("MOVIES");
+  const [subcategory, setSubcategory] = useState<Subcategory>(categories.ENTERTAINMENT[0]);
   const [activeTab, setActiveTab] = useState("popular");
 
   // Separate query for featured articles
@@ -34,7 +36,7 @@ export default function EntertainmentPage() {
     }
   });
 
-  // Regular articles query
+  // Regular articles query with subcategory filter
   const { data: articles = [], isLoading: isArticlesLoading } = useQuery({
     queryKey: ['entertainment-articles', subcategory],
     queryFn: async () => {
@@ -50,6 +52,7 @@ export default function EntertainmentPage() {
         return [];
       }
       
+      console.log('Fetched articles:', data); // Debug log
       return data || [];
     }
   });
@@ -89,14 +92,14 @@ export default function EntertainmentPage() {
 
         {/* Subcategory Filter */}
         <div className="flex justify-center gap-4 mb-8">
-          {["MOVIES", "SERIES", "COMICS"].map((s) => (
+          {categories.ENTERTAINMENT.map((sub) => (
             <Button
-              key={s}
-              variant={subcategory === s ? "default" : "outline"}
-              onClick={() => setSubcategory(s)}
+              key={sub}
+              variant={subcategory === sub ? "default" : "outline"}
+              onClick={() => setSubcategory(sub)}
               className="min-w-[100px]"
             >
-              {s}
+              {sub}
             </Button>
           ))}
         </div>
@@ -108,7 +111,7 @@ export default function EntertainmentPage() {
         />
 
         {/* Grid Section */}
-        <ArticleGrid articles={gridFeaturedArticles} />
+        <ArticleGrid articles={articles} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
