@@ -1,27 +1,8 @@
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { $getRoot, $createParagraphNode, EditorState } from 'lexical';
-
-const theme = {
-  paragraph: 'mb-2',
-  text: {
-    bold: 'font-bold',
-    italic: 'italic',
-    underline: 'underline',
-  },
-};
-
-const initialConfig = {
-  namespace: 'BlogEditor',
-  theme,
-  onError: (error: Error) => {
-    console.error(error);
-  },
-};
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
+import { Button } from "@/components/ui/button";
+import { ImageIcon, Bold, Italic, List, ListOrdered } from "lucide-react";
 
 interface RichTextEditorProps {
   content: string;
@@ -29,39 +10,75 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
-  const initialState = () => {
-    const root = $getRoot();
-    if (root.getFirstChild() === null) {
-      const paragraph = $createParagraphNode();
-      root.append(paragraph);
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image,
+    ],
+    content,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  const addImage = () => {
+    const url = window.prompt('Enter the URL of the image:');
+    if (url && editor) {
+      editor.chain().focus().setImage({ src: url }).run();
     }
   };
 
-  const handleChange = (editorState: EditorState) => {
-    editorState.read(() => {
-      const root = $getRoot();
-      const content = root.getTextContent();
-      onChange(content);
-    });
-  };
+  if (!editor) {
+    return null;
+  }
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <div className="relative min-h-[200px] w-full border rounded-lg">
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className="min-h-[200px] outline-none p-4" />
-          }
-          placeholder={
-            <div className="absolute top-[1.125rem] left-[1.125rem] text-gray-400">
-              Start writing your content...
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={handleChange} />
-        <HistoryPlugin />
+    <div className="border rounded-md">
+      <div className="border-b p-2 flex gap-2 bg-secondary">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={editor.isActive('bold') ? 'bg-muted' : ''}
+        >
+          <Bold className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={editor.isActive('italic') ? 'bg-muted' : ''}
+        >
+          <Italic className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive('bulletList') ? 'bg-muted' : ''}
+        >
+          <List className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive('orderedList') ? 'bg-muted' : ''}
+        >
+          <ListOrdered className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={addImage}
+        >
+          <ImageIcon className="h-4 w-4" />
+        </Button>
       </div>
-    </LexicalComposer>
+      <EditorContent 
+        editor={editor} 
+        className="prose max-w-none p-4 min-h-[200px] focus:outline-none"
+      />
+    </div>
   );
 }
