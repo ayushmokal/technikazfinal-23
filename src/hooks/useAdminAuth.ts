@@ -2,13 +2,9 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-
-export interface AdminAuthState {
-  email: string;
-  password: string;
-  isSigningUp: boolean;
-  isLoading: boolean;
-}
+import { handleAuthError } from "./useAuthError";
+import { AdminAuthState } from "./useAuthTypes";
+import { handleAdminUserCreation } from "./useAdminUserManagement";
 
 export const useAdminAuth = () => {
   const [state, setState] = useState<AdminAuthState>({
@@ -19,18 +15,6 @@ export const useAdminAuth = () => {
   });
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  const validatePassword = (password: string) => {
-    if (password.length < 6) {
-      toast({
-        variant: "destructive",
-        title: "Invalid Password",
-        description: "Password must be at least 6 characters long.",
-      });
-      return false;
-    }
-    return true;
-  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,10 +28,6 @@ export const useAdminAuth = () => {
       return;
     }
 
-    if (!validatePassword(state.password)) {
-      return;
-    }
-
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
@@ -56,17 +36,7 @@ export const useAdminAuth = () => {
         password: state.password,
       });
 
-      if (signUpError) {
-        if (signUpError.message.includes('rate_limit')) {
-          toast({
-            variant: "destructive",
-            title: "Rate Limit Exceeded",
-            description: "Please wait a moment before trying again.",
-          });
-          return;
-        }
-        throw signUpError;
-      }
+      if (signUpError) throw signUpError;
 
       if (!user) {
         toast({
@@ -77,48 +47,10 @@ export const useAdminAuth = () => {
         return;
       }
 
-      try {
-        const { error: adminError } = await supabase
-          .from("admin_users")
-          .insert([{ id: user.id, email: user.email }]);
-
-        if (adminError) {
-          if (adminError.code === '23505') {
-            toast({
-              variant: "destructive",
-              title: "Email Already Exists",
-              description: "This email is already registered. Please try logging in instead.",
-            });
-            setState(prev => ({ ...prev, isSigningUp: false }));
-            return;
-          }
-          
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to create admin user",
-          });
-          return;
-        }
-
-        toast({
-          title: "Success",
-          description: "Admin account created successfully. Please log in.",
-        });
-        setState(prev => ({ ...prev, isSigningUp: false }));
-      } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
-        });
-      }
+      await handleAdminUserCreation(user, setState, toast);
+      
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
+      handleAuthError(error, toast);
     } finally {
       setState(prev => ({ ...prev, isLoading: false }));
     }
@@ -127,9 +59,7 @@ export const useAdminAuth = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (state.isLoading) {
-      return;
-    }
+    if (state.isLoading) return;
 
     setState(prev => ({ ...prev, isLoading: true }));
 
@@ -139,14 +69,7 @@ export const useAdminAuth = () => {
         password: state.password,
       });
 
-      if (authError) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: authError.message,
-        });
-        return;
-      }
+      if (authError) throw authError;
 
       if (!user) {
         toast({
@@ -163,15 +86,7 @@ export const useAdminAuth = () => {
         .eq("id", user.id)
         .maybeSingle();
 
-      if (adminError) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to verify admin status",
-        });
-        await supabase.auth.signOut();
-        return;
-      }
+      if (adminError) throw adminError;
 
       if (!adminData) {
         toast({
@@ -189,11 +104,7 @@ export const useAdminAuth = () => {
       });
       navigate("/admin");
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
+      handleAuthError(error, toast);
     } finally {
       setState(prev => ({ ...prev, isLoading: false }));
     }
