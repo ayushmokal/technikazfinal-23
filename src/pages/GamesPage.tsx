@@ -9,9 +9,10 @@ import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
+import type { Subcategory } from "@/types/blog";
 
 export default function GamesPage() {
-  const [platform, setPlatform] = useState(categories.GAMES[0]); // Default to first subcategory
+  const [platform, setPlatform] = useState<Subcategory>(categories.GAMES[0]); // Properly typed state
   const [activeTab, setActiveTab] = useState("popular");
 
   // Separate query for featured articles
