@@ -15,10 +15,14 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
       to={`/article/${slug}`}
       className={cn(
         "group relative overflow-hidden rounded-lg bg-white shadow-lg transition-all duration-300 hover:shadow-xl",
+        featured ? "md:col-span-2 md:row-span-2" : "",
         "animate-fadeIn"
       )}
     >
-      <div className="aspect-video w-full overflow-hidden">
+      <div className={cn(
+        "aspect-video w-full overflow-hidden",
+        featured && "md:aspect-[16/9]"
+      )}>
         <img
           src={image || '/placeholder.svg'}
           alt={title}
@@ -32,7 +36,10 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
             {category}
           </span>
         </div>
-        <h3 className="text-lg font-bold leading-tight line-clamp-2 group-hover:text-primary-foreground transition-colors">
+        <h3 className={cn(
+          "font-bold leading-tight line-clamp-2 group-hover:text-primary-foreground transition-colors",
+          featured ? "text-2xl md:text-3xl" : "text-lg"
+        )}>
           {title}
         </h3>
       </div>

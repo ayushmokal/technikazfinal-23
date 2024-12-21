@@ -25,39 +25,19 @@ export default function Index() {
     }
   });
 
-  const featuredArticles = blogs?.slice(0, 2) || [];
+  const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
   const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
   const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
-  const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <main className="container mx-auto px-4 py-8">
-        {/* Ad Space */}
-        <div className="w-full h-20 bg-gray-200 mb-8 flex items-center justify-center">
-          <span className="text-gray-500">Ads Here</span>
-        </div>
-
-        {/* Featured Stories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {featuredArticles.map((article) => (
-            <ArticleCard
-              key={article.slug}
-              title={article.title}
-              image={article.image_url || ''}
-              category={article.category}
-              slug={article.slug}
-              featured
-            />
-          ))}
-        </div>
-
         {/* Homepage Featured Section */}
         <section className="mb-12">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Featured Stories</h2>
             <div className="flex gap-2">
               <Button variant="outline" size="icon">
@@ -68,14 +48,15 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {homepageFeatured.map((article) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {homepageFeatured.map((article, index) => (
               <ArticleCard
                 key={article.slug}
                 title={article.title}
                 image={article.image_url || ''}
                 category={article.category}
                 slug={article.slug}
+                featured={index === 0} // Make the first card larger
               />
             ))}
           </div>
