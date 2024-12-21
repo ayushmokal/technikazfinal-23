@@ -13,6 +13,30 @@ export default function EntertainmentPage() {
   const [subcategory, setSubcategory] = useState("MOVIES");
   const [activeTab, setActiveTab] = useState("popular");
 
+  // Separate query for featured articles
+  const { data: featuredArticles } = useQuery({
+    queryKey: ['entertainment-featured-articles'],
+    queryFn: async () => {
+      console.log('Fetching featured entertainment articles');
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('category', 'ENTERTAINMENT')
+        .eq('featured', true)
+        .order('created_at', { ascending: false })
+        .limit(7);
+      
+      if (error) {
+        console.error('Error fetching featured entertainment articles:', error);
+        throw error;
+      }
+      
+      console.log('Featured entertainment articles fetched:', data);
+      return data || [];
+    }
+  });
+
+  // Regular articles query
   const { data: articles } = useQuery({
     queryKey: ['entertainment-articles', subcategory],
     queryFn: async () => {
@@ -28,8 +52,8 @@ export default function EntertainmentPage() {
     }
   });
 
-  const featuredArticle = articles?.[0];
-  const gridArticles = articles?.slice(1, 5) || [];
+  const mainFeaturedArticle = featuredArticles?.[0];
+  const gridFeaturedArticles = featuredArticles?.slice(1) || [];
   const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles?.slice(0, 6) || [];
   const upcomingArticles = articles?.slice(0, 5) || [];
