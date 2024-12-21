@@ -20,7 +20,7 @@ export const handleAuthError = (error: any, toast: Toast) => {
     return;
   }
 
-  if (error.message.includes('email_not_confirmed')) {
+  if (error.message.includes('email_not_confirmed') || error.message.includes('Email not confirmed')) {
     toast({
       variant: "destructive",
       title: "Email Not Confirmed",
