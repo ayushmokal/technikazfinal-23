@@ -14,14 +14,14 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
     <Link
       to={`/article/${slug}`}
       className={cn(
-        "group relative overflow-hidden rounded-lg bg-white shadow-lg transition-all duration-300 hover:shadow-xl",
-        featured ? "md:col-span-2 md:row-span-2" : "",
+        "group block overflow-hidden rounded-lg bg-white transition-all duration-300 hover:shadow-lg",
+        featured ? "md:col-span-2" : "",
         "animate-fadeIn"
       )}
     >
       <div className={cn(
-        "aspect-video w-full overflow-hidden",
-        featured && "md:aspect-[16/9]"
+        "relative aspect-[16/9] w-full overflow-hidden",
+        featured && "md:aspect-[21/9]"
       )}>
         <img
           src={image || '/placeholder.svg'}
@@ -31,13 +31,13 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
       </div>
       <div className="p-4">
         <h3 className={cn(
-          "font-bold leading-tight mb-2 group-hover:text-primary transition-colors",
-          featured ? "text-2xl md:text-3xl" : "text-lg"
+          "font-bold leading-tight mb-3 group-hover:text-primary transition-colors",
+          featured ? "text-xl md:text-2xl" : "text-lg"
         )}>
           {title}
         </h3>
         <div>
-          <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
+          <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             {category}
           </span>
         </div>
