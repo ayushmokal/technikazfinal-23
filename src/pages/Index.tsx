@@ -37,17 +37,6 @@ export default function Index() {
       <main className="container mx-auto px-4 py-8">
         {/* Homepage Featured Section */}
         <section className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Featured Stories</h2>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             {/* Top featured articles (60/40 split) */}
             {homepageFeatured.slice(0, 2).map((article, index) => (
