@@ -104,6 +104,40 @@ export default function Index() {
           <span className="text-gray-500">Ads Here</span>
         </div>
 
+        {/* Mobiles Section */}
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">MOBILES</h2>
+              <Link to="/gadgets?subcategory=MOBILE" className="text-sm text-primary hover:underline">See All</Link>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {mobileArticles.map((article) => (
+              <ArticleCard
+                key={article.slug}
+                title={article.title}
+                image={article.image_url || ''}
+                category={article.category}
+                slug={article.slug}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Advertisement Section */}
+        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Ads Here</span>
+        </div>
+
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Popular/Recent Articles */}
