@@ -27,7 +27,9 @@ export function ArticleCard({
         "animate-fadeIn"
       )}
     >
-      <div className="relative w-full h-[400px] overflow-hidden">
+      <div className={cn(
+        "relative w-full overflow-hidden aspect-[16/9]"
+      )}>
         <img
           src={image || '/placeholder.svg'}
           alt={title}
