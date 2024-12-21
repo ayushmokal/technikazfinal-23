@@ -4,7 +4,6 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { ImageUpload } from "./ImageUpload";
 import { CategorySelect } from "./CategorySelect";
+import { RichTextEditor } from "./RichTextEditor";
 import { categories, type BlogFormData } from "@/types/blog";
 
 export function BlogForm() {
@@ -165,10 +165,9 @@ export function BlogForm() {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Write your blog content here..."
-                  className="min-h-[200px]"
-                  {...field}
+                <RichTextEditor 
+                  content={field.value} 
+                  onChange={field.onChange}
                 />
               </FormControl>
               <FormMessage />
