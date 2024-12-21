@@ -4,20 +4,19 @@ import { Navigation } from "@/components/Navigation";
 import { ArticleCard } from "@/components/ArticleCard";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlogFormData } from "@/types/blog";
-import { categories } from "@/types/blog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+
+const platforms = ["PS5", "Xbox", "Nintendo", "PC"];
 
 export default function CategoryPage() {
   const { category } = useParams();
   const [articles, setArticles] = useState<BlogFormData[]>([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
+  const [selectedPlatform, setSelectedPlatform] = useState<string>("PS5");
   const [isLoading, setIsLoading] = useState(true);
-
-  const subcategories = category ? categories[category.toUpperCase() as keyof typeof categories] || [] : [];
 
   useEffect(() => {
     fetchArticles();
-  }, [category, selectedSubcategory]);
+  }, [category, selectedPlatform]);
 
   const fetchArticles = async () => {
     try {
@@ -26,8 +25,8 @@ export default function CategoryPage() {
         .select("*")
         .eq("category", category?.toUpperCase());
 
-      if (selectedSubcategory !== "all") {
-        query = query.eq("subcategory", selectedSubcategory);
+      if (selectedPlatform) {
+        query = query.eq("subcategory", selectedPlatform);
       }
 
       const { data, error } = await query;
@@ -56,63 +55,52 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <main className="container mx-auto px-4 py-8">
+        {/* Category Header */}
         <header className="mb-8">
-          <h1 className="text-4xl font-bold capitalize">{category}</h1>
-          {subcategories.length > 0 && (
-            <Tabs defaultValue="all" className="mt-4" onValueChange={setSelectedSubcategory}>
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                {subcategories.map((subcat) => (
-                  <TabsTrigger key={subcat} value={subcat}>
-                    {subcat}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              <TabsContent value="all">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                  {articles.map((article) => (
-                    <ArticleCard
-                      key={article.slug}
-                      title={article.title}
-                      image={article.image_url || "/placeholder.svg"}
-                      category={article.category}
-                      slug={article.slug}
-                    />
-                  ))}
-                </div>
-              </TabsContent>
-              {subcategories.map((subcat) => (
-                <TabsContent key={subcat} value={subcat}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                    {articles.map((article) => (
-                      <ArticleCard
-                        key={article.slug}
-                        title={article.title}
-                        image={article.image_url || "/placeholder.svg"}
-                        category={article.category}
-                        slug={article.slug}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-              ))}
-            </Tabs>
-          )}
-        </header>
-
-        {!subcategories.length && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || "/placeholder.svg"}
-                category={article.category}
-                slug={article.slug}
-              />
+          <h1 className="text-4xl font-bold text-center mb-8">Games</h1>
+          
+          {/* Platform Filters */}
+          <div className="flex justify-center gap-8 mb-8">
+            {platforms.map((platform) => (
+              <button
+                key={platform}
+                onClick={() => setSelectedPlatform(platform)}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  selectedPlatform === platform
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-gray-600"
+                )}
+              >
+                {platform}
+              </button>
             ))}
           </div>
-        )}
+        </header>
+
+        {/* Hero Article */}
+        <div className="mb-12">
+          <ArticleCard
+            title="PlayStation 5 Pro Release Date, Price, Specs, Preorder Details"
+            image="/lovable-uploads/c8618d7a-0934-449b-8f91-0bdb472e025e.png"
+            category="GAMES"
+            slug="ps5-pro-announcement"
+            mainFeatured={true}
+          />
+        </div>
+
+        {/* Articles Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {articles.map((article) => (
+            <ArticleCard
+              key={article.slug}
+              title={article.title}
+              image={article.image_url || "/placeholder.svg"}
+              category={article.category}
+              slug={article.slug}
+            />
+          ))}
+        </div>
       </main>
     </div>
   );

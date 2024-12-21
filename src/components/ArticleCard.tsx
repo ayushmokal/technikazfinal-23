@@ -22,16 +22,17 @@ export function ArticleCard({
     <Link
       to={`/article/${slug}`}
       className={cn(
-        "group block overflow-hidden bg-white transition-all duration-300 hover:shadow-lg",
-        mainFeatured ? "lg:col-span-3" : featured ? "lg:col-span-2" : "lg:col-span-1",
+        "group block overflow-hidden bg-white rounded-lg transition-all duration-300 hover:shadow-lg",
+        mainFeatured ? "col-span-full" : featured ? "md:col-span-2" : "",
         "animate-fadeIn"
       )}
     >
       <div className={cn(
-        "relative w-full overflow-hidden aspect-[16/9]"
+        "relative w-full overflow-hidden",
+        mainFeatured ? "aspect-[21/9]" : "aspect-[16/9]"
       )}>
         <img
-          src={image || '/placeholder.svg'}
+          src={image}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
