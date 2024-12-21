@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/form";
 import { ImageUpload } from "./ImageUpload";
 import { CategorySelect } from "./CategorySelect";
+import { SubcategorySelect } from "./SubcategorySelect";
 import { RichTextEditor } from "./RichTextEditor";
-import { categories, type BlogFormData } from "@/types/blog";
+import { type BlogFormData } from "@/types/blog";
 import { useNavigate } from "react-router-dom";
 
 interface BlogFormProps {
@@ -163,36 +164,9 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
           onCategoryChange={setSelectedCategory} 
         />
 
-        <FormField
-          control={form.control}
-          name="subcategory"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Subcategory</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={!selectedCategory}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a subcategory" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {selectedCategory &&
-                    categories[selectedCategory as keyof typeof categories]?.map(
-                      (subcategory) => (
-                        <SelectItem key={subcategory} value={subcategory}>
-                          {subcategory}
-                        </SelectItem>
-                      )
-                    )}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
+        <SubcategorySelect 
+          form={form}
+          selectedCategory={selectedCategory}
         />
 
         <FormField
