@@ -36,16 +36,6 @@ export default function GadgetsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
-      {/* Top Ad Banner */}
-      <div className="w-full h-[100px] bg-gray-200 overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7" 
-          alt="Advertisement" 
-          className="w-full h-full object-cover hover:scale-105 transition-transform"
-        />
-      </div>
-
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Mobile Phone Comparison</h1>
         
@@ -90,24 +80,6 @@ export default function GadgetsPage() {
             ))}
           </div>
         )}
-
-        {/* Middle Ad Banner */}
-        <div className="w-full h-[200px] bg-gray-200 my-8 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
-            alt="Advertisement" 
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
-        </div>
-
-        {/* Bottom Ad Banner */}
-        <div className="w-full h-[150px] bg-gray-200 mt-8 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" 
-            alt="Advertisement" 
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
-        </div>
       </main>
     </div>
   );

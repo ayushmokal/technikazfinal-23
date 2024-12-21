@@ -66,12 +66,8 @@ export default function Index() {
         </section>
 
         {/* Advertisement Section */}
-        <div className="w-full h-[200px] bg-gray-200 overflow-hidden mb-12">
-          <img 
-            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
-            alt="Advertisement" 
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
+        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Ads Here</span>
         </div>
 
         {/* Tech Deals Section */}
@@ -104,12 +100,8 @@ export default function Index() {
         </section>
 
         {/* Advertisement Section */}
-        <div className="w-full h-[200px] bg-gray-200 overflow-hidden mb-12">
-          <img 
-            src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7" 
-            alt="Advertisement" 
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
+        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Ads Here</span>
         </div>
 
         {/* Mobiles Section */}
@@ -142,16 +134,13 @@ export default function Index() {
         </section>
 
         {/* Advertisement Section */}
-        <div className="w-full h-[200px] bg-gray-200 overflow-hidden mb-12">
-          <img 
-            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" 
-            alt="Advertisement" 
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
-          />
+        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Ads Here</span>
         </div>
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Popular/Recent Articles */}
           <div className="lg:col-span-2">
             <div className="flex gap-4 mb-6">
               <Button 
