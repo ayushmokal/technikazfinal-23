@@ -1,12 +1,14 @@
 export interface BlogFormData {
+  id?: string;
   title: string;
   content: string;
   category: string;
-  subcategory: string;
+  subcategory?: string | null;
   author: string;
-  image_url: string;
+  image_url?: string | null;
   slug: string;
-  created_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export const categories = {
