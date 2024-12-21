@@ -12,7 +12,7 @@ export function BlogManager() {
   const { data: blogs, refetch } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
-      console.log('Fetching blogs...');
+      console.log('Fetching all blogs...');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -22,8 +22,9 @@ export function BlogManager() {
         console.error('Error fetching blogs:', error);
         throw error;
       }
-      console.log('Blogs fetched successfully:', data);
-      return data;
+      
+      console.log('All blogs fetched successfully:', data);
+      return data || [];
     },
   });
 
@@ -76,6 +77,7 @@ export function BlogManager() {
   };
 
   const toggleFeatured = async (id: string, currentValue: boolean, category: string) => {
+    // Check featured count for the category
     if (!currentValue) {
       const { data: featuredCount } = await supabase
         .from('blogs')
@@ -114,10 +116,19 @@ export function BlogManager() {
     refetch();
   };
 
+  if (!blogs) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">Loading blogs...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {Object.keys(categories).map((category) => {
-        const categoryBlogs = blogs?.filter((blog) => blog.category === category) || [];
+        const categoryBlogs = blogs.filter((blog) => blog.category === category) || [];
+        console.log(`Filtered blogs for ${category}:`, categoryBlogs);
         
         return (
           <CategorySection
