@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Facebook, Twitter, Instagram, X } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 const categories = [
   {
@@ -31,11 +33,35 @@ const categories = [
 
 export function Navigation() {
   return (
-    <nav className="w-full bg-white shadow-sm">
+    <nav className="bg-white shadow-sm">
+      {/* Top Bar */}
+      <div className="bg-black text-white py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <div className="flex gap-2">
+            <Button variant="ghost" size="icon" className="hover:text-primary">
+              <Facebook className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="hover:text-primary">
+              <Twitter className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="hover:text-primary">
+              <Instagram className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="hover:text-primary">
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <Button variant="ghost" size="sm">
+            <Link to="/contact">Contact</Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            Technikaz
+          <Link to="/" className="text-2xl font-bold">
+            <img src="/lovable-uploads/524f9623-9785-43e3-bb56-651959732327.png" alt="Technikaz" className="h-8" />
           </Link>
           <div className="hidden md:flex space-x-8">
             {categories.map((category) => (
@@ -49,10 +75,10 @@ export function Navigation() {
             ))}
           </div>
           <div className="flex items-center space-x-4">
-            <input
+            <Input
               type="search"
               placeholder="Search"
-              className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-[200px]"
             />
           </div>
         </div>
