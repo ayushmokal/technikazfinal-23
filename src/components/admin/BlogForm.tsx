@@ -75,6 +75,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormData) => {
     try {
+      console.log('Submitting form data:', data); // Debug log
       setIsLoading(true);
 
       if (mode === 'create') {
@@ -100,6 +101,13 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
 
         data.image_url = publicUrlData.publicUrl;
       }
+
+      // Ensure category is properly set
+      if (!data.category && selectedCategory) {
+        data.category = selectedCategory;
+      }
+
+      console.log('Final data to be submitted:', data); // Debug log
 
       if (mode === 'edit' && initialData?.id) {
         const { error } = await supabase
@@ -131,6 +139,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
         setImageFile(null);
       }
     } catch (error: any) {
+      console.error('Error submitting form:', error); // Debug log
       toast({
         variant: "destructive",
         title: "Error",
