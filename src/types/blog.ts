@@ -1,20 +1,23 @@
 export interface BlogFormData {
-  id?: string;
+  id: string;
   title: string;
   content: string;
+  image_url: string;
   category: string;
-  subcategory?: string | null;
-  author: string;
-  image_url?: string | null;
+  subcategory: string;
   slug: string;
-  created_at?: string;
-  updated_at?: string;
+  author: string;
+  created_at: string;
+  updated_at: string;
+  featured: boolean;
+  popular: boolean;
+  upcoming?: boolean;
 }
 
 export const categories = {
-  GAMES: ["PS5", "XBOX", "NINTENDO"],
-  TECH: ["TECH DEALS", "NEWS"],
-  ENTERTAINMENT: ["MOVIES", "SERIES", "COMICS"],
-  GADGETS: ["MOBILE", "LAPTOPS"],
+  GAMES: ["PS5", "Xbox", "Nintendo", "PC"],
+  TECH: ["Tech Deals", "News"],
+  ENTERTAINMENT: ["Movies", "Series", "Comics"],
+  GADGETS: ["Mobile", "Laptops"],
   STOCKS: [],
-} as const;
+};

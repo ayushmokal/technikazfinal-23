@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { CategoryHero } from "@/components/CategoryHero";
+import { ArticleGrid } from "@/components/ArticleGrid";
+import { ArticleTabs } from "@/components/ArticleTabs";
 
 export default function GamesPage() {
   const [platform, setPlatform] = useState("PS5");
@@ -60,57 +61,10 @@ export default function GamesPage() {
         </div>
 
         {/* Hero Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {featuredArticle && (
-            <>
-              <div className="lg:col-span-2">
-                <Link to={`/article/${featuredArticle.slug}`} className="block">
-                  <img
-                    src={featuredArticle.image_url}
-                    alt={featuredArticle.title}
-                    className="w-full aspect-[16/9] object-cover rounded-lg"
-                  />
-                  <h2 className="text-2xl font-bold mt-4">{featuredArticle.title}</h2>
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {gridArticles.slice(0, 2).map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="block"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-full aspect-[16/9] object-cover rounded-lg"
-                    />
-                  </Link>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+        <CategoryHero featuredArticle={featuredArticle} gridArticles={gridArticles} />
 
         {/* Grid Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {gridArticles.map((article) => (
-            <Link
-              key={article.slug}
-              to={`/article/${article.slug}`}
-              className="block group"
-            >
-              <img
-                src={article.image_url}
-                alt={article.title}
-                className="w-full aspect-[4/3] object-cover rounded-lg mb-2"
-              />
-              <h3 className="font-medium group-hover:text-primary transition-colors">
-                {article.title}
-              </h3>
-            </Link>
-          ))}
-        </div>
+        <ArticleGrid articles={gridArticles} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
@@ -120,90 +74,12 @@ export default function GamesPage() {
         {/* Popular/Recent/Upcoming Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
-            <Tabs defaultValue="popular" className="w-full" onValueChange={setActiveTab}>
-              <TabsList>
-                <TabsTrigger value="popular">Popular</TabsTrigger>
-                <TabsTrigger value="recent">Recent</TabsTrigger>
-                <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="popular" className="space-y-4">
-                {popularArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-32 h-24 object-cover rounded"
-                    />
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {new Date(article.created_at!).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-                <Button variant="outline" className="w-full">Load More</Button>
-              </TabsContent>
-
-              <TabsContent value="recent" className="space-y-4">
-                {/* Similar structure as popular tab */}
-                {recentArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-32 h-24 object-cover rounded"
-                    />
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {new Date(article.created_at!).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-                <Button variant="outline" className="w-full">Load More</Button>
-              </TabsContent>
-
-              <TabsContent value="upcoming" className="space-y-4">
-                {/* Similar structure as popular tab */}
-                {upcomingArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-32 h-24 object-cover rounded"
-                    />
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        Coming {new Date(article.created_at!).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-                <Button variant="outline" className="w-full">Load More</Button>
-              </TabsContent>
-            </Tabs>
+            <ArticleTabs
+              popularArticles={popularArticles}
+              recentArticles={recentArticles}
+              upcomingArticles={upcomingArticles}
+              onTabChange={setActiveTab}
+            />
           </div>
 
           {/* Sidebar */}
@@ -245,7 +121,7 @@ export default function GamesPage() {
                     <div>
                       <h4 className="font-medium line-clamp-2">{article.title}</h4>
                       <p className="text-sm text-gray-500">
-                        Coming {new Date(article.created_at!).toLocaleDateString()}
+                        Coming {new Date(article.created_at).toLocaleDateString()}
                       </p>
                     </div>
                   </Link>

@@ -8,13 +8,17 @@ import CategoryPage from "./pages/CategoryPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
 import ArticlePage from "./pages/ArticlePage";
+import GamesPage from "./pages/GamesPage";
+import TechPage from "./pages/TechPage";
+import EntertainmentPage from "./pages/EntertainmentPage";
+import StocksPage from "./pages/StocksPage";
 import React from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
-      retry: 1,
+      retry:  1,
     },
   },
 });
@@ -29,6 +33,10 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/games" element={<GamesPage />} />
+              <Route path="/tech" element={<TechPage />} />
+              <Route path="/entertainment" element={<EntertainmentPage />} />
+              <Route path="/stocks" element={<StocksPage />} />
               <Route path="/:category" element={<CategoryPage />} />
               <Route path="/article/:slug" element={<ArticlePage />} />
               <Route path="/admin/login" element={<AdminLogin />} />
