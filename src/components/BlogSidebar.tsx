@@ -1,28 +1,55 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 export function BlogSidebar() {
   const [email, setEmail] = useState("");
 
-  const upcomingGames = [
-    { title: "PS5 Upcoming Games", date: "Dec 15, 2024" },
-    { title: "PS5 Upcoming Games", date: "Dec 16, 2024" },
-    { title: "PS5 Upcoming Games", date: "Dec 17, 2024" },
-    { title: "PS5 Upcoming Games", date: "Dec 18, 2024" },
-    { title: "PS5 Upcoming Games", date: "Dec 19, 2024" },
-  ];
+  const { data: upcomingBlogs } = useQuery({
+    queryKey: ['upcoming-blogs'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement newsletter subscription
+    setEmail("");
+  };
 
   return (
     <aside className="space-y-8">
-      {/* Advertisement Section */}
-      <div className="bg-gray-200 p-4 text-center min-h-[200px] flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
+      {/* Newsletter Section */}
+      <div className="bg-secondary p-6 rounded-lg">
+        <h3 className="text-lg font-bold mb-4">Subscribe to Newsletter</h3>
+        <form onSubmit={handleSubscribe} className="space-y-4">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Button type="submit" className="w-full">
+            Subscribe
+          </Button>
+        </form>
       </div>
 
       {/* Upcoming Section */}
       <div className="space-y-4">
-        <h3 className="text-lg font-bold">Upcomings</h3>
+        <h3 className="text-lg font-bold">Latest Posts</h3>
         <div className="flex gap-2 flex-wrap">
           <Button variant="outline" size="sm">Games</Button>
           <Button variant="outline" size="sm">Phone</Button>
@@ -30,25 +57,47 @@ export function BlogSidebar() {
           <Button variant="outline" size="sm">More</Button>
         </div>
         <div className="space-y-4">
-          {upcomingGames.map((game, index) => (
-            <div key={index} className="flex gap-3">
+          {upcomingBlogs?.map((blog) => (
+            <Link 
+              to={`/article/${blog.slug}`}
+              key={blog.id} 
+              className="flex gap-3 group hover:bg-secondary p-2 rounded-lg transition-colors"
+            >
               <img
-                src="/placeholder.svg"
-                alt={game.title}
+                src={blog.image_url || "/placeholder.svg"}
+                alt={blog.title}
                 className="w-20 h-14 object-cover rounded"
               />
               <div>
-                <h4 className="font-medium">{game.title}</h4>
-                <p className="text-sm text-gray-500">Coming {game.date}</p>
+                <h4 className="font-medium line-clamp-2 group-hover:text-primary transition-colors">
+                  {blog.title}
+                </h4>
+                <p className="text-sm text-gray-500">
+                  {new Date(blog.created_at).toLocaleDateString()}
+                </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
 
-      {/* Advertisement Section */}
-      <div className="bg-gray-200 p-4 text-center min-h-[200px] flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
+      {/* Popular Categories */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold">Popular Categories</h3>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" className="w-full justify-start">
+            <span className="mr-2">🎮</span> Games
+          </Button>
+          <Button variant="outline" className="w-full justify-start">
+            <span className="mr-2">📱</span> Tech
+          </Button>
+          <Button variant="outline" className="w-full justify-start">
+            <span className="mr-2">🎬</span> Movies
+          </Button>
+          <Button variant="outline" className="w-full justify-start">
+            <span className="mr-2">📺</span> Series
+          </Button>
+        </div>
       </div>
     </aside>
   );
