@@ -20,23 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-interface BlogFormData {
-  title: string;
-  content: string;
-  category: string;
-  subcategory: string;
-  author: string;
-  image_url: string;
-}
-
-const categories = {
-  GAMES: ["PS5", "XBOX", "NINTENDO"],
-  TECH: ["TECH DEALS", "NEWS"],
-  ENTERTAINMENT: ["MOVIES", "SERIES", "COMICS"],
-  GADGETS: ["MOBILE", "LAPTOPS"],
-  STOCKS: [],
-};
+import { ImageUpload } from "./ImageUpload";
+import { CategorySelect } from "./CategorySelect";
+import { categories, type BlogFormData } from "@/types/blog";
 
 export function BlogForm() {
   const { toast } = useToast();
@@ -52,6 +38,7 @@ export function BlogForm() {
       subcategory: "",
       author: "",
       image_url: "",
+      slug: "",
     },
   });
 
@@ -61,11 +48,18 @@ export function BlogForm() {
     }
   };
 
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
+
   const onSubmit = async (data: BlogFormData) => {
     try {
       setIsLoading(true);
+      data.slug = generateSlug(data.title);
 
-      // Upload image if selected
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
         const fileName = `${Math.random()}.${fileExt}`;
@@ -79,7 +73,6 @@ export function BlogForm() {
           throw uploadError;
         }
 
-        // Get public URL
         const { data: publicUrlData } = supabase.storage
           .from("blog-images")
           .getPublicUrl(filePath);
@@ -87,8 +80,9 @@ export function BlogForm() {
         data.image_url = publicUrlData.publicUrl;
       }
 
-      // Insert blog post
-      const { error } = await supabase.from("blogs").insert([data]);
+      const { error } = await supabase
+        .from("blogs")
+        .insert([data]);
 
       if (error) throw error;
 
@@ -127,35 +121,9 @@ export function BlogForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  field.onChange(value);
-                  setSelectedCategory(value);
-                }}
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {Object.keys(categories).map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
+        <CategorySelect 
+          form={form} 
+          onCategoryChange={setSelectedCategory} 
         />
 
         <FormField
@@ -222,15 +190,7 @@ export function BlogForm() {
           )}
         />
 
-        <div className="space-y-2">
-          <FormLabel>Blog Image</FormLabel>
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="cursor-pointer"
-          />
-        </div>
+        <ImageUpload onChange={handleImageChange} />
 
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Creating..." : "Create Blog Post"}

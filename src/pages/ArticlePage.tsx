@@ -2,20 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
-
-interface BlogPost {
-  title: string;
-  content: string;
-  image_url: string;
-  author: string;
-  category: string;
-  subcategory: string | null;
-  created_at: string;
-}
+import type { BlogFormData } from "@/types/blog";
 
 export default function ArticlePage() {
   const { slug } = useParams();
-  const [blog, setBlog] = useState<BlogPost | null>(null);
+  const [blog, setBlog] = useState<BlogFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +18,7 @@ export default function ArticlePage() {
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
-        .eq("id", slug)
+        .eq("slug", slug)
         .single();
 
       if (error) throw error;
@@ -69,7 +60,7 @@ export default function ArticlePage() {
             <div className="flex items-center text-gray-600 mb-8">
               <span className="mr-4">By {blog.author}</span>
               <span>
-                {new Date(blog.created_at).toLocaleDateString("en-US", {
+                {new Date().toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
