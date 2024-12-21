@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { BlogForm } from "@/components/admin/BlogForm";
+import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
+import { BlogManager } from "@/components/admin/BlogManager";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -42,10 +45,30 @@ export default function AdminPanel() {
           <Button onClick={handleLogout}>Logout</Button>
         </div>
         
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-6">Create New Blog Post</h2>
-          <BlogForm />
-        </div>
+        <Tabs defaultValue="analytics" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="manage">Manage Blogs</TabsTrigger>
+            <TabsTrigger value="create">Create Blog</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="analytics" className="space-y-4">
+            <h2 className="text-xl font-semibold">Blog Analytics</h2>
+            <BlogAnalytics />
+          </TabsContent>
+
+          <TabsContent value="manage" className="space-y-4">
+            <h2 className="text-xl font-semibold">Manage Blog Posts</h2>
+            <BlogManager />
+          </TabsContent>
+
+          <TabsContent value="create" className="space-y-4">
+            <h2 className="text-xl font-semibold">Create New Blog Post</h2>
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <BlogForm />
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
