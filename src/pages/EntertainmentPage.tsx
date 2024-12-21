@@ -63,15 +63,18 @@ export default function EntertainmentPage() {
       <Navigation />
       
       {/* Ad Banner */}
-      <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
+      <div className="w-full h-[100px] bg-gray-200 overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+          alt="Advertisement" 
+          className="w-full h-full object-cover hover:scale-105 transition-transform"
+        />
       </div>
 
       <main className="container mx-auto px-4 py-8">
         {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">Entertainment</h1>
 
-        {/* Subcategory Filter */}
         <div className="flex justify-center gap-4 mb-8">
           {["MOVIES", "SERIES", "COMICS"].map((s) => (
             <Button
@@ -95,8 +98,12 @@ export default function EntertainmentPage() {
         <ArticleGrid articles={gridFeaturedArticles} />
 
         {/* Middle Ad */}
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
-          <span className="text-gray-500">Ads Here</span>
+        <div className="w-full h-[200px] bg-gray-200 overflow-hidden mb-8">
+          <img 
+            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158" 
+            alt="Advertisement" 
+            className="w-full h-full object-cover hover:scale-105 transition-transform"
+          />
         </div>
 
         {/* Popular/Recent/Upcoming Tabs */}
@@ -113,11 +120,14 @@ export default function EntertainmentPage() {
           {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
             {/* Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+            <div className="w-full h-[300px] bg-gray-200 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7" 
+                alt="Advertisement" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform"
+              />
             </div>
 
-            {/* Upcoming Section */}
             <div className="border rounded-lg overflow-hidden">
               <div className="bg-primary p-4">
                 <h2 className="text-white font-semibold">Upcomings</h2>
@@ -158,8 +168,12 @@ export default function EntertainmentPage() {
             </div>
 
             {/* Bottom Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+            <div className="w-full h-[300px] bg-gray-200 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334" 
+                alt="Advertisement" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform"
+              />
             </div>
           </div>
         </div>

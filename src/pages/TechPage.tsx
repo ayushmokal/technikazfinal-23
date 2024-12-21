@@ -68,8 +68,12 @@ export default function TechPage() {
       <Navigation />
       
       {/* Ad Banner */}
-      <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
+      <div className="w-full h-[100px] bg-gray-200 overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7" 
+          alt="Advertisement" 
+          className="w-full h-full object-cover hover:scale-105 transition-transform"
+        />
       </div>
 
       <main className="container mx-auto px-4 py-8">
@@ -99,8 +103,13 @@ export default function TechPage() {
         {/* Grid Section */}
         <ArticleGrid articles={gridFeaturedArticles} />
 
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
-          <span className="text-gray-500">Ads Here</span>
+        {/* Middle Ad */}
+        <div className="w-full h-[200px] bg-gray-200 overflow-hidden mb-8">
+          <img 
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" 
+            alt="Advertisement" 
+            className="w-full h-full object-cover hover:scale-105 transition-transform"
+          />
         </div>
 
         {/* Popular/Recent/Upcoming Tabs */}
@@ -117,8 +126,12 @@ export default function TechPage() {
           {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
             {/* Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+            <div className="w-full h-[300px] bg-gray-200 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+                alt="Advertisement" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform"
+              />
             </div>
 
             {/* Upcoming Section */}
@@ -162,8 +175,12 @@ export default function TechPage() {
             </div>
 
             {/* Bottom Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+            <div className="w-full h-[300px] bg-gray-200 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
+                alt="Advertisement" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform"
+              />
             </div>
           </div>
         </div>
