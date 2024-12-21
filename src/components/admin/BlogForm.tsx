@@ -48,17 +48,35 @@ export function BlogForm() {
     }
   };
 
-  const generateSlug = (title: string) => {
-    return title
+  const generateSlug = async (title: string) => {
+    const baseSlug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
+    
+    // Add timestamp to ensure uniqueness
+    const timestamp = new Date().getTime();
+    const uniqueSlug = `${baseSlug}-${timestamp}`;
+    
+    // Check if slug exists
+    const { data: existingPost } = await supabase
+      .from('blogs')
+      .select('slug')
+      .eq('slug', uniqueSlug)
+      .single();
+
+    if (existingPost) {
+      // In the unlikely case of a collision, add a random number
+      return `${uniqueSlug}-${Math.floor(Math.random() * 1000)}`;
+    }
+
+    return uniqueSlug;
   };
 
   const onSubmit = async (data: BlogFormData) => {
     try {
       setIsLoading(true);
-      data.slug = generateSlug(data.title);
+      data.slug = await generateSlug(data.title);
 
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
