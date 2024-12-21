@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Star, Trash2 } from "lucide-react";
+import { Pencil, Star, Trash2, Crown } from "lucide-react";
 import { categories } from "@/types/blog";
 
 export function BlogManager() {
@@ -52,7 +52,6 @@ export function BlogManager() {
   };
 
   const handleEdit = (slug: string) => {
-    // Navigate to edit page (to be implemented)
     console.log("Edit blog:", slug);
   };
 
@@ -74,6 +73,44 @@ export function BlogManager() {
     toast({
       title: "Success",
       description: "Blog status updated successfully",
+    });
+    refetch();
+  };
+
+  const toggleFeatured = async (id: string, currentValue: boolean) => {
+    // Count current featured blogs
+    const { data: featuredCount } = await supabase
+      .from('blogs')
+      .select('id', { count: 'exact' })
+      .eq('featured', true);
+
+    // Check if we're trying to feature a new blog and already have 6
+    if (!currentValue && featuredCount && featuredCount.length >= 6) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Maximum of 6 featured blogs allowed",
+      });
+      return;
+    }
+
+    const { error } = await supabase
+      .from('blogs')
+      .update({ featured: !currentValue })
+      .eq('id', id);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update featured status",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Featured status updated successfully",
     });
     refetch();
   };
@@ -110,7 +147,16 @@ export function BlogManager() {
                           <Button
                             variant="ghost"
                             size="icon"
+                            onClick={() => toggleFeatured(blog.id, blog.featured || false)}
+                            title={blog.featured ? "Remove from featured" : "Add to featured"}
+                          >
+                            <Crown className={`h-4 w-4 ${blog.featured ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={() => togglePopular(blog.id, blog.popular || false)}
+                            title={blog.popular ? "Remove from popular" : "Add to popular"}
                           >
                             <Star className={`h-4 w-4 ${blog.popular ? 'fill-yellow-400 text-yellow-400' : ''}`} />
                           </Button>

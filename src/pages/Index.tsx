@@ -30,6 +30,7 @@ export default function Index() {
   const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
+  const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -53,6 +54,32 @@ export default function Index() {
             />
           ))}
         </div>
+
+        {/* Homepage Featured Section */}
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Featured Stories</h2>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {homepageFeatured.map((article) => (
+              <ArticleCard
+                key={article.slug}
+                title={article.title}
+                image={article.image_url || ''}
+                category={article.category}
+                slug={article.slug}
+              />
+            ))}
+          </div>
+        </section>
 
         {/* Tech Deals Section */}
         <section className="mb-12">
