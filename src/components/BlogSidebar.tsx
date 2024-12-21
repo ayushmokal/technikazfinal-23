@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Facebook, Twitter, Instagram, Pinterest, Youtube } from "lucide-react";
+import { Facebook, Twitter, Instagram, Youtube, Share2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
@@ -29,7 +29,7 @@ export function BlogSidebar() {
             <Instagram className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon" className="hover:text-primary">
-            <Pinterest className="h-4 w-4" />
+            <Share2 className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon" className="hover:text-primary">
             <Youtube className="h-4 w-4" />
