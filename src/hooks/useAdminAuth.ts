@@ -43,21 +43,25 @@ export const useAdminAuth = () => {
         return;
       }
 
+      // Check if user is an admin
       const { data: adminData, error: adminError } = await supabase
         .from("admin_users")
         .select()
         .eq("id", data.user.id)
         .single();
 
-      if (adminError) throw adminError;
+      if (adminError) {
+        console.error("Admin check error:", adminError);
+        throw new Error("Failed to verify admin status");
+      }
 
       if (!adminData) {
+        await supabase.auth.signOut();
         toast({
           variant: "destructive",
           title: "Access Denied",
           description: "You are not authorized to access the admin panel",
         });
-        await supabase.auth.signOut();
         return;
       }
 
@@ -66,7 +70,9 @@ export const useAdminAuth = () => {
         description: "Logged in successfully",
       });
       navigate("/admin");
+      
     } catch (error: any) {
+      console.error("Login error:", error);
       handleAuthError(error, toast);
     } finally {
       setState(prev => ({ ...prev, isLoading: false }));

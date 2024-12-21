@@ -2,6 +2,8 @@ import { useToast } from "@/hooks/use-toast";
 type Toast = ReturnType<typeof useToast>["toast"];
 
 export const handleAuthError = (error: any, toast: Toast) => {
+  console.log("Auth error details:", error);
+
   if (error.message.includes('rate_limit')) {
     toast({
       variant: "destructive",
@@ -29,9 +31,10 @@ export const handleAuthError = (error: any, toast: Toast) => {
     return;
   }
 
+  // Generic error handler
   toast({
     variant: "destructive",
     title: "Error",
-    description: error.message,
+    description: error.message || "An unexpected error occurred",
   });
 };
