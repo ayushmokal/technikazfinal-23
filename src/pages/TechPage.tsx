@@ -24,7 +24,12 @@ export default function TechPage() {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data;
+      
+      // Add default value for upcoming if it's missing
+      return (data || []).map(article => ({
+        ...article,
+        upcoming: article.upcoming || false
+      }));
     }
   });
 

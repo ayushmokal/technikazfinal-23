@@ -22,7 +22,11 @@ export default function StocksPage() {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data;
+      
+      return (data || []).map(article => ({
+        ...article,
+        upcoming: article.upcoming || false
+      }));
     }
   });
 
