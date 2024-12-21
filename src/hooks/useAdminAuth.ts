@@ -3,7 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { handleAuthError } from "./useAuthError";
-import type { Database } from "@/integrations/supabase/types";
 
 interface AdminAuthState {
   email: string;
@@ -28,34 +27,6 @@ export const useAdminAuth = () => {
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
-      // First check if the user exists in admin_users table
-      const { data: adminCheck, error: adminCheckError } = await supabase
-        .from('admin_users')
-        .select('email')
-        .eq('email', state.email)
-        .maybeSingle();
-
-      if (adminCheckError) {
-        console.error("Admin check error:", adminCheckError);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to verify admin status",
-        });
-        setState(prev => ({ ...prev, isLoading: false }));
-        return;
-      }
-
-      if (!adminCheck) {
-        toast({
-          variant: "destructive",
-          title: "Access Denied",
-          description: "This email is not registered as an admin user.",
-        });
-        setState(prev => ({ ...prev, isLoading: false }));
-        return;
-      }
-
       const { data, error } = await supabase.auth.signInWithPassword({
         email: state.email,
         password: state.password,

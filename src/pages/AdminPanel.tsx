@@ -3,18 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import type { Database } from "@/integrations/supabase/types";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    checkAdmin();
+    checkAuth();
   }, []);
 
-  const checkAdmin = async () => {
+  const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -22,23 +21,7 @@ export default function AdminPanel() {
       return;
     }
 
-    const { data: adminData } = await supabase
-      .from('admin_users')
-      .select()
-      .eq('id', session.user.id)
-      .single();
-
-    if (!adminData) {
-      toast({
-        variant: "destructive",
-        title: "Access Denied",
-        description: "You are not authorized to access the admin panel",
-      });
-      navigate("/admin/login");
-      return;
-    }
-
-    setIsAdmin(true);
+    setIsLoading(false);
   };
 
   const handleLogout = async () => {
@@ -46,7 +29,7 @@ export default function AdminPanel() {
     navigate("/admin/login");
   };
 
-  if (!isAdmin) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
