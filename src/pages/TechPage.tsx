@@ -10,20 +10,24 @@ import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState("TECH DEALS");
+  const [subcategory, setSubcategory] = useState("Tech Deals");
   const [activeTab, setActiveTab] = useState("popular");
 
   const { data: articles } = useQuery({
     queryKey: ['tech-articles', subcategory],
     queryFn: async () => {
+      console.log('Fetching tech articles for subcategory:', subcategory);
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('category', 'TECH')
-        .eq('subcategory', subcategory)
-        .order('created_at', { ascending: false });
+        .eq('subcategory', subcategory);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching tech articles:', error);
+        throw error;
+      }
+      console.log('Fetched tech articles:', data);
       return data || [];
     }
   });
@@ -49,7 +53,7 @@ export default function TechPage() {
 
         {/* Subcategory Filter */}
         <div className="flex justify-center gap-4 mb-8">
-          {["TECH DEALS", "NEWS"].map((s) => (
+          {["Tech Deals", "News"].map((s) => (
             <Button
               key={s}
               variant={subcategory === s ? "default" : "outline"}
