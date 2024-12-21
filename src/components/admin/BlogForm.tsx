@@ -12,26 +12,26 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ImageUpload } from "./ImageUpload";
 import { CategorySelect } from "./CategorySelect";
 import { RichTextEditor } from "./RichTextEditor";
 import { categories, type BlogFormData } from "@/types/blog";
+import { useNavigate } from "react-router-dom";
 
-export function BlogForm() {
+interface BlogFormProps {
+  initialData?: BlogFormData;
+  mode?: 'create' | 'edit';
+}
+
+export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialData?.category || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<BlogFormData>({
-    defaultValues: {
+    defaultValues: initialData || {
       title: "",
       content: "",
       category: "",
@@ -39,6 +39,9 @@ export function BlogForm() {
       author: "",
       image_url: "",
       slug: "",
+      upcoming: false,
+      featured: false,
+      popular: false,
     },
   });
 
@@ -54,11 +57,9 @@ export function BlogForm() {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
     
-    // Add timestamp to ensure uniqueness
     const timestamp = new Date().getTime();
     const uniqueSlug = `${baseSlug}-${timestamp}`;
     
-    // Check if slug exists - using maybeSingle() instead of single()
     const { data: existingPost } = await supabase
       .from('blogs')
       .select('slug')
@@ -66,7 +67,6 @@ export function BlogForm() {
       .maybeSingle();
 
     if (existingPost) {
-      // In the unlikely case of a collision, add a random number
       return `${uniqueSlug}-${Math.floor(Math.random() * 1000)}`;
     }
 
@@ -76,7 +76,10 @@ export function BlogForm() {
   const onSubmit = async (data: BlogFormData) => {
     try {
       setIsLoading(true);
-      data.slug = await generateSlug(data.title);
+
+      if (mode === 'create') {
+        data.slug = await generateSlug(data.title);
+      }
 
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
@@ -98,19 +101,35 @@ export function BlogForm() {
         data.image_url = publicUrlData.publicUrl;
       }
 
-      const { error } = await supabase
-        .from("blogs")
-        .insert([data]);
+      if (mode === 'edit' && initialData?.id) {
+        const { error } = await supabase
+          .from("blogs")
+          .update(data)
+          .eq('id', initialData.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Blog post created successfully",
-      });
+        toast({
+          title: "Success",
+          description: "Blog post updated successfully",
+        });
 
-      form.reset();
-      setImageFile(null);
+        navigate('/admin');
+      } else {
+        const { error } = await supabase
+          .from("blogs")
+          .insert([data]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Blog post created successfully",
+        });
+
+        form.reset();
+        setImageFile(null);
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -162,7 +181,7 @@ export function BlogForm() {
                 </FormControl>
                 <SelectContent>
                   {selectedCategory &&
-                    categories[selectedCategory as keyof typeof categories].map(
+                    categories[selectedCategory as keyof typeof categories]?.map(
                       (subcategory) => (
                         <SelectItem key={subcategory} value={subcategory}>
                           {subcategory}
@@ -210,7 +229,7 @@ export function BlogForm() {
         <ImageUpload onChange={handleImageChange} />
 
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Creating..." : "Create Blog Post"}
+          {isLoading ? (mode === 'edit' ? "Updating..." : "Creating...") : (mode === 'edit' ? "Update Blog Post" : "Create Blog Post")}
         </Button>
       </form>
     </Form>
