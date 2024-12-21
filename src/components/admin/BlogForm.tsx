@@ -58,12 +58,12 @@ export function BlogForm() {
     const timestamp = new Date().getTime();
     const uniqueSlug = `${baseSlug}-${timestamp}`;
     
-    // Check if slug exists
+    // Check if slug exists - using maybeSingle() instead of single()
     const { data: existingPost } = await supabase
       .from('blogs')
       .select('slug')
       .eq('slug', uniqueSlug)
-      .single();
+      .maybeSingle();
 
     if (existingPost) {
       // In the unlikely case of a collision, add a random number
