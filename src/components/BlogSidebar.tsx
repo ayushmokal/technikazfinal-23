@@ -23,7 +23,7 @@ export function BlogSidebar() {
     }
   });
 
-  const categories = ["GAMES", "TECH ENTERTAINMENT", "GADGETS", "STOCKS"];
+  const categories = ["GAMES", "TECH", "ENTERTAINMENT", "STOCKS"];
 
   return (
     <aside className="space-y-8">
