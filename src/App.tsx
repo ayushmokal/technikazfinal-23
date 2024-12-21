@@ -12,13 +12,14 @@ import GamesPage from "./pages/GamesPage";
 import TechPage from "./pages/TechPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import StocksPage from "./pages/StocksPage";
+import EditBlogPage from "./pages/EditBlogPage";
 import React from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
-      retry:  1,
+      retry: 1,
     },
   },
 });
@@ -41,6 +42,7 @@ function App() {
               <Route path="/article/:slug" element={<ArticlePage />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin/edit/:id" element={<EditBlogPage />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>

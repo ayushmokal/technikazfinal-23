@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -15,6 +16,7 @@ import { categories } from "@/types/blog";
 
 export function BlogManager() {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const { data: blogs, refetch } = useQuery({
     queryKey: ['blogs'],
@@ -51,8 +53,8 @@ export function BlogManager() {
     refetch();
   };
 
-  const handleEdit = (slug: string) => {
-    console.log("Edit blog:", slug);
+  const handleEdit = (id: string) => {
+    navigate(`/admin/edit/${id}`);
   };
 
   const togglePopular = async (id: string, currentValue: boolean) => {
@@ -163,7 +165,7 @@ export function BlogManager() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleEdit(blog.slug)}
+                            onClick={() => handleEdit(blog.id)}
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
