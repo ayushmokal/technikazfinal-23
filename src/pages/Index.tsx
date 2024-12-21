@@ -21,7 +21,6 @@ export default function Index() {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      console.log('Fetched blogs:', data); // Debug log
       return data;
     }
   });
@@ -31,8 +30,6 @@ export default function Index() {
   const mobileArticles = blogs?.filter(blog => blog.category === 'GADGETS' && blog.subcategory === 'MOBILE').slice(0, 4) || [];
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
-
-  console.log('Mobile articles:', mobileArticles); // Debug log
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,15 +48,30 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {homepageFeatured.map((article, index) => (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Top featured articles (60/40 split) */}
+            {homepageFeatured.slice(0, 2).map((article, index) => (
               <ArticleCard
                 key={article.slug}
                 title={article.title}
                 image={article.image_url || ''}
                 category={article.category}
                 slug={article.slug}
-                featured={index === 0}
+                mainFeatured={index === 0}
+                featured={index === 1}
+              />
+            ))}
+          </div>
+          
+          {/* Bottom four articles */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            {homepageFeatured.slice(2, 6).map((article) => (
+              <ArticleCard
+                key={article.slug}
+                title={article.title}
+                image={article.image_url || ''}
+                category={article.category}
+                slug={article.slug}
               />
             ))}
           </div>
