@@ -6,6 +6,7 @@ export interface BlogFormData {
   author: string;
   image_url: string;
   slug: string;
+  created_at: string;
 }
 
 export const categories = {
