@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { BlogForm } from "@/components/admin/BlogForm";
 import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
+import { MobileProductManager } from "@/components/admin/MobileProductManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminPanel() {
@@ -50,6 +51,7 @@ export default function AdminPanel() {
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="manage">Manage Blogs</TabsTrigger>
             <TabsTrigger value="create">Create Blog</TabsTrigger>
+            <TabsTrigger value="products">Mobile Products</TabsTrigger>
           </TabsList>
 
           <TabsContent value="analytics" className="space-y-4">
@@ -66,6 +68,13 @@ export default function AdminPanel() {
             <h2 className="text-xl font-semibold">Create New Blog Post</h2>
             <div className="bg-white rounded-lg shadow-lg p-6">
               <BlogForm />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="products" className="space-y-4">
+            <h2 className="text-xl font-semibold">Manage Mobile Products</h2>
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <MobileProductManager />
             </div>
           </TabsContent>
         </Tabs>
