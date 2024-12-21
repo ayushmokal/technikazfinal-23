@@ -22,7 +22,7 @@ const categories = [
   {
     name: "GADGETS",
     path: "/gadgets",
-    subcategories: ["Mobile", "Laptops"],
+    subcategories: ["MOBILE", "LAPTOPS"],
   },
   {
     name: "STOCKS",
