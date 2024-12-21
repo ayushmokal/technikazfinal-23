@@ -8,9 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { categories } from "@/types/blog";
 
 export default function GamesPage() {
-  const [platform, setPlatform] = useState("ALL");
+  const [platform, setPlatform] = useState(categories.GAMES[0]); // Default to first subcategory
   const [activeTab, setActiveTab] = useState("popular");
 
   // Separate query for featured articles
@@ -36,7 +37,7 @@ export default function GamesPage() {
     }
   });
 
-  // Regular articles query
+  // Regular articles query with subcategory filter
   const { data: articles } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
@@ -45,11 +46,8 @@ export default function GamesPage() {
         .from('blogs')
         .select('*')
         .eq('category', 'GAMES')
+        .eq('subcategory', platform)
         .order('created_at', { ascending: false });
-
-      if (platform !== "ALL") {
-        query = query.eq('subcategory', platform);
-      }
       
       const { data, error } = await query;
       
@@ -59,7 +57,7 @@ export default function GamesPage() {
       }
       
       console.log('Games articles fetched successfully:', data);
-      return data;
+      return data || [];
     }
   });
 
@@ -72,18 +70,13 @@ export default function GamesPage() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      {/* Ad Banner */}
-      <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
-      </div>
-
       <main className="container mx-auto px-4 py-8">
         {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">Games</h1>
 
         {/* Platform Filter */}
         <div className="flex justify-center gap-4 mb-8">
-          {["ALL", "PS5", "Xbox", "Nintendo", "PC"].map((p) => (
+          {categories.GAMES.map((p) => (
             <Button
               key={p}
               variant={platform === p ? "default" : "outline"}
@@ -105,11 +98,6 @@ export default function GamesPage() {
 
         {/* Grid Section */}
         <ArticleGrid articles={articles || []} />
-
-        {/* Middle Ad */}
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
-          <span className="text-gray-500">Ads Here</span>
-        </div>
 
         {/* Popular/Recent Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
