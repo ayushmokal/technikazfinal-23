@@ -3,58 +3,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { handleAuthError } from "./useAuthError";
-import { AdminAuthState } from "./useAuthTypes";
-import { handleAdminUserCreation } from "./useAdminUserManagement";
+
+interface AdminAuthState {
+  email: string;
+  password: string;
+  isLoading: boolean;
+}
 
 export const useAdminAuth = () => {
   const [state, setState] = useState<AdminAuthState>({
     email: "",
     password: "",
-    isSigningUp: false,
     isLoading: false,
   });
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (state.isLoading) {
-      toast({
-        variant: "destructive",
-        title: "Please wait",
-        description: "A request is already in progress.",
-      });
-      return;
-    }
-
-    setState(prev => ({ ...prev, isLoading: true }));
-
-    try {
-      const { data: { user }, error: signUpError } = await supabase.auth.signUp({
-        email: state.email,
-        password: state.password,
-      });
-
-      if (signUpError) throw signUpError;
-
-      if (!user) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to create user",
-        });
-        return;
-      }
-
-      await handleAdminUserCreation(user, setState, toast);
-      
-    } catch (error: any) {
-      handleAuthError(error, toast);
-    } finally {
-      setState(prev => ({ ...prev, isLoading: false }));
-    }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,8 +77,6 @@ export const useAdminAuth = () => {
     ...state,
     setEmail: (email: string) => setState(prev => ({ ...prev, email })),
     setPassword: (password: string) => setState(prev => ({ ...prev, password })),
-    setIsSigningUp: (isSigningUp: boolean) => setState(prev => ({ ...prev, isSigningUp })),
-    handleSignUp,
     handleLogin,
   };
 };

@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AdminAuthState } from "@/hooks/useAuthTypes";
 
-interface AdminLoginFormProps extends AdminAuthState {
+interface AdminLoginFormProps {
+  email: string;
+  password: string;
+  isLoading: boolean;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   onEmailChange: (email: string) => void;
   onPasswordChange: (password: string) => void;
@@ -12,7 +14,6 @@ export const AdminLoginForm = ({
   email,
   password,
   isLoading,
-  isSigningUp,
   onSubmit,
   onEmailChange,
   onPasswordChange,
@@ -43,7 +44,7 @@ export const AdminLoginForm = ({
         </div>
       </div>
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Processing..." : (isSigningUp ? "Sign Up" : "Sign In")}
+        {isLoading ? "Processing..." : "Sign In"}
       </Button>
     </form>
   );

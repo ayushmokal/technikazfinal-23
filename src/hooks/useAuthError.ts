@@ -11,15 +11,6 @@ export const handleAuthError = (error: any, toast: Toast) => {
     return;
   }
 
-  if (error.message.includes('email_not_confirmed')) {
-    toast({
-      variant: "destructive",
-      title: "Email Not Confirmed",
-      description: "Please check your email and confirm your account before logging in. Check your spam folder if you don't see the email.",
-    });
-    return;
-  }
-
   if (error.message.includes('invalid_credentials')) {
     toast({
       variant: "destructive",
