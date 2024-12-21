@@ -60,8 +60,8 @@ export function Navigation() {
       {/* Main Navigation */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-2xl font-bold">
-            <img src="/lovable-uploads/524f9623-9785-43e3-bb56-651959732327.png" alt="Technikaz" className="h-8" />
+          <Link to="/" className="text-2xl font-bold text-primary">
+            Technikaz
           </Link>
           <div className="hidden md:flex space-x-8">
             {categories.map((category) => (
