@@ -17,7 +17,8 @@ export const categories = {
   TECH: ["Tech Deals", "News"],
   GAMES: ["PC", "PS5", "Xbox", "Nintendo"],
   ENTERTAINMENT: ["MOVIES", "SERIES", "COMICS"],
-  STOCKS: ["Market News", "Analysis", "IPO", "Crypto"]
+  STOCKS: ["Market News", "Analysis", "IPO", "Crypto"],
+  GADGETS: ["Mobiles", "Laptops"]
 } as const;
 
 export type Category = keyof typeof categories;
