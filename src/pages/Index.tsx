@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 export default function Index() {
   const { data: blogs } = useQuery({
@@ -23,7 +24,7 @@ export default function Index() {
 
   const featuredArticles = blogs?.slice(0, 2) || [];
   const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
-  const gadgetArticles = blogs?.filter(blog => blog.category === 'GADGETS').slice(0, 4) || [];
+  const mobileArticles = blogs?.filter(blog => blog.category === 'MOBILES').slice(0, 4) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
 
   return (
@@ -44,6 +45,7 @@ export default function Index() {
               image={article.image_url || ''}
               category={article.category}
               slug={article.slug}
+              featured
             />
           ))}
         </div>
@@ -51,7 +53,10 @@ export default function Index() {
         {/* Tech Deals Section */}
         <section className="mb-12">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">TECH DEALS</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">TECH DEALS</h2>
+              <Link to="/TECH" className="text-sm text-primary hover:underline">See All</Link>
+            </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon">
                 <ArrowLeft className="h-4 w-4" />
@@ -61,7 +66,7 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {techDeals.map((article) => (
               <ArticleCard
                 key={article.slug}
@@ -74,10 +79,13 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Gadgets Section */}
+        {/* Mobiles Section */}
         <section className="mb-12">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">GADGETS</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">MOBILES</h2>
+              <Link to="/MOBILES" className="text-sm text-primary hover:underline">See All</Link>
+            </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon">
                 <ArrowLeft className="h-4 w-4" />
@@ -87,8 +95,8 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {gadgetArticles.map((article) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {mobileArticles.map((article) => (
               <ArticleCard
                 key={article.slug}
                 title={article.title}
@@ -101,33 +109,41 @@ export default function Index() {
         </section>
 
         {/* Main Content Area */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Articles */}
-          <div className="col-span-2">
+          <div className="lg:col-span-2">
             <div className="flex gap-4 mb-6">
               <Button variant="outline" className="rounded-full">Popular</Button>
               <Button variant="outline" className="rounded-full">Recent</Button>
             </div>
             <div className="space-y-6">
               {recentArticles.map((article) => (
-                <div key={article.slug} className="flex gap-4">
+                <Link 
+                  to={`/article/${article.slug}`}
+                  key={article.slug} 
+                  className="flex gap-4 group hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                >
                   <img
                     src={article.image_url || '/placeholder.svg'}
                     alt={article.title}
                     className="w-32 h-24 object-cover rounded"
                   />
                   <div>
-                    <h3 className="font-semibold line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-gray-500">{new Date(article.created_at).toLocaleDateString()}</p>
+                    <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {new Date(article.created_at).toLocaleDateString()}
+                    </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <Button className="w-full mt-6">Load More</Button>
           </div>
 
           {/* Sidebar */}
-          <div className="col-span-1">
+          <div className="lg:col-span-1">
             <BlogSidebar />
           </div>
         </div>
