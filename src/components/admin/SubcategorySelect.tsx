@@ -10,6 +10,9 @@ interface SubcategorySelectProps {
 }
 
 export function SubcategorySelect({ form, selectedCategory }: SubcategorySelectProps) {
+  console.log('Selected category:', selectedCategory); // Debug log
+  console.log('Available subcategories:', selectedCategory ? categories[selectedCategory as keyof typeof categories] : 'none'); // Debug log
+
   return (
     <FormField
       control={form.control}
@@ -19,7 +22,7 @@ export function SubcategorySelect({ form, selectedCategory }: SubcategorySelectP
           <FormLabel>Subcategory</FormLabel>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            value={field.value}
             disabled={!selectedCategory}
           >
             <FormControl>
