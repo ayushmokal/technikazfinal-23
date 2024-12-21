@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ export default function AdminPanel() {
     }
 
     const { data: adminData } = await supabase
-      .from("admin_users")
+      .from('admin_users')
       .select()
-      .eq("id", session.user.id)
+      .eq('id', session.user.id)
       .single();
 
     if (!adminData) {

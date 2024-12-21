@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
 type Toast = ReturnType<typeof useToast>["toast"];
 
 export const handleAdminUserCreation = async (
@@ -10,7 +11,7 @@ export const handleAdminUserCreation = async (
 ) => {
   try {
     const { error: adminError } = await supabase
-      .from("admin_users")
+      .from('admin_users')
       .insert([{ id: user.id, email: user.email }]);
 
     if (adminError) {

@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { handleAuthError } from "./useAuthError";
+import type { Database } from "@/integrations/supabase/types";
 
 interface AdminAuthState {
   email: string;
@@ -29,9 +30,9 @@ export const useAdminAuth = () => {
     try {
       // First check if the user exists in admin_users table
       const { data: adminCheck, error: adminCheckError } = await supabase
-        .from("admin_users")
-        .select("email")
-        .eq("email", state.email)
+        .from('admin_users')
+        .select('email')
+        .eq('email', state.email)
         .maybeSingle();
 
       if (adminCheckError) {
