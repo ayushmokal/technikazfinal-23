@@ -27,14 +27,14 @@ export const useAdminAuth = () => {
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data: { user }, error } = await supabase.auth.signInWithPassword({
         email: state.email,
         password: state.password,
       });
 
       if (error) throw error;
 
-      if (!data.user) {
+      if (!user) {
         toast({
           variant: "destructive",
           title: "Error",
@@ -43,6 +43,7 @@ export const useAdminAuth = () => {
         return;
       }
 
+      // Check if user exists and is authenticated
       toast({
         title: "Success",
         description: "Logged in successfully",
