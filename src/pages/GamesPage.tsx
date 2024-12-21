@@ -10,18 +10,24 @@ import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 
 export default function GamesPage() {
-  const [platform, setPlatform] = useState("PS5");
+  const [platform, setPlatform] = useState("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
   const { data: articles } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('blogs')
         .select('*')
         .eq('category', 'GAMES')
-        .eq('subcategory', platform)
         .order('created_at', { ascending: false });
+
+      // Only apply subcategory filter if not "ALL"
+      if (platform !== "ALL") {
+        query = query.eq('subcategory', platform);
+      }
+      
+      const { data, error } = await query;
       
       if (error) throw error;
       
@@ -53,7 +59,7 @@ export default function GamesPage() {
 
         {/* Platform Filter */}
         <div className="flex justify-center gap-4 mb-8">
-          {["PS5", "Xbox", "Nintendo", "PC"].map((p) => (
+          {["ALL", "PS5", "Xbox", "Nintendo", "PC"].map((p) => (
             <Button
               key={p}
               variant={platform === p ? "default" : "outline"}
