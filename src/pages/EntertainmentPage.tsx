@@ -14,10 +14,9 @@ export default function EntertainmentPage() {
   const [activeTab, setActiveTab] = useState("popular");
 
   // Separate query for featured articles
-  const { data: featuredArticles } = useQuery({
+  const { data: featuredArticles = [], isLoading: isFeaturedLoading } = useQuery({
     queryKey: ['entertainment-featured-articles'],
     queryFn: async () => {
-      console.log('Fetching featured entertainment articles');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -28,16 +27,15 @@ export default function EntertainmentPage() {
       
       if (error) {
         console.error('Error fetching featured entertainment articles:', error);
-        throw error;
+        return [];
       }
       
-      console.log('Featured entertainment articles fetched:', data);
       return data || [];
     }
   });
 
   // Regular articles query
-  const { data: articles } = useQuery({
+  const { data: articles = [], isLoading: isArticlesLoading } = useQuery({
     queryKey: ['entertainment-articles', subcategory],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -47,16 +45,34 @@ export default function EntertainmentPage() {
         .eq('subcategory', subcategory)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching entertainment articles:', error);
+        return [];
+      }
+      
       return data || [];
     }
   });
 
-  const mainFeaturedArticle = featuredArticles?.[0];
-  const gridFeaturedArticles = featuredArticles?.slice(1) || [];
-  const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
-  const recentArticles = articles?.slice(0, 6) || [];
-  const upcomingArticles = articles?.slice(0, 5) || [];
+  const mainFeaturedArticle = featuredArticles[0];
+  const gridFeaturedArticles = featuredArticles.slice(1);
+  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
+  const recentArticles = articles.slice(0, 6);
+  const upcomingArticles = articles.slice(0, 5);
+
+  if (isFeaturedLoading || isArticlesLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto"></div>
+            <div className="h-[400px] bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -137,12 +153,12 @@ export default function EntertainmentPage() {
               <div className="divide-y">
                 {upcomingArticles.map((article) => (
                   <Link
-                    key={article.slug}
+                    key={article.id}
                     to={`/article/${article.slug}`}
                     className="flex gap-4 p-4 hover:bg-gray-50"
                   >
                     <img
-                      src={article.image_url}
+                      src={article.image_url || '/placeholder.svg'}
                       alt={article.title}
                       className="w-20 h-16 object-cover rounded"
                     />
