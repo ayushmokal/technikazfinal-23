@@ -40,7 +40,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
       author: "",
       image_url: "",
       slug: "",
-      upcoming: false,
       featured: false,
       popular: false,
     },

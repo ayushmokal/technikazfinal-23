@@ -11,7 +11,6 @@ export interface BlogFormData {
   updated_at: string;
   featured: boolean;
   popular: boolean;
-  upcoming?: boolean; // Make it optional
 }
 
 export const categories = {
