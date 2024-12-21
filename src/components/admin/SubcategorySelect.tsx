@@ -10,8 +10,7 @@ interface SubcategorySelectProps {
 }
 
 export function SubcategorySelect({ form, selectedCategory }: SubcategorySelectProps) {
-  console.log('Selected category:', selectedCategory); // Debug log
-  console.log('Available subcategories:', selectedCategory ? categories[selectedCategory as keyof typeof categories] : 'none'); // Debug log
+  const subcategories = selectedCategory ? categories[selectedCategory as keyof typeof categories] || [] : [];
 
   return (
     <FormField
@@ -23,7 +22,7 @@ export function SubcategorySelect({ form, selectedCategory }: SubcategorySelectP
           <Select
             onValueChange={field.onChange}
             value={field.value}
-            disabled={!selectedCategory}
+            disabled={!selectedCategory || subcategories.length === 0}
           >
             <FormControl>
               <SelectTrigger>
@@ -31,14 +30,11 @@ export function SubcategorySelect({ form, selectedCategory }: SubcategorySelectP
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {selectedCategory &&
-                categories[selectedCategory as keyof typeof categories]?.map(
-                  (subcategory) => (
-                    <SelectItem key={subcategory} value={subcategory}>
-                      {subcategory}
-                    </SelectItem>
-                  )
-                )}
+              {subcategories.map((subcategory) => (
+                <SelectItem key={subcategory} value={subcategory}>
+                  {subcategory}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <FormMessage />

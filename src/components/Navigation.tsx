@@ -2,32 +2,33 @@ import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { categories } from "@/types/blog";
 
-const categories = [
+const navigationCategories = [
   {
     name: "GAMES",
     path: "/games",
-    subcategories: ["PS5", "Xbox", "Nintendo"],
+    subcategories: categories.GAMES,
   },
   {
     name: "TECH",
     path: "/tech",
-    subcategories: ["Tech Deals", "News"],
+    subcategories: categories.TECH,
   },
   {
     name: "ENTERTAINMENT",
     path: "/entertainment",
-    subcategories: ["Movies", "Series", "Comics"],
+    subcategories: categories.ENTERTAINMENT,
   },
   {
     name: "GADGETS",
     path: "/gadgets",
-    subcategories: ["MOBILE", "LAPTOPS"],
+    subcategories: categories.GADGETS,
   },
   {
     name: "STOCKS",
     path: "/stocks",
-    subcategories: [],
+    subcategories: categories.STOCKS,
   },
 ];
 
@@ -64,7 +65,7 @@ export function Navigation() {
             Technikaz
           </Link>
           <div className="hidden md:flex space-x-8">
-            {categories.map((category) => (
+            {navigationCategories.map((category) => (
               <Link
                 key={category.name}
                 to={category.path}

@@ -15,10 +15,10 @@ export interface BlogFormData {
 
 export const categories = {
   TECH: ["Tech Deals", "News"],
-  GAMES: ["PC", "PS5", "Xbox", "Nintendo"],
-  ENTERTAINMENT: ["MOVIES", "SERIES", "COMICS"],
+  GAMES: ["PS5", "Xbox", "Nintendo", "PC"],
+  ENTERTAINMENT: ["Movies", "Series", "Comics"],
   STOCKS: ["Market News", "Analysis", "IPO", "Crypto"],
-  GADGETS: ["Mobiles", "Laptops"]
+  GADGETS: ["MOBILE", "LAPTOPS"]
 } as const;
 
 export type Category = keyof typeof categories;
