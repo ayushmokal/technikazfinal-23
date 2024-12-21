@@ -29,15 +29,14 @@ export function ArticleCard({ title, image, category, slug, featured = false }: 
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-      <div className="absolute bottom-0 p-4 text-white">
+      <div className="p-4">
         <div className="mb-2">
-          <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold">
+          <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
             {category}
           </span>
         </div>
         <h3 className={cn(
-          "font-bold leading-tight line-clamp-2 group-hover:text-primary-foreground transition-colors",
+          "font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors",
           featured ? "text-2xl md:text-3xl" : "text-lg"
         )}>
           {title}
