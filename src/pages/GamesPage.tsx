@@ -12,11 +12,11 @@ import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
 
 export default function GamesPage() {
-  const [platform, setPlatform] = useState<Subcategory>(categories.GAMES[0]); // Properly typed state
+  const [platform, setPlatform] = useState<Subcategory | "ALL">("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
   // Separate query for featured articles
-  const { data: featuredArticles } = useQuery({
+  const { data: featuredArticles = [] } = useQuery({
     queryKey: ['games-featured-articles'],
     queryFn: async () => {
       console.log('Fetching featured games articles');
@@ -38,8 +38,8 @@ export default function GamesPage() {
     }
   });
 
-  // Regular articles query with subcategory filter
-  const { data: articles } = useQuery({
+  // Regular articles query with platform filter
+  const { data: articles = [] } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
       console.log('Fetching games articles with platform:', platform);
@@ -47,8 +47,12 @@ export default function GamesPage() {
         .from('blogs')
         .select('*')
         .eq('category', 'GAMES')
-        .eq('subcategory', platform)
         .order('created_at', { ascending: false });
+      
+      // Only apply platform filter if not "ALL"
+      if (platform !== "ALL") {
+        query = query.eq('subcategory', platform);
+      }
       
       const { data, error } = await query;
       
@@ -57,15 +61,15 @@ export default function GamesPage() {
         throw error;
       }
       
-      console.log('Games articles fetched successfully:', data);
+      console.log('Games articles fetched:', data);
       return data || [];
     }
   });
 
-  const mainFeaturedArticle = featuredArticles?.[0];
-  const gridFeaturedArticles = featuredArticles?.slice(1) || [];
-  const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
-  const recentArticles = articles?.slice(0, 6) || [];
+  const mainFeaturedArticle = featuredArticles[0];
+  const gridFeaturedArticles = featuredArticles.slice(1);
+  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const recentArticles = articles.slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -77,6 +81,13 @@ export default function GamesPage() {
 
         {/* Platform Filter */}
         <div className="flex justify-center gap-4 mb-8">
+          <Button
+            variant={platform === "ALL" ? "default" : "outline"}
+            onClick={() => setPlatform("ALL")}
+            className="min-w-[100px]"
+          >
+            All
+          </Button>
           {categories.GAMES.map((p) => (
             <Button
               key={p}
@@ -89,16 +100,21 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {/* Featured Articles Section */}
+        {/* Hero Section */}
         {mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
-            gridArticles={gridFeaturedArticles}
+            gridArticles={gridFeaturedArticles} 
           />
         )}
 
         {/* Grid Section */}
-        <ArticleGrid articles={articles || []} />
+        <ArticleGrid articles={articles} />
+
+        {/* Middle Ad */}
+        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
+          <span className="text-gray-500">Advertisement</span>
+        </div>
 
         {/* Popular/Recent Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -114,12 +130,12 @@ export default function GamesPage() {
           <div className="lg:col-span-4 space-y-8">
             {/* Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+              <span className="text-gray-500">Advertisement</span>
             </div>
 
             {/* Bottom Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+              <span className="text-gray-500">Advertisement</span>
             </div>
           </div>
         </div>
