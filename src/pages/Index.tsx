@@ -26,8 +26,18 @@ export default function Index() {
   });
 
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
-  const techDeals = blogs?.filter(blog => blog.category === 'TECH' && blog.subcategory === 'TECH DEALS').slice(0, 4) || [];
-  const mobileArticles = blogs?.filter(blog => blog.category === 'GADGETS' && blog.subcategory === 'MOBILE').slice(0, 4) || [];
+  // Updated filter conditions for Tech Deals
+  const techDeals = blogs?.filter(blog => 
+    blog.category === 'TECH' && 
+    blog.subcategory === 'Tech Deals'
+  ).slice(0, 4) || [];
+  
+  // Updated filter conditions for Mobile articles
+  const mobileArticles = blogs?.filter(blog => 
+    blog.category === 'GADGETS' && 
+    blog.subcategory === 'MOBILE'
+  ).slice(0, 4) || [];
+  
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
 
@@ -75,7 +85,7 @@ export default function Index() {
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold">TECH DEALS</h2>
-              <Link to="/TECH" className="text-sm text-primary hover:underline">See All</Link>
+              <Link to="/tech" className="text-sm text-primary hover:underline">See All</Link>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="icon">
@@ -86,17 +96,23 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {techDeals.map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || ''}
-                category={article.category}
-                slug={article.slug}
-              />
-            ))}
-          </div>
+          {techDeals.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {techDeals.map((article) => (
+                <ArticleCard
+                  key={article.slug}
+                  title={article.title}
+                  image={article.image_url || ''}
+                  category={article.category}
+                  slug={article.slug}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-gray-100 rounded-lg">
+              <p className="text-gray-500">No tech deals available at the moment</p>
+            </div>
+          )}
         </section>
 
         {/* Advertisement Section */}
@@ -120,17 +136,23 @@ export default function Index() {
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {mobileArticles.map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || ''}
-                category={article.category}
-                slug={article.slug}
-              />
-            ))}
-          </div>
+          {mobileArticles.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {mobileArticles.map((article) => (
+                <ArticleCard
+                  key={article.slug}
+                  title={article.title}
+                  image={article.image_url || ''}
+                  category={article.category}
+                  slug={article.slug}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-gray-100 rounded-lg">
+              <p className="text-gray-500">No mobile articles available at the moment</p>
+            </div>
+          )}
         </section>
 
         {/* Advertisement Section */}
