@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
 import { BlogFormData } from "@/types/blog";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { SideArticle } from "@/components/SideArticle";
 
 interface ArticleGridProps {
   articles: BlogFormData[];
@@ -10,32 +9,7 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {articles.map((article) => (
-        <div key={article.slug} className="bg-white rounded-xl overflow-hidden">
-          <Link
-            to={`/article/${article.slug}`}
-            className="block group"
-          >
-            <div className="relative overflow-hidden">
-              <AspectRatio ratio={16/9}>
-                <img
-                  src={article.image_url}
-                  alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </AspectRatio>
-            </div>
-          </Link>
-          <div className="p-4">
-            <Link 
-              to={`/article/${article.slug}`}
-              className="block hover:text-primary transition-colors"
-            >
-              <h3 className="font-medium text-base line-clamp-2">
-                {article.title}
-              </h3>
-            </Link>
-          </div>
-        </div>
+        <SideArticle key={article.slug} article={article} />
       ))}
     </div>
   );
