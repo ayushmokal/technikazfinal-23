@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Star, Trophy } from "lucide-react";
+import { Pencil, Trash2, Star, Trophy, Home } from "lucide-react";
 import { BlogFormData } from "@/types/blog";
 import {
   Tooltip,
@@ -49,6 +49,27 @@ export function CategoryBlogTable({
               </TooltipTrigger>
               <TooltipContent>
                 <p>Toggle Popular</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onToggleFeatured(blog.id, blog.featured || false, blog.category)}
+                >
+                  <Home
+                    className={`h-4 w-4 ${
+                      blog.featured ? "fill-blue-500 text-blue-500" : "text-gray-400"
+                    }`}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle Featured on Homepage</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
