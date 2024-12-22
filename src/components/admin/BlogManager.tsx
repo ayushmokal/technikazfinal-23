@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { type Category } from "@/types/blog";
+import { type Category, categories } from "@/types/blog";
 import { CategorySection } from "./CategorySection";
 
 interface BlogManagerProps {
@@ -134,7 +134,7 @@ export function BlogManager({ selectedCategory }: BlogManagerProps) {
     );
   }
 
-  const categoriesToShow = selectedCategory ? [selectedCategory] : Object.keys(categories);
+  const categoriesToShow = selectedCategory ? [selectedCategory] : Object.keys(categories) as Category[];
 
   return (
     <div className="space-y-4">
