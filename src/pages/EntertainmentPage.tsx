@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,8 @@ export default function EntertainmentPage() {
         .select('*')
         .eq('category', 'ENTERTAINMENT')
         .eq('subcategory', subcategory)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(4); // Limit to 4 articles for one row
       
       if (error) {
         console.error('Error fetching entertainment articles:', error);
@@ -109,8 +109,8 @@ export default function EntertainmentPage() {
           />
         )}
 
-        {/* Regular Articles Grid */}
-        <ArticleGrid articles={articles} />
+        {/* Regular Articles Grid - One Row Only */}
+        <ArticleGrid articles={articles.slice(0, 4)} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
