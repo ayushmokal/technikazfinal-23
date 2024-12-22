@@ -7,11 +7,13 @@ import { BlogForm } from "@/components/admin/BlogForm";
 import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Folders } from "lucide-react";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -41,34 +43,50 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Admin Panel</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-3xl font-bold">Admin Panel</h1>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => setShowCategories(!showCategories)}
+            >
+              <Folders className="h-4 w-4" />
+              Manage Categories
+            </Button>
+          </div>
           <Button onClick={handleLogout}>Logout</Button>
         </div>
         
-        <Tabs defaultValue="analytics" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="manage">Manage Blogs</TabsTrigger>
-            <TabsTrigger value="create">Create Blog</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="analytics" className="space-y-4">
-            <h2 className="text-xl font-semibold">Blog Analytics</h2>
-            <BlogAnalytics />
-          </TabsContent>
-
-          <TabsContent value="manage" className="space-y-4">
-            <h2 className="text-xl font-semibold">Manage Blog Posts</h2>
-            <BlogManager />
-          </TabsContent>
-
-          <TabsContent value="create" className="space-y-4">
-            <h2 className="text-xl font-semibold">Create New Blog Post</h2>
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <BlogForm />
+        {showCategories ? (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Category Management</h2>
+              <Button variant="outline" onClick={() => setShowCategories(false)}>
+                Back to Dashboard
+              </Button>
             </div>
-          </TabsContent>
-        </Tabs>
+            <BlogManager />
+          </div>
+        ) : (
+          <Tabs defaultValue="analytics" className="space-y-6">
+            <TabsList>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="create">Create Blog</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="analytics" className="space-y-4">
+              <h2 className="text-xl font-semibold">Blog Analytics</h2>
+              <BlogAnalytics />
+            </TabsContent>
+
+            <TabsContent value="create" className="space-y-4">
+              <h2 className="text-xl font-semibold">Create New Blog Post</h2>
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <BlogForm />
+              </div>
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
     </div>
   );
