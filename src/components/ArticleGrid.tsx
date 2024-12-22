@@ -16,7 +16,7 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
             className="block group"
           >
             <div className="relative overflow-hidden rounded-xl">
-              <AspectRatio ratio={4/3}>
+              <AspectRatio ratio={16/9}>
                 <img
                   src={article.image_url}
                   alt={article.title}
