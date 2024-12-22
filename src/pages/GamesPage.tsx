@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -54,7 +53,7 @@ export default function GamesPage() {
         query = query.eq('subcategory', platform);
       }
       
-      const { data, error } = await query;
+      const { data, error } = await query.limit(4); // Limit to 4 articles for one row
       
       if (error) {
         console.error('Error fetching games articles:', error);
@@ -67,7 +66,7 @@ export default function GamesPage() {
   });
 
   const mainFeaturedArticle = featuredArticles[0];
-  const gridFeaturedArticles = featuredArticles.slice(1);
+  const gridFeaturedArticles = featuredArticles.slice(1, 3); // Only take 2 articles for the hero section
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles.slice(0, 6) || [];
 
@@ -108,8 +107,8 @@ export default function GamesPage() {
           />
         )}
 
-        {/* Grid Section */}
-        <ArticleGrid articles={articles} />
+        {/* Grid Section - Only one row */}
+        <ArticleGrid articles={articles.slice(0, 4)} />
 
         {/* Middle Ad */}
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
