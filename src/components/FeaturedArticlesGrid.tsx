@@ -12,7 +12,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
 
   return (
     <div className="grid grid-cols-12 gap-6">
-      {/* Main Featured Article - 60% width */}
+      {/* Main Featured Article - Rectangular (16:9) */}
       <div className="col-span-12 lg:col-span-7">
         <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
@@ -30,12 +30,12 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         </Link>
       </div>
 
-      {/* Second Article - 40% width */}
+      {/* Second Article - Square (1:1) */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
-              <AspectRatio ratio={16/9}>
+              <AspectRatio ratio={1}>
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
