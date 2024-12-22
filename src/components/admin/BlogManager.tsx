@@ -89,6 +89,23 @@ export function BlogManager({ selectedCategory }: BlogManagerProps) {
   const toggleFeatured = async (id: string, currentValue: boolean, category: string, isHomepage = false) => {
     // If toggling homepage featured status
     if (isHomepage) {
+      // If trying to feature a blog, check the total count first
+      if (!currentValue) {
+        const { data: featuredCount } = await supabase
+          .from('blogs')
+          .select('id', { count: 'exact' })
+          .eq('featured', true);
+
+        if (featuredCount && featuredCount.length >= 6) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Maximum of 6 featured blogs allowed on homepage",
+          });
+          return;
+        }
+      }
+
       const { error } = await supabase
         .from('blogs')
         .update({ featured: !currentValue })
