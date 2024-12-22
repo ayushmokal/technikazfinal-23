@@ -86,7 +86,32 @@ export function BlogManager({ selectedCategory }: BlogManagerProps) {
     refetch();
   };
 
-  const toggleFeatured = async (id: string, currentValue: boolean, category: string) => {
+  const toggleFeatured = async (id: string, currentValue: boolean, category: string, isHomepage = false) => {
+    // If toggling homepage featured status
+    if (isHomepage) {
+      const { error } = await supabase
+        .from('blogs')
+        .update({ featured: !currentValue })
+        .eq('id', id);
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to update homepage featured status",
+        });
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "Homepage featured status updated successfully",
+      });
+      refetch();
+      return;
+    }
+
+    // If toggling category featured status
     // Check featured count for the category
     if (!currentValue) {
       const { data: featuredCount } = await supabase

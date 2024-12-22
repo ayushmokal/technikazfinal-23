@@ -11,7 +11,7 @@ import {
 
 interface CategoryBlogTableProps {
   blog: BlogFormData;
-  onToggleFeatured: (id: string, currentValue: boolean, category: string) => void;
+  onToggleFeatured: (id: string, currentValue: boolean, category: string, isHomepage?: boolean) => void;
   onTogglePopular: (id: string, currentValue: boolean) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
@@ -59,7 +59,7 @@ export function CategoryBlogTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onToggleFeatured(blog.id, blog.featured || false, blog.category)}
+                  onClick={() => onToggleFeatured(blog.id, blog.featured || false, blog.category, true)}
                 >
                   <Home
                     className={`h-4 w-4 ${

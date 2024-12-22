@@ -5,7 +5,7 @@ import { type BlogFormData } from "@/types/blog";
 interface CategorySectionProps {
   category: string;
   blogs: BlogFormData[];
-  onToggleFeatured: (id: string, currentValue: boolean, category: string) => void;
+  onToggleFeatured: (id: string, currentValue: boolean, category: string, isHomepage?: boolean) => void;
   onTogglePopular: (id: string, currentValue: boolean) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
