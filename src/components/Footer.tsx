@@ -11,7 +11,11 @@ export function Footer() {
           {/* Logo and Newsletter */}
           <div className="space-y-4">
             <Link to="/" className="block">
-              <img src="/lovable-uploads/524f9623-9785-43e3-bb56-651959732327.png" alt="Technikaz" className="h-8" />
+              <img 
+                src="/lovable-uploads/b9245872-2c89-4c1b-91eb-8e2ea38da7fd.png" 
+                alt="Technikaz" 
+                className="h-8 w-auto hover:opacity-80 transition-opacity"
+              />
             </Link>
             <div className="flex gap-2">
               <Input

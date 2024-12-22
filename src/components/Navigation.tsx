@@ -61,8 +61,12 @@ export function Navigation() {
       {/* Main Navigation */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            Technikaz
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/lovable-uploads/b9245872-2c89-4c1b-91eb-8e2ea38da7fd.png" 
+              alt="Technikaz" 
+              className="h-8 w-auto hover:opacity-80 transition-opacity"
+            />
           </Link>
           <div className="hidden md:flex space-x-8">
             {navigationCategories.map((category) => (
