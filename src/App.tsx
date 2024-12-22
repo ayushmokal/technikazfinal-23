@@ -13,6 +13,7 @@ import TechPage from "./pages/TechPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import StocksPage from "./pages/StocksPage";
 import EditBlogPage from "./pages/EditBlogPage";
+import AboutUs from "./pages/AboutUs";
 import React from 'react';
 
 const queryClient = new QueryClient({
@@ -43,6 +44,7 @@ function App() {
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/admin/edit/:id" element={<EditBlogPage />} />
+              <Route path="/about" element={<AboutUs />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
