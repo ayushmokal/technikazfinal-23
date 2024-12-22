@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { BlogSidebar } from "@/components/BlogSidebar";
 import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
 
@@ -53,7 +54,7 @@ export default function GamesPage() {
         query = query.eq('subcategory', platform);
       }
       
-      const { data, error } = await query.limit(4); // Limit to 4 articles for one row
+      const { data, error } = await query.limit(4);
       
       if (error) {
         console.error('Error fetching games articles:', error);
@@ -66,7 +67,7 @@ export default function GamesPage() {
   });
 
   const mainFeaturedArticle = featuredArticles[0];
-  const gridFeaturedArticles = featuredArticles.slice(1, 3); // Only take 2 articles for the hero section
+  const gridFeaturedArticles = featuredArticles.slice(1, 3);
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles.slice(0, 6) || [];
 
@@ -115,8 +116,9 @@ export default function GamesPage() {
           <span className="text-gray-500">Advertisement</span>
         </div>
 
-        {/* Popular/Recent Tabs */}
+        {/* Popular/Recent Tabs and Sidebar Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Main Content */}
           <div className="lg:col-span-8">
             <ArticleTabs
               popularArticles={popularArticles}
@@ -126,16 +128,8 @@ export default function GamesPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-4 space-y-8">
-            {/* Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Advertisement</span>
-            </div>
-
-            {/* Bottom Ad Space */}
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Advertisement</span>
-            </div>
+          <div className="lg:col-span-4">
+            <BlogSidebar />
           </div>
         </div>
       </main>
