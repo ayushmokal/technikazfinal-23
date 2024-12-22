@@ -98,7 +98,8 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {mainFeaturedArticle && (
+        {/* Only show CategoryHero when platform is "ALL" */}
+        {platform === "ALL" && mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
             gridArticles={gridFeaturedArticles} 
