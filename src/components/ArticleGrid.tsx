@@ -10,12 +10,12 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {articles.map((article) => (
-        <div key={article.slug} className="flex flex-col">
+        <div key={article.slug} className="bg-white rounded-xl overflow-hidden">
           <Link
             to={`/article/${article.slug}`}
             className="block group"
           >
-            <div className="relative overflow-hidden rounded-xl">
+            <div className="relative overflow-hidden">
               <AspectRatio ratio={16/9}>
                 <img
                   src={article.image_url}
@@ -25,14 +25,16 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
               </AspectRatio>
             </div>
           </Link>
-          <Link 
-            to={`/article/${article.slug}`}
-            className="mt-3 hover:text-primary transition-colors"
-          >
-            <h3 className="font-medium text-base line-clamp-2">
-              {article.title}
-            </h3>
-          </Link>
+          <div className="p-4">
+            <Link 
+              to={`/article/${article.slug}`}
+              className="block hover:text-primary transition-colors"
+            >
+              <h3 className="font-medium text-base line-clamp-2">
+                {article.title}
+              </h3>
+            </Link>
+          </div>
         </div>
       ))}
     </div>

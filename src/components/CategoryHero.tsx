@@ -13,9 +13,9 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
       {featuredArticle && (
         <>
           {/* Main Featured Article - Takes up 3 columns */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 bg-white rounded-xl overflow-hidden">
             <Link to={`/article/${featuredArticle.slug}`} className="block group">
-              <div className="relative overflow-hidden rounded-xl">
+              <div className="relative overflow-hidden">
                 <AspectRatio ratio={16/9}>
                   <img
                     src={featuredArticle.image_url}
@@ -25,25 +25,27 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
                 </AspectRatio>
               </div>
             </Link>
-            <Link 
-              to={`/article/${featuredArticle.slug}`}
-              className="block mt-3 hover:text-primary transition-colors"
-            >
-              <h2 className="text-xl md:text-2xl font-bold">
-                {featuredArticle.title}
-              </h2>
-            </Link>
+            <div className="p-4">
+              <Link 
+                to={`/article/${featuredArticle.slug}`}
+                className="block hover:text-primary transition-colors"
+              >
+                <h2 className="text-xl md:text-2xl font-bold">
+                  {featuredArticle.title}
+                </h2>
+              </Link>
+            </div>
           </div>
 
           {/* Right Side Articles - Stack in one column */}
           <div className="lg:col-span-1 space-y-6">
             {gridArticles.slice(0, 2).map((article) => (
-              <div key={article.slug}>
+              <div key={article.slug} className="bg-white rounded-xl overflow-hidden">
                 <Link
                   to={`/article/${article.slug}`}
                   className="block group"
                 >
-                  <div className="relative overflow-hidden rounded-xl">
+                  <div className="relative overflow-hidden">
                     <AspectRatio ratio={16/9}>
                       <img
                         src={article.image_url}
@@ -53,14 +55,16 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
                     </AspectRatio>
                   </div>
                 </Link>
-                <Link 
-                  to={`/article/${article.slug}`}
-                  className="block mt-3 hover:text-primary transition-colors"
-                >
-                  <h3 className="text-base font-medium">
-                    {article.title}
-                  </h3>
-                </Link>
+                <div className="p-4">
+                  <Link 
+                    to={`/article/${article.slug}`}
+                    className="block hover:text-primary transition-colors"
+                  >
+                    <h3 className="text-base font-medium">
+                      {article.title}
+                    </h3>
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
