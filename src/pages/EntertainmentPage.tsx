@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
-import { ArticleCard } from "@/components/ArticleCard";
+import { CategoryHero } from "@/components/CategoryHero";
 
 export default function EntertainmentPage() {
   const [subcategory, setSubcategory] = useState<Subcategory>(categories.ENTERTAINMENT[0]);
@@ -101,21 +100,12 @@ export default function EntertainmentPage() {
           ))}
         </div>
 
-        {/* Featured Articles Grid */}
+        {/* Featured Articles Section */}
         {featuredArticles.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            {featuredArticles.map((article, index) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || "/placeholder.svg"}
-                category={article.category}
-                slug={article.slug}
-                featured={index === 0}
-                mainFeatured={index === 0}
-              />
-            ))}
-          </div>
+          <CategoryHero
+            featuredArticle={featuredArticles[0]}
+            gridArticles={featuredArticles.slice(1)}
+          />
         )}
 
         {/* Regular Articles Grid */}

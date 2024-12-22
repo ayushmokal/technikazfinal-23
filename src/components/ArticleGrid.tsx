@@ -29,7 +29,7 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
             to={`/article/${article.slug}`}
             className="mt-3 hover:text-primary transition-colors"
           >
-            <h3 className="font-medium text-lg line-clamp-2">
+            <h3 className="font-medium text-base line-clamp-2">
               {article.title}
             </h3>
           </Link>
