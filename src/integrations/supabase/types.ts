@@ -16,6 +16,7 @@ export type Database = {
           content: string
           created_at: string
           featured: boolean | null
+          featured_in_category: boolean | null
           id: string
           image_url: string | null
           popular: boolean | null
@@ -30,6 +31,7 @@ export type Database = {
           content: string
           created_at?: string
           featured?: boolean | null
+          featured_in_category?: boolean | null
           id?: string
           image_url?: string | null
           popular?: boolean | null
@@ -44,6 +46,7 @@ export type Database = {
           content?: string
           created_at?: string
           featured?: boolean | null
+          featured_in_category?: boolean | null
           id?: string
           image_url?: string | null
           popular?: boolean | null

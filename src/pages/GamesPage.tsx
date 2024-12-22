@@ -15,7 +15,7 @@ export default function GamesPage() {
   const [platform, setPlatform] = useState<Subcategory | "ALL">("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
-  // Separate query for featured articles
+  // Query for category-specific featured articles
   const { data: featuredArticles = [] } = useQuery({
     queryKey: ['games-featured-articles'],
     queryFn: async () => {
@@ -24,7 +24,7 @@ export default function GamesPage() {
         .from('blogs')
         .select('*')
         .eq('category', 'GAMES')
-        .eq('featured', true)
+        .eq('featured_in_category', true)
         .order('created_at', { ascending: false })
         .limit(7);
       
@@ -76,10 +76,8 @@ export default function GamesPage() {
       <Navigation />
       
       <main className="container mx-auto px-4 py-8">
-        {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">Games</h1>
 
-        {/* Platform Filter */}
         <div className="flex justify-center gap-4 mb-8">
           <Button
             variant={platform === "ALL" ? "default" : "outline"}
@@ -100,7 +98,6 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {/* Hero Section */}
         {mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
@@ -108,17 +105,13 @@ export default function GamesPage() {
           />
         )}
 
-        {/* Grid Section - Only one row */}
         <ArticleGrid articles={articles.slice(0, 4)} />
 
-        {/* Middle Ad */}
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
         </div>
 
-        {/* Popular/Recent Tabs and Sidebar Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-8">
             <ArticleTabs
               popularArticles={popularArticles}
@@ -127,7 +120,6 @@ export default function GamesPage() {
             />
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-4">
             <BlogSidebar />
           </div>

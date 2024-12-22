@@ -31,10 +31,10 @@ export function CategoryBlogTable({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onToggleFeatured(blog.id!, blog.featured || false, blog.category)}
-            title={blog.featured ? "Remove from featured" : "Add to featured"}
+            onClick={() => onToggleFeatured(blog.id!, blog.featured_in_category || false, blog.category)}
+            title={blog.featured_in_category ? "Remove from featured" : "Add to featured"}
           >
-            <Crown className={`h-4 w-4 ${blog.featured ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+            <Crown className={`h-4 w-4 ${blog.featured_in_category ? 'fill-yellow-400 text-yellow-400' : ''}`} />
           </Button>
           <Button
             variant="ghost"

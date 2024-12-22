@@ -8,6 +8,7 @@ export interface BlogFormData {
   image_url: string;
   slug: string;
   featured?: boolean;
+  featured_in_category?: boolean;
   popular?: boolean;
   created_at: string;
   updated_at: string;

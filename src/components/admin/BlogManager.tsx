@@ -83,7 +83,7 @@ export function BlogManager() {
         .from('blogs')
         .select('id', { count: 'exact' })
         .eq('category', category)
-        .eq('featured', true);
+        .eq('featured_in_category', true);
 
       if (featuredCount && featuredCount.length >= 7) {
         toast({
@@ -97,7 +97,7 @@ export function BlogManager() {
 
     const { error } = await supabase
       .from('blogs')
-      .update({ featured: !currentValue })
+      .update({ featured_in_category: !currentValue })
       .eq('id', id);
 
     if (error) {
