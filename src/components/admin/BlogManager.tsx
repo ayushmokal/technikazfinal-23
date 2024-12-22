@@ -2,28 +2,38 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { categories } from "@/types/blog";
+import { type Category } from "@/types/blog";
 import { CategorySection } from "./CategorySection";
 
-export function BlogManager() {
+interface BlogManagerProps {
+  selectedCategory?: Category;
+}
+
+export function BlogManager({ selectedCategory }: BlogManagerProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const { data: blogs, refetch } = useQuery({
-    queryKey: ['blogs'],
+    queryKey: ['blogs', selectedCategory],
     queryFn: async () => {
-      console.log('Fetching all blogs...');
-      const { data, error } = await supabase
+      console.log('Fetching blogs...', selectedCategory ? `for category: ${selectedCategory}` : 'all categories');
+      const query = supabase
         .from('blogs')
         .select('*')
         .order('created_at', { ascending: false });
+
+      if (selectedCategory) {
+        query.eq('category', selectedCategory);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching blogs:', error);
         throw error;
       }
       
-      console.log('All blogs fetched successfully:', data);
+      console.log('Blogs fetched successfully:', data);
       return data || [];
     },
   });
@@ -124,10 +134,12 @@ export function BlogManager() {
     );
   }
 
+  const categoriesToShow = selectedCategory ? [selectedCategory] : Object.keys(categories);
+
   return (
     <div className="space-y-4">
-      {Object.keys(categories).map((category) => {
-        const categoryBlogs = blogs.filter((blog) => blog.category === category) || [];
+      {categoriesToShow.map((category) => {
+        const categoryBlogs = selectedCategory ? blogs : blogs.filter((blog) => blog.category === category);
         console.log(`Filtered blogs for ${category}:`, categoryBlogs);
         
         return (

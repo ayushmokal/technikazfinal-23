@@ -8,12 +8,14 @@ import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Folders } from "lucide-react";
+import { type Category, categories } from "@/types/blog";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -48,10 +50,13 @@ export default function AdminPanel() {
             <Button
               variant="outline"
               className="flex items-center gap-2"
-              onClick={() => setShowCategories(!showCategories)}
+              onClick={() => {
+                setShowCategories(!showCategories);
+                setSelectedCategory(null);
+              }}
             >
               <Folders className="h-4 w-4" />
-              Manage Categories
+              Manage All Categories
             </Button>
           </div>
           <Button onClick={handleLogout}>Logout</Button>
@@ -60,12 +65,41 @@ export default function AdminPanel() {
         {showCategories ? (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Category Management</h2>
-              <Button variant="outline" onClick={() => setShowCategories(false)}>
-                Back to Dashboard
-              </Button>
+              <h2 className="text-xl font-semibold">
+                {selectedCategory ? `${selectedCategory} Category Management` : 'Category Management'}
+              </h2>
+              {selectedCategory ? (
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setSelectedCategory(null)}>
+                    Back to Categories
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowCategories(false)}>
+                    Back to Dashboard
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="outline" onClick={() => setShowCategories(false)}>
+                  Back to Dashboard
+                </Button>
+              )}
             </div>
-            <BlogManager />
+            
+            {selectedCategory ? (
+              <BlogManager selectedCategory={selectedCategory} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(Object.keys(categories) as Category[]).map((category) => (
+                  <Button
+                    key={category}
+                    variant="outline"
+                    className="h-24 text-lg font-semibold"
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    Manage {category}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <Tabs defaultValue="analytics" className="space-y-6">
