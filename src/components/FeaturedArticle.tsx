@@ -8,7 +8,7 @@ interface FeaturedArticleProps {
 
 export function FeaturedArticle({ article }: FeaturedArticleProps) {
   return (
-    <div className="lg:col-span-3 bg-white rounded-xl overflow-hidden">
+    <div className="bg-white rounded-xl overflow-hidden h-full">
       <Link to={`/article/${article.slug}`} className="block group">
         <div className="relative overflow-hidden">
           <AspectRatio ratio={16/9}>
@@ -25,7 +25,7 @@ export function FeaturedArticle({ article }: FeaturedArticleProps) {
           to={`/article/${article.slug}`}
           className="block hover:text-primary transition-colors"
         >
-          <h2 className="text-xl md:text-2xl font-bold">
+          <h2 className="text-2xl md:text-3xl font-bold">
             {article.title}
           </h2>
         </Link>

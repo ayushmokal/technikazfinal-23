@@ -12,7 +12,9 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 animate-fadeIn">
       {featuredArticle && (
         <>
-          <FeaturedArticle article={featuredArticle} />
+          <div className="lg:col-span-3">
+            <FeaturedArticle article={featuredArticle} />
+          </div>
           <div className="lg:col-span-1 space-y-6">
             {gridArticles.slice(0, 2).map((article) => (
               <SideArticle key={article.slug} article={article} />

@@ -8,7 +8,7 @@ interface SideArticleProps {
 
 export function SideArticle({ article }: SideArticleProps) {
   return (
-    <div className="bg-white rounded-xl overflow-hidden">
+    <div className="bg-white rounded-xl overflow-hidden h-full">
       <Link
         to={`/article/${article.slug}`}
         className="block group"
@@ -28,7 +28,7 @@ export function SideArticle({ article }: SideArticleProps) {
           to={`/article/${article.slug}`}
           className="block hover:text-primary transition-colors"
         >
-          <h3 className="text-base font-medium">
+          <h3 className="text-lg font-medium">
             {article.title}
           </h3>
         </Link>
