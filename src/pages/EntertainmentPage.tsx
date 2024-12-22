@@ -5,11 +5,11 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
+import { ArticleCard } from "@/components/ArticleCard";
 
 export default function EntertainmentPage() {
   const [subcategory, setSubcategory] = useState<Subcategory>(categories.ENTERTAINMENT[0]);
@@ -25,7 +25,7 @@ export default function EntertainmentPage() {
         .eq('category', 'ENTERTAINMENT')
         .eq('featured', true)
         .order('created_at', { ascending: false })
-        .limit(7);
+        .limit(3);
       
       if (error) {
         console.error('Error fetching featured entertainment articles:', error);
@@ -52,13 +52,10 @@ export default function EntertainmentPage() {
         return [];
       }
       
-      console.log('Fetched articles:', data); // Debug log
       return data || [];
     }
   });
 
-  const mainFeaturedArticle = featuredArticles[0];
-  const gridFeaturedArticles = featuredArticles.slice(1);
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
   const recentArticles = articles.slice(0, 6);
   const upcomingArticles = articles.slice(0, 5);
@@ -104,13 +101,24 @@ export default function EntertainmentPage() {
           ))}
         </div>
 
-        {/* Hero Section */}
-        <CategoryHero 
-          featuredArticle={mainFeaturedArticle} 
-          gridArticles={gridFeaturedArticles} 
-        />
+        {/* Featured Articles Grid */}
+        {featuredArticles.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {featuredArticles.map((article, index) => (
+              <ArticleCard
+                key={article.slug}
+                title={article.title}
+                image={article.image_url || "/placeholder.svg"}
+                category={article.category}
+                slug={article.slug}
+                featured={index === 0}
+                mainFeatured={index === 0}
+              />
+            ))}
+          </div>
+        )}
 
-        {/* Grid Section */}
+        {/* Regular Articles Grid */}
         <ArticleGrid articles={articles} />
 
         {/* Middle Ad */}
