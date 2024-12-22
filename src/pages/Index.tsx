@@ -9,6 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
@@ -30,7 +37,7 @@ export default function Index() {
   const techDeals = blogs?.filter(blog => 
     blog.category === 'TECH' && 
     blog.subcategory === 'Tech Deals'
-  ).slice(0, 4) || [];
+  ) || [];
   
   const mobileArticles = blogs?.filter(blog => 
     blog.category === 'GADGETS' && 
@@ -61,27 +68,30 @@ export default function Index() {
               <h2 className="text-xl font-bold">TECH DEALS</h2>
               <Link to="/tech" className="text-sm text-primary hover:underline">See All</Link>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
           </div>
           {techDeals.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {techDeals.map((article) => (
-                <ArticleCard
-                  key={article.slug}
-                  title={article.title}
-                  image={article.image_url || ''}
-                  category={article.category}
-                  slug={article.slug}
-                />
-              ))}
-            </div>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {techDeals.map((article) => (
+                  <CarouselItem key={article.slug} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4">
+                    <ArticleCard
+                      title={article.title}
+                      image={article.image_url || ''}
+                      category={article.category}
+                      slug={article.slug}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           ) : (
             <div className="text-center py-8 bg-gray-100 rounded-xl">
               <p className="text-gray-500">No tech deals available at the moment</p>
