@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
@@ -26,13 +27,11 @@ export default function Index() {
   });
 
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
-  // Updated filter conditions for Tech Deals
   const techDeals = blogs?.filter(blog => 
     blog.category === 'TECH' && 
     blog.subcategory === 'Tech Deals'
   ).slice(0, 4) || [];
   
-  // Updated filter conditions for Mobile articles
   const mobileArticles = blogs?.filter(blog => 
     blog.category === 'GADGETS' && 
     blog.subcategory === 'MOBILE'
@@ -47,32 +46,7 @@ export default function Index() {
       <main className="container mx-auto px-4 py-8">
         {/* Homepage Featured Section */}
         <section className="mb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            {homepageFeatured.slice(0, 2).map((article, index) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || ''}
-                category={article.category}
-                slug={article.slug}
-                mainFeatured={index === 0}
-                featured={index === 1}
-              />
-            ))}
-          </div>
-          
-          {/* Bottom four articles */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-            {homepageFeatured.slice(2, 6).map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                image={article.image_url || ''}
-                category={article.category}
-                slug={article.slug}
-              />
-            ))}
-          </div>
+          <FeaturedArticlesGrid articles={homepageFeatured} />
         </section>
 
         {/* Advertisement Section */}
@@ -109,7 +83,7 @@ export default function Index() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 bg-gray-100 rounded-lg">
+            <div className="text-center py-8 bg-gray-100 rounded-xl">
               <p className="text-gray-500">No tech deals available at the moment</p>
             </div>
           )}
@@ -149,7 +123,7 @@ export default function Index() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 bg-gray-100 rounded-lg">
+            <div className="text-center py-8 bg-gray-100 rounded-xl">
               <p className="text-gray-500">No mobile articles available at the moment</p>
             </div>
           )}
