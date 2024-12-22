@@ -28,9 +28,9 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
     <section className="mb-12">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold">{title}</h2>
-          <Link to={linkTo} className="text-sm text-primary hover:underline">
-            See All
+          <h2 className="text-xl font-bold text-primary">{title}</h2>
+          <Link to={linkTo} className="text-sm text-gray-600 hover:text-primary">
+            • See All
           </Link>
         </div>
       </div>
@@ -39,7 +39,7 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
           align: "start",
           loop: true,
         }}
-        className="w-full"
+        className="w-full relative group"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           {articles.map((article) => (
@@ -56,8 +56,8 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex" />
-        <CarouselNext className="hidden md:flex" />
+        <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2" />
+        <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2" />
       </Carousel>
     </section>
   );
