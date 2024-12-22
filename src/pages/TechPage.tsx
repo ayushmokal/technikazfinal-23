@@ -8,13 +8,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { categories } from "@/types/blog";
 
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState("Tech Deals");
+  const [subcategory, setSubcategory] = useState<string>("Tech Deals");
   const [activeTab, setActiveTab] = useState("popular");
 
-  // Separate query for featured articles
-  const { data: featuredArticles } = useQuery({
+  // Query for featured articles
+  const { data: featuredArticles, isLoading: isFeaturedLoading } = useQuery({
     queryKey: ['tech-featured-articles'],
     queryFn: async () => {
       console.log('Fetching featured tech articles');
@@ -36,8 +37,8 @@ export default function TechPage() {
     }
   });
 
-  // Regular articles query
-  const { data: articles } = useQuery({
+  // Query for subcategory articles
+  const { data: articles, isLoading: isArticlesLoading } = useQuery({
     queryKey: ['tech-articles', subcategory],
     queryFn: async () => {
       console.log('Fetching tech articles for subcategory:', subcategory);
@@ -63,47 +64,57 @@ export default function TechPage() {
   const recentArticles = articles?.slice(0, 6) || [];
   const upcomingArticles = articles?.slice(0, 5) || [];
 
+  if (isFeaturedLoading || isArticlesLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <p className="text-gray-500">Loading articles...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      {/* Ad Banner */}
       <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
         <span className="text-gray-500">Ads Here</span>
       </div>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">Tech</h1>
 
-        {/* Subcategory Filter */}
         <div className="flex justify-center gap-4 mb-8">
-          {["Tech Deals", "News"].map((s) => (
+          {categories.TECH.map((subcat) => (
             <Button
-              key={s}
-              variant={subcategory === s ? "default" : "outline"}
-              onClick={() => setSubcategory(s)}
+              key={subcat}
+              variant={subcategory === subcat ? "default" : "outline"}
+              onClick={() => {
+                console.log('Switching to subcategory:', subcat);
+                setSubcategory(subcat);
+              }}
               className="min-w-[100px]"
             >
-              {s}
+              {subcat}
             </Button>
           ))}
         </div>
 
-        {/* Hero Section */}
         <CategoryHero 
           featuredArticle={mainFeaturedArticle} 
           gridArticles={gridFeaturedArticles} 
         />
 
-        {/* Grid Section */}
         <ArticleGrid articles={gridFeaturedArticles} />
 
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
           <span className="text-gray-500">Ads Here</span>
         </div>
 
-        {/* Popular/Recent/Upcoming Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <ArticleTabs
@@ -114,14 +125,11 @@ export default function TechPage() {
             />
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
-            {/* Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
               <span className="text-gray-500">Ads Here</span>
             </div>
 
-            {/* Upcoming Section */}
             <div className="border rounded-lg overflow-hidden">
               <div className="bg-primary p-4">
                 <h2 className="text-white font-semibold">Upcomings</h2>
@@ -161,7 +169,6 @@ export default function TechPage() {
               </div>
             </div>
 
-            {/* Bottom Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
               <span className="text-gray-500">Ads Here</span>
             </div>
