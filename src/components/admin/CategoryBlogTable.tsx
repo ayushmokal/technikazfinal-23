@@ -1,8 +1,13 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Star, Trash2, Crown } from "lucide-react";
-import { type BlogFormData } from "@/types/blog";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Pencil, Trash2, Star, Trophy } from "lucide-react";
+import { BlogFormData } from "@/types/blog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface CategoryBlogTableProps {
   blog: BlogFormData;
@@ -12,36 +17,38 @@ interface CategoryBlogTableProps {
   onDelete: (id: string) => void;
 }
 
-export function CategoryBlogTable({ 
-  blog, 
-  onToggleFeatured, 
-  onTogglePopular, 
-  onEdit, 
-  onDelete 
+export function CategoryBlogTable({
+  blog,
+  onToggleFeatured,
+  onTogglePopular,
+  onEdit,
+  onDelete,
 }: CategoryBlogTableProps) {
   return (
     <TableRow>
       <TableCell>{blog.title}</TableCell>
-      <TableCell>{blog.subcategory}</TableCell>
+      <TableCell>{blog.subcategory || '-'}</TableCell>
       <TableCell>{blog.author}</TableCell>
+      <TableCell>{new Date(blog.created_at).toLocaleDateString()}</TableCell>
       <TableCell>
-        {new Date(blog.created_at).toLocaleDateString()}
-      </TableCell>
-      <TableCell>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onToggleFeatured(blog.id!, blog.featured_in_category || false, blog.category)}
+                  onClick={() => onTogglePopular(blog.id, blog.popular || false)}
                 >
-                  <Crown className={`h-4 w-4 ${blog.featured_in_category ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                  <Star
+                    className={`h-4 w-4 ${
+                      blog.popular ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
+                    }`}
+                  />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{blog.featured_in_category ? "Remove from featured" : "Add to featured"}</p>
+                <p>Toggle Popular</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -52,13 +59,17 @@ export function CategoryBlogTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onTogglePopular(blog.id!, blog.popular || false)}
+                  onClick={() => onToggleFeatured(blog.id, blog.featured_in_category || false, blog.category)}
                 >
-                  <Star className={`h-4 w-4 ${blog.popular ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                  <Trophy
+                    className={`h-4 w-4 ${
+                      blog.featured_in_category ? "fill-primary text-primary" : "text-gray-400"
+                    }`}
+                  />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{blog.popular ? "Remove from popular" : "Add to popular"}</p>
+                <p>Toggle Featured in Category</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -69,13 +80,13 @@ export function CategoryBlogTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onEdit(blog.id!)}
+                  onClick={() => onEdit(blog.id)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Edit article</p>
+                <p>Edit Blog</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -86,13 +97,13 @@ export function CategoryBlogTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onDelete(blog.id!)}
+                  onClick={() => onDelete(blog.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Delete article</p>
+                <p>Delete Blog</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

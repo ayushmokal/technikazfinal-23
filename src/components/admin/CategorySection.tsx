@@ -19,15 +19,21 @@ export function CategorySection({
   onEdit,
   onDelete
 }: CategorySectionProps) {
-  const featuredCount = blogs.filter(blog => blog.featured_in_category).length;
+  const featuredInCategoryCount = blogs.filter(blog => blog.featured_in_category).length;
+  const featuredCount = blogs.filter(blog => blog.featured).length;
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold capitalize">{category}</h3>
-        <span className={`text-sm ${featuredCount >= 7 ? 'text-red-500' : 'text-gray-500'}`}>
-          Featured blogs: {featuredCount}/7
-        </span>
+        <div className="flex gap-4 text-sm">
+          <span className={`${featuredInCategoryCount >= 7 ? 'text-red-500' : 'text-gray-500'}`}>
+            Featured in {category}: {featuredInCategoryCount}/7
+          </span>
+          <span className="text-gray-500">
+            Featured on Homepage: {featuredCount}
+          </span>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
