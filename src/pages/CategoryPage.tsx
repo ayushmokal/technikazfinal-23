@@ -10,12 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function CategoryPage() {
   const { category } = useParams();
   const [articles, setArticles] = useState<BlogFormData[]>([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
 
   const subcategories = category ? categories[category.toUpperCase() as keyof typeof categories] || [] : [];
 
   useEffect(() => {
+    if (subcategories.length > 0 && !selectedSubcategory) {
+      setSelectedSubcategory(subcategories[0]);
+    }
     fetchArticles();
   }, [category, selectedSubcategory]);
 
@@ -26,7 +29,7 @@ export default function CategoryPage() {
         .select("*")
         .eq("category", category?.toUpperCase());
 
-      if (selectedSubcategory !== "all") {
+      if (selectedSubcategory) {
         query = query.eq("subcategory", selectedSubcategory);
       }
 
@@ -59,28 +62,14 @@ export default function CategoryPage() {
         <header className="mb-8">
           <h1 className="text-4xl font-bold capitalize">{category}</h1>
           {subcategories.length > 0 && (
-            <Tabs defaultValue="all" className="mt-4" onValueChange={setSelectedSubcategory}>
+            <Tabs value={selectedSubcategory} className="mt-4" onValueChange={setSelectedSubcategory}>
               <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
                 {subcategories.map((subcat) => (
                   <TabsTrigger key={subcat} value={subcat}>
                     {subcat}
                   </TabsTrigger>
                 ))}
               </TabsList>
-              <TabsContent value="all">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                  {articles.map((article) => (
-                    <ArticleCard
-                      key={article.slug}
-                      title={article.title}
-                      image={article.image_url || "/placeholder.svg"}
-                      category={article.category}
-                      slug={article.slug}
-                    />
-                  ))}
-                </div>
-              </TabsContent>
               {subcategories.map((subcat) => (
                 <TabsContent key={subcat} value={subcat}>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
