@@ -2,8 +2,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ArticleCard } from "./ArticleCard";
 import { BlogFormData } from "@/types/blog";
@@ -59,10 +57,6 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="absolute -left-4 right-4 top-0 bottom-0 flex items-center justify-between pointer-events-none">
-          <CarouselPrevious className="pointer-events-auto" />
-          <CarouselNext className="pointer-events-auto" />
-        </div>
       </Carousel>
     </section>
   );
