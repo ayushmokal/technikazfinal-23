@@ -4,11 +4,12 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
+import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function EntertainmentPage() {
   const [subcategory, setSubcategory] = useState<Subcategory>(categories.ENTERTAINMENT[0]);
@@ -56,7 +57,8 @@ export default function EntertainmentPage() {
   });
 
   const mainFeaturedArticle = featuredArticles[0];
-  const gridFeaturedArticles = featuredArticles.slice(1, 3);
+  const sideFeaturedArticles = featuredArticles.slice(1, 3);
+  const gridArticles = articles.slice(0, 4);
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
   const recentArticles = articles.slice(0, 6);
 
@@ -93,23 +95,60 @@ export default function EntertainmentPage() {
           ))}
         </div>
 
-        {/* Featured Articles Section */}
-        {featuredArticles.length > 0 && (
-          <CategoryHero
-            featuredArticle={mainFeaturedArticle}
-            gridArticles={gridFeaturedArticles}
-          />
-        )}
+        {/* Featured Articles Section - 60-20-20 Layout */}
+        <div className="grid grid-cols-12 gap-6 mb-12">
+          {/* Main Featured Article - 60% width */}
+          {mainFeaturedArticle && (
+            <div className="col-span-12 lg:col-span-7">
+              <Link to={`/article/${mainFeaturedArticle.slug}`} className="block group">
+                <div className="relative overflow-hidden rounded-xl">
+                  <AspectRatio ratio={4/3}>
+                    <img
+                      src={mainFeaturedArticle.image_url || '/placeholder.svg'}
+                      alt={mainFeaturedArticle.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </AspectRatio>
+                </div>
+                <h2 className="mt-4 text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
+                  {mainFeaturedArticle.title}
+                </h2>
+              </Link>
+            </div>
+          )}
 
-        {/* Regular Articles Grid */}
-        <ArticleGrid articles={articles.slice(0, 4)} />
+          {/* Side Articles - 20% width each */}
+          <div className="col-span-12 lg:col-span-5 space-y-6">
+            {sideFeaturedArticles.map((article) => (
+              <div key={article.slug} className="bg-white rounded-xl overflow-hidden group">
+                <Link to={`/article/${article.slug}`} className="block">
+                  <div className="relative overflow-hidden">
+                    <AspectRatio ratio={4/3}>
+                      <img
+                        src={article.image_url || '/placeholder.svg'}
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </AspectRatio>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium group-hover:text-primary transition-colors">
+                      {article.title}
+                    </h3>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* Middle Ad */}
+        {/* Grid Articles */}
+        <ArticleGrid articles={gridArticles} />
+
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
           <span className="text-gray-500">Advertisement</span>
         </div>
 
-        {/* Popular/Recent Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <ArticleTabs
@@ -119,14 +158,11 @@ export default function EntertainmentPage() {
             />
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
-            {/* Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
               <span className="text-gray-500">Advertisement</span>
             </div>
 
-            {/* Upcoming Section */}
             <div className="border rounded-lg overflow-hidden">
               <div className="bg-primary p-4">
                 <h2 className="text-white font-semibold">Upcomings</h2>
@@ -165,7 +201,6 @@ export default function EntertainmentPage() {
               </div>
             </div>
 
-            {/* Bottom Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
               <span className="text-gray-500">Advertisement</span>
             </div>
