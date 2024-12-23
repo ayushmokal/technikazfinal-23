@@ -60,10 +60,10 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
           ))}
         </CarouselContent>
         <CarouselPrevious 
-          className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none"
+          className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10"
         />
         <CarouselNext 
-          className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none"
+          className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10"
         />
       </Carousel>
     </section>
