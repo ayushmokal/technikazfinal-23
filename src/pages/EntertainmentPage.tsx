@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
-import { CategoryHero } from "@/components/CategoryHero";
 
 export default function EntertainmentPage() {
   const [subcategory, setSubcategory] = useState<Subcategory>(categories.ENTERTAINMENT[0]);
   const [activeTab, setActiveTab] = useState("popular");
 
-  // Separate query for featured articles
+  // Query for featured articles
   const { data: featuredArticles = [], isLoading: isFeaturedLoading } = useQuery({
     queryKey: ['entertainment-featured-articles'],
     queryFn: async () => {
@@ -25,7 +24,7 @@ export default function EntertainmentPage() {
         .eq('category', 'ENTERTAINMENT')
         .eq('featured', true)
         .order('created_at', { ascending: false })
-        .limit(3);
+        .limit(7);
       
       if (error) {
         console.error('Error fetching featured entertainment articles:', error);
@@ -45,8 +44,7 @@ export default function EntertainmentPage() {
         .select('*')
         .eq('category', 'ENTERTAINMENT')
         .eq('subcategory', subcategory)
-        .order('created_at', { ascending: false })
-        .limit(4); // Limit to 4 articles for one row
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching entertainment articles:', error);
@@ -57,20 +55,20 @@ export default function EntertainmentPage() {
     }
   });
 
+  const mainFeaturedArticle = featuredArticles[0];
+  const gridFeaturedArticles = featuredArticles.slice(1, 3);
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
   const recentArticles = articles.slice(0, 6);
-  const upcomingArticles = articles.slice(0, 5);
 
   if (isFeaturedLoading || isArticlesLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto"></div>
-            <div className="h-[400px] bg-gray-200 rounded"></div>
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <p className="text-gray-500">Loading articles...</p>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
@@ -79,16 +77,9 @@ export default function EntertainmentPage() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      {/* Ad Banner */}
-      <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
-      </div>
-
       <main className="container mx-auto px-4 py-8">
-        {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">Entertainment</h1>
 
-        {/* Subcategory Filter */}
         <div className="flex justify-center gap-4 mb-8">
           {categories.ENTERTAINMENT.map((sub) => (
             <Button
@@ -105,26 +96,25 @@ export default function EntertainmentPage() {
         {/* Featured Articles Section */}
         {featuredArticles.length > 0 && (
           <CategoryHero
-            featuredArticle={featuredArticles[0]}
-            gridArticles={featuredArticles.slice(1)}
+            featuredArticle={mainFeaturedArticle}
+            gridArticles={gridFeaturedArticles}
           />
         )}
 
-        {/* Regular Articles Grid - One Row Only */}
+        {/* Regular Articles Grid */}
         <ArticleGrid articles={articles.slice(0, 4)} />
 
         {/* Middle Ad */}
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
-          <span className="text-gray-500">Ads Here</span>
+          <span className="text-gray-500">Advertisement</span>
         </div>
 
-        {/* Popular/Recent/Upcoming Tabs */}
+        {/* Popular/Recent Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <ArticleTabs
               popularArticles={popularArticles}
               recentArticles={recentArticles}
-              upcomingArticles={upcomingArticles}
               onTabChange={setActiveTab}
             />
           </div>
@@ -133,7 +123,7 @@ export default function EntertainmentPage() {
           <div className="lg:col-span-4 space-y-8">
             {/* Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+              <span className="text-gray-500">Advertisement</span>
             </div>
 
             {/* Upcoming Section */}
@@ -154,10 +144,9 @@ export default function EntertainmentPage() {
                 </div>
               </div>
               <div className="divide-y">
-                {upcomingArticles.map((article) => (
-                  <Link
-                    key={article.id}
-                    to={`/article/${article.slug}`}
+                {articles.slice(0, 5).map((article) => (
+                  <div
+                    key={article.slug}
                     className="flex gap-4 p-4 hover:bg-gray-50"
                   >
                     <img
@@ -171,14 +160,14 @@ export default function EntertainmentPage() {
                         Coming {new Date(article.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Bottom Ad Space */}
             <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
+              <span className="text-gray-500">Advertisement</span>
             </div>
           </div>
         </div>
