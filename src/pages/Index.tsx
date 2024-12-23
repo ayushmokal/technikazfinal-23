@@ -10,19 +10,26 @@ import { CarouselSection } from "@/components/CarouselSection";
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
 
-  const { data: blogs } = useQuery({
+  const { data: blogs, isError, isLoading } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
+      console.log('Fetching all blogs');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error('Error fetching blogs:', error);
+        throw error;
+      }
+      
+      console.log('Blogs fetched:', data);
+      return data || [];
     }
   });
 
+  // Filter blogs after successful fetch
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
   const techDeals = blogs?.filter(blog => 
     blog.category === 'TECH' && 
@@ -36,6 +43,35 @@ export default function Index() {
   
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
+
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <main className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-red-600">Error loading content</h2>
+            <p className="text-gray-600">Please try again later</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <main className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold">Loading...</h2>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
