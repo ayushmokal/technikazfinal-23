@@ -16,7 +16,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       <div className="col-span-12 lg:col-span-7">
         <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
-            <AspectRatio ratio={16/9}>
+            <AspectRatio ratio={4/3}>
               <img
                 src={articles[0].image_url || '/placeholder.svg'}
                 alt={articles[0].title}
@@ -35,7 +35,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
-              <AspectRatio ratio={16/9}>
+              <AspectRatio ratio={4/3}>
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
