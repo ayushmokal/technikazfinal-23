@@ -25,11 +25,14 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
   }
 
   return (
-    <section className="mb-12">
+    <section className="mb-12 relative">
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-primary">{title}</h2>
-          <Link to={linkTo} className="text-sm text-gray-600 hover:text-primary">
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-bold text-primary uppercase">{title}</h2>
+          <Link 
+            to={linkTo} 
+            className="text-sm text-gray-600 hover:text-primary"
+          >
             • See All
           </Link>
         </div>
@@ -56,8 +59,10 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2" />
-        <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2" />
+        <div className="absolute -left-4 right-4 top-0 bottom-0 flex items-center justify-between pointer-events-none">
+          <CarouselPrevious className="pointer-events-auto" />
+          <CarouselNext className="pointer-events-auto" />
+        </div>
       </Carousel>
     </section>
   );
