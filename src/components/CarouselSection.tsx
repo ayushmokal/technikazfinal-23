@@ -59,14 +59,12 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="absolute -left-4 right-4 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none">
-          <CarouselPrevious 
-            className="pointer-events-auto h-8 w-8 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
-          />
-          <CarouselNext 
-            className="pointer-events-auto h-8 w-8 rounded-full border border-gray-200 bg-white hover:bg-gray-100"
-          />
-        </div>
+        <CarouselPrevious 
+          className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none"
+        />
+        <CarouselNext 
+          className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none"
+        />
       </Carousel>
     </section>
   );
