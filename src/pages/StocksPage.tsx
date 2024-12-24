@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,12 +7,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { BlogSidebar } from "@/components/BlogSidebar";
+import { categories } from "@/types/blog";
+import type { Subcategory } from "@/types/blog";
 
 export default function StocksPage() {
+  const [subcategory, setSubcategory] = useState<Subcategory | "ALL">("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
-  // Query for featured articles
-  const { data: featuredArticles, isLoading: isFeaturedLoading } = useQuery({
+  // Query for category-specific featured articles
+  const { data: featuredArticles = [] } = useQuery({
     queryKey: ['stocks-featured-articles'],
     queryFn: async () => {
       console.log('Fetching featured stocks articles');
@@ -21,7 +24,7 @@ export default function StocksPage() {
         .from('blogs')
         .select('*')
         .eq('category', 'STOCKS')
-        .eq('featured', true)
+        .eq('featured_in_category', true)
         .order('created_at', { ascending: false })
         .limit(7);
       
@@ -30,70 +33,81 @@ export default function StocksPage() {
         throw error;
       }
       
-      console.log('Featured stocks articles fetched:', data);
       return data || [];
     }
   });
 
-  // Query for all stocks articles
-  const { data: articles, isLoading: isArticlesLoading } = useQuery({
-    queryKey: ['stocks-articles'],
+  // Regular articles query with subcategory filter
+  const { data: articles = [] } = useQuery({
+    queryKey: ['stocks-articles', subcategory],
     queryFn: async () => {
-      console.log('Fetching stocks articles');
-      const { data, error } = await supabase
+      console.log('Fetching stocks articles with subcategory:', subcategory);
+      let query = supabase
         .from('blogs')
         .select('*')
         .eq('category', 'STOCKS')
         .order('created_at', { ascending: false });
       
+      // Only apply subcategory filter if not "ALL"
+      if (subcategory !== "ALL") {
+        query = query.eq('subcategory', subcategory);
+      }
+      
+      const { data, error } = await query.limit(4);
+      
       if (error) {
         console.error('Error fetching stocks articles:', error);
         throw error;
       }
-      console.log('Fetched stocks articles:', data);
+      
       return data || [];
     }
   });
 
-  const mainFeaturedArticle = featuredArticles?.[0];
-  const gridFeaturedArticles = featuredArticles?.slice(1) || [];
-  const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
-  const recentArticles = articles?.slice(0, 6) || [];
-  const upcomingArticles = articles?.slice(0, 5) || [];
-
-  if (isFeaturedLoading || isArticlesLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500">Loading articles...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  const mainFeaturedArticle = featuredArticles[0];
+  const gridFeaturedArticles = featuredArticles.slice(1, 3);
+  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const recentArticles = articles.slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <div className="w-full h-[50px] bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500">Ads Here</span>
-      </div>
-
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-8">Stocks</h1>
 
-        <CategoryHero 
-          featuredArticle={mainFeaturedArticle} 
-          gridArticles={gridFeaturedArticles} 
-        />
+        <div className="flex justify-center gap-4 mb-8">
+          <Button
+            variant={subcategory === "ALL" ? "default" : "outline"}
+            onClick={() => setSubcategory("ALL")}
+            className="min-w-[100px]"
+          >
+            All
+          </Button>
+          {categories.STOCKS.map((sub) => (
+            <Button
+              key={sub}
+              variant={subcategory === sub ? "default" : "outline"}
+              onClick={() => setSubcategory(sub)}
+              className="min-w-[100px]"
+            >
+              {sub}
+            </Button>
+          ))}
+        </div>
 
-        <ArticleGrid articles={gridFeaturedArticles} />
+        {/* Only show CategoryHero when subcategory is "ALL" */}
+        {subcategory === "ALL" && mainFeaturedArticle && (
+          <CategoryHero 
+            featuredArticle={mainFeaturedArticle} 
+            gridArticles={gridFeaturedArticles} 
+          />
+        )}
 
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
-          <span className="text-gray-500">Ads Here</span>
+        <ArticleGrid articles={articles.slice(0, 4)} />
+
+        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
+          <span className="text-gray-500">Advertisement</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -101,58 +115,12 @@ export default function StocksPage() {
             <ArticleTabs
               popularArticles={popularArticles}
               recentArticles={recentArticles}
-              upcomingArticles={upcomingArticles}
               onTabChange={setActiveTab}
             />
           </div>
 
-          <div className="lg:col-span-4 space-y-8">
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
-            </div>
-
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-primary p-4">
-                <h2 className="text-white font-semibold">Upcomings</h2>
-                <div className="flex gap-2 mt-2">
-                  {["Markets", "Trading", "More"].map((tab) => (
-                    <Button
-                      key={tab}
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:text-primary hover:bg-white"
-                    >
-                      {tab}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="divide-y">
-                {upcomingArticles.map((article) => (
-                  <Link
-                    key={article.slug}
-                    to={`/article/${article.slug}`}
-                    className="flex gap-4 p-4 hover:bg-gray-50"
-                  >
-                    <img
-                      src={article.image_url}
-                      alt={article.title}
-                      className="w-20 h-16 object-cover rounded"
-                    />
-                    <div>
-                      <h4 className="font-medium line-clamp-2">{article.title}</h4>
-                      <p className="text-sm text-gray-500">
-                        Coming {new Date(article.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="w-full h-[300px] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500">Ads Here</span>
-            </div>
+          <div className="lg:col-span-4">
+            <BlogSidebar />
           </div>
         </div>
       </main>
