@@ -22,11 +22,12 @@ export function ArticleTabs({
   const getPopularArticles = () => {
     console.log('Getting popular articles for category:', category);
     const categoryField = `popular_in_${category.toLowerCase()}` as keyof BlogFormData;
-    return recentArticles.filter(article => article[categoryField] === true);
+    const filteredArticles = recentArticles.filter(article => article[categoryField] === true);
+    console.log('Filtered popular articles:', filteredArticles);
+    return filteredArticles;
   };
 
   const filteredPopularArticles = getPopularArticles();
-  console.log('Filtered popular articles:', filteredPopularArticles);
 
   return (
     <Tabs defaultValue="popular" className="w-full" onValueChange={onTabChange}>
@@ -39,27 +40,31 @@ export function ArticleTabs({
       </TabsList>
 
       <TabsContent value="popular" className="space-y-4">
-        {filteredPopularArticles.map((article) => (
-          <Link
-            key={article.slug}
-            to={`/article/${article.slug}`}
-            className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-          >
-            <img
-              src={article.image_url}
-              alt={article.title}
-              className="w-32 h-24 object-cover rounded"
-            />
-            <div>
-              <h3 className="font-medium group-hover:text-primary transition-colors">
-                {article.title}
-              </h3>
-              <p className="text-sm text-gray-500">
-                {new Date(article.created_at).toLocaleDateString()}
-              </p>
-            </div>
-          </Link>
-        ))}
+        {filteredPopularArticles.length > 0 ? (
+          filteredPopularArticles.map((article) => (
+            <Link
+              key={article.slug}
+              to={`/article/${article.slug}`}
+              className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
+            >
+              <img
+                src={article.image_url}
+                alt={article.title}
+                className="w-32 h-24 object-cover rounded"
+              />
+              <div>
+                <h3 className="font-medium group-hover:text-primary transition-colors">
+                  {article.title}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {new Date(article.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p className="text-gray-500 text-center py-4">No popular articles found in this category</p>
+        )}
         <Button variant="outline" className="w-full">Load More</Button>
       </TabsContent>
 
