@@ -22,7 +22,11 @@ export function ArticleTabs({
   const getPopularArticles = () => {
     console.log('Getting popular articles for category:', category);
     const categoryField = `popular_in_${category.toLowerCase()}` as keyof BlogFormData;
-    const filteredArticles = recentArticles.filter(article => article[categoryField] === true);
+    const filteredArticles = recentArticles.filter(article => {
+      const isPopular = article[categoryField];
+      console.log(`Article ${article.title} popular status:`, isPopular);
+      return isPopular === true;
+    });
     console.log('Filtered popular articles:', filteredArticles);
     return filteredArticles;
   };
