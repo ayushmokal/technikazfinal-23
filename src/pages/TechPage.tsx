@@ -37,7 +37,7 @@ export default function TechPage() {
     }
   });
 
-  // Regular articles query with subcategory filter
+  // Query for all tech articles
   const { data: articles = [] } = useQuery({
     queryKey: ['tech-articles', subcategory],
     queryFn: async () => {
@@ -53,7 +53,7 @@ export default function TechPage() {
         query = query.eq('subcategory', subcategory);
       }
       
-      const { data, error } = await query.limit(4);
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching tech articles:', error);
@@ -66,7 +66,7 @@ export default function TechPage() {
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.slice(0, 6) || [];
+  const popularArticles = articles || [];
   const recentArticles = articles.slice(0, 6) || [];
 
   return (
@@ -96,7 +96,6 @@ export default function TechPage() {
           ))}
         </div>
 
-        {/* Only show CategoryHero when subcategory is "ALL" */}
         {subcategory === "ALL" && mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
