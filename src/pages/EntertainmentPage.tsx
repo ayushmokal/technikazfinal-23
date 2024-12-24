@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
-import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
 import { EntertainmentCategories } from "@/components/entertainment/EntertainmentCategories";
 import { EntertainmentFeatured } from "@/components/entertainment/EntertainmentFeatured";
