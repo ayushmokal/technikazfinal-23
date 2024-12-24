@@ -10,6 +10,11 @@ export interface BlogFormData {
   featured?: boolean;
   featured_in_category?: boolean;
   popular?: boolean;
+  popular_in_tech?: boolean;
+  popular_in_games?: boolean;
+  popular_in_entertainment?: boolean;
+  popular_in_stocks?: boolean;
+  popular_in_gadgets?: boolean;
   created_at: string;
   updated_at: string;
 }

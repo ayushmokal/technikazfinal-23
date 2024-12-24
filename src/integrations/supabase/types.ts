@@ -20,6 +20,11 @@ export type Database = {
           id: string
           image_url: string | null
           popular: boolean | null
+          popular_in_entertainment: boolean | null
+          popular_in_gadgets: boolean | null
+          popular_in_games: boolean | null
+          popular_in_stocks: boolean | null
+          popular_in_tech: boolean | null
           slug: string
           subcategory: string | null
           title: string
@@ -35,6 +40,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           popular?: boolean | null
+          popular_in_entertainment?: boolean | null
+          popular_in_gadgets?: boolean | null
+          popular_in_games?: boolean | null
+          popular_in_stocks?: boolean | null
+          popular_in_tech?: boolean | null
           slug: string
           subcategory?: string | null
           title: string
@@ -50,6 +60,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           popular?: boolean | null
+          popular_in_entertainment?: boolean | null
+          popular_in_gadgets?: boolean | null
+          popular_in_games?: boolean | null
+          popular_in_stocks?: boolean | null
+          popular_in_tech?: boolean | null
           slug?: string
           subcategory?: string | null
           title?: string

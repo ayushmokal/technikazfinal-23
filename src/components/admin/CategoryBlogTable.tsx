@@ -24,6 +24,24 @@ export function CategoryBlogTable({
   onEdit,
   onDelete,
 }: CategoryBlogTableProps) {
+  // Helper function to get the correct popular field based on category
+  const getPopularInCategory = (blog: BlogFormData) => {
+    switch (blog.category) {
+      case 'TECH':
+        return blog.popular_in_tech;
+      case 'GAMES':
+        return blog.popular_in_games;
+      case 'ENTERTAINMENT':
+        return blog.popular_in_entertainment;
+      case 'STOCKS':
+        return blog.popular_in_stocks;
+      case 'GADGETS':
+        return blog.popular_in_gadgets;
+      default:
+        return false;
+    }
+  };
+
   return (
     <TableRow>
       <TableCell>{blog.title}</TableCell>
@@ -38,17 +56,17 @@ export function CategoryBlogTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onTogglePopular(blog.id, blog.popular || false)}
+                  onClick={() => onTogglePopular(blog.id, getPopularInCategory(blog))}
                 >
                   <Star
                     className={`h-4 w-4 ${
-                      blog.popular ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
+                      getPopularInCategory(blog) ? "fill-yellow-400 text-yellow-400" : "text-gray-400"
                     }`}
                   />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Toggle Popular</p>
+                <p>Toggle Popular in {blog.category}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

@@ -65,9 +65,14 @@ export function BlogManager({ selectedCategory }: BlogManagerProps) {
   };
 
   const togglePopular = async (id: string, currentValue: boolean) => {
+    const blog = blogs?.find(b => b.id === id);
+    if (!blog) return;
+
+    const updateField = `popular_in_${blog.category.toLowerCase()}`;
+    
     const { error } = await supabase
       .from('blogs')
-      .update({ popular: !currentValue })
+      .update({ [updateField]: !currentValue })
       .eq('id', id);
 
     if (error) {
