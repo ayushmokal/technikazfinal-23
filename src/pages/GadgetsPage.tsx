@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,8 @@ import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
+import type { Subcategory } from "@/types/blog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function GadgetsPage() {
   const [subcategory, setSubcategory] = useState<string>("MOBILE");
