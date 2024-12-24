@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,49 +6,40 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
+import EditBlogPage from "./pages/EditBlogPage";
 import ArticlePage from "./pages/ArticlePage";
 import GamesPage from "./pages/GamesPage";
 import TechPage from "./pages/TechPage";
-import EntertainmentPage from "./pages/EntertainmentPage";
 import StocksPage from "./pages/StocksPage";
-import EditBlogPage from "./pages/EditBlogPage";
-import React from 'react';
+import EntertainmentPage from "./pages/EntertainmentPage";
+import GadgetsPage from "./pages/GadgetsPage";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      retry: 1,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
           <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/games" element={<GamesPage />} />
-              <Route path="/tech" element={<TechPage />} />
-              <Route path="/entertainment" element={<EntertainmentPage />} />
-              <Route path="/stocks" element={<StocksPage />} />
-              <Route path="/:category" element={<CategoryPage />} />
-              <Route path="/article/:slug" element={<ArticlePage />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminPanel />} />
-              <Route path="/admin/edit/:id" element={<EditBlogPage />} />
-              {/* Catch all route - redirect to home */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
+            <Route path="/article/:slug" element={<ArticlePage />} />
+            <Route path="/games" element={<GamesPage />} />
+            <Route path="/tech" element={<TechPage />} />
+            <Route path="/stocks" element={<StocksPage />} />
+            <Route path="/entertainment" element={<EntertainmentPage />} />
+            <Route path="/gadgets" element={<GadgetsPage />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/edit/:id" element={<EditBlogPage />} />
+            {/* Catch all route - redirect to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
