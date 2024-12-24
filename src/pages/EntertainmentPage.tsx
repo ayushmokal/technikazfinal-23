@@ -25,8 +25,7 @@ export default function EntertainmentPage() {
         .select('*')
         .eq('category', 'ENTERTAINMENT')
         .eq('featured_in_category', true)
-        .order('created_at', { ascending: false })
-        .limit(7);
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching featured entertainment articles:', error);
@@ -37,7 +36,7 @@ export default function EntertainmentPage() {
     }
   });
 
-  // Regular articles query with subcategory filter
+  // Query for all entertainment articles
   const { data: articles = [] } = useQuery({
     queryKey: ['entertainment-articles', subcategory],
     queryFn: async () => {
@@ -48,12 +47,11 @@ export default function EntertainmentPage() {
         .eq('category', 'ENTERTAINMENT')
         .order('created_at', { ascending: false });
       
-      // Only apply subcategory filter if not "ALL"
       if (subcategory !== "ALL") {
         query = query.eq('subcategory', subcategory);
       }
       
-      const { data, error } = await query.limit(4);
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching entertainment articles:', error);
@@ -66,7 +64,7 @@ export default function EntertainmentPage() {
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const popularArticles = articles || [];
   const recentArticles = articles.slice(0, 6) || [];
 
   return (

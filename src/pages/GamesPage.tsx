@@ -25,20 +25,18 @@ export default function GamesPage() {
         .select('*')
         .eq('category', 'GAMES')
         .eq('featured_in_category', true)
-        .order('created_at', { ascending: false })
-        .limit(7);
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching featured games articles:', error);
         throw error;
       }
       
-      console.log('Featured games articles fetched:', data);
       return data || [];
     }
   });
 
-  // Regular articles query with platform filter
+  // Query for all games articles
   const { data: articles = [] } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
@@ -49,26 +47,24 @@ export default function GamesPage() {
         .eq('category', 'GAMES')
         .order('created_at', { ascending: false });
       
-      // Only apply platform filter if not "ALL"
       if (platform !== "ALL") {
         query = query.eq('subcategory', platform);
       }
       
-      const { data, error } = await query.limit(4);
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching games articles:', error);
         throw error;
       }
       
-      console.log('Games articles fetched:', data);
       return data || [];
     }
   });
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const popularArticles = articles || [];
   const recentArticles = articles.slice(0, 6) || [];
 
   return (
