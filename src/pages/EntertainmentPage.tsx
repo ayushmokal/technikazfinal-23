@@ -62,7 +62,6 @@ export default function EntertainmentPage() {
 
   const mainFeaturedArticle = featuredArticles[0];
   const sideFeaturedArticles = featuredArticles.slice(1, 3);
-  const gridArticles = articles.slice(0, 4);
   const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
   const recentArticles = articles.slice(0, 6);
 
@@ -91,12 +90,14 @@ export default function EntertainmentPage() {
           setSubcategory={setSubcategory} 
         />
 
-        <EntertainmentFeatured 
-          mainFeaturedArticle={mainFeaturedArticle} 
-          sideFeaturedArticles={sideFeaturedArticles} 
-        />
+        {subcategory === "ALL" && (
+          <EntertainmentFeatured 
+            mainFeaturedArticle={mainFeaturedArticle} 
+            sideFeaturedArticles={sideFeaturedArticles} 
+          />
+        )}
 
-        <ArticleGrid articles={gridArticles} />
+        <ArticleGrid articles={articles} />
 
         <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
           <span className="text-gray-500">Advertisement</span>
