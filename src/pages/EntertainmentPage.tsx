@@ -96,7 +96,6 @@ export default function EntertainmentPage() {
           ))}
         </div>
 
-        {/* Only show CategoryHero when subcategory is "ALL" */}
         {subcategory === "ALL" && mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
@@ -116,6 +115,7 @@ export default function EntertainmentPage() {
               popularArticles={popularArticles}
               recentArticles={recentArticles}
               onTabChange={setActiveTab}
+              category="ENTERTAINMENT"
             />
           </div>
 

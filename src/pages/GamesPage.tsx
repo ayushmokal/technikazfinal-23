@@ -98,7 +98,6 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {/* Only show CategoryHero when platform is "ALL" */}
         {platform === "ALL" && mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
@@ -118,6 +117,7 @@ export default function GamesPage() {
               popularArticles={popularArticles}
               recentArticles={recentArticles}
               onTabChange={setActiveTab}
+              category="GAMES"
             />
           </div>
 
