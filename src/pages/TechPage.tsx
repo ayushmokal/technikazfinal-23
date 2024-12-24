@@ -66,7 +66,7 @@ export default function TechPage() {
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const popularArticles = articles.slice(0, 6) || [];
   const recentArticles = articles.slice(0, 6) || [];
 
   return (
@@ -116,6 +116,7 @@ export default function TechPage() {
               popularArticles={popularArticles}
               recentArticles={recentArticles}
               onTabChange={setActiveTab}
+              category="TECH"
             />
           </div>
 

@@ -8,14 +8,36 @@ interface ArticleTabsProps {
   recentArticles: BlogFormData[];
   upcomingArticles?: BlogFormData[]; // Made optional
   onTabChange: (value: string) => void;
+  category: string;
 }
 
 export function ArticleTabs({ 
   popularArticles, 
   recentArticles, 
   upcomingArticles = [], // Default to empty array
-  onTabChange 
+  onTabChange,
+  category 
 }: ArticleTabsProps) {
+  // Helper function to get popular articles based on category
+  const getPopularArticles = () => {
+    switch (category) {
+      case 'TECH':
+        return popularArticles.filter(article => article.popular_in_tech);
+      case 'GAMES':
+        return popularArticles.filter(article => article.popular_in_games);
+      case 'ENTERTAINMENT':
+        return popularArticles.filter(article => article.popular_in_entertainment);
+      case 'STOCKS':
+        return popularArticles.filter(article => article.popular_in_stocks);
+      case 'GADGETS':
+        return popularArticles.filter(article => article.popular_in_gadgets);
+      default:
+        return popularArticles;
+    }
+  };
+
+  const filteredPopularArticles = getPopularArticles();
+
   return (
     <Tabs defaultValue="popular" className="w-full" onValueChange={onTabChange}>
       <TabsList>
@@ -27,7 +49,7 @@ export function ArticleTabs({
       </TabsList>
 
       <TabsContent value="popular" className="space-y-4">
-        {popularArticles.map((article) => (
+        {filteredPopularArticles.map((article) => (
           <Link
             key={article.slug}
             to={`/article/${article.slug}`}
