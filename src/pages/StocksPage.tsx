@@ -8,10 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
-import { categories } from "@/types/blog";
 
 export default function StocksPage() {
-  const [subcategory, setSubcategory] = useState<string>("CRYPTO");
   const [activeTab, setActiveTab] = useState("popular");
 
   // Query for featured articles
@@ -37,16 +35,15 @@ export default function StocksPage() {
     }
   });
 
-  // Query for subcategory articles
+  // Query for all stocks articles
   const { data: articles, isLoading: isArticlesLoading } = useQuery({
-    queryKey: ['stocks-articles', subcategory],
+    queryKey: ['stocks-articles'],
     queryFn: async () => {
-      console.log('Fetching stocks articles for subcategory:', subcategory);
+      console.log('Fetching stocks articles');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('category', 'STOCKS')
-        .eq('subcategory', subcategory)
         .order('created_at', { ascending: false });
       
       if (error) {
@@ -88,22 +85,6 @@ export default function StocksPage() {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-8">Stocks</h1>
 
-        <div className="flex justify-center gap-4 mb-8">
-          {categories.STOCKS.map((subcat) => (
-            <Button
-              key={subcat}
-              variant={subcategory === subcat ? "default" : "outline"}
-              onClick={() => {
-                console.log('Switching to subcategory:', subcat);
-                setSubcategory(subcat);
-              }}
-              className="min-w-[100px]"
-            >
-              {subcat}
-            </Button>
-          ))}
-        </div>
-
         <CategoryHero 
           featuredArticle={mainFeaturedArticle} 
           gridArticles={gridFeaturedArticles} 
@@ -134,7 +115,7 @@ export default function StocksPage() {
               <div className="bg-primary p-4">
                 <h2 className="text-white font-semibold">Upcomings</h2>
                 <div className="flex gap-2 mt-2">
-                  {["Stocks", "Crypto", "More"].map((tab) => (
+                  {["Markets", "Trading", "More"].map((tab) => (
                     <Button
                       key={tab}
                       variant="ghost"
