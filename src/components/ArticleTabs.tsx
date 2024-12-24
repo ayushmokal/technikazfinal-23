@@ -20,6 +20,9 @@ export function ArticleTabs({
 }: ArticleTabsProps) {
   // Helper function to get popular articles based on category
   const getPopularArticles = () => {
+    console.log('Getting popular articles for category:', category);
+    console.log('Available articles:', popularArticles);
+    
     switch (category) {
       case 'TECH':
         return popularArticles.filter(article => article.popular_in_tech);
@@ -32,11 +35,13 @@ export function ArticleTabs({
       case 'GADGETS':
         return popularArticles.filter(article => article.popular_in_gadgets);
       default:
+        console.log('No category match, returning all popular articles');
         return popularArticles;
     }
   };
 
   const filteredPopularArticles = getPopularArticles();
+  console.log('Filtered popular articles:', filteredPopularArticles);
 
   return (
     <Tabs defaultValue="popular" className="w-full" onValueChange={onTabChange}>
