@@ -21,23 +21,8 @@ export function ArticleTabs({
   // Helper function to get popular articles based on category
   const getPopularArticles = () => {
     console.log('Getting popular articles for category:', category);
-    console.log('Available articles:', popularArticles);
-    
-    switch (category) {
-      case 'TECH':
-        return popularArticles.filter(article => article.popular_in_tech);
-      case 'GAMES':
-        return popularArticles.filter(article => article.popular_in_games);
-      case 'ENTERTAINMENT':
-        return popularArticles.filter(article => article.popular_in_entertainment);
-      case 'STOCKS':
-        return popularArticles.filter(article => article.popular_in_stocks);
-      case 'GADGETS':
-        return popularArticles.filter(article => article.popular_in_gadgets);
-      default:
-        console.log('No category match, returning all popular articles');
-        return popularArticles;
-    }
+    console.log('Available articles:', recentArticles); // Changed to recentArticles
+    return recentArticles; // Simply return all recent articles
   };
 
   const filteredPopularArticles = getPopularArticles();
