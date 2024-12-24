@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlogFormData } from "@/types/blog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface ArticleTabsProps {
   popularArticles: BlogFormData[];
@@ -54,6 +55,32 @@ export function ArticleTabs({
     }
   };
 
+  const ArticleItem = ({ article }: { article: BlogFormData }) => (
+    <Link
+      key={article.slug}
+      to={`/article/${article.slug}`}
+      className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
+    >
+      <div className="w-[240px] h-[135px] overflow-hidden rounded">
+        <AspectRatio ratio={16/9}>
+          <img
+            src={article.image_url}
+            alt={article.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </AspectRatio>
+      </div>
+      <div className="flex-1">
+        <h3 className="font-medium group-hover:text-primary transition-colors line-clamp-2">
+          {article.title}
+        </h3>
+        <p className="text-sm text-gray-500 mt-2">
+          {new Date(article.created_at).toLocaleDateString()}
+        </p>
+      </div>
+    </Link>
+  );
+
   return (
     <Tabs defaultValue="popular" className="w-full" onValueChange={onTabChange}>
       <TabsList>
@@ -68,25 +95,7 @@ export function ArticleTabs({
         {filteredPopularArticles.length > 0 ? (
           <>
             {filteredPopularArticles.slice(0, visiblePopular).map((article) => (
-              <Link
-                key={article.slug}
-                to={`/article/${article.slug}`}
-                className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-              >
-                <img
-                  src={article.image_url}
-                  alt={article.title}
-                  className="w-32 h-24 object-cover rounded"
-                />
-                <div>
-                  <h3 className="font-medium group-hover:text-primary transition-colors">
-                    {article.title}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {new Date(article.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-              </Link>
+              <ArticleItem key={article.slug} article={article} />
             ))}
             {filteredPopularArticles.length > visiblePopular && (
               <Button 
@@ -105,25 +114,7 @@ export function ArticleTabs({
 
       <TabsContent value="recent" className="space-y-4">
         {recentArticles.slice(0, visibleRecent).map((article) => (
-          <Link
-            key={article.slug}
-            to={`/article/${article.slug}`}
-            className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-          >
-            <img
-              src={article.image_url}
-              alt={article.title}
-              className="w-32 h-24 object-cover rounded"
-            />
-            <div>
-              <h3 className="font-medium group-hover:text-primary transition-colors">
-                {article.title}
-              </h3>
-              <p className="text-sm text-gray-500">
-                {new Date(article.created_at).toLocaleDateString()}
-              </p>
-            </div>
-          </Link>
+          <ArticleItem key={article.slug} article={article} />
         ))}
         {recentArticles.length > visibleRecent && (
           <Button 
@@ -139,25 +130,7 @@ export function ArticleTabs({
       {upcomingArticles.length > 0 && (
         <TabsContent value="upcoming" className="space-y-4">
           {upcomingArticles.slice(0, visibleUpcoming).map((article) => (
-            <Link
-              key={article.slug}
-              to={`/article/${article.slug}`}
-              className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-            >
-              <img
-                src={article.image_url}
-                alt={article.title}
-                className="w-32 h-24 object-cover rounded"
-              />
-              <div>
-                <h3 className="font-medium group-hover:text-primary transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Coming {new Date(article.created_at).toLocaleDateString()}
-                </p>
-              </div>
-            </Link>
+            <ArticleItem key={article.slug} article={article} />
           ))}
           {upcomingArticles.length > visibleUpcoming && (
             <Button 
