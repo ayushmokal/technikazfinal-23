@@ -12,13 +12,14 @@ import { categories } from "@/types/blog";
 import type { Subcategory } from "@/types/blog";
 
 export default function GamesPage() {
-  const [platform, setPlatform] = useState<Subcategory>("ALL");
+  const [platform, setPlatform] = useState<Subcategory | "ALL">("ALL");
   const [activeTab, setActiveTab] = useState("popular");
 
   // Query for category-specific featured articles
-  const { data: featuredArticles = [], isLoading: isFeaturedLoading } = useQuery({
+  const { data: featuredArticles = [] } = useQuery({
     queryKey: ['games-featured-articles'],
     queryFn: async () => {
+      console.log('Fetching featured games articles');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -29,55 +30,46 @@ export default function GamesPage() {
       
       if (error) {
         console.error('Error fetching featured games articles:', error);
-        return [];
+        throw error;
       }
       
+      console.log('Featured games articles fetched:', data);
       return data || [];
     }
   });
 
   // Regular articles query with platform filter
-  const { data: articles = [], isLoading: isArticlesLoading } = useQuery({
+  const { data: articles = [] } = useQuery({
     queryKey: ['games-articles', platform],
     queryFn: async () => {
+      console.log('Fetching games articles with platform:', platform);
       let query = supabase
         .from('blogs')
         .select('*')
         .eq('category', 'GAMES')
         .order('created_at', { ascending: false });
       
+      // Only apply platform filter if not "ALL"
       if (platform !== "ALL") {
         query = query.eq('subcategory', platform);
       }
       
-      const { data, error } = await query;
+      const { data, error } = await query.limit(4);
       
       if (error) {
         console.error('Error fetching games articles:', error);
-        return [];
+        throw error;
       }
       
+      console.log('Games articles fetched:', data);
       return data || [];
     }
   });
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6);
-  const recentArticles = articles.slice(0, 6);
-
-  if (isFeaturedLoading || isArticlesLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500">Loading articles...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  const recentArticles = articles.slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -106,6 +98,7 @@ export default function GamesPage() {
           ))}
         </div>
 
+        {/* Only show CategoryHero when platform is "ALL" */}
         {platform === "ALL" && mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
@@ -113,9 +106,9 @@ export default function GamesPage() {
           />
         )}
 
-        <ArticleGrid articles={articles} />
+        <ArticleGrid articles={articles.slice(0, 4)} />
 
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-8">
+        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
         </div>
 

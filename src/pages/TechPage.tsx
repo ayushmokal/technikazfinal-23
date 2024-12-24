@@ -11,7 +11,7 @@ import { ArticleTabs } from "@/components/ArticleTabs";
 import { categories } from "@/types/blog";
 
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState<string>("ALL");
+  const [subcategory, setSubcategory] = useState<string>("Tech Deals");
   const [activeTab, setActiveTab] = useState("popular");
 
   // Query for featured articles
@@ -42,17 +42,12 @@ export default function TechPage() {
     queryKey: ['tech-articles', subcategory],
     queryFn: async () => {
       console.log('Fetching tech articles for subcategory:', subcategory);
-      let query = supabase
+      const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('category', 'TECH')
+        .eq('subcategory', subcategory)
         .order('created_at', { ascending: false });
-
-      if (subcategory !== "ALL") {
-        query = query.eq('subcategory', subcategory);
-      }
-      
-      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching tech articles:', error);
@@ -68,8 +63,6 @@ export default function TechPage() {
   const popularArticles = articles?.filter(article => article.popular)?.slice(0, 6) || [];
   const recentArticles = articles?.slice(0, 6) || [];
   const upcomingArticles = articles?.slice(0, 5) || [];
-
-  const techCategories = ["ALL", "PS5", "XBOX", "NINTENDO", "PC"];
 
   if (isFeaturedLoading || isArticlesLoading) {
     return (
@@ -96,17 +89,17 @@ export default function TechPage() {
         <h1 className="text-4xl font-bold text-center mb-8">Tech</h1>
 
         <div className="flex justify-center gap-4 mb-8">
-          {techCategories.map((cat) => (
+          {categories.TECH.map((subcat) => (
             <Button
-              key={cat}
-              variant={subcategory === cat ? "default" : "outline"}
+              key={subcat}
+              variant={subcategory === subcat ? "default" : "outline"}
               onClick={() => {
-                console.log('Switching to category:', cat);
-                setSubcategory(cat);
+                console.log('Switching to subcategory:', subcat);
+                setSubcategory(subcat);
               }}
               className="min-w-[100px]"
             >
-              {cat === "ALL" ? "All" : cat}
+              {subcat}
             </Button>
           ))}
         </div>
@@ -141,7 +134,7 @@ export default function TechPage() {
               <div className="bg-primary p-4">
                 <h2 className="text-white font-semibold">Upcomings</h2>
                 <div className="flex gap-2 mt-2">
-                  {["PS5", "Xbox", "Nintendo", "PC"].map((tab) => (
+                  {["Games", "Phone", "Movies", "More"].map((tab) => (
                     <Button
                       key={tab}
                       variant="ghost"

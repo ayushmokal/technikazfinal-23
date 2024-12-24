@@ -23,4 +23,4 @@ export const categories = {
 } as const;
 
 export type Category = keyof typeof categories;
-export type Subcategory = (typeof categories[Category][number] | "ALL");
+export type Subcategory = typeof categories[Category][number];
