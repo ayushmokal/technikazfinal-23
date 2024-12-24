@@ -6,6 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
+import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
@@ -43,6 +46,32 @@ export default function Index() {
   
   const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
+
+  const ArticleItem = ({ article }: { article: any }) => (
+    <Link
+      key={article.slug}
+      to={`/article/${article.slug}`}
+      className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
+    >
+      <div className="w-[240px] h-[135px] overflow-hidden rounded">
+        <AspectRatio ratio={16/9}>
+          <img
+            src={article.image_url || '/placeholder.svg'}
+            alt={article.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </AspectRatio>
+      </div>
+      <div className="flex-1">
+        <h3 className="font-medium group-hover:text-primary transition-colors line-clamp-2">
+          {article.title}
+        </h3>
+        <p className="text-sm text-gray-500 mt-2">
+          {new Date(article.created_at).toLocaleDateString()}
+        </p>
+      </div>
+    </Link>
+  );
 
   if (isError) {
     return (
@@ -140,24 +169,7 @@ export default function Index() {
             <div className="space-y-6">
               {(activeTab === 'popular' ? popularArticles : recentArticles).map(
                 (article) => (
-                  <div
-                    key={article.slug}
-                    className="flex gap-4 group hover:bg-gray-50 p-2 rounded-lg transition-colors"
-                  >
-                    <img
-                      src={article.image_url || '/placeholder.svg'}
-                      alt={article.title}
-                      className="w-32 h-24 object-cover rounded"
-                    />
-                    <div>
-                      <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {new Date(article.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
+                  <ArticleItem key={article.slug} article={article} />
                 )
               )}
             </div>
