@@ -21,8 +21,8 @@ export function ArticleTabs({
   // Helper function to get popular articles based on category
   const getPopularArticles = () => {
     console.log('Getting popular articles for category:', category);
-    console.log('Available articles:', recentArticles); // Changed to recentArticles
-    return recentArticles; // Simply return all recent articles
+    const categoryField = `popular_in_${category.toLowerCase()}` as keyof BlogFormData;
+    return recentArticles.filter(article => article[categoryField] === true);
   };
 
   const filteredPopularArticles = getPopularArticles();
