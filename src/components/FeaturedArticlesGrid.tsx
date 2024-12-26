@@ -11,9 +11,9 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
   if (!articles.length) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-      {/* Main Featured Article */}
-      <div className="col-span-1 md:col-span-7">
+    <div className="grid grid-cols-12 gap-6">
+      {/* Main Featured Article - 60% width */}
+      <div className="col-span-12 lg:col-span-7">
         <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
             <AspectRatio ratio={16/9}>
@@ -24,15 +24,15 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
               />
             </AspectRatio>
           </div>
-          <h2 className="mt-4 text-xl md:text-2xl lg:text-3xl font-bold group-hover:text-primary transition-colors">
+          <h2 className="mt-4 text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
             {articles[0].title}
           </h2>
         </Link>
       </div>
 
-      {/* Second Article */}
+      {/* Second Article - 40% width */}
       {articles[1] && (
-        <div className="col-span-1 md:col-span-5">
+        <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
               <AspectRatio ratio={16/9}>
@@ -43,7 +43,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
                 />
               </AspectRatio>
             </div>
-            <h2 className="mt-4 text-lg md:text-xl lg:text-2xl font-bold group-hover:text-primary transition-colors">
+            <h2 className="mt-4 text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">
               {articles[1].title}
             </h2>
           </Link>
@@ -52,7 +52,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
 
       {/* Remaining Articles */}
       {articles.slice(2).map((article) => (
-        <div key={article.slug} className="col-span-1 sm:col-span-1 md:col-span-3">
+        <div key={article.slug} className="col-span-12 sm:col-span-6 lg:col-span-3">
           <ArticleCard
             title={article.title}
             image={article.image_url || ''}
