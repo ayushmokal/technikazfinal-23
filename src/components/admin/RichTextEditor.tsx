@@ -1,8 +1,9 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Bold, Italic, List, ListOrdered } from "lucide-react";
+import { ImageIcon, Bold, Italic, List, ListOrdered, Link as LinkIcon } from "lucide-react";
 
 interface RichTextEditorProps {
   content: string;
@@ -14,6 +15,12 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     extensions: [
       StarterKit,
       Image,
+      Link.configure({
+        openOnClick: true,
+        HTMLAttributes: {
+          class: 'text-primary underline',
+        },
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -22,11 +29,31 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   });
 
   const addImage = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     const url = window.prompt('Enter the URL of the image:');
     if (url && editor) {
       editor.chain().focus().setImage({ src: url }).run();
     }
+  };
+
+  const addLink = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const previousUrl = editor?.getAttributes('link').href;
+    const url = window.prompt('Enter the URL:', previousUrl);
+    
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === '') {
+      editor?.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    // update link
+    editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   };
 
   if (!editor) {
@@ -37,11 +64,11 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
     <div className="border rounded-md">
       <div className="border-b p-2 flex gap-2 bg-secondary">
         <Button
-          type="button" // Explicitly set button type
+          type="button"
           variant="ghost"
           size="sm"
           onClick={(e) => {
-            e.preventDefault(); // Prevent form submission
+            e.preventDefault();
             editor.chain().focus().toggleBold().run();
           }}
           className={editor.isActive('bold') ? 'bg-muted' : ''}
@@ -91,6 +118,15 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
           onClick={addImage}
         >
           <ImageIcon className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={addLink}
+          className={editor.isActive('link') ? 'bg-muted' : ''}
+        >
+          <LinkIcon className="h-4 w-4" />
         </Button>
       </div>
       <EditorContent 
