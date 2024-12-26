@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/Layout";
@@ -9,6 +9,7 @@ import { ProductKeySpecs } from "@/components/product/ProductKeySpecs";
 import { ProductReview } from "@/components/product/ProductReview";
 import { ProductSpecTable } from "@/components/product/ProductSpecTable";
 import { CompareSection } from "@/components/product/CompareSection";
+import { useToast } from "@/hooks/use-toast";
 
 type ProductType = 'mobile' | 'laptop';
 
@@ -45,19 +46,41 @@ interface MobileProduct extends BaseProduct {
 }
 
 export default function ProductDetailPage() {
-  const { id, type = 'mobile' } = useParams<{ id: string; type?: ProductType }>();
-  const isLaptop = type === 'laptop';
+  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get('type') as ProductType || 'mobile';
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
     queryFn: async () => {
+      const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
-        .from(isLaptop ? 'laptops' : 'mobile_products')
+        .from(tableName)
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load product details",
+        });
+        throw error;
+      }
+
+      if (!data) {
+        toast({
+          variant: "destructive",
+          title: "Not Found",
+          description: "Product not found",
+        });
+        navigate('/gadgets');
+        return null;
+      }
+
       return data as LaptopProduct | MobileProduct;
     },
   });
@@ -70,6 +93,7 @@ export default function ProductDetailPage() {
     );
   }
 
+  const isLaptop = type === 'laptop';
   const specifications = isLaptop ? [
     {
       title: "Key Specs",
@@ -138,7 +162,7 @@ export default function ProductDetailPage() {
             </div>
 
             <ProductKeySpecs
-              type={type as ProductType}
+              type={type}
               screenSize={isLaptop ? undefined : (product as MobileProduct).screen_size}
               camera={isLaptop ? undefined : (product as MobileProduct).camera}
               processor={product.processor}
