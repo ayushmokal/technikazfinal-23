@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ProductForm } from "./ProductForm";
 
 interface Product {
   id: string;
@@ -50,6 +51,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -100,6 +102,15 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+  };
+
+  const handleEditComplete = () => {
+    setEditingProduct(null);
+    fetchProducts(); // Refresh the product list
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -139,6 +150,13 @@ export function ProductManager({ productType }: ProductManagerProps) {
                     View Details
                   </Button>
                   <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleEdit(product)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => handleDelete(product.id)}
@@ -152,6 +170,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         </TableBody>
       </Table>
 
+      {/* View Details Dialog */}
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
@@ -172,6 +191,22 @@ export function ProductManager({ productType }: ProductManagerProps) {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Product Dialog */}
+      <Dialog open={!!editingProduct} onOpenChange={() => setEditingProduct(null)}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+          </DialogHeader>
+          {editingProduct && (
+            <ProductForm 
+              initialData={editingProduct}
+              onSuccess={handleEditComplete}
+              productType={productType}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,25 +28,29 @@ interface ProductFormData {
   battery: string;
   os?: string;
   color?: string;
-  // Mobile specific fields
   camera?: string;
   chipset?: string;
   resolution?: string;
   screen_size?: string;
   charging_specs?: string;
-  // Laptop specific fields
   graphics?: string;
   ports?: string;
 }
 
-export function ProductForm() {
+interface ProductFormProps {
+  initialData?: ProductFormData;
+  onSuccess?: () => void;
+  productType?: 'mobile' | 'laptop';
+}
+
+export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [productType, setProductType] = useState<'mobile' | 'laptop'>('mobile');
+  const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
 
   const form = useForm<ProductFormData>({
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       brand: "",
       model_name: "",
@@ -58,6 +62,12 @@ export function ProductForm() {
       battery: "",
     },
   });
+
+  useEffect(() => {
+    if (propProductType) {
+      setProductType(propProductType);
+    }
+  }, [propProductType]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -91,19 +101,37 @@ export function ProductForm() {
       }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
-      const { error } = await supabase
-        .from(table)
-        .insert([data]);
+      
+      if (initialData?.id) {
+        // Update existing product
+        const { error } = await supabase
+          .from(table)
+          .update(data)
+          .eq('id', initialData.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
-      });
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
+        });
+      } else {
+        // Create new product
+        const { error } = await supabase
+          .from(table)
+          .insert([data]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
+        });
+      }
 
       form.reset();
       setImageFile(null);
+      onSuccess?.();
     } catch (error: any) {
       console.error('Error submitting form:', error);
       toast({
