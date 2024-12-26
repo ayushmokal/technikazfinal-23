@@ -3,7 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Bold, Italic, List, ListOrdered, Link as LinkIcon, Video } from "lucide-react";
+import { ImageIcon, Bold, Italic, List, ListOrdered, Link as LinkIcon } from "lucide-react";
 
 interface RichTextEditorProps {
   content: string;
@@ -20,83 +20,33 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
         HTMLAttributes: {
           class: 'text-primary underline',
         },
-        validate: href => {
-          // Allow video URLs
-          return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)/.test(href) || true;
-        },
-        transformPasted: (url) => {
-          // Convert YouTube watch URLs to embed URLs
-          if (url.includes('youtube.com/watch')) {
-            const videoId = url.split('v=')[1]?.split('&')[0];
-            if (videoId) {
-              return `https://www.youtube.com/embed/${videoId}`;
-            }
-          }
-          // Convert YouTube short URLs
-          if (url.includes('youtu.be')) {
-            const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-            if (videoId) {
-              return `https://www.youtube.com/embed/${videoId}`;
-            }
-          }
-          // Convert Vimeo URLs
-          if (url.includes('vimeo.com')) {
-            const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
-            if (videoId) {
-              return `https://player.vimeo.com/video/${videoId}`;
-            }
-          }
-          return url;
+        protocols: ['http', 'https'],
+        autolink: true,
+        linkOnPaste: true,
+        validate: (url) => {
+          // Allow both regular URLs and video URLs
+          return true;
         },
       }),
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-    editorProps: {
-      handlePaste: (view, event) => {
-        const text = event.clipboardData?.getData('text/plain');
-        if (text && isVideoUrl(text)) {
-          const embedUrl = transformVideoUrl(text);
-          if (embedUrl) {
-            view.dispatch(
-              view.state.tr.replaceSelectionWith(
-                view.state.schema.nodes.paragraph.create(null, [
-                  view.state.schema.nodes.text.create(null),
-                  view.state.schema.nodes.hardBreak.create(null),
-                  view.state.schema.nodes.iframe.create({ src: embedUrl }),
-                  view.state.schema.nodes.hardBreak.create(null),
-                ])
-              )
-            );
-            return true;
+      const html = editor.getHTML();
+      // Transform video URLs into embeds before saving
+      const transformedHtml = html.replace(
+        /href="(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|vimeo\.com\/)([a-zA-Z0-9_-]+)"/g,
+        (match, protocol, www, domain, videoId) => {
+          if (domain.includes('youtube')) {
+            return `src="https://www.youtube.com/embed/${videoId}"`;
+          } else if (domain.includes('vimeo')) {
+            return `src="https://player.vimeo.com/video/${videoId}"`;
           }
+          return match;
         }
-        return false;
-      },
+      );
+      onChange(transformedHtml);
     },
   });
-
-  const isVideoUrl = (url: string): boolean => {
-    return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)/.test(url);
-  };
-
-  const transformVideoUrl = (url: string): string | null => {
-    if (url.includes('youtube.com/watch')) {
-      const videoId = url.split('v=')[1]?.split('&')[0];
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-    }
-    if (url.includes('youtu.be')) {
-      const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-    }
-    if (url.includes('vimeo.com')) {
-      const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
-      return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
-    }
-    return null;
-  };
 
   const addImage = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -120,8 +70,26 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
       return;
     }
 
-    const transformedUrl = isVideoUrl(url) ? transformVideoUrl(url) || url : url;
-    editor?.chain().focus().extendMarkRange('link').setLink({ href: transformedUrl }).run();
+    // Check if it's a video URL and transform it
+    const videoMatch = url.match(
+      /(youtube\.com\/watch\?v=|youtu\.be\/|vimeo\.com\/)([a-zA-Z0-9_-]+)/
+    );
+
+    if (videoMatch) {
+      const [, domain, videoId] = videoMatch;
+      const embedUrl = domain.includes('youtube')
+        ? `https://www.youtube.com/embed/${videoId}`
+        : `https://player.vimeo.com/video/${videoId}`;
+      
+      // Insert iframe for video
+      editor?.chain()
+        .focus()
+        .insertContent(`<iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`)
+        .run();
+    } else {
+      // Regular link
+      editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
   };
 
   if (!editor) {
