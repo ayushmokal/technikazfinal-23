@@ -9,12 +9,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { NextArticles } from "@/components/article/NextArticles";
 
+const ARTICLES_PER_PAGE = 2;
+
 export default function ArticlePage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogFormData | null>(null);
   const [nextArticles, setNextArticles] = useState<BlogFormData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -72,14 +75,15 @@ export default function ArticlePage() {
         .from("blogs")
         .select("*")
         .eq("category", currentBlog.category)
-        .gt("created_at", currentBlog.created_at)
-        .order("created_at", { ascending: true })
-        .limit(2);
+        .neq("id", currentBlog.id)
+        .order("created_at", { ascending: false })
+        .limit(ARTICLES_PER_PAGE);
 
       if (error) throw error;
       
       console.log("Found next articles:", data);
       setNextArticles(data || []);
+      setHasMore(data && data.length === ARTICLES_PER_PAGE);
     } catch (error) {
       console.error("Error fetching next articles:", error);
       toast({
@@ -91,7 +95,7 @@ export default function ArticlePage() {
   };
 
   const loadMoreArticles = async () => {
-    if (!blog || !nextArticles.length) return;
+    if (!blog || !nextArticles.length || isLoadingMore) return;
     
     setIsLoadingMore(true);
     try {
@@ -100,14 +104,16 @@ export default function ArticlePage() {
         .from("blogs")
         .select("*")
         .eq("category", blog.category)
-        .gt("created_at", lastArticle.created_at)
-        .order("created_at", { ascending: true })
-        .limit(2);
+        .neq("id", blog.id)
+        .lt("created_at", lastArticle.created_at)
+        .order("created_at", { ascending: false })
+        .limit(ARTICLES_PER_PAGE);
 
       if (error) throw error;
       
       if (data) {
-        setNextArticles([...nextArticles, ...data]);
+        setNextArticles(prev => [...prev, ...data]);
+        setHasMore(data.length === ARTICLES_PER_PAGE);
       }
     } catch (error) {
       console.error("Error loading more articles:", error);
@@ -150,6 +156,7 @@ export default function ArticlePage() {
               articles={nextArticles}
               isLoadingMore={isLoadingMore}
               onLoadMore={loadMoreArticles}
+              hasMore={hasMore}
             />
           </div>
           <div className="lg:col-span-4">
