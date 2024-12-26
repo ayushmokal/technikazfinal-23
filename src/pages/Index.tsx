@@ -16,23 +16,37 @@ export default function Index() {
   const { data: blogs, isError, isLoading, error } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
-      console.log('Fetching all blogs');
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching blogs:', error);
-        throw error;
+      try {
+        console.log('Fetching all blogs');
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+        
+        if (!data) {
+          console.log('No data returned');
+          return [];
+        }
+        
+        console.log('Blogs fetched successfully:', data);
+        return data;
+      } catch (err) {
+        console.error('Error in queryFn:', err);
+        throw err;
       }
-      
-      console.log('Blogs fetched:', data);
-      return data || [];
     },
-    retry: 1, // Only retry once
-    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
-    refetchOnWindowFocus: false // Don't refetch when window regains focus
+    retry: 2,
+    retryDelay: 1000,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
+    meta: {
+      errorMessage: 'Failed to fetch blog posts'
+    }
   });
 
   // Filter blogs after successful fetch
@@ -82,7 +96,9 @@ export default function Index() {
         <main className="container mx-auto px-4 py-8">
           <div className="text-center p-8 bg-red-50 rounded-lg">
             <h2 className="text-xl font-bold text-red-600 mb-2">Error loading content</h2>
-            <p className="text-gray-600 mb-4">{error?.message || 'Please try again later'}</p>
+            <p className="text-gray-600 mb-4">
+              {error instanceof Error ? error.message : 'Please try again later'}
+            </p>
             <Button 
               onClick={() => window.location.reload()}
               variant="outline"
