@@ -1,19 +1,13 @@
 import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { CategoryHero } from "@/components/CategoryHero";
-import { ArticleGrid } from "@/components/ArticleGrid";
-import { ArticleTabs } from "@/components/ArticleTabs";
-import { BlogSidebar } from "@/components/BlogSidebar";
 import { categories } from "@/types/blog";
-import type { Subcategory } from "@/types/blog";
+import { CategoryPageContent } from "@/components/CategoryPageContent";
 
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState<Subcategory | "ALL">("ALL");
-  const [activeTab, setActiveTab] = useState("popular");
+  const [subcategory, setSubcategory] = useState<"Tech Deals" | "News" | "ALL">("ALL");
 
   // Query for category-specific featured articles
   const { data: featuredArticles = [] } = useQuery({
@@ -25,8 +19,7 @@ export default function TechPage() {
         .select('*')
         .eq('category', 'TECH')
         .eq('featured_in_category', true)
-        .order('created_at', { ascending: false })
-        .limit(7);
+        .order('created_at', { ascending: false });
       
       if (error) {
         console.error('Error fetching featured tech articles:', error);
@@ -48,7 +41,6 @@ export default function TechPage() {
         .eq('category', 'TECH')
         .order('created_at', { ascending: false });
       
-      // Only apply subcategory filter if not "ALL"
       if (subcategory !== "ALL") {
         query = query.eq('subcategory', subcategory);
       }
@@ -64,66 +56,18 @@ export default function TechPage() {
     }
   });
 
-  const mainFeaturedArticle = featuredArticles[0];
-  const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles || [];
-  const recentArticles = articles.slice(0, 6) || [];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-8">Tech</h1>
-
-        <div className="flex justify-center gap-4 mb-8">
-          <Button
-            variant={subcategory === "ALL" ? "default" : "outline"}
-            onClick={() => setSubcategory("ALL")}
-            className="min-w-[100px]"
-          >
-            All
-          </Button>
-          {categories.TECH.map((sub) => (
-            <Button
-              key={sub}
-              variant={subcategory === sub ? "default" : "outline"}
-              onClick={() => setSubcategory(sub)}
-              className="min-w-[100px]"
-            >
-              {sub}
-            </Button>
-          ))}
-        </div>
-
-        {subcategory === "ALL" && mainFeaturedArticle && (
-          <CategoryHero 
-            featuredArticle={mainFeaturedArticle} 
-            gridArticles={gridFeaturedArticles} 
-          />
-        )}
-
-        <ArticleGrid articles={articles.slice(0, 4)} />
-
-        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
-          <span className="text-gray-500">Advertisement</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8">
-            <ArticleTabs
-              popularArticles={popularArticles}
-              recentArticles={recentArticles}
-              onTabChange={setActiveTab}
-              category="TECH"
-            />
-          </div>
-
-          <div className="lg:col-span-4">
-            <BlogSidebar />
-          </div>
-        </div>
-      </main>
+      <CategoryPageContent
+        title="Tech"
+        articles={articles}
+        featuredArticles={featuredArticles}
+        subcategories={categories.TECH}
+        selectedSubcategory={subcategory}
+        onSubcategoryChange={setSubcategory}
+        category="TECH"
+      />
       <Footer />
     </div>
   );
