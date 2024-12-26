@@ -1,4 +1,5 @@
 import { BlogFormData } from "@/types/blog";
+import { ArticleHeader } from "./ArticleHeader";
 
 interface ArticleContentProps {
   blog: BlogFormData;
