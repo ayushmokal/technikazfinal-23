@@ -72,41 +72,131 @@ export type Database = {
         }
         Relationships: []
       }
-      mobile_products: {
+      laptops: {
         Row: {
           battery: string
-          camera: string
+          brand: string
+          color: string | null
           created_at: string
           display_specs: string
+          graphics: string | null
           id: string
           image_url: string | null
+          model_name: string | null
           name: string
+          os: string | null
+          ports: string | null
           price: number
           processor: string
+          ram: string
+          storage: string
           updated_at: string
         }
         Insert: {
           battery: string
-          camera: string
+          brand: string
+          color?: string | null
           created_at?: string
           display_specs: string
+          graphics?: string | null
           id?: string
           image_url?: string | null
+          model_name?: string | null
           name: string
+          os?: string | null
+          ports?: string | null
           price: number
           processor: string
+          ram: string
+          storage: string
           updated_at?: string
         }
         Update: {
           battery?: string
+          brand?: string
+          color?: string | null
+          created_at?: string
+          display_specs?: string
+          graphics?: string | null
+          id?: string
+          image_url?: string | null
+          model_name?: string | null
+          name?: string
+          os?: string | null
+          ports?: string | null
+          price?: number
+          processor?: string
+          ram?: string
+          storage?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mobile_products: {
+        Row: {
+          battery: string
+          brand: string | null
+          camera: string
+          charging_specs: string | null
+          chipset: string | null
+          color: string | null
+          created_at: string
+          display_specs: string
+          id: string
+          image_url: string | null
+          model_name: string | null
+          name: string
+          os: string | null
+          price: number
+          processor: string
+          ram: string | null
+          resolution: string | null
+          screen_size: string | null
+          storage: string | null
+          updated_at: string
+        }
+        Insert: {
+          battery: string
+          brand?: string | null
+          camera: string
+          charging_specs?: string | null
+          chipset?: string | null
+          color?: string | null
+          created_at?: string
+          display_specs: string
+          id?: string
+          image_url?: string | null
+          model_name?: string | null
+          name: string
+          os?: string | null
+          price: number
+          processor: string
+          ram?: string | null
+          resolution?: string | null
+          screen_size?: string | null
+          storage?: string | null
+          updated_at?: string
+        }
+        Update: {
+          battery?: string
+          brand?: string | null
           camera?: string
+          charging_specs?: string | null
+          chipset?: string | null
+          color?: string | null
           created_at?: string
           display_specs?: string
           id?: string
           image_url?: string | null
+          model_name?: string | null
           name?: string
+          os?: string | null
           price?: number
           processor?: string
+          ram?: string | null
+          resolution?: string | null
+          screen_size?: string | null
+          storage?: string | null
           updated_at?: string
         }
         Relationships: []
