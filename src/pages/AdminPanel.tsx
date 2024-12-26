@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { BlogForm } from "@/components/admin/BlogForm";
+import { ProductForm } from "@/components/admin/ProductForm";
 import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -105,7 +106,8 @@ export default function AdminPanel() {
           <Tabs defaultValue="analytics" className="space-y-6">
             <TabsList>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="create">Create Blog</TabsTrigger>
+              <TabsTrigger value="create-blog">Create Blog</TabsTrigger>
+              <TabsTrigger value="add-product">Add Product</TabsTrigger>
             </TabsList>
 
             <TabsContent value="analytics" className="space-y-4">
@@ -113,10 +115,17 @@ export default function AdminPanel() {
               <BlogAnalytics />
             </TabsContent>
 
-            <TabsContent value="create" className="space-y-4">
+            <TabsContent value="create-blog" className="space-y-4">
               <h2 className="text-xl font-semibold">Create New Blog Post</h2>
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <BlogForm />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="add-product" className="space-y-4">
+              <h2 className="text-xl font-semibold">Add New Product</h2>
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <ProductForm />
               </div>
             </TabsContent>
           </Tabs>
