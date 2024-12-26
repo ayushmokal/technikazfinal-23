@@ -29,6 +29,9 @@ export function ArticleTabs({
   // Helper function to get popular articles based on category
   const getPopularArticles = () => {
     console.log('Getting popular articles for category:', category);
+    if (category === "HOME") {
+      return popularArticles;
+    }
     const categoryField = `popular_in_${category.toLowerCase()}` as keyof BlogFormData;
     const filteredArticles = popularArticles.filter(article => {
       const isPopular = article[categoryField];
@@ -108,7 +111,9 @@ export function ArticleTabs({
             )}
           </>
         ) : (
-          <p className="text-gray-500 text-center py-4">No popular articles found in this category</p>
+          <div className="flex flex-col items-center justify-center py-8 bg-gray-50 rounded-lg">
+            <p className="text-gray-500">No popular articles available</p>
+          </div>
         )}
       </TabsContent>
 
