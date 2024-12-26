@@ -25,7 +25,21 @@ interface Product {
   brand: string;
   price: number;
   image_url?: string;
-  [key: string]: any;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
+  camera?: string;
+  os?: string;
+  chipset?: string;
+  graphics?: string;
+  ports?: string;
+  color?: string;
+  model_name?: string;
+  resolution?: string;
+  screen_size?: string;
+  charging_specs?: string;
 }
 
 interface ProductManagerProps {
