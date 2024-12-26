@@ -9,11 +9,12 @@ import { CarouselSection } from "@/components/CarouselSection";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { ArticleTabs } from "@/components/ArticleTabs";
 
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
+  const [activeTab, setActiveTab] = useState("popular");
 
-  const { data: blogs, isError, isLoading } = useQuery({
+  const { data: blogs = [], isError, isLoading } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
       console.log('Fetching all blogs');
@@ -44,34 +45,8 @@ export default function Index() {
     blog.subcategory === 'MOBILE'
   ).slice(0, 4) || [];
   
-  const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
+  const popularArticles = blogs?.filter(blog => blog.popular) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
-
-  const ArticleItem = ({ article }: { article: any }) => (
-    <Link
-      key={article.slug}
-      to={`/article/${article.slug}`}
-      className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
-    >
-      <div className="w-[240px] h-[135px] overflow-hidden rounded">
-        <AspectRatio ratio={16/9}>
-          <img
-            src={article.image_url || '/placeholder.svg'}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </AspectRatio>
-      </div>
-      <div className="flex-1">
-        <h3 className="font-medium group-hover:text-primary transition-colors line-clamp-2">
-          {article.title}
-        </h3>
-        <p className="text-sm text-gray-500 mt-2">
-          {new Date(article.created_at).toLocaleDateString()}
-        </p>
-      </div>
-    </Link>
-  );
 
   if (isError) {
     return (
@@ -141,42 +116,17 @@ export default function Index() {
         </div>
 
         {/* Main Content Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Popular/Recent Articles */}
-          <div className="lg:col-span-2">
-            <div className="flex gap-4 mb-6">
-              <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === 'popular'
-                    ? 'bg-primary text-white'
-                    : 'bg-white border border-gray-200'
-                }`}
-                onClick={() => setActiveTab('popular')}
-              >
-                Popular
-              </button>
-              <button
-                className={`px-4 py-2 rounded-full ${
-                  activeTab === 'recent'
-                    ? 'bg-primary text-white'
-                    : 'bg-white border border-gray-200'
-                }`}
-                onClick={() => setActiveTab('recent')}
-              >
-                Recent
-              </button>
-            </div>
-            <div className="space-y-6">
-              {(activeTab === 'popular' ? popularArticles : recentArticles).map(
-                (article) => (
-                  <ArticleItem key={article.slug} article={article} />
-                )
-              )}
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8">
+            <ArticleTabs
+              popularArticles={popularArticles}
+              recentArticles={recentArticles}
+              onTabChange={setActiveTab}
+              category="HOME"
+            />
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-4">
             <BlogSidebar />
           </div>
         </div>
