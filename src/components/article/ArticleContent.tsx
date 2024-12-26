@@ -1,7 +1,8 @@
 import { BlogFormData } from "@/types/blog";
 import { ArticleHeader } from "./ArticleHeader";
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
+import { ArticleRating } from "./ArticleRating";
+import { useState, useEffect } from "react";
 
 interface ArticleContentProps {
   blog: BlogFormData;
@@ -9,15 +10,13 @@ interface ArticleContentProps {
 
 export function ArticleContent({ blog }: ArticleContentProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [averageRating, setAverageRating] = useState(blog.average_rating || 0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Calculate how far the user has scrolled
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY;
-      
-      // Calculate percentage scrolled
       const scrolled = (scrollTop / (documentHeight - windowHeight)) * 100;
       setScrollProgress(Math.min(scrolled, 100));
     };
@@ -25,6 +24,10 @@ export function ArticleContent({ blog }: ArticleContentProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleRatingUpdate = (newRating: number) => {
+    setAverageRating(newRating);
+  };
 
   return (
     <article className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -42,9 +45,16 @@ export function ArticleContent({ blog }: ArticleContentProps) {
       <div className="p-8">
         <ArticleHeader blog={blog} />
         <div 
-          className="prose max-w-none"
+          className="prose max-w-none mb-8"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
+        <div className="border-t pt-8">
+          <ArticleRating 
+            blogId={blog.id || ''} 
+            currentRating={averageRating}
+            onRatingUpdate={handleRatingUpdate}
+          />
+        </div>
       </div>
     </article>
   );

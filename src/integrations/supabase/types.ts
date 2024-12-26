@@ -12,6 +12,7 @@ export type Database = {
       blogs: {
         Row: {
           author: string
+          average_rating: number | null
           category: string
           content: string
           created_at: string
@@ -34,6 +35,7 @@ export type Database = {
         }
         Insert: {
           author: string
+          average_rating?: number | null
           category: string
           content: string
           created_at?: string
@@ -56,6 +58,7 @@ export type Database = {
         }
         Update: {
           author?: string
+          average_rating?: number | null
           category?: string
           content?: string
           created_at?: string
@@ -227,6 +230,38 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      ratings: {
+        Row: {
+          blog_id: string
+          created_at: string
+          id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          blog_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          blog_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

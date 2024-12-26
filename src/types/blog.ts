@@ -19,6 +19,7 @@ export interface BlogFormData {
   updated_at: string;
   view_count?: number;
   share_count?: number;
+  average_rating?: number;
 }
 
 export const categories = {
