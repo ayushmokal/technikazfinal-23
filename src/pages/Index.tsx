@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
+  const [popularFilter, setPopularFilter] = useState<'all' | 'category'>('all');
 
   const { data: blogs, isError, isLoading } = useQuery({
     queryKey: ['blogs'],
@@ -44,7 +45,18 @@ export default function Index() {
     blog.subcategory === 'MOBILE'
   ).slice(0, 4) || [];
   
-  const popularArticles = blogs?.filter(blog => blog.popular).slice(0, 6) || [];
+  // Updated popular articles filtering logic
+  const popularArticles = blogs?.filter(blog => 
+    popularFilter === 'all' ? blog.popular : (
+      blog.category === 'TECH' ? blog.popular_in_tech :
+      blog.category === 'GAMES' ? blog.popular_in_games :
+      blog.category === 'ENTERTAINMENT' ? blog.popular_in_entertainment :
+      blog.category === 'STOCKS' ? blog.popular_in_stocks :
+      blog.category === 'GADGETS' ? blog.popular_in_gadgets :
+      false
+    )
+  ).slice(0, 6) || [];
+  
   const recentArticles = blogs?.slice(0, 6) || [];
 
   const ArticleItem = ({ article }: { article: any }) => (
@@ -165,6 +177,32 @@ export default function Index() {
               >
                 Recent
               </button>
+
+              {/* Popular Filter Options */}
+              {activeTab === 'popular' && (
+                <div className="flex gap-2 ml-4">
+                  <button
+                    className={`px-4 py-2 rounded-full ${
+                      popularFilter === 'all'
+                        ? 'bg-primary text-white'
+                        : 'bg-white border border-gray-200'
+                    }`}
+                    onClick={() => setPopularFilter('all')}
+                  >
+                    All Categories
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded-full ${
+                      popularFilter === 'category'
+                        ? 'bg-primary text-white'
+                        : 'bg-white border border-gray-200'
+                    }`}
+                    onClick={() => setPopularFilter('category')}
+                  >
+                    By Category
+                  </button>
+                </div>
+              )}
             </div>
             <div className="space-y-6">
               {(activeTab === 'popular' ? popularArticles : recentArticles).map(
