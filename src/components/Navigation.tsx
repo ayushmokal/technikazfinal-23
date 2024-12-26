@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, X, Search } from "lucide-react";
+import { Facebook, Twitter, Instagram, X, Search, Menu, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { categories } from "@/types/blog";
@@ -15,6 +15,16 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { useNavigate } from "react-router-dom";
 import { BlogFormData } from "@/types/blog";
 
@@ -49,6 +59,7 @@ const navigationCategories = [
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const { data: searchResults } = useQuery({
@@ -91,7 +102,7 @@ export function Navigation() {
               <X className="h-4 w-4" />
             </Button>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="hidden sm:block">
             <Link to="/contact">Contact</Link>
           </Button>
         </div>
@@ -100,14 +111,54 @@ export function Navigation() {
       {/* Main Navigation */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center">
-            <img 
-              src="/lovable-uploads/b9245872-2c89-4c1b-91eb-8e2ea38da7fd.png" 
-              alt="Technikaz" 
-              className="h-8 w-auto hover:opacity-80 transition-opacity"
-            />
-          </Link>
-          <div className="hidden md:flex space-x-8">
+          <div className="flex items-center gap-4">
+            {/* Mobile Menu Button */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                <div className="py-4">
+                  <div className="space-y-4">
+                    {navigationCategories.map((category) => (
+                      <Collapsible key={category.name}>
+                        <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-100 rounded-lg">
+                          <Link to={category.path} className="flex-1">
+                            {category.name}
+                          </Link>
+                          <ChevronDown className="h-4 w-4" />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="pl-4 space-y-2">
+                          {category.subcategories.map((subcategory) => (
+                            <Link
+                              key={subcategory}
+                              to={`${category.path}?subcategory=${subcategory}`}
+                              className="block p-2 hover:bg-gray-100 rounded-lg"
+                            >
+                              {subcategory}
+                            </Link>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/lovable-uploads/b9245872-2c89-4c1b-91eb-8e2ea38da7fd.png" 
+                alt="Technikaz" 
+                className="h-8 w-auto hover:opacity-80 transition-opacity"
+              />
+            </Link>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex space-x-8">
             {navigationCategories.map((category) => (
               <Link
                 key={category.name}
@@ -118,12 +169,13 @@ export function Navigation() {
               </Link>
             ))}
           </div>
+          
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Input
                 type="search"
                 placeholder="Search articles..."
-                className="w-[200px]"
+                className="w-[200px] lg:w-[300px]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setOpen(true)}
