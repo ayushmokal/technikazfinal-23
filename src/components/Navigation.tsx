@@ -1,14 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Facebook, Twitter, Instagram, X, Menu, Search as SearchIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Facebook, Twitter, Instagram, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { categories } from "@/types/blog";
-import { useState } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 
 const navigationCategories = [
   {
@@ -39,43 +33,6 @@ const navigationCategories = [
 ];
 
 export function Navigation() {
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const { data: searchResults } = useQuery({
-    queryKey: ['search', searchTerm],
-    queryFn: async () => {
-      if (!searchTerm) return [];
-      
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('title, slug, category')
-        .ilike('title', `%${searchTerm}%`)
-        .limit(5);
-      
-      if (error) {
-        console.error('Search error:', error);
-        return [];
-      }
-      
-      return data || [];
-    },
-    enabled: searchTerm.length > 0,
-  });
-
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
-    setIsSearchOpen(true);
-  };
-
-  const handleSelectResult = (slug: string) => {
-    setIsSearchOpen(false);
-    setSearchTerm("");
-    navigate(`/article/${slug}`);
-  };
-
   return (
     <nav className="bg-white shadow-sm">
       {/* Top Bar */}
@@ -111,8 +68,6 @@ export function Navigation() {
               className="h-8 w-auto hover:opacity-80 transition-opacity"
             />
           </Link>
-
-          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {navigationCategories.map((category) => (
               <Link
@@ -124,109 +79,14 @@ export function Navigation() {
               </Link>
             ))}
           </div>
-
-          {/* Mobile Navigation */}
-          <div className="flex md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-                <nav className="flex flex-col gap-4">
-                  {navigationCategories.map((category) => (
-                    <Link
-                      key={category.name}
-                      to={category.path}
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                    >
-                      {category.name}
-                    </Link>
-                  ))}
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          {/* Search */}
-          <div className="flex items-center gap-4">
-            <div className="hidden md:block relative">
-              <Popover open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-                <PopoverTrigger asChild>
-                  <div>
-                    <Input
-                      type="search"
-                      placeholder="Search articles..."
-                      className="w-[200px]"
-                      value={searchTerm}
-                      onChange={(e) => handleSearch(e.target.value)}
-                    />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0" align="end">
-                  <Command>
-                    <CommandList>
-                      <CommandEmpty>No results found.</CommandEmpty>
-                      <CommandGroup>
-                        {searchResults?.map((result) => (
-                          <CommandItem
-                            key={result.slug}
-                            onSelect={() => handleSelectResult(result.slug)}
-                            className="cursor-pointer"
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-medium">{result.title}</span>
-                              <span className="text-sm text-gray-500">{result.category}</span>
-                            </div>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsSearchVisible(!isSearchVisible)}
-            >
-              <SearchIcon className="h-5 w-5" />
-            </Button>
+          <div className="flex items-center space-x-4">
+            <Input
+              type="search"
+              placeholder="Search"
+              className="w-[200px]"
+            />
           </div>
         </div>
-
-        {/* Mobile Search */}
-        {isSearchVisible && (
-          <div className="md:hidden px-4 py-2">
-            <Command className="rounded-lg border shadow-md">
-              <CommandInput
-                placeholder="Search articles..."
-                value={searchTerm}
-                onValueChange={handleSearch}
-              />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup>
-                  {searchResults?.map((result) => (
-                    <CommandItem
-                      key={result.slug}
-                      onSelect={() => handleSelectResult(result.slug)}
-                      className="cursor-pointer"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-medium">{result.title}</span>
-                        <span className="text-sm text-gray-500">{result.category}</span>
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </div>
-        )}
       </div>
     </nav>
   );

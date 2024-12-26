@@ -7,7 +7,7 @@ interface ArticleGridProps {
 
 export function ArticleGrid({ articles }: ArticleGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {articles.map((article) => (
         <SideArticle key={article.slug} article={article} />
       ))}
