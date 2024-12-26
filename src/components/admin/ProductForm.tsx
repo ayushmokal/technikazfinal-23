@@ -11,6 +11,7 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 
 export interface ProductFormData {
+  id?: string;  // Added id as optional property
   name: string;
   brand: string;
   model_name?: string;
