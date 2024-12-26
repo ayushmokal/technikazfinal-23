@@ -3,15 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Camera,
-  Smartphone,
-  Battery,
-  Cpu,
-} from "lucide-react";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
+import { ProductKeyFeatures } from "@/components/product/ProductKeyFeatures";
+import { ProductReviewSection } from "@/components/product/ProductReviewSection";
+import { CompareSection } from "@/components/product/CompareSection";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -45,29 +42,10 @@ export default function ProductDetailPage() {
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column - Product Images */}
-          <div className="space-y-4">
-            <div className="aspect-square relative overflow-hidden rounded-lg border">
-              <img
-                src={product.image_url || "/placeholder.svg"}
-                alt={product.name}
-                className="object-cover w-full h-full"
-              />
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {[1, 2, 3, 4, 5].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden"
-                >
-                  <img
-                    src={product.image_url || "/placeholder.svg"}
-                    alt={`${product.name} view ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <ProductImageGallery 
+            mainImage={product.image_url || "/placeholder.svg"}
+            productName={product.name}
+          />
 
           {/* Right Column - Product Info */}
           <div className="space-y-6">
@@ -84,29 +62,12 @@ export default function ProductDetailPage() {
               <Button>Compare</Button>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Key Specs</h2>
-              <div className="grid grid-cols-4 gap-4">
-                <div className="flex flex-col items-center text-center">
-                  <Smartphone className="h-8 w-8 mb-2" />
-                  <span className="text-sm">{product.screen_size}</span>
-                </div>
-                <div className="flex flex-col items-center text-center">
-                  <Camera className="h-8 w-8 mb-2" />
-                  <span className="text-sm">{product.camera}</span>
-                </div>
-                <div className="flex flex-col items-center text-center">
-                  <Cpu className="h-8 w-8 mb-2" />
-                  <span className="text-sm">{product.processor}</span>
-                </div>
-                <div className="flex flex-col items-center text-center">
-                  <Battery className="h-8 w-8 mb-2" />
-                  <span className="text-sm">{product.battery}</span>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
+            <ProductKeyFeatures
+              screenSize={product.screen_size}
+              camera={product.camera}
+              processor={product.processor}
+              battery={product.battery}
+            />
 
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="grid w-full grid-cols-7">
@@ -119,28 +80,8 @@ export default function ProductDetailPage() {
                 <TabsTrigger value="pictures">Pictures</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-4">
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold mb-2">SAMSUNG {product.name} REVIEW</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-green-600">PROS</h4>
-                      <ul className="list-disc list-inside text-sm space-y-1">
-                        <li>All-in productivity features</li>
-                        <li>Good performance & battery life</li>
-                        <li>Good display & cameras</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-red-600">CONS</h4>
-                      <ul className="list-disc list-inside text-sm space-y-1">
-                        <li>All-in productivity features</li>
-                        <li>Good performance & battery life</li>
-                        <li>Good display & cameras</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+              <TabsContent value="overview">
+                <ProductReviewSection productName={product.name} />
               </TabsContent>
 
               <TabsContent value="specs">
@@ -149,85 +90,40 @@ export default function ProductDetailPage() {
                     <div>
                       <h3 className="font-semibold mb-2">Key Specs</h3>
                       <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">RAM</span>
-                          <span>{product.ram}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Processor</span>
-                          <span>{product.processor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Storage</span>
-                          <span>{product.storage}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Battery</span>
-                          <span>{product.battery}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Display</span>
-                          <span>{product.display_specs}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div>
-                      <h3 className="font-semibold mb-2">General</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Operating System</span>
-                          <span>{product.os}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Chipset</span>
-                          <span>{product.chipset}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div>
-                      <h3 className="font-semibold mb-2">Display</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Screen Size</span>
-                          <span>{product.screen_size}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Resolution</span>
-                          <span>{product.resolution}</span>
-                        </div>
+                        {Object.entries({
+                          RAM: product.ram,
+                          Processor: product.processor,
+                          Storage: product.storage,
+                          Battery: product.battery,
+                          Display: product.display_specs,
+                          Camera: product.camera,
+                          OS: product.os,
+                          Chipset: product.chipset,
+                          "Screen Size": product.screen_size,
+                          Resolution: product.resolution,
+                          Color: product.color,
+                        }).map(([key, value]) => value && (
+                          <div key={key} className="flex justify-between">
+                            <span className="text-muted-foreground">{key}</span>
+                            <span>{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </ScrollArea>
               </TabsContent>
-
-              {/* Other tab contents can be implemented similarly */}
             </Tabs>
           </div>
         </div>
 
-        {/* Compare Section */}
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">Compare Suggested Mobiles</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((_, index) => (
-              <div key={index} className="bg-white p-2 rounded-lg shadow">
-                <img
-                  src="/placeholder.svg"
-                  alt="Compare product"
-                  className="w-full h-32 object-cover rounded mb-2"
-                />
-                <Button variant="outline" className="w-full">Compare</Button>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CompareSection 
+          similarProducts={Array(4).fill({
+            id: '1',
+            name: 'Similar Product',
+            image_url: product.image_url,
+          })}
+        />
       </div>
     </Layout>
   );
