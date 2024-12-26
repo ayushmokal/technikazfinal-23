@@ -17,6 +17,8 @@ export interface BlogFormData {
   popular_in_gadgets?: boolean;
   created_at: string;
   updated_at: string;
+  view_count?: number;
+  share_count?: number;
 }
 
 export const categories = {
