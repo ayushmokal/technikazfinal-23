@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
 
-  const { data: blogs, isError, isLoading } = useQuery({
+  const { data: blogs, isError, isLoading, error } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
       console.log('Fetching all blogs');
@@ -29,7 +29,10 @@ export default function Index() {
       
       console.log('Blogs fetched:', data);
       return data || [];
-    }
+    },
+    retry: 1, // Only retry once
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false // Don't refetch when window regains focus
   });
 
   // Filter blogs after successful fetch
@@ -49,7 +52,6 @@ export default function Index() {
 
   const ArticleItem = ({ article }: { article: any }) => (
     <Link
-      key={article.slug}
       to={`/article/${article.slug}`}
       className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
     >
@@ -78,9 +80,15 @@ export default function Index() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <main className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-600">Error loading content</h2>
-            <p className="text-gray-600">Please try again later</p>
+          <div className="text-center p-8 bg-red-50 rounded-lg">
+            <h2 className="text-xl font-bold text-red-600 mb-2">Error loading content</h2>
+            <p className="text-gray-600 mb-4">{error?.message || 'Please try again later'}</p>
+            <Button 
+              onClick={() => window.location.reload()}
+              variant="outline"
+            >
+              Retry
+            </Button>
           </div>
         </main>
         <Footer />
@@ -93,8 +101,9 @@ export default function Index() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <main className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold">Loading...</h2>
+          <div className="flex flex-col items-center justify-center space-y-4 p-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <h2 className="text-xl font-medium text-gray-600">Loading content...</h2>
           </div>
         </main>
         <Footer />
