@@ -10,26 +10,32 @@ export default function AboutUs() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-12">
-          <div className="max-w-3xl mx-auto text-center mb-8">
+          <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-6">We are a team of content writers who share their learnings</h1>
-            <p className="text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+            <p className="text-gray-600 mb-8">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
-          </div>
-          
-          {/* Stats */}
-          <div className="bg-primary text-white p-6 rounded-lg flex justify-around items-center max-w-3xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold">100+</div>
-              <div className="text-sm">Blogs Published</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold">18K+</div>
-              <div className="text-sm">Views on Freewet</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold">30K+</div>
-              <div className="text-sm">Total active Users</div>
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/ff33cfce-1cae-4840-a5f3-dd58a9c83b89.png"
+                alt="Team together"
+                className="w-full rounded-lg mb-8"
+              />
+              {/* Stats overlay */}
+              <div className="absolute bottom-0 left-0 right-0 bg-primary bg-opacity-90 text-white p-6 flex justify-around items-center">
+                <div className="text-center">
+                  <div className="text-3xl font-bold">100+</div>
+                  <div className="text-sm">Blogs Published</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">18K+</div>
+                  <div className="text-sm">Views on Freewet</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">30K+</div>
+                  <div className="text-sm">Total active Users</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -70,7 +76,7 @@ export default function AboutUs() {
             </div>
             <div>
               <img 
-                src="/lovable-uploads/e26337a3-f70b-4f42-9608-4bbdd245d60c.png" 
+                src="/lovable-uploads/65c084cf-741d-447d-b97c-8ab1210f5cd4.png" 
                 alt="Team hands together" 
                 className="rounded-lg w-full"
               />
@@ -84,7 +90,7 @@ export default function AboutUs() {
             <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
               <div>
                 <img 
-                  src="/lovable-uploads/e26337a3-f70b-4f42-9608-4bbdd245d60c.png" 
+                  src="/lovable-uploads/b3c28543-1867-465f-87ad-2cb22320d66b.png" 
                   alt="Team discussion" 
                   className="rounded-lg w-full"
                 />
