@@ -42,13 +42,19 @@ export function CategoryDistribution() {
               endAngle={0}
             >
               <RadialBar
-                minAngle={15}
-                background
-                clockWise={true}
                 dataKey="count"
+                background
+                clockWise
                 label={{ fill: '#666', position: 'insideStart' }}
               />
-              <Legend iconSize={10} width={120} height={140} layout="vertical" verticalAlign="middle" align="right" />
+              <Legend 
+                iconSize={10} 
+                width={120} 
+                height={140} 
+                layout="vertical" 
+                verticalAlign="middle" 
+                align="right"
+              />
             </RadialBarChart>
           </ResponsiveContainer>
         </div>
