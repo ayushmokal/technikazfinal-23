@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Star, Trophy, Home } from "lucide-react";
+import { Pencil, Trash2, Star, Trophy, Home, Heart } from "lucide-react";
 import { BlogFormData } from "@/types/blog";
 import {
   Tooltip,
@@ -50,6 +50,27 @@ export function CategoryBlogTable({
       <TableCell>{new Date(blog.created_at).toLocaleDateString()}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onTogglePopular(blog.id, blog.popular || false)}
+                >
+                  <Heart
+                    className={`h-4 w-4 ${
+                      blog.popular ? "fill-red-500 text-red-500" : "text-gray-400"
+                    }`}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle Popular on Homepage</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
