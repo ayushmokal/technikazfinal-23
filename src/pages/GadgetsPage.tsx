@@ -53,7 +53,7 @@ export default function GadgetsPage() {
         query = query.eq('subcategory', subcategory);
       }
       
-      const { data, error } = await query.limit(4);
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching gadgets articles:', error);
@@ -66,7 +66,8 @@ export default function GadgetsPage() {
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
-  const popularArticles = articles.filter(article => article.popular)?.slice(0, 6) || [];
+  // Filter articles that are marked as popular in gadgets category
+  const popularArticles = articles.filter(article => article.popular_in_gadgets) || [];
   const recentArticles = articles.slice(0, 6) || [];
 
   return (
