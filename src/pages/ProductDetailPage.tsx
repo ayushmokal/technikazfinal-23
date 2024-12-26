@@ -10,20 +10,55 @@ import { ProductReview } from "@/components/product/ProductReview";
 import { ProductSpecTable } from "@/components/product/ProductSpecTable";
 import { CompareSection } from "@/components/product/CompareSection";
 
+type ProductType = 'mobile' | 'laptop';
+
+interface BaseProduct {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  image_url: string | null;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
+  os: string | null;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface LaptopProduct extends BaseProduct {
+  graphics: string | null;
+  ports: string | null;
+  model_name: string | null;
+}
+
+interface MobileProduct extends BaseProduct {
+  camera: string;
+  chipset: string | null;
+  charging_specs: string | null;
+  resolution: string | null;
+  screen_size: string | null;
+  model_name: string | null;
+}
+
 export default function ProductDetailPage() {
-  const { id, type = 'mobile' } = useParams();
+  const { id, type = 'mobile' } = useParams<{ id: string; type?: ProductType }>();
+  const isLaptop = type === 'laptop';
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from(type === 'laptop' ? 'laptops' : 'mobile_products')
+        .from(isLaptop ? 'laptops' : 'mobile_products')
         .select('*')
         .eq('id', id)
         .single();
 
       if (error) throw error;
-      return data;
+      return data as LaptopProduct | MobileProduct;
     },
   });
 
@@ -35,14 +70,14 @@ export default function ProductDetailPage() {
     );
   }
 
-  const specifications = type === 'laptop' ? [
+  const specifications = isLaptop ? [
     {
       title: "Key Specs",
       specs: [
         { label: "RAM", value: product.ram },
         { label: "Processor", value: product.processor },
         { label: "Storage", value: product.storage },
-        { label: "Graphics", value: product.graphics },
+        { label: "Graphics", value: (product as LaptopProduct).graphics },
         { label: "Display", value: product.display_specs },
       ],
     },
@@ -50,7 +85,7 @@ export default function ProductDetailPage() {
       title: "General",
       specs: [
         { label: "Operating System", value: product.os },
-        { label: "Ports", value: product.ports },
+        { label: "Ports", value: (product as LaptopProduct).ports },
         { label: "Color", value: product.color },
       ],
     },
@@ -69,7 +104,7 @@ export default function ProductDetailPage() {
       title: "General",
       specs: [
         { label: "Operating System", value: product.os },
-        { label: "Chipset", value: product.chipset },
+        { label: "Chipset", value: (product as MobileProduct).chipset },
         { label: "Color", value: product.color },
       ],
     },
@@ -103,12 +138,12 @@ export default function ProductDetailPage() {
             </div>
 
             <ProductKeySpecs
-              type={type}
-              screenSize={product.screen_size}
-              camera={product.camera}
+              type={type as ProductType}
+              screenSize={isLaptop ? undefined : (product as MobileProduct).screen_size}
+              camera={isLaptop ? undefined : (product as MobileProduct).camera}
               processor={product.processor}
               battery={product.battery}
-              graphics={product.graphics}
+              graphics={isLaptop ? (product as LaptopProduct).graphics : undefined}
             />
 
             <Tabs defaultValue="overview" className="w-full">
