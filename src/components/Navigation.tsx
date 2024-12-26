@@ -1,8 +1,22 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, X } from "lucide-react";
+import { Facebook, Twitter, Instagram, X, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { categories } from "@/types/blog";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { useNavigate } from "react-router-dom";
+import { BlogFormData } from "@/types/blog";
 
 const navigationCategories = [
   {
@@ -33,6 +47,31 @@ const navigationCategories = [
 ];
 
 export function Navigation() {
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const { data: searchResults } = useQuery({
+    queryKey: ['blogs', searchQuery],
+    queryFn: async () => {
+      if (!searchQuery) return [];
+      
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .ilike('title', `%${searchQuery}%`)
+        .limit(5);
+      
+      if (error) {
+        console.error('Error searching blogs:', error);
+        return [];
+      }
+      
+      return data as BlogFormData[];
+    },
+    enabled: searchQuery.length > 0,
+  });
+
   return (
     <nav className="bg-white shadow-sm">
       {/* Top Bar */}
@@ -80,11 +119,43 @@ export function Navigation() {
             ))}
           </div>
           <div className="flex items-center space-x-4">
-            <Input
-              type="search"
-              placeholder="Search"
-              className="w-[200px]"
-            />
+            <div className="relative">
+              <Input
+                type="search"
+                placeholder="Search articles..."
+                className="w-[200px]"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setOpen(true)}
+              />
+              <CommandDialog open={open} onOpenChange={setOpen}>
+                <Command>
+                  <CommandInput 
+                    placeholder="Search articles..." 
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                  />
+                  <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandGroup heading="Articles">
+                      {searchResults?.map((article) => (
+                        <CommandItem
+                          key={article.id}
+                          onSelect={() => {
+                            navigate(`/article/${article.slug}`);
+                            setOpen(false);
+                            setSearchQuery("");
+                          }}
+                        >
+                          <Search className="mr-2 h-4 w-4" />
+                          {article.title}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </CommandDialog>
+            </div>
           </div>
         </div>
       </div>
