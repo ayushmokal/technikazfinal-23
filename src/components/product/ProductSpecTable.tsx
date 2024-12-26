@@ -1,4 +1,3 @@
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 interface SpecificationGroup {
@@ -12,7 +11,7 @@ interface ProductSpecTableProps {
 
 export function ProductSpecTable({ specifications }: ProductSpecTableProps) {
   return (
-    <ScrollArea className="h-[400px] w-full rounded-md border p-4">
+    <div className="w-full rounded-md border p-4">
       <div className="space-y-6">
         {specifications.map((group, index) => (
           <div key={index}>
@@ -29,6 +28,6 @@ export function ProductSpecTable({ specifications }: ProductSpecTableProps) {
           </div>
         ))}
       </div>
-    </ScrollArea>
+    </div>
   );
 }
