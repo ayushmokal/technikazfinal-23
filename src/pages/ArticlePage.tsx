@@ -46,6 +46,9 @@ export default function ArticlePage() {
         return;
       }
 
+      // Increment view count
+      await supabase.rpc('increment_view_count', { blog_id: data.id });
+      
       console.log("Found blog:", data);
       setBlog(data);
       fetchNextArticles(data);

@@ -25,10 +25,12 @@ export type Database = {
           popular_in_games: boolean | null
           popular_in_stocks: boolean | null
           popular_in_tech: boolean | null
+          share_count: number | null
           slug: string
           subcategory: string | null
           title: string
           updated_at: string
+          view_count: number | null
         }
         Insert: {
           author: string
@@ -45,10 +47,12 @@ export type Database = {
           popular_in_games?: boolean | null
           popular_in_stocks?: boolean | null
           popular_in_tech?: boolean | null
+          share_count?: number | null
           slug: string
           subcategory?: string | null
           title: string
           updated_at?: string
+          view_count?: number | null
         }
         Update: {
           author?: string
@@ -65,10 +69,12 @@ export type Database = {
           popular_in_games?: boolean | null
           popular_in_stocks?: boolean | null
           popular_in_tech?: boolean | null
+          share_count?: number | null
           slug?: string
           subcategory?: string | null
           title?: string
           updated_at?: string
+          view_count?: number | null
         }
         Relationships: []
       }
@@ -227,7 +233,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_share_count: {
+        Args: {
+          blog_id: string
+        }
+        Returns: undefined
+      }
+      increment_view_count: {
+        Args: {
+          blog_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
