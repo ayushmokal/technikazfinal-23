@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -72,31 +71,39 @@ export default function GadgetsPage() {
           <TabsContent value="mobiles" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {mobileProducts.map((product) => (
-                <Link to={`/product/${product.id}`} key={product.id}>
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader>
-                      <div className="w-full h-48 relative mb-4">
-                        <img
-                          src={product.image_url || "/placeholder.svg"}
-                          alt={product.name}
-                          className="w-full h-full object-cover rounded-t-lg"
-                        />
-                      </div>
-                      <CardTitle>{product.name}</CardTitle>
-                      <CardDescription>
-                        {product.brand} {product.model_name}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
+                <Card key={product.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="w-full h-48 relative mb-4">
+                      <img
+                        src={product.image_url || "/placeholder.svg"}
+                        alt={product.name}
+                        className="w-full h-full object-cover rounded-t-lg"
+                      />
+                    </div>
+                    <CardTitle>{product.name}</CardTitle>
+                    <CardDescription>
+                      {product.brand} {product.model_name}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[200px] rounded-md border p-4">
                       <div className="space-y-2">
-                        <p><strong>Price:</strong> ₹{product.price.toLocaleString()}</p>
+                        <p><strong>Price:</strong> ${product.price}</p>
                         <p><strong>Display:</strong> {product.display_specs}</p>
                         <p><strong>Processor:</strong> {product.processor}</p>
                         <p><strong>RAM:</strong> {product.ram}</p>
+                        <p><strong>Storage:</strong> {product.storage}</p>
+                        <p><strong>Camera:</strong> {product.camera}</p>
+                        <p><strong>Battery:</strong> {product.battery}</p>
+                        <p><strong>OS:</strong> {product.os}</p>
+                        <p><strong>Resolution:</strong> {product.resolution}</p>
+                        <p><strong>Screen Size:</strong> {product.screen_size}</p>
+                        <p><strong>Charging:</strong> {product.charging_specs}</p>
+                        <p><strong>Color:</strong> {product.color}</p>
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </TabsContent>
@@ -121,12 +128,12 @@ export default function GadgetsPage() {
                   <CardContent>
                     <ScrollArea className="h-[200px] rounded-md border p-4">
                       <div className="space-y-2">
-                        <p><strong>Price:</strong> ₹{laptop.price.toLocaleString()}</p>
+                        <p><strong>Price:</strong> ${laptop.price}</p>
                         <p><strong>Display:</strong> {laptop.display_specs}</p>
                         <p><strong>Processor:</strong> {laptop.processor}</p>
-                        <p><strong>Graphics:</strong> {laptop.graphics}</p>
                         <p><strong>RAM:</strong> {laptop.ram}</p>
                         <p><strong>Storage:</strong> {laptop.storage}</p>
+                        <p><strong>Graphics:</strong> {laptop.graphics}</p>
                         <p><strong>Battery:</strong> {laptop.battery}</p>
                         <p><strong>OS:</strong> {laptop.os}</p>
                         <p><strong>Ports:</strong> {laptop.ports}</p>

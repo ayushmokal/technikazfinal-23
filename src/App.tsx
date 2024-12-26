@@ -13,7 +13,6 @@ import TechPage from "./pages/TechPage";
 import StocksPage from "./pages/StocksPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import GadgetsPage from "./pages/GadgetsPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
 import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/NotFound";
 
@@ -34,11 +33,11 @@ function App() {
             <Route path="/stocks" element={<StocksPage />} />
             <Route path="/entertainment" element={<EntertainmentPage />} />
             <Route path="/gadgets" element={<GadgetsPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/admin/edit/:id" element={<EditBlogPage />} />
+            {/* 404 route - show NotFound component */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
