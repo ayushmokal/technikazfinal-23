@@ -2,22 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { ImageUpload } from "./ImageUpload";
-import { CategorySelect } from "./CategorySelect";
-import { SubcategorySelect } from "./SubcategorySelect";
-import { RichTextEditor } from "./RichTextEditor";
+import { Form } from "@/components/ui/form";
 import { type BlogFormData } from "@/types/blog";
 import { useNavigate } from "react-router-dom";
+import { FormFields } from "./FormFields";
 
 interface BlogFormProps {
   initialData?: BlogFormData;
@@ -75,7 +64,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
 
   const onSubmit = async (data: BlogFormData) => {
     try {
-      console.log('Submitting form data:', data); // Debug log
       setIsLoading(true);
 
       if (mode === 'create') {
@@ -102,12 +90,9 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
         data.image_url = publicUrlData.publicUrl;
       }
 
-      // Ensure category is properly set
       if (!data.category && selectedCategory) {
         data.category = selectedCategory;
       }
-
-      console.log('Final data to be submitted:', data); // Debug log
 
       if (mode === 'edit' && initialData?.id) {
         const { error } = await supabase
@@ -139,7 +124,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
         setImageFile(null);
       }
     } catch (error: any) {
-      console.error('Error submitting form:', error); // Debug log
       toast({
         variant: "destructive",
         title: "Error",
@@ -153,63 +137,12 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter blog title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <CategorySelect 
-          form={form} 
-          onCategoryChange={setSelectedCategory} 
-        />
-
-        <SubcategorySelect 
+        <FormFields
           form={form}
           selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          onImageChange={handleImageChange}
         />
-
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Content</FormLabel>
-              <FormControl>
-                <RichTextEditor 
-                  content={field.value} 
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="author"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Author</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter author name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <ImageUpload onChange={handleImageChange} />
-
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (mode === 'edit' ? "Updating..." : "Creating...") : (mode === 'edit' ? "Update Blog Post" : "Create Blog Post")}
         </Button>
