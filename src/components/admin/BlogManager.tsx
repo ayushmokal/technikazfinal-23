@@ -65,6 +65,31 @@ export function BlogManager({ selectedCategory }: BlogManagerProps) {
   };
 
   const togglePopular = async (id: string, currentValue: boolean) => {
+    console.log('Toggling homepage popular status:', id, currentValue);
+    
+    const { error } = await supabase
+      .from('blogs')
+      .update({ popular: !currentValue })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating popular status:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update blog status",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Blog status updated successfully",
+    });
+    refetch();
+  };
+
+  const toggleCategoryPopular = async (id: string, currentValue: boolean) => {
     const blog = blogs?.find(b => b.id === id);
     if (!blog) return;
 
