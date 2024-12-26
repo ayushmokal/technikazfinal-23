@@ -1,19 +1,16 @@
+import { useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/Layout";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { ProductKeySpecs } from "@/components/product/ProductKeySpecs";
-import { ProductReview } from "@/components/product/ProductReview";
-import { ProductSpecTable } from "@/components/product/ProductSpecTable";
-import { CompareSection } from "@/components/product/CompareSection";
+import { ProductSidebar } from "@/components/product/ProductSidebar";
+import { ProductContent } from "@/components/product/ProductContent";
 import { useToast } from "@/hooks/use-toast";
 
-type ProductType = 'mobile' | 'laptop';
+export type ProductType = 'mobile' | 'laptop';
 
-interface BaseProduct {
+export interface BaseProduct {
   id: string;
   name: string;
   brand: string;
@@ -30,13 +27,13 @@ interface BaseProduct {
   updated_at: string;
 }
 
-interface LaptopProduct extends BaseProduct {
+export interface LaptopProduct extends BaseProduct {
   graphics: string | null;
   ports: string | null;
   model_name: string | null;
 }
 
-interface MobileProduct extends BaseProduct {
+export interface MobileProduct extends BaseProduct {
   camera: string;
   chipset: string | null;
   charging_specs: string | null;
@@ -46,6 +43,7 @@ interface MobileProduct extends BaseProduct {
 }
 
 export default function ProductDetailPage() {
+  const [activeSection, setActiveSection] = useState('overview');
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as ProductType || 'mobile';
@@ -134,74 +132,23 @@ export default function ProductDetailPage() {
     },
   ];
 
-  const suggestedProducts = [
-    { id: "1", name: "Product 1", image: "/placeholder.svg" },
-    { id: "2", name: "Product 2", image: "/placeholder.svg" },
-    { id: "3", name: "Product 3", image: "/placeholder.svg" },
-    { id: "4", name: "Product 4", image: "/placeholder.svg" },
-  ];
-
   return (
     <Layout>
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <ProductGallery mainImage={product.image_url} productName={product.name} />
-
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">{product.name}</h1>
-              <p className="text-muted-foreground">By {product.brand}</p>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold">
-                ₹{product.price.toLocaleString()}
-                <span className="text-sm text-muted-foreground ml-2">(onwards)</span>
-              </div>
-              <Button>Compare</Button>
-            </div>
-
-            <ProductKeySpecs
-              type={type}
-              screenSize={isLaptop ? undefined : (product as MobileProduct).screen_size}
-              camera={isLaptop ? undefined : (product as MobileProduct).camera}
-              processor={product.processor}
-              battery={product.battery}
-              graphics={isLaptop ? (product as LaptopProduct).graphics : undefined}
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-8">
+          <div>
+            <ProductGallery mainImage={product.image_url} productName={product.name} />
+            <ProductSidebar
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
             />
-
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="specs">Specifications</TabsTrigger>
-                <TabsTrigger value="compare">Compare</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="overview">
-                <ProductReview productName={product.name} />
-              </TabsContent>
-
-              <TabsContent value="specs">
-                <ProductSpecTable specifications={specifications} />
-              </TabsContent>
-
-              <TabsContent value="compare">
-                <div className="text-center text-muted-foreground py-8">
-                  Select products to compare
-                </div>
-              </TabsContent>
-
-              <TabsContent value="reviews">
-                <div className="text-center text-muted-foreground py-8">
-                  No reviews yet
-                </div>
-              </TabsContent>
-            </Tabs>
           </div>
+          <ProductContent
+            product={product}
+            type={type}
+            specifications={specifications}
+          />
         </div>
-
-        <CompareSection suggestedProducts={suggestedProducts} />
       </div>
     </Layout>
   );
