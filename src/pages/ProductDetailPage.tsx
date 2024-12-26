@@ -11,13 +11,13 @@ import { ProductSpecTable } from "@/components/product/ProductSpecTable";
 import { CompareSection } from "@/components/product/CompareSection";
 
 export default function ProductDetailPage() {
-  const { id } = useParams();
+  const { id, type = 'mobile' } = useParams();
 
   const { data: product, isLoading } = useQuery({
-    queryKey: ['product', id],
+    queryKey: ['product', id, type],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('mobile_products')
+        .from(type === 'laptop' ? 'laptops' : 'mobile_products')
         .select('*')
         .eq('id', id)
         .single();
@@ -35,7 +35,26 @@ export default function ProductDetailPage() {
     );
   }
 
-  const specifications = [
+  const specifications = type === 'laptop' ? [
+    {
+      title: "Key Specs",
+      specs: [
+        { label: "RAM", value: product.ram },
+        { label: "Processor", value: product.processor },
+        { label: "Storage", value: product.storage },
+        { label: "Graphics", value: product.graphics },
+        { label: "Display", value: product.display_specs },
+      ],
+    },
+    {
+      title: "General",
+      specs: [
+        { label: "Operating System", value: product.os },
+        { label: "Ports", value: product.ports },
+        { label: "Color", value: product.color },
+      ],
+    },
+  ] : [
     {
       title: "Key Specs",
       specs: [
@@ -51,13 +70,7 @@ export default function ProductDetailPage() {
       specs: [
         { label: "Operating System", value: product.os },
         { label: "Chipset", value: product.chipset },
-      ],
-    },
-    {
-      title: "Display",
-      specs: [
-        { label: "Screen Size", value: product.screen_size },
-        { label: "Resolution", value: product.resolution },
+        { label: "Color", value: product.color },
       ],
     },
   ];
@@ -90,10 +103,12 @@ export default function ProductDetailPage() {
             </div>
 
             <ProductKeySpecs
+              type={type}
               screenSize={product.screen_size}
               camera={product.camera}
               processor={product.processor}
               battery={product.battery}
+              graphics={product.graphics}
             />
 
             <Tabs defaultValue="overview" className="w-full">
