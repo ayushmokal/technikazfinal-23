@@ -14,6 +14,7 @@ import StocksPage from "./pages/StocksPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import GadgetsPage from "./pages/GadgetsPage";
 import AboutUs from "./pages/AboutUs";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -36,8 +37,8 @@ function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/admin/edit/:id" element={<EditBlogPage />} />
-            {/* Catch all route - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* 404 route - show NotFound component */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
