@@ -6,8 +6,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
 import { CategoryPageContent } from "@/components/CategoryPageContent";
 
+// Define the specific subcategories for the Tech category
+type TechSubcategory = typeof categories.TECH[number] | "ALL";
+
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState<"Tech Deals" | "News" | "ALL">("ALL");
+  const [subcategory, setSubcategory] = useState<TechSubcategory>("ALL");
 
   // Query for category-specific featured articles
   const { data: featuredArticles = [] } = useQuery({
@@ -56,6 +59,13 @@ export default function TechPage() {
     }
   });
 
+  // Convert the readonly array to a regular array for the component
+  const techSubcategories = [...categories.TECH];
+
+  const handleSubcategoryChange = (newSubcategory: string) => {
+    setSubcategory(newSubcategory as TechSubcategory);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -63,9 +73,9 @@ export default function TechPage() {
         title="Tech"
         articles={articles}
         featuredArticles={featuredArticles}
-        subcategories={categories.TECH}
+        subcategories={techSubcategories}
         selectedSubcategory={subcategory}
-        onSubcategoryChange={setSubcategory}
+        onSubcategoryChange={handleSubcategoryChange}
         category="TECH"
       />
       <Footer />
