@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BlogFormData } from "@/types/blog";
+import { BlogFormData, Subcategory } from "@/types/blog";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
@@ -10,7 +10,7 @@ interface CategoryPageContentProps {
   title: string;
   articles: BlogFormData[];
   featuredArticles: BlogFormData[];
-  subcategories: string[];
+  subcategories: readonly string[];
   selectedSubcategory: string;
   onSubcategoryChange: (subcategory: string) => void;
   category: string;

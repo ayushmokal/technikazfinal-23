@@ -4,10 +4,11 @@ import { Footer } from "@/components/Footer";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
-import { CategoryPageContent } from "@/components/CategoryPageContent";
+
+type TechSubcategory = "ALL" | "Tech Deals" | "News";
 
 export default function TechPage() {
-  const [subcategory, setSubcategory] = useState<"Tech Deals" | "News" | "ALL">("ALL");
+  const [subcategory, setSubcategory] = useState<TechSubcategory>("ALL");
 
   // Query for category-specific featured articles
   const { data: featuredArticles = [] } = useQuery({
@@ -56,6 +57,10 @@ export default function TechPage() {
     }
   });
 
+  const handleSubcategoryChange = (newSubcategory: string) => {
+    setSubcategory(newSubcategory as TechSubcategory);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -63,9 +68,9 @@ export default function TechPage() {
         title="Tech"
         articles={articles}
         featuredArticles={featuredArticles}
-        subcategories={categories.TECH}
+        subcategories={[...categories.TECH]}
         selectedSubcategory={subcategory}
-        onSubcategoryChange={setSubcategory}
+        onSubcategoryChange={handleSubcategoryChange}
         category="TECH"
       />
       <Footer />
