@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
+import { CategoryPageContent } from "@/components/CategoryPageContent";
 
 type TechSubcategory = "ALL" | "Tech Deals" | "News";
 
