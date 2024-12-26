@@ -9,11 +9,13 @@ import { CarouselSection } from "@/components/CarouselSection";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
+  const { toast } = useToast();
 
-  const { data: blogs, isError, isLoading, error } = useQuery({
+  const { data: blogs, isError, isLoading, error, refetch } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
       try {
@@ -37,11 +39,16 @@ export default function Index() {
         return data;
       } catch (err) {
         console.error('Error in queryFn:', err);
+        toast({
+          title: "Error fetching data",
+          description: "Please try again later",
+          variant: "destructive",
+        });
         throw err;
       }
     },
-    retry: 2,
-    retryDelay: 1000,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
     meta: {
@@ -100,10 +107,11 @@ export default function Index() {
               {error instanceof Error ? error.message : 'Please try again later'}
             </p>
             <Button 
-              onClick={() => window.location.reload()}
+              onClick={() => refetch()}
               variant="outline"
+              className="hover:bg-red-100"
             >
-              Retry
+              Try Again
             </Button>
           </div>
         </main>
