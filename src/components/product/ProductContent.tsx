@@ -13,6 +13,30 @@ interface ProductContentProps {
 export function ProductContent({ product, type, activeSection }: ProductContentProps) {
   const isLaptop = type === 'laptop';
 
+  // Mock data for suggested products - this would typically come from your backend
+  const suggestedProducts = [
+    {
+      id: '1',
+      name: 'Similar Product 1',
+      image: product.image_url || '/placeholder.svg'
+    },
+    {
+      id: '2',
+      name: 'Similar Product 2',
+      image: product.image_url || '/placeholder.svg'
+    },
+    {
+      id: '3',
+      name: 'Similar Product 3',
+      image: product.image_url || '/placeholder.svg'
+    },
+    {
+      id: '4',
+      name: 'Similar Product 4',
+      image: product.image_url || '/placeholder.svg'
+    }
+  ];
+
   const renderContent = () => {
     switch (activeSection) {
       case 'overview':
@@ -99,7 +123,7 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
         return <ProductReview productName={product.name} />;
 
       case 'compare':
-        return <CompareSection />;
+        return <CompareSection suggestedProducts={suggestedProducts} />;
 
       default:
         return null;
