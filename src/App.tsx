@@ -13,6 +13,7 @@ import TechPage from "./pages/TechPage";
 import StocksPage from "./pages/StocksPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import GadgetsPage from "./pages/GadgetsPage";
+import AboutUs from "./pages/AboutUs";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/stocks" element={<StocksPage />} />
             <Route path="/entertainment" element={<EntertainmentPage />} />
             <Route path="/gadgets" element={<GadgetsPage />} />
+            <Route path="/about" element={<AboutUs />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/admin/edit/:id" element={<EditBlogPage />} />
