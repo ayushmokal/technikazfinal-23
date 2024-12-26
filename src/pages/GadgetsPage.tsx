@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,7 +71,7 @@ export default function GadgetsPage() {
           <TabsContent value="mobiles" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {mobileProducts.map((product) => (
-                <Link to={`/product/${product.id}`} key={product.id}>
+                <Link to={`/product/${product.id}?type=mobile`} key={product.id}>
                   <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                     <CardHeader>
                       <div className="w-full h-48 relative mb-4">
@@ -104,37 +103,39 @@ export default function GadgetsPage() {
           <TabsContent value="laptops" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {laptops.map((laptop) => (
-                <Card key={laptop.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="w-full h-48 relative mb-4">
-                      <img
-                        src={laptop.image_url || "/placeholder.svg"}
-                        alt={laptop.name}
-                        className="w-full h-full object-cover rounded-t-lg"
-                      />
-                    </div>
-                    <CardTitle>{laptop.name}</CardTitle>
-                    <CardDescription>
-                      {laptop.brand} {laptop.model_name}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ScrollArea className="h-[200px] rounded-md border p-4">
-                      <div className="space-y-2">
-                        <p><strong>Price:</strong> ₹{laptop.price.toLocaleString()}</p>
-                        <p><strong>Display:</strong> {laptop.display_specs}</p>
-                        <p><strong>Processor:</strong> {laptop.processor}</p>
-                        <p><strong>Graphics:</strong> {laptop.graphics}</p>
-                        <p><strong>RAM:</strong> {laptop.ram}</p>
-                        <p><strong>Storage:</strong> {laptop.storage}</p>
-                        <p><strong>Battery:</strong> {laptop.battery}</p>
-                        <p><strong>OS:</strong> {laptop.os}</p>
-                        <p><strong>Ports:</strong> {laptop.ports}</p>
-                        <p><strong>Color:</strong> {laptop.color}</p>
+                <Link to={`/product/${laptop.id}?type=laptop`} key={laptop.id}>
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardHeader>
+                      <div className="w-full h-48 relative mb-4">
+                        <img
+                          src={laptop.image_url || "/placeholder.svg"}
+                          alt={laptop.name}
+                          className="w-full h-full object-cover rounded-t-lg"
+                        />
                       </div>
-                    </ScrollArea>
-                  </CardContent>
-                </Card>
+                      <CardTitle>{laptop.name}</CardTitle>
+                      <CardDescription>
+                        {laptop.brand} {laptop.model_name}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ScrollArea className="h-[200px] rounded-md border p-4">
+                        <div className="space-y-2">
+                          <p><strong>Price:</strong> ₹{laptop.price.toLocaleString()}</p>
+                          <p><strong>Display:</strong> {laptop.display_specs}</p>
+                          <p><strong>Processor:</strong> {laptop.processor}</p>
+                          <p><strong>Graphics:</strong> {laptop.graphics}</p>
+                          <p><strong>RAM:</strong> {laptop.ram}</p>
+                          <p><strong>Storage:</strong> {laptop.storage}</p>
+                          <p><strong>Battery:</strong> {laptop.battery}</p>
+                          <p><strong>OS:</strong> {laptop.os}</p>
+                          <p><strong>Ports:</strong> {laptop.ports}</p>
+                          <p><strong>Color:</strong> {laptop.color}</p>
+                        </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
           </TabsContent>
