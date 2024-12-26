@@ -91,52 +91,11 @@ export default function ProductDetailPage() {
     );
   }
 
-  const isLaptop = type === 'laptop';
-  const specifications = isLaptop ? [
-    {
-      title: "Key Specs",
-      specs: [
-        { label: "RAM", value: product.ram },
-        { label: "Processor", value: product.processor },
-        { label: "Storage", value: product.storage },
-        { label: "Graphics", value: (product as LaptopProduct).graphics },
-        { label: "Display", value: product.display_specs },
-      ],
-    },
-    {
-      title: "General",
-      specs: [
-        { label: "Operating System", value: product.os },
-        { label: "Ports", value: (product as LaptopProduct).ports },
-        { label: "Color", value: product.color },
-      ],
-    },
-  ] : [
-    {
-      title: "Key Specs",
-      specs: [
-        { label: "RAM", value: product.ram },
-        { label: "Processor", value: product.processor },
-        { label: "Storage", value: product.storage },
-        { label: "Battery", value: product.battery },
-        { label: "Display", value: product.display_specs },
-      ],
-    },
-    {
-      title: "General",
-      specs: [
-        { label: "Operating System", value: product.os },
-        { label: "Chipset", value: (product as MobileProduct).chipset },
-        { label: "Color", value: product.color },
-      ],
-    },
-  ];
-
   return (
     <Layout>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-8">
-          <div>
+          <div className="space-y-8">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
             <ProductSidebar
               activeSection={activeSection}
@@ -146,7 +105,7 @@ export default function ProductDetailPage() {
           <ProductContent
             product={product}
             type={type}
-            specifications={specifications}
+            activeSection={activeSection}
           />
         </div>
       </div>
