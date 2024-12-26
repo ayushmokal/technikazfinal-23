@@ -99,7 +99,7 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
         return <ProductReview productName={product.name} />;
 
       case 'compare':
-        return <CompareSection currentProduct={product as MobileProduct} />;
+        return <CompareSection currentProduct={product} type={type} />;
 
       default:
         return null;

@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-interface Product {
+interface BaseProduct {
   id: string;
   name: string;
   image_url: string | null;
@@ -16,25 +16,35 @@ interface Product {
   processor: string;
   ram: string;
   storage: string;
-  camera: string;
   battery: string;
   os: string | null;
-  chipset: string | null;
   color: string | null;
 }
 
-interface CompareSectionProps {
-  currentProduct: Product;
+interface MobileProduct extends BaseProduct {
+  camera: string;
+  chipset: string | null;
 }
 
-export function CompareSection({ currentProduct }: CompareSectionProps) {
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([currentProduct]);
+interface LaptopProduct extends BaseProduct {
+  graphics: string | null;
+  ports: string | null;
+}
+
+interface CompareSectionProps {
+  currentProduct: MobileProduct | LaptopProduct;
+  type: 'mobile' | 'laptop';
+}
+
+export function CompareSection({ currentProduct, type }: CompareSectionProps) {
+  const [selectedProducts, setSelectedProducts] = useState<(MobileProduct | LaptopProduct)[]>([currentProduct]);
 
   const { data: products = [] } = useQuery({
-    queryKey: ['mobile-products'],
+    queryKey: ['products', type],
     queryFn: async () => {
+      const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
-        .from('mobile_products')
+        .from(tableName)
         .select('*')
         .neq('id', currentProduct.id)
         .limit(10);
@@ -44,7 +54,7 @@ export function CompareSection({ currentProduct }: CompareSectionProps) {
     },
   });
 
-  const addToCompare = (product: Product) => {
+  const addToCompare = (product: MobileProduct | LaptopProduct) => {
     if (selectedProducts.length < 3) {
       setSelectedProducts([...selectedProducts, product]);
     }
@@ -55,7 +65,7 @@ export function CompareSection({ currentProduct }: CompareSectionProps) {
   };
 
   const renderComparisonTable = () => {
-    const specs = [
+    const baseSpecs = [
       { title: "Price", key: "price" },
       { title: "Brand", key: "brand" },
       { title: "Model", key: "model_name" },
@@ -63,12 +73,24 @@ export function CompareSection({ currentProduct }: CompareSectionProps) {
       { title: "Processor", key: "processor" },
       { title: "RAM", key: "ram" },
       { title: "Storage", key: "storage" },
-      { title: "Camera", key: "camera" },
       { title: "Battery", key: "battery" },
       { title: "OS", key: "os" },
-      { title: "Chipset", key: "chipset" },
       { title: "Color", key: "color" },
     ];
+
+    const mobileSpecs = [
+      ...baseSpecs,
+      { title: "Camera", key: "camera" },
+      { title: "Chipset", key: "chipset" },
+    ];
+
+    const laptopSpecs = [
+      ...baseSpecs,
+      { title: "Graphics", key: "graphics" },
+      { title: "Ports", key: "ports" },
+    ];
+
+    const specs = type === 'laptop' ? laptopSpecs : mobileSpecs;
 
     return (
       <div className="mt-6">
@@ -101,7 +123,7 @@ export function CompareSection({ currentProduct }: CompareSectionProps) {
                 <div className="font-medium">{spec.title}</div>
                 {selectedProducts.map((product) => (
                   <div key={`${product.id}-${spec.key}`}>
-                    {product[spec.key as keyof Product]?.toString() || 'N/A'}
+                    {product[spec.key as keyof typeof product]?.toString() || 'N/A'}
                   </div>
                 ))}
               </div>
