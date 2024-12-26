@@ -9,26 +9,50 @@ import { CarouselSection } from "@/components/CarouselSection";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
+  const { toast } = useToast();
 
-  const { data: blogs, isError, isLoading } = useQuery({
+  const { data: blogs, isError, isLoading, error, refetch } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
-      console.log('Fetching all blogs');
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching blogs:', error);
-        throw error;
+      try {
+        console.log('Fetching all blogs');
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+        
+        if (!data) {
+          console.log('No data returned');
+          return [];
+        }
+        
+        console.log('Blogs fetched successfully:', data);
+        return data;
+      } catch (err) {
+        console.error('Error in queryFn:', err);
+        toast({
+          title: "Error fetching data",
+          description: "Please try again later",
+          variant: "destructive",
+        });
+        throw err;
       }
-      
-      console.log('Blogs fetched:', data);
-      return data || [];
+    },
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
+    meta: {
+      errorMessage: 'Failed to fetch blog posts'
     }
   });
 
@@ -49,7 +73,6 @@ export default function Index() {
 
   const ArticleItem = ({ article }: { article: any }) => (
     <Link
-      key={article.slug}
       to={`/article/${article.slug}`}
       className="flex gap-4 group hover:bg-gray-100 p-2 rounded-lg"
     >
@@ -78,9 +101,18 @@ export default function Index() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <main className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-600">Error loading content</h2>
-            <p className="text-gray-600">Please try again later</p>
+          <div className="text-center p-8 bg-red-50 rounded-lg">
+            <h2 className="text-xl font-bold text-red-600 mb-2">Error loading content</h2>
+            <p className="text-gray-600 mb-4">
+              {error instanceof Error ? error.message : 'Please try again later'}
+            </p>
+            <Button 
+              onClick={() => refetch()}
+              variant="outline"
+              className="hover:bg-red-100"
+            >
+              Try Again
+            </Button>
           </div>
         </main>
         <Footer />
@@ -93,8 +125,9 @@ export default function Index() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <main className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold">Loading...</h2>
+          <div className="flex flex-col items-center justify-center space-y-4 p-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <h2 className="text-xl font-medium text-gray-600">Loading content...</h2>
           </div>
         </main>
         <Footer />
