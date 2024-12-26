@@ -7,8 +7,9 @@ import { BlogForm } from "@/components/admin/BlogForm";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
+import { ProductManager } from "@/components/admin/ProductManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Folders } from "lucide-react";
+import { Folders, Smartphone } from "lucide-react";
 import { type Category, categories } from "@/types/blog";
 
 export default function AdminPanel() {
@@ -16,7 +17,9 @@ export default function AdminPanel() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
+  const [showProducts, setShowProducts] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [productType, setProductType] = useState<'mobile' | 'laptop' | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -53,11 +56,26 @@ export default function AdminPanel() {
               className="flex items-center gap-2"
               onClick={() => {
                 setShowCategories(!showCategories);
+                setShowProducts(false);
                 setSelectedCategory(null);
+                setProductType(null);
               }}
             >
               <Folders className="h-4 w-4" />
               Manage All Categories
+            </Button>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => {
+                setShowProducts(!showProducts);
+                setShowCategories(false);
+                setSelectedCategory(null);
+                setProductType(null);
+              }}
+            >
+              <Smartphone className="h-4 w-4" />
+              Manage Products
             </Button>
           </div>
           <Button onClick={handleLogout}>Logout</Button>
@@ -99,6 +117,49 @@ export default function AdminPanel() {
                     Manage {category}
                   </Button>
                 ))}
+              </div>
+            )}
+          </div>
+        ) : showProducts ? (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">
+                {productType ? `${productType === 'mobile' ? 'Mobile Phones' : 'Laptops'} Management` : 'Product Management'}
+              </h2>
+              {productType ? (
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setProductType(null)}>
+                    Back to Products
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowProducts(false)}>
+                    Back to Dashboard
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="outline" onClick={() => setShowProducts(false)}>
+                  Back to Dashboard
+                </Button>
+              )}
+            </div>
+            
+            {productType ? (
+              <ProductManager productType={productType} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-24 text-lg font-semibold"
+                  onClick={() => setProductType('mobile')}
+                >
+                  Manage Mobile Phones
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-24 text-lg font-semibold"
+                  onClick={() => setProductType('laptop')}
+                >
+                  Manage Laptops
+                </Button>
               </div>
             )}
           </div>
