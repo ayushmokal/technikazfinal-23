@@ -28,7 +28,7 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
     <section className="mb-12 relative">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold text-primary uppercase">{title}</h2>
+          <h2 className="text-lg md:text-xl font-bold text-primary uppercase">{title}</h2>
           <Link 
             to={linkTo} 
             className="text-sm text-gray-600 hover:text-primary"
@@ -48,7 +48,7 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
           {articles.map((article) => (
             <CarouselItem
               key={article.slug}
-              className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4"
+              className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
               <ArticleCard
                 title={article.title}
@@ -60,10 +60,10 @@ export function CarouselSection({ title, linkTo, articles }: CarouselSectionProp
           ))}
         </CarouselContent>
         <CarouselPrevious 
-          className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10"
+          className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10 hidden md:flex"
         />
         <CarouselNext 
-          className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10"
+          className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-none bg-white opacity-70 hover:opacity-100 transition-opacity border-none shadow-none z-10 hidden md:flex"
         />
       </Carousel>
     </section>

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, X } from "lucide-react";
+import { Facebook, Twitter, Instagram, X, Menu, Search as SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { categories } from "@/types/blog";
+import { useState } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 const navigationCategories = [
   {
@@ -33,6 +35,8 @@ const navigationCategories = [
 ];
 
 export function Navigation() {
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   return (
     <nav className="bg-white shadow-sm">
       {/* Top Bar */}
@@ -68,6 +72,8 @@ export function Navigation() {
               className="h-8 w-auto hover:opacity-80 transition-opacity"
             />
           </Link>
+
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {navigationCategories.map((category) => (
               <Link
@@ -79,14 +85,61 @@ export function Navigation() {
               </Link>
             ))}
           </div>
-          <div className="flex items-center space-x-4">
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4">
+                  {navigationCategories.map((category) => (
+                    <Link
+                      key={category.name}
+                      to={category.path}
+                      className="text-lg font-medium hover:text-primary transition-colors"
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Search */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block">
+              <Input
+                type="search"
+                placeholder="Search"
+                className="w-[200px]"
+              />
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsSearchVisible(!isSearchVisible)}
+            >
+              <SearchIcon className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Search */}
+        {isSearchVisible && (
+          <div className="md:hidden px-4 py-2">
             <Input
               type="search"
               placeholder="Search"
-              className="w-[200px]"
+              className="w-full"
             />
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
