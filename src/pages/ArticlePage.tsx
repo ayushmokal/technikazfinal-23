@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { BlogSidebar } from "@/components/BlogSidebar";
-import { Button } from "@/components/ui/button";
 import type { BlogFormData } from "@/types/blog";
 import { useToast } from "@/components/ui/use-toast";
+import { ArticleContent } from "@/components/article/ArticleContent";
+import { NextArticles } from "@/components/article/NextArticles";
 
 export default function ArticlePage() {
   const { slug } = useParams();
@@ -18,11 +19,15 @@ export default function ArticlePage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchBlog();
+    if (slug) {
+      setIsLoading(true);
+      fetchBlog();
+    }
   }, [slug]);
 
   const fetchBlog = async () => {
     try {
+      console.log("Fetching blog with slug:", slug);
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
@@ -41,6 +46,7 @@ export default function ArticlePage() {
         return;
       }
 
+      console.log("Found blog:", data);
       setBlog(data);
       fetchNextArticles(data);
     } catch (error) {
@@ -50,6 +56,7 @@ export default function ArticlePage() {
         title: "Error",
         description: "Failed to load the article. Please try again later.",
       });
+      navigate("/");
     } finally {
       setIsLoading(false);
     }
@@ -57,6 +64,7 @@ export default function ArticlePage() {
 
   const fetchNextArticles = async (currentBlog: BlogFormData) => {
     try {
+      console.log("Fetching next articles for category:", currentBlog.category);
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
@@ -66,9 +74,16 @@ export default function ArticlePage() {
         .limit(2);
 
       if (error) throw error;
+      
+      console.log("Found next articles:", data);
       setNextArticles(data || []);
     } catch (error) {
       console.error("Error fetching next articles:", error);
+      toast({
+        variant: "destructive",
+        title: "Warning",
+        description: "Unable to load more articles at this time.",
+      });
     }
   };
 
@@ -108,7 +123,11 @@ export default function ArticlePage() {
       <div className="min-h-screen bg-gray-50">
         <Navigation />
         <main className="container mx-auto px-4 py-8">
-          <div>Loading...</div>
+          <div className="animate-pulse space-y-4">
+            <div className="h-64 bg-gray-200 rounded-lg"></div>
+            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
         </main>
         <Footer />
       </div>
@@ -122,108 +141,14 @@ export default function ArticlePage() {
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-8 space-y-8">
-            <article className="bg-white rounded-lg shadow-lg overflow-hidden">
-              {blog.image_url && (
-                <img
-                  src={blog.image_url}
-                  alt={blog.title}
-                  className="w-full h-[400px] object-cover"
-                />
-              )}
-              <div className="p-8">
-                <div className="mb-6">
-                  <div className="flex gap-2 mb-4">
-                    <span className="inline-block bg-primary text-white px-3 py-1 text-sm font-semibold rounded-full">
-                      {blog.category}
-                    </span>
-                    {blog.subcategory && (
-                      <span className="inline-block bg-gray-200 text-gray-700 px-3 py-1 text-sm font-semibold rounded-full">
-                        {blog.subcategory}
-                      </span>
-                    )}
-                  </div>
-                  <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
-                  <div className="flex items-center text-gray-600 mb-4 text-sm">
-                    <span className="mr-4">By {blog.author}</span>
-                    <span>
-                      {new Date(blog.created_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-                </div>
-                <div 
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
-              </div>
-            </article>
-
-            {/* Next Articles */}
-            {nextArticles.map((article) => (
-              <article 
-                key={article.slug}
-                className="bg-white rounded-lg shadow-lg overflow-hidden animate-fadeIn"
-              >
-                {article.image_url && (
-                  <img
-                    src={article.image_url}
-                    alt={article.title}
-                    className="w-full h-[400px] object-cover"
-                  />
-                )}
-                <div className="p-8">
-                  <div className="mb-6">
-                    <div className="flex gap-2 mb-4">
-                      <span className="inline-block bg-primary text-white px-3 py-1 text-sm font-semibold rounded-full">
-                        {article.category}
-                      </span>
-                      {article.subcategory && (
-                        <span className="inline-block bg-gray-200 text-gray-700 px-3 py-1 text-sm font-semibold rounded-full">
-                          {article.subcategory}
-                        </span>
-                      )}
-                    </div>
-                    <h2 className="text-2xl font-bold mb-4">{article.title}</h2>
-                    <div className="flex items-center text-gray-600 mb-4 text-sm">
-                      <span className="mr-4">By {article.author}</span>
-                      <span>
-                        {new Date(article.created_at).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                  <div 
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: article.content }}
-                  />
-                </div>
-              </article>
-            ))}
-
-            {/* Load More Button */}
-            {nextArticles.length > 0 && (
-              <div className="flex justify-center py-8">
-                <Button
-                  onClick={loadMoreArticles}
-                  disabled={isLoadingMore}
-                  variant="outline"
-                  size="lg"
-                >
-                  {isLoadingMore ? "Loading..." : "Load More Articles"}
-                </Button>
-              </div>
-            )}
+            <ArticleContent blog={blog} />
+            <NextArticles 
+              articles={nextArticles}
+              isLoadingMore={isLoadingMore}
+              onLoadMore={loadMoreArticles}
+            />
           </div>
-
-          {/* Sidebar */}
           <div className="lg:col-span-4">
             <BlogSidebar />
           </div>
