@@ -6,8 +6,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
+import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import { ArticleTabs } from "@/components/ArticleTabs";
-import { SEO } from "@/components/SEO";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState("popular");
@@ -77,7 +79,6 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SEO />
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         {/* Homepage Featured Section */}
