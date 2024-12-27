@@ -20,11 +20,12 @@ export function ImageUpload({ onChange, label = "Product Image" }: ImageUploadPr
     }
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validImageTypes.includes(file.type)) {
       toast({
         variant: "destructive",
         title: "Invalid file type",
-        description: "Please upload an image file",
+        description: "Please upload a valid image file (JPEG, PNG, WebP, or GIF)",
       });
       return;
     }
@@ -44,7 +45,7 @@ export function ImageUpload({ onChange, label = "Product Image" }: ImageUploadPr
       onChange(e);
       toast({
         title: "File selected",
-        description: "Image ready for upload",
+        description: `${file.type === 'image/webp' ? 'WebP image' : 'Image'} ready for upload`,
       });
     } catch (error) {
       toast({
@@ -62,11 +63,14 @@ export function ImageUpload({ onChange, label = "Product Image" }: ImageUploadPr
       <FormLabel>{label}</FormLabel>
       <Input
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/gif"
         onChange={handleFileChange}
         className="cursor-pointer"
         disabled={isUploading}
       />
+      <p className="text-sm text-muted-foreground">
+        Supported formats: JPEG, PNG, WebP, GIF (max 5MB)
+      </p>
       {isUploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
     </div>
   );
