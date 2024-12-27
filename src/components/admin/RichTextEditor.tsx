@@ -11,7 +11,6 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
   const editorRef = useRef<any>(null);
 
   useEffect(() => {
-    // Ensure content is synced when changed externally
     if (editorRef.current && content !== editorRef.current.getData()) {
       editorRef.current.setData(content);
     }
@@ -19,16 +18,16 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
-    // Initialize with content if available
-    if (content) {
-      editor.setData(content);
-    }
+    // Initialize with empty content to prevent undefined errors
+    editor.setData(content || '');
   };
 
   const handleEditorChange = (_event: any, editor: any) => {
+    if (!editor) return;
+    
     try {
-      const data = editor.getData() || '';
-      onChange(data);
+      const data = editor.getData();
+      onChange(data || '');
     } catch (error) {
       console.error('CKEditor error:', error);
       onChange('');
@@ -43,25 +42,27 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo'
-          ],
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo'
+            ]
+          },
           mediaEmbed: {
             previewsInData: true
           }
