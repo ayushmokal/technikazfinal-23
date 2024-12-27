@@ -17,34 +17,41 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
     switch (activeSection) {
       case 'overview':
         return (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">{product.name}</h1>
-              <p className="text-muted-foreground">By {product.brand}</p>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold">
-                ₹{product.price.toLocaleString()}
-                <span className="text-sm text-muted-foreground ml-2">(onwards)</span>
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-3xl font-bold">{product.name}</h1>
+                <p className="text-muted-foreground">By {product.brand}</p>
               </div>
-              <Button>Compare</Button>
-            </div>
 
-            <div className="prose max-w-none">
-              <h2>Key Features</h2>
-              <ul>
-                <li>Display: {product.display_specs}</li>
-                <li>Processor: {product.processor}</li>
-                <li>RAM: {product.ram}</li>
-                <li>Storage: {product.storage}</li>
-                {isLaptop ? (
-                  <li>Graphics: {(product as LaptopProduct).graphics}</li>
-                ) : (
-                  <li>Camera: {(product as MobileProduct).camera}</li>
-                )}
-                <li>Battery: {product.battery}</li>
-              </ul>
+              <div className="flex items-center justify-between">
+                <div className="text-2xl font-bold">
+                  ₹{product.price.toLocaleString()}
+                  <span className="text-sm text-muted-foreground ml-2">(onwards)</span>
+                </div>
+                <Button>Compare</Button>
+              </div>
+
+              <div className="prose max-w-none">
+                <h2>Key Features</h2>
+                <ul>
+                  <li>Display: {product.display_specs}</li>
+                  <li>Processor: {product.processor}</li>
+                  <li>RAM: {product.ram}</li>
+                  <li>Storage: {product.storage}</li>
+                  {isLaptop ? (
+                    <li>Graphics: {(product as LaptopProduct).graphics}</li>
+                  ) : (
+                    <li>Camera: {(product as MobileProduct).camera}</li>
+                  )}
+                  <li>Battery: {product.battery}</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="pt-8 border-t">
+              <h2 className="text-2xl font-bold mb-6">Detailed Specifications</h2>
+              <ProductSpecifications product={product} />
             </div>
           </div>
         );
