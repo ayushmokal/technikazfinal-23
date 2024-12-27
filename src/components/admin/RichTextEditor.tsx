@@ -18,7 +18,6 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
-    // Initialize with empty content to prevent undefined errors
     editor.setData(content || '');
   };
 

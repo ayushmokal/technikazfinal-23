@@ -75,35 +75,21 @@
   }
 }
 
-.ProseMirror p.is-editor-empty:first-child::before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
+/* CKEditor Styles */
+.ck-editor__editable {
+  min-height: 300px;
+  max-height: 600px;
+  overflow-y: auto !important;
 }
 
-.ProseMirror {
-  > * + * {
-    margin-top: 0.75em;
-  }
+.ck.ck-editor__editable > .ck-placeholder::before {
+  color: #6b7280;
+}
 
-  img {
-    max-width: 100%;
-    height: auto;
-    margin: 1em 0;
-  }
+.ck.ck-toolbar {
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+}
 
-  iframe {
-    width: 100%;
-    aspect-ratio: 16/9;
-    margin: 1em 0;
-    border: none;
-    border-radius: 0.5rem;
-  }
-
-  ul,
-  ol {
-    padding: 0 1rem;
-  }
+.ck.ck-editor__main > .ck-editor__editable {
+  border-radius: 0 0 0.375rem 0.375rem !important;
 }
