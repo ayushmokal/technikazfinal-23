@@ -6,16 +6,23 @@ interface RichTextEditorProps {
   onChange: (content: string) => void;
 }
 
-export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
+export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
+  const handleEditorChange = (_event: any, editor: any) => {
+    try {
+      const data = editor.getData() || '';
+      onChange(data);
+    } catch (error) {
+      console.error('CKEditor error:', error);
+      onChange('');
+    }
+  };
+
   return (
     <div className="border rounded-md min-h-[400px]">
       <CKEditor
         editor={ClassicEditor}
-        data={content}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          onChange(data);
-        }}
+        data={content || ''}
+        onChange={handleEditorChange}
         config={{
           toolbar: [
             'heading',
