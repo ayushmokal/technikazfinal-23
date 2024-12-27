@@ -1,5 +1,6 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useEffect, useRef } from 'react';
 
 interface RichTextEditorProps {
   content: string;
@@ -7,6 +8,23 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
+  const editorRef = useRef<any>(null);
+
+  useEffect(() => {
+    // Ensure content is synced when changed externally
+    if (editorRef.current && content !== editorRef.current.getData()) {
+      editorRef.current.setData(content);
+    }
+  }, [content]);
+
+  const handleReady = (editor: any) => {
+    editorRef.current = editor;
+    // Initialize with content if available
+    if (content) {
+      editor.setData(content);
+    }
+  };
+
   const handleEditorChange = (_event: any, editor: any) => {
     try {
       const data = editor.getData() || '';
@@ -22,6 +40,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
       <CKEditor
         editor={ClassicEditor}
         data={content || ''}
+        onReady={handleReady}
         onChange={handleEditorChange}
         config={{
           toolbar: [
