@@ -18,7 +18,9 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
-    editor.setData(content || '');
+    if (content) {
+      editor.setData(content);
+    }
   };
 
   const handleEditorChange = (_event: any, editor: any) => {
@@ -37,10 +39,11 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
     <div className="border rounded-md min-h-[400px]">
       <CKEditor
         editor={ClassicEditor}
-        data={content || ''}
+        data={content}
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
+          removePlugins: ['Title'],
           toolbar: {
             items: [
               'heading',
@@ -54,17 +57,13 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               'outdent',
               'indent',
               '|',
-              'imageUpload',
               'blockQuote',
               'insertTable',
-              'mediaEmbed',
               'undo',
               'redo'
             ]
           },
-          mediaEmbed: {
-            previewsInData: true
-          }
+          placeholder: 'Type your content here...'
         }}
       />
     </div>
