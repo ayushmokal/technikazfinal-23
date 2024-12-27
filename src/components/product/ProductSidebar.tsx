@@ -14,12 +14,20 @@ export function ProductSidebar({ activeSection, onSectionChange }: ProductSideba
     { id: 'compare', label: 'Compare' },
   ];
 
+  const scrollToSection = (sectionId: string) => {
+    onSectionChange(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="w-48 space-y-2">
+    <div className="w-48 space-y-2 sticky top-24">
       {sections.map((section) => (
         <button
           key={section.id}
-          onClick={() => onSectionChange(section.id)}
+          onClick={() => scrollToSection(section.id)}
           className={cn(
             "w-full text-left py-2 px-4 hover:text-primary transition-colors",
             activeSection === section.id && "text-primary border-l-2 border-primary bg-primary/5"
