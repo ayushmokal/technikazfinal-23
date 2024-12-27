@@ -8,6 +8,7 @@ import type { BlogFormData } from "@/types/blog";
 import { useToast } from "@/components/ui/use-toast";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { NextArticles } from "@/components/article/NextArticles";
+import { SEO } from "@/components/SEO";
 
 export default function ArticlePage() {
   const { slug } = useParams();
@@ -139,8 +140,23 @@ export default function ArticlePage() {
 
   if (!blog) return null;
 
+  // Extract the first paragraph for meta description
+  const getMetaDescription = (content: string) => {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    const firstParagraph = div.querySelector('p');
+    return firstParagraph ? firstParagraph.textContent?.slice(0, 160) + '...' : '';
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEO 
+        title={`${blog.title} | Technikaz`}
+        description={getMetaDescription(blog.content)}
+        image={blog.image_url || '/og-image.png'}
+        type="article"
+        keywords={`${blog.category.toLowerCase()}, ${blog.subcategory?.toLowerCase()}, tech news`}
+      />
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
