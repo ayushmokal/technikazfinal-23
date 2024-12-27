@@ -8,20 +8,28 @@ import { DesktopMenu } from "./navigation/DesktopMenu";
 
 export function Navigation() {
   return (
-    <nav className="bg-[#1A1F2C] shadow-sm">
+    <nav className="bg-white shadow-sm">
+      {/* Top Bar */}
+      <div className="bg-black text-white py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <SocialLinks />
+          <Button variant="ghost" size="sm" className="hidden sm:block">
+            <Link to="/contact">Contact</Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           <div className="flex items-center gap-4">
             <MobileMenu />
             <Logo />
           </div>
           
-          <div className="flex items-center space-x-8">
-            <DesktopMenu />
-            <SocialLinks />
-            <Button variant="ghost" size="sm" className="hidden sm:block text-white hover:text-primary">
-              <Link to="/contact">Contact</Link>
-            </Button>
+          <DesktopMenu />
+          
+          <div className="flex items-center space-x-4">
             <SearchBar />
           </div>
         </div>
