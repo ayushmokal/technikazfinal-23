@@ -31,6 +31,9 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
       slug: "",
       featured: false,
       popular: false,
+      meta_title: "",
+      meta_description: "",
+      meta_keywords: "",
     },
   });
 

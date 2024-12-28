@@ -20,6 +20,9 @@ export type Database = {
           featured_in_category: boolean | null
           id: string
           image_url: string | null
+          meta_description: string | null
+          meta_keywords: string | null
+          meta_title: string | null
           popular: boolean | null
           popular_in_entertainment: boolean | null
           popular_in_gadgets: boolean | null
@@ -43,6 +46,9 @@ export type Database = {
           featured_in_category?: boolean | null
           id?: string
           image_url?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_title?: string | null
           popular?: boolean | null
           popular_in_entertainment?: boolean | null
           popular_in_gadgets?: boolean | null
@@ -66,6 +72,9 @@ export type Database = {
           featured_in_category?: boolean | null
           id?: string
           image_url?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_title?: string | null
           popular?: boolean | null
           popular_in_entertainment?: boolean | null
           popular_in_gadgets?: boolean | null
