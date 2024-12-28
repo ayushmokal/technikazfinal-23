@@ -2,6 +2,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useEffect, useRef } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface RichTextEditorProps {
   content: string;
@@ -10,23 +11,51 @@ interface RichTextEditorProps {
 
 class UploadAdapter {
   private loader: any;
+  private toast: any;
 
-  constructor(loader: any) {
+  constructor(loader: any, toast: any) {
     this.loader = loader;
+    this.toast = toast;
   }
 
   async upload() {
     try {
       const file = await this.loader.file;
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.toast({
+          variant: "destructive",
+          title: "Invalid file type",
+          description: "Please upload an image file",
+        });
+        throw new Error('Invalid file type');
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.toast({
+          variant: "destructive",
+          title: "File too large",
+          description: "Please upload an image smaller than 5MB",
+        });
+        throw new Error('File too large');
+      }
+
       const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("blog-images")
         .upload(filePath, file);
 
       if (uploadError) {
+        this.toast({
+          variant: "destructive",
+          title: "Upload failed",
+          description: uploadError.message,
+        });
         throw uploadError;
       }
 
@@ -34,10 +63,15 @@ class UploadAdapter {
         .from("blog-images")
         .getPublicUrl(filePath);
 
+      this.toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+
       return {
         default: publicUrlData.publicUrl
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Upload failed:', error);
       throw error;
     }
@@ -50,6 +84,7 @@ class UploadAdapter {
 
 export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
   const editorRef = useRef<any>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (editorRef.current && content !== editorRef.current.getData()) {
@@ -66,7 +101,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
     editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
-      return new UploadAdapter(loader);
+      return new UploadAdapter(loader, toast);
     };
     
     try {
@@ -119,7 +154,30 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               'insertTable',
               'mediaEmbed',
               'undo',
-              'redo'
+              'redo',
+              '|',
+              'paragraph',
+              'alignment'
+            ]
+          },
+          heading: {
+            options: [
+              { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+              { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+              { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+              { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+            ]
+          },
+          image: {
+            toolbar: [
+              'imageStyle:inline',
+              'imageStyle:block',
+              'imageStyle:side',
+              '|',
+              'toggleImageCaption',
+              'imageTextAlternative',
+              '|',
+              'resizeImage'
             ]
           },
           mediaEmbed: {
