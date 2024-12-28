@@ -12,18 +12,34 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
 
   useEffect(() => {
     if (editorRef.current && content !== editorRef.current.getData()) {
-      editorRef.current.setData(content);
+      try {
+        // Ensure content is a string
+        const safeContent = typeof content === 'string' ? content : '';
+        editorRef.current.setData(safeContent);
+      } catch (error) {
+        console.error('Error setting editor data:', error);
+        editorRef.current?.setData(''); // Fallback to empty string
+      }
     }
   }, [content]);
 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
-    // Initialize with empty content to prevent undefined errors
-    editor.setData(content || '');
+    try {
+      // Ensure initial content is a string
+      const safeContent = typeof content === 'string' ? content : '';
+      editor.setData(safeContent);
+    } catch (error) {
+      console.error('Error in editor ready:', error);
+      editor.setData(''); // Fallback to empty string
+    }
   };
 
   const handleEditorChange = (_event: any, editor: any) => {
-    if (!editor) return;
+    if (!editor) {
+      console.warn('Editor instance not available');
+      return;
+    }
     
     try {
       const data = editor.getData();
@@ -38,7 +54,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
     <div className="border rounded-md min-h-[400px]">
       <CKEditor
         editor={ClassicEditor}
-        data={content || ''}
+        data={typeof content === 'string' ? content : ''}
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
