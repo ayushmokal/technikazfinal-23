@@ -11,7 +11,7 @@ interface FormFieldsProps {
   form: UseFormReturn<BlogFormData>;
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
-  onImageChange: (url: string) => void;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function FormFields({ form, selectedCategory, onCategoryChange, onImageChange }: FormFieldsProps) {
@@ -49,7 +49,7 @@ export function FormFields({ form, selectedCategory, onCategoryChange, onImageCh
             <FormLabel>Content</FormLabel>
             <FormControl>
               <RichTextEditor 
-                content={field.value || ''} 
+                content={field.value} 
                 onChange={field.onChange}
               />
             </FormControl>

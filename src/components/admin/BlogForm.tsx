@@ -18,21 +18,27 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>(initialData?.category || "");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<BlogFormData>({
-    defaultValues: {
-      title: initialData?.title || "",
-      content: initialData?.content || "",
-      category: initialData?.category || "",
-      subcategory: initialData?.subcategory || "",
-      author: initialData?.author || "",
-      image_url: initialData?.image_url || "",
-      slug: initialData?.slug || "",
-      featured: initialData?.featured || false,
-      popular: initialData?.popular || false,
-      featured_in_category: initialData?.featured_in_category || false,
+    defaultValues: initialData || {
+      title: "",
+      content: "",
+      category: "",
+      subcategory: "",
+      author: "",
+      image_url: "",
+      slug: "",
+      featured: false,
+      popular: false,
     },
   });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
 
   const generateSlug = async (title: string) => {
     const baseSlug = title
@@ -41,48 +47,83 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
       .replace(/(^-|-$)/g, '');
     
     const timestamp = new Date().getTime();
-    return `${baseSlug}-${timestamp}`;
+    const uniqueSlug = `${baseSlug}-${timestamp}`;
+    
+    const { data: existingPost } = await supabase
+      .from('blogs')
+      .select('slug')
+      .eq('slug', uniqueSlug)
+      .maybeSingle();
+
+    if (existingPost) {
+      return `${uniqueSlug}-${Math.floor(Math.random() * 1000)}`;
+    }
+
+    return uniqueSlug;
   };
 
   const onSubmit = async (data: BlogFormData) => {
     try {
       setIsLoading(true);
-      console.log('Submitting form with data:', data);
 
       if (mode === 'create') {
         data.slug = await generateSlug(data.title);
+      }
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split(".").pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("blog-images")
+          .upload(filePath, imageFile);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("blog-images")
+          .getPublicUrl(filePath);
+
+        data.image_url = publicUrlData.publicUrl;
       }
 
       if (!data.category && selectedCategory) {
         data.category = selectedCategory;
       }
 
-      const { error } = mode === 'edit' && initialData?.id
-        ? await supabase
-            .from("blogs")
-            .update(data)
-            .eq('id', initialData.id)
-        : await supabase
-            .from("blogs")
-            .insert([data]);
+      if (mode === 'edit' && initialData?.id) {
+        const { error } = await supabase
+          .from("blogs")
+          .update(data)
+          .eq('id', initialData.id);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
+        if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: `Blog post ${mode === 'edit' ? 'updated' : 'created'} successfully`,
-      });
+        toast({
+          title: "Success",
+          description: "Blog post updated successfully",
+        });
 
-      if (mode === 'edit') {
         navigate('/admin');
       } else {
+        const { error } = await supabase
+          .from("blogs")
+          .insert([data]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Blog post created successfully",
+        });
+
         form.reset();
+        setImageFile(null);
       }
     } catch (error: any) {
-      console.error('Form submission error:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -93,11 +134,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
     }
   };
 
-  const handleImageUrl = (url: string) => {
-    console.log('Setting image URL:', url);
-    form.setValue('image_url', url);
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -105,7 +141,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
           form={form}
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
-          onImageChange={handleImageUrl}
+          onImageChange={handleImageChange}
         />
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (mode === 'edit' ? "Updating..." : "Creating...") : (mode === 'edit' ? "Update Blog Post" : "Create Blog Post")}

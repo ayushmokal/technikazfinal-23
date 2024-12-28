@@ -11,7 +11,7 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 
 export interface ProductFormData {
-  id?: string;
+  id?: string;  // Added id as optional property
   name: string;
   brand: string;
   model_name?: string;
@@ -42,6 +42,7 @@ interface ProductFormProps {
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
 
   const form = useForm<ProductFormData>({
@@ -64,13 +65,35 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     }
   }, [propProductType]);
 
-  const handleImageUrl = (url: string) => {
-    form.setValue('image_url', url);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
   };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split(".").pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("blog-images")
+          .upload(filePath, imageFile);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("blog-images")
+          .getPublicUrl(filePath);
+
+        data.image_url = publicUrlData.publicUrl;
+      }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
@@ -100,6 +123,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       }
 
       form.reset();
+      setImageFile(null);
       onSuccess?.();
     } catch (error: any) {
       console.error('Error submitting form:', error);
@@ -126,7 +150,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           <SpecificationsSection form={form} />
           <AdditionalSpecsSection form={form} productType={productType} />
           
-          <ImageUpload onChange={handleImageUrl} />
+          <ImageUpload onChange={handleImageChange} />
 
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "Adding..." : `Add ${productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}`}
