@@ -136,30 +136,27 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
-          toolbar: {
-            items: [
-              'heading',
-              '|',
-              'bold',
-              'italic',
-              'link',
-              'bulletedList',
-              'numberedList',
-              '|',
-              'outdent',
-              'indent',
-              '|',
-              'imageUpload',
-              'blockQuote',
-              'insertTable',
-              'mediaEmbed',
-              'undo',
-              'redo',
-              '|',
-              'paragraph',
-              'alignment'
-            ]
-          },
+          toolbar: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            '|',
+            'outdent',
+            'indent',
+            '|',
+            'imageUpload',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'undo',
+            'redo',
+            '|',
+            'alignment'
+          ],
           heading: {
             options: [
               { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
@@ -175,9 +172,14 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               'imageStyle:side',
               '|',
               'toggleImageCaption',
-              'imageTextAlternative',
-              '|',
-              'resizeImage'
+              'imageTextAlternative'
+            ],
+            styles: [
+              'full',
+              'side',
+              'alignLeft',
+              'alignCenter',
+              'alignRight'
             ]
           },
           mediaEmbed: {
