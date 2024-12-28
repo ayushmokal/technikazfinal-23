@@ -14,15 +14,13 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
     <div className="grid grid-cols-12 gap-6">
       {/* Main Featured Article - 60% width */}
       <div className="col-span-12 lg:col-span-7">
-        <Link to={`/article/${articles[0].slug}`} className="block group">
-          <div className="relative overflow-hidden rounded-xl">
-            <AspectRatio ratio={16/9}>
-              <img
-                src={articles[0].image_url || '/placeholder.svg'}
-                alt={articles[0].title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </AspectRatio>
+        <Link to={`/article/${articles[0].slug}`} className="block group h-full">
+          <div className="relative overflow-hidden rounded-xl h-[400px]">
+            <img
+              src={articles[0].image_url || '/placeholder.svg'}
+              alt={articles[0].title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
           </div>
           <h2 className="mt-4 text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
             {articles[0].title}
@@ -33,15 +31,13 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Second Article - 40% width */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
-          <Link to={`/article/${articles[1].slug}`} className="block group">
-            <div className="relative overflow-hidden rounded-xl">
-              <AspectRatio ratio={16/9}>
-                <img
-                  src={articles[1].image_url || '/placeholder.svg'}
-                  alt={articles[1].title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </AspectRatio>
+          <Link to={`/article/${articles[1].slug}`} className="block group h-full">
+            <div className="relative overflow-hidden rounded-xl h-[400px]">
+              <img
+                src={articles[1].image_url || '/placeholder.svg'}
+                alt={articles[1].title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
             <h2 className="mt-4 text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">
               {articles[1].title}
