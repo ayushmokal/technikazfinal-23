@@ -1,10 +1,51 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useEffect, useRef } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 
 interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
+}
+
+class UploadAdapter {
+  private loader: any;
+
+  constructor(loader: any) {
+    this.loader = loader;
+  }
+
+  async upload() {
+    try {
+      const file = await this.loader.file;
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from("blog-images")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("blog-images")
+        .getPublicUrl(filePath);
+
+      return {
+        default: publicUrlData.publicUrl
+      };
+    } catch (error) {
+      console.error('Upload failed:', error);
+      throw error;
+    }
+  }
+
+  abort() {
+    console.log('Upload aborted');
+  }
 }
 
 export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
@@ -13,7 +54,6 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
   useEffect(() => {
     if (editorRef.current && content !== editorRef.current.getData()) {
       try {
-        // Ensure content is a string
         const safeContent = typeof content === 'string' ? content : '';
         editorRef.current.setData(safeContent);
       } catch (error) {
@@ -25,8 +65,11 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
 
   const handleReady = (editor: any) => {
     editorRef.current = editor;
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
+      return new UploadAdapter(loader);
+    };
+    
     try {
-      // Ensure initial content is a string
       const safeContent = typeof content === 'string' ? content : '';
       editor.setData(safeContent);
     } catch (error) {
