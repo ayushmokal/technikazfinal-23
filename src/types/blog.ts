@@ -20,6 +20,9 @@ export interface BlogFormData {
   view_count?: number;
   share_count?: number;
   average_rating?: number;
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
 }
 
 export const categories = {
