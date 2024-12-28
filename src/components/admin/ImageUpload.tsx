@@ -40,10 +40,7 @@ export function ImageUpload({ onChange, label = "Image" }: ImageUploadProps) {
         .getPublicUrl(fileName);
 
       console.log('File uploaded successfully, public URL:', publicUrl);
-      
-      // Clean the URL and update the form
-      const cleanUrl = publicUrl.replace(/:\/?$/, '');
-      onChange(cleanUrl);
+      onChange(publicUrl);
       
       toast({
         title: "Success",
@@ -69,14 +66,10 @@ export function ImageUpload({ onChange, label = "Image" }: ImageUploadProps) {
       <FormLabel>{label}</FormLabel>
       <Input
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        accept="image/*"
         onChange={handleFileChange}
-        className="cursor-pointer"
         disabled={isUploading}
       />
-      <p className="text-sm text-muted-foreground">
-        Supported formats: JPEG, PNG, WebP, GIF (max 5MB)
-      </p>
       {isUploading && <p className="text-sm text-muted-foreground">Uploading...</p>}
     </div>
   );

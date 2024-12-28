@@ -15,8 +15,6 @@ interface FormFieldsProps {
 }
 
 export function FormFields({ form, selectedCategory, onCategoryChange, onImageChange }: FormFieldsProps) {
-  console.log('FormFields rendering with form values:', form.getValues());
-
   return (
     <>
       <FormField
@@ -52,10 +50,7 @@ export function FormFields({ form, selectedCategory, onCategoryChange, onImageCh
             <FormControl>
               <RichTextEditor 
                 content={field.value || ''} 
-                onChange={(value) => {
-                  console.log('RichTextEditor onChange called with value:', value);
-                  field.onChange(value);
-                }}
+                onChange={field.onChange}
               />
             </FormControl>
             <FormMessage />
