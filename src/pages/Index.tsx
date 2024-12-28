@@ -6,9 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
-import { Link } from "react-router-dom";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 import { ArticleTabs } from "@/components/ArticleTabs";
 
 export default function Index() {
@@ -86,6 +83,11 @@ export default function Index() {
           <FeaturedArticlesGrid articles={homepageFeatured} />
         </section>
 
+        {/* Advertisement Section Above Tech Deals */}
+        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Advertisement</span>
+        </div>
+
         {/* Tech Deals Section */}
         <CarouselSection 
           title="TECH DEALS"
@@ -99,6 +101,11 @@ export default function Index() {
           linkTo="/gadgets?subcategory=MOBILE"
           articles={mobileArticles}
         />
+
+        {/* Advertisement Section Below Mobiles */}
+        <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center mb-12">
+          <span className="text-gray-500">Advertisement</span>
+        </div>
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
