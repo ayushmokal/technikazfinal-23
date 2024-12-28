@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,9 +12,32 @@ export default function EditBlogPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Check authentication on component mount
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast({
+        variant: "destructive",
+        title: "Unauthorized",
+        description: "Please login to access this page",
+      });
+      navigate('/admin/login');
+      return;
+    }
+  };
+
   const { data: blog, isLoading } = useQuery({
     queryKey: ['blog', id],
     queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error('Not authenticated');
+      }
+
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -31,14 +55,34 @@ export default function EditBlogPage() {
 
       return data;
     },
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   if (!blog) {
-    return <div>Blog post not found</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900">Blog post not found</h2>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/admin')}
+            className="mt-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Admin Panel
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
