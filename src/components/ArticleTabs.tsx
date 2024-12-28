@@ -101,13 +101,14 @@ export function ArticleTabs({
               <ArticleItem key={article.slug} article={article} />
             ))}
             {filteredPopularArticles.length > visiblePopular && (
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => handleLoadMore('popular')}
-              >
-                Load More
-              </Button>
+              <div className="text-center">
+                <button 
+                  onClick={() => handleLoadMore('popular')}
+                  className="px-8 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+                >
+                  Load More
+                </button>
+              </div>
             )}
           </>
         ) : (
@@ -122,13 +123,14 @@ export function ArticleTabs({
           <ArticleItem key={article.slug} article={article} />
         ))}
         {recentArticles.length > visibleRecent && (
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={() => handleLoadMore('recent')}
-          >
-            Load More
-          </Button>
+          <div className="text-center">
+            <button 
+              onClick={() => handleLoadMore('recent')}
+              className="px-8 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              Load More
+            </button>
+          </div>
         )}
       </TabsContent>
 
@@ -138,13 +140,14 @@ export function ArticleTabs({
             <ArticleItem key={article.slug} article={article} />
           ))}
           {upcomingArticles.length > visibleUpcoming && (
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => handleLoadMore('upcoming')}
-            >
-              Load More
-            </Button>
+            <div className="text-center">
+              <button 
+                onClick={() => handleLoadMore('upcoming')}
+                className="px-8 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Load More
+              </button>
+            </div>
           )}
         </TabsContent>
       )}
