@@ -33,10 +33,6 @@ export function CategoryPageContent({
   const popularArticles = articles || [];
   const recentArticles = articles.slice(0, 6) || [];
 
-  const handleLoadMore = () => {
-    setVisibleArticles(prev => prev + 4);
-  };
-
   return (
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">{title}</h1>
@@ -69,18 +65,6 @@ export function CategoryPageContent({
       )}
 
       <ArticleGrid articles={articles.slice(0, visibleArticles)} />
-
-      {articles.length > visibleArticles && (
-        <div className="flex justify-center mt-8">
-          <Button 
-            variant="outline" 
-            size="lg"
-            onClick={handleLoadMore}
-          >
-            Load More Articles
-          </Button>
-        </div>
-      )}
 
       <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
         <span className="text-gray-500">Advertisement</span>
