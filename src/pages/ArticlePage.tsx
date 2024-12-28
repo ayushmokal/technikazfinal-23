@@ -7,14 +7,18 @@ import { BlogSidebar } from "@/components/BlogSidebar";
 import type { BlogFormData } from "@/types/blog";
 import { useToast } from "@/components/ui/use-toast";
 import { ArticleContent } from "@/components/article/ArticleContent";
-import { NextArticles } from "@/components/article/NextArticles";
+import { CarouselSection } from "@/components/CarouselSection";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function ArticlePage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogFormData | null>(null);
-  const [nextArticles, setNextArticles] = useState<BlogFormData[]>([]);
+  const [relatedArticles, setRelatedArticles] = useState<BlogFormData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const articlesPerPage = 6;
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,7 +31,6 @@ export default function ArticlePage() {
 
   const fetchBlog = async () => {
     try {
-      console.log("Fetching blog with slug:", slug);
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
@@ -46,12 +49,9 @@ export default function ArticlePage() {
         return;
       }
 
-      // Increment view count
       await supabase.rpc('increment_view_count', { blog_id: data.id });
-      
-      console.log("Found blog:", data);
       setBlog(data);
-      fetchNextArticles(data);
+      fetchRelatedArticles(data);
     } catch (error) {
       console.error("Error fetching blog:", error);
       toast({
@@ -65,49 +65,49 @@ export default function ArticlePage() {
     }
   };
 
-  const fetchNextArticles = async (currentBlog: BlogFormData) => {
+  const fetchRelatedArticles = async (currentBlog: BlogFormData) => {
     try {
-      console.log("Fetching next articles for category:", currentBlog.category);
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
         .eq("category", currentBlog.category)
-        .gt("created_at", currentBlog.created_at)
-        .order("created_at", { ascending: true })
-        .limit(2);
+        .neq("id", currentBlog.id)
+        .order("created_at", { ascending: false })
+        .range(0, articlesPerPage - 1);
 
       if (error) throw error;
-      
-      console.log("Found next articles:", data);
-      setNextArticles(data || []);
+      setRelatedArticles(data || []);
     } catch (error) {
-      console.error("Error fetching next articles:", error);
+      console.error("Error fetching related articles:", error);
       toast({
         variant: "destructive",
         title: "Warning",
-        description: "Unable to load more articles at this time.",
+        description: "Unable to load related articles at this time.",
       });
     }
   };
 
   const loadMoreArticles = async () => {
-    if (!blog || !nextArticles.length) return;
+    if (!blog) return;
     
     setIsLoadingMore(true);
     try {
-      const lastArticle = nextArticles[nextArticles.length - 1];
+      const start = page * articlesPerPage;
+      const end = start + articlesPerPage - 1;
+      
       const { data, error } = await supabase
         .from("blogs")
         .select("*")
         .eq("category", blog.category)
-        .gt("created_at", lastArticle.created_at)
-        .order("created_at", { ascending: true })
-        .limit(2);
+        .neq("id", blog.id)
+        .order("created_at", { ascending: false })
+        .range(start, end);
 
       if (error) throw error;
       
       if (data) {
-        setNextArticles([...nextArticles, ...data]);
+        setRelatedArticles(prev => [...prev, ...data]);
+        setPage(prev => prev + 1);
       }
     } catch (error) {
       console.error("Error loading more articles:", error);
@@ -146,12 +146,49 @@ export default function ArticlePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-8">
             <ArticleContent blog={blog} />
-            <NextArticles 
-              articles={nextArticles}
-              isLoadingMore={isLoadingMore}
-              onLoadMore={loadMoreArticles}
-            />
+            
+            {relatedArticles.length > 0 && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">More from {blog.category}</h2>
+                <ScrollArea className="h-[800px] rounded-md border p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {relatedArticles.map((article) => (
+                      <div 
+                        key={article.id}
+                        className="group cursor-pointer"
+                        onClick={() => navigate(`/article/${article.slug}`)}
+                      >
+                        <div className="relative overflow-hidden rounded-lg">
+                          <img
+                            src={article.image_url || '/placeholder.svg'}
+                            alt={article.title}
+                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        <h3 className="mt-2 text-lg font-semibold group-hover:text-primary transition-colors">
+                          {article.title}
+                        </h3>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {relatedArticles.length >= articlesPerPage && (
+                    <div className="flex justify-center mt-6">
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={loadMoreArticles}
+                        disabled={isLoadingMore}
+                      >
+                        {isLoadingMore ? "Loading..." : "Load More Articles"}
+                      </Button>
+                    </div>
+                  )}
+                </ScrollArea>
+              </div>
+            )}
           </div>
+          
           <div className="lg:col-span-4">
             <BlogSidebar />
           </div>
