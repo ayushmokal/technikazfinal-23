@@ -7,9 +7,8 @@ import { BlogSidebar } from "@/components/BlogSidebar";
 import type { BlogFormData } from "@/types/blog";
 import { useToast } from "@/components/ui/use-toast";
 import { ArticleContent } from "@/components/article/ArticleContent";
-import { CarouselSection } from "@/components/CarouselSection";
+import { NextArticles } from "@/components/article/NextArticles";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function ArticlePage() {
   const { slug } = useParams();
@@ -150,41 +149,39 @@ export default function ArticlePage() {
             {relatedArticles.length > 0 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">More from {blog.category}</h2>
-                <ScrollArea className="h-[800px] rounded-md border p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {relatedArticles.map((article) => (
-                      <div 
-                        key={article.id}
-                        className="group cursor-pointer"
-                        onClick={() => navigate(`/article/${article.slug}`)}
-                      >
-                        <div className="relative overflow-hidden rounded-lg">
-                          <img
-                            src={article.image_url || '/placeholder.svg'}
-                            alt={article.title}
-                            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        <h3 className="mt-2 text-lg font-semibold group-hover:text-primary transition-colors">
-                          {article.title}
-                        </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {relatedArticles.map((article) => (
+                    <div 
+                      key={article.id}
+                      className="group cursor-pointer"
+                      onClick={() => navigate(`/article/${article.slug}`)}
+                    >
+                      <div className="relative overflow-hidden rounded-lg">
+                        <img
+                          src={article.image_url || '/placeholder.svg'}
+                          alt={article.title}
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                       </div>
-                    ))}
-                  </div>
-                  
-                  {relatedArticles.length >= articlesPerPage && (
-                    <div className="flex justify-center mt-6">
-                      <Button
-                        variant="outline"
-                        size="lg"
-                        onClick={loadMoreArticles}
-                        disabled={isLoadingMore}
-                      >
-                        {isLoadingMore ? "Loading..." : "Load More Articles"}
-                      </Button>
+                      <h3 className="mt-2 text-lg font-semibold group-hover:text-primary transition-colors">
+                        {article.title}
+                      </h3>
                     </div>
-                  )}
-                </ScrollArea>
+                  ))}
+                </div>
+                
+                {relatedArticles.length >= articlesPerPage && (
+                  <div className="flex justify-center mt-6">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={loadMoreArticles}
+                      disabled={isLoadingMore}
+                    >
+                      {isLoadingMore ? "Loading..." : "Load More Articles"}
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </div>
