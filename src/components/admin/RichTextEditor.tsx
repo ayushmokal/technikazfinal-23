@@ -22,7 +22,6 @@ class UploadAdapter {
     try {
       const file = await this.loader.file;
       
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         this.toast({
           variant: "destructive",
@@ -32,7 +31,6 @@ class UploadAdapter {
         throw new Error('Invalid file type');
       }
 
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.toast({
           variant: "destructive",
@@ -93,7 +91,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
         editorRef.current.setData(safeContent);
       } catch (error) {
         console.error('Error setting editor data:', error);
-        editorRef.current?.setData(''); // Fallback to empty string
+        editorRef.current?.setData('');
       }
     }
   }, [content]);
@@ -109,7 +107,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
       editor.setData(safeContent);
     } catch (error) {
       console.error('Error in editor ready:', error);
-      editor.setData(''); // Fallback to empty string
+      editor.setData('');
     }
   };
 
@@ -161,16 +159,6 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
               { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
               { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
-            ]
-          },
-          image: {
-            toolbar: [
-              'imageTextAlternative',
-              'toggleImageCaption',
-              '|',
-              'imageStyle:inline',
-              'imageStyle:block',
-              'imageStyle:side'
             ]
           }
         }}
