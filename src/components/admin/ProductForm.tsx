@@ -11,7 +11,7 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 
 export interface ProductFormData {
-  id?: string;  // Added id as optional property
+  id?: string;
   name: string;
   brand: string;
   model_name?: string;
@@ -75,6 +75,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     try {
       setIsLoading(true);
 
+      // Handle image upload if a new image is selected
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
         const fileName = `${Math.random()}.${fileExt}`;
@@ -150,10 +151,13 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           <SpecificationsSection form={form} />
           <AdditionalSpecsSection form={form} productType={productType} />
           
-          <ImageUpload onChange={handleImageChange} />
+          <ImageUpload 
+            onChange={handleImageChange} 
+            currentImageUrl={initialData?.image_url}
+          />
 
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Adding..." : `Add ${productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}`}
+            {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
           </Button>
         </form>
       </Form>
