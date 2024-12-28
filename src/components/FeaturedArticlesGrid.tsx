@@ -14,7 +14,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
     <div className="grid grid-cols-12 gap-6">
       {/* Main Featured Article - 60% width */}
       <div className="col-span-12 lg:col-span-7">
-        <Link to={`/article/${articles[0].slug}`} className="block group h-full">
+        <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
             <AspectRatio ratio={16/9} className="h-[400px]">
               <img
@@ -24,8 +24,8 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
               />
             </AspectRatio>
           </div>
-          <div className="mt-4">
-            <h2 className="text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
+          <div className="mt-4 h-[72px] flex items-center"> {/* Fixed height container for title */}
+            <h2 className="text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors line-clamp-2">
               {articles[0].title}
             </h2>
           </div>
@@ -35,7 +35,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Second Article - 40% width */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
-          <Link to={`/article/${articles[1].slug}`} className="block group h-full">
+          <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
               <AspectRatio ratio={16/9} className="h-[400px]">
                 <img
@@ -45,8 +45,8 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
                 />
               </AspectRatio>
             </div>
-            <div className="mt-4">
-              <h2 className="text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">
+            <div className="mt-4 h-[72px] flex items-center"> {/* Fixed height container for title */}
+              <h2 className="text-xl md:text-2xl font-bold group-hover:text-primary transition-colors line-clamp-2">
                 {articles[1].title}
               </h2>
             </div>
