@@ -29,12 +29,17 @@ export function CategoryPageLayout({
   onSubcategoryChange,
   children
 }: CategoryPageLayoutProps) {
+  const [visibleArticles, setVisibleArticles] = useState(4);
   const [activeTab, setActiveTab] = useState("popular");
 
   const mainFeaturedArticle = featuredArticles[0];
   const gridFeaturedArticles = featuredArticles.slice(1, 3);
   const popularArticles = articles || [];
   const recentArticles = articles.slice(0, 6) || [];
+
+  const handleLoadMore = () => {
+    setVisibleArticles(prev => prev + 4);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -72,7 +77,19 @@ export function CategoryPageLayout({
 
         {children}
 
-        <ArticleGrid articles={articles} />
+        <ArticleGrid articles={articles.slice(0, visibleArticles)} />
+
+        {articles.length > visibleArticles && (
+          <div className="flex justify-center mt-8">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={handleLoadMore}
+            >
+              Load More Articles
+            </Button>
+          </div>
+        )}
 
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
