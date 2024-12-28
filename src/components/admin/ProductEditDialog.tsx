@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
+import { ProductFormData } from "./ProductForm";
 
 interface Product {
   id: string;
@@ -12,7 +13,21 @@ interface Product {
   brand: string;
   price: number;
   image_url?: string;
-  [key: string]: any;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
+  camera?: string;
+  os?: string;
+  chipset?: string;
+  color?: string;
+  graphics?: string;
+  ports?: string;
+  model_name?: string;
+  resolution?: string;
+  screen_size?: string;
+  charging_specs?: string;
 }
 
 interface ProductEditDialogProps {
