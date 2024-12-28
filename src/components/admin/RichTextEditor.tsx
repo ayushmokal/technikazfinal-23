@@ -7,25 +7,43 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
+  console.log('RichTextEditor rendering with content:', content);
+
   return (
-    <div className="border rounded-md min-h-[400px]">
+    <div className="min-h-[400px] border rounded-md">
       <CKEditor
         editor={ClassicEditor}
         data={content}
-        onChange={(_event: any, editor: any) => {
-          try {
-            const data = editor.getData();
-            console.log('Editor content updated:', data);
-            onChange(data);
-          } catch (error) {
-            console.error('Editor error:', error);
-            onChange('');
-          }
-        }}
         config={{
-          toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList'],
-          placeholder: 'Type your content here...',
-          removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'undo',
+              'redo'
+            ]
+          },
+          placeholder: 'Start typing your content here...',
+        }}
+        onReady={(editor) => {
+          console.log('Editor is ready to use!', editor);
+        }}
+        onChange={(_event, editor) => {
+          const data = editor.getData();
+          console.log('Editor content changed:', data);
+          onChange(data);
+        }}
+        onError={(error, { willEditorRestart }) => {
+          console.error('Editor error:', error);
+          if (willEditorRestart) {
+            console.log('Editor will restart');
+          }
         }}
       />
     </div>
