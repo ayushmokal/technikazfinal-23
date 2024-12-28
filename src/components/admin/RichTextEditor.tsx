@@ -8,7 +8,7 @@ interface RichTextEditorProps {
 
 export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   return (
-    <div className="border rounded-md min-h-[400px]">
+    <div className="min-h-[400px] border rounded-md">
       <CKEditor
         editor={ClassicEditor}
         data={content}
@@ -16,29 +16,14 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
           const data = editor.getData();
           onChange(data);
         }}
+        onError={(error, { phase }) => {
+          console.error('Editor error:', error);
+          console.log('Phase:', phase);
+        }}
         config={{
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo'
-          ],
-          mediaEmbed: {
-            previewsInData: true
-          }
+          toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList'],
+          placeholder: 'Type your content here...',
+          removePlugins: ['MediaEmbed', 'ImageUpload']
         }}
       />
     </div>
