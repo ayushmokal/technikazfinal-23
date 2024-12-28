@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { FormLabel } from "@/components/ui/form";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,12 +27,24 @@ export function ImageUpload({ onChange, label = "Product Image", currentImageUrl
   return (
     <div className="space-y-4">
       <FormLabel>{label}</FormLabel>
-      <Input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="cursor-pointer"
-      />
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          className="relative overflow-hidden"
+          type="button"
+        >
+          Choose file
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+          />
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          {previewUrl ? "File selected" : "No file chosen"}
+        </span>
+      </div>
       {(previewUrl || currentImageUrl) && (
         <div className="w-full max-w-[200px]">
           <AspectRatio ratio={1}>
