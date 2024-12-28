@@ -12,8 +12,14 @@ import {
   PieChart, 
   Pie, 
   Cell,
-  ResponsiveContainer 
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Legend,
+  AreaChart,
+  Area
 } from 'recharts';
+import { format, subDays, startOfDay, endOfDay } from 'date-fns';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -21,15 +27,47 @@ export function BlogAnalytics() {
   const { data: blogStats } = useQuery({
     queryKey: ['blog-stats'],
     queryFn: async () => {
+      const thirtyDaysAgo = subDays(new Date(), 30);
+      
       const { data: blogs } = await supabase
         .from('blogs')
-        .select('*');
+        .select('*')
+        .gte('created_at', thirtyDaysAgo.toISOString());
 
       // Category distribution
       const categoryStats = Object.keys(categories).reduce((acc, category) => {
         acc[category] = blogs?.filter(blog => blog.category === category).length || 0;
         return acc;
       }, {} as Record<string, number>);
+
+      // Time-based metrics
+      const dailyPostCounts = Array.from({ length: 30 }, (_, i) => {
+        const date = subDays(new Date(), i);
+        const start = startOfDay(date);
+        const end = endOfDay(date);
+        const count = blogs?.filter(blog => {
+          const blogDate = new Date(blog.created_at);
+          return blogDate >= start && blogDate <= end;
+        }).length || 0;
+        return {
+          date: format(date, 'MMM dd'),
+          posts: count
+        };
+      }).reverse();
+
+      // View count trends
+      const dailyViewCounts = Array.from({ length: 30 }, (_, i) => {
+        const date = subDays(new Date(), i);
+        const postsOnDay = blogs?.filter(blog => {
+          const blogDate = new Date(blog.created_at);
+          return format(blogDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+        }) || [];
+        const views = postsOnDay.reduce((sum, blog) => sum + (blog.view_count || 0), 0);
+        return {
+          date: format(date, 'MMM dd'),
+          views
+        };
+      }).reverse();
 
       // Most viewed articles
       const topViewed = blogs
@@ -68,7 +106,9 @@ export function BlogAnalytics() {
         topViewed,
         topShared,
         avgRatingByCategory,
-        pieData
+        pieData,
+        dailyPostCounts,
+        dailyViewCounts
       };
     },
   });
@@ -77,6 +117,52 @@ export function BlogAnalytics() {
 
   return (
     <div className="space-y-8">
+      {/* Time-based Metrics */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Daily Post Counts */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Posts per Day (Last 30 Days)</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={blogStats.dailyPostCounts}>
+                <defs>
+                  <linearGradient id="colorPosts" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" angle={-45} textAnchor="end" height={100} />
+                <YAxis />
+                <Tooltip />
+                <Area type="monotone" dataKey="posts" stroke="#8884d8" fillOpacity={1} fill="url(#colorPosts)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* View Count Trends */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Daily Views (Last 30 Days)</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={blogStats.dailyViewCounts}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" angle={-45} textAnchor="end" height={100} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="views" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Category Distribution */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {Object.entries(blogStats.categoryStats).map(([category, count]) => (
