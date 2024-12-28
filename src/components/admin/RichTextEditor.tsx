@@ -165,10 +165,14 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
             ]
           },
           image: {
+            toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
             styles: {
-              options: ['alignLeft', 'alignCenter', 'alignRight']
-            },
-            toolbar: ['imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight']
+              options: [
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
+              ]
+            }
           }
         }}
       />
