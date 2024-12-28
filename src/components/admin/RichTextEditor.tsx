@@ -153,9 +153,7 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
             'insertTable',
             'mediaEmbed',
             'undo',
-            'redo',
-            '|',
-            'alignment'
+            'redo'
           ],
           heading: {
             options: [
@@ -167,26 +165,13 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
           },
           image: {
             toolbar: [
+              'imageTextAlternative',
+              'toggleImageCaption',
+              '|',
               'imageStyle:inline',
               'imageStyle:block',
-              'imageStyle:side',
-              '|',
-              'toggleImageCaption',
-              'imageTextAlternative'
-            ],
-            styles: {
-              options: [
-                'inline',
-                'block',
-                'side',
-                'alignLeft',
-                'alignCenter',
-                'alignRight'
-              ]
-            }
-          },
-          mediaEmbed: {
-            previewsInData: true
+              'imageStyle:side'
+            ]
           }
         }}
       />
