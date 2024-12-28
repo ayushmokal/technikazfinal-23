@@ -59,8 +59,11 @@ export function ImageUpload({ onChange, label = "Image" }: ImageUploadProps) {
         .from('blog-images')
         .getPublicUrl(fileName);
 
+      // Clean the URL by removing any trailing colons
+      const cleanUrl = publicUrl.replace(/:\/?$/, '');
+      
       // Update the form
-      onChange(publicUrl);
+      onChange(cleanUrl);
       
       toast({
         title: "Success",

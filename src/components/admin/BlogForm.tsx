@@ -58,6 +58,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   const onSubmit = async (data: BlogFormData) => {
     try {
       setIsLoading(true);
+      console.log('Submitting form with data:', data);
 
       if (mode === 'create') {
         data.slug = await generateSlug(data.title);
@@ -67,35 +68,29 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
         data.category = selectedCategory;
       }
 
-      if (mode === 'edit' && initialData?.id) {
-        const { error } = await supabase
-          .from("blogs")
-          .update(data)
-          .eq('id', initialData.id);
+      const { error } = mode === 'edit' && initialData?.id
+        ? await supabase
+            .from("blogs")
+            .update(data)
+            .eq('id', initialData.id)
+        : await supabase
+            .from("blogs")
+            .insert([data]);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        toast({
-          title: "Success",
-          description: "Blog post updated successfully",
-        });
+      toast({
+        title: "Success",
+        description: `Blog post ${mode === 'edit' ? 'updated' : 'created'} successfully`,
+      });
 
+      if (mode === 'edit') {
         navigate('/admin');
       } else {
-        const { error } = await supabase
-          .from("blogs")
-          .insert([data]);
-
-        if (error) throw error;
-
-        toast({
-          title: "Success",
-          description: "Blog post created successfully",
-        });
-
         form.reset();
       }
     } catch (error: any) {
+      console.error('Form submission error:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -107,6 +102,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   };
 
   const handleImageUrl = (url: string) => {
+    console.log('Setting image URL:', url);
     form.setValue('image_url', url);
   };
 
