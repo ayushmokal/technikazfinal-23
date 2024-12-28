@@ -134,25 +134,28 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo'
-          ],
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo'
+            ],
+            shouldNotGroupWhenFull: true
+          },
           heading: {
             options: [
               { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
@@ -160,6 +163,12 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
               { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
             ]
+          },
+          image: {
+            styles: {
+              options: ['alignLeft', 'alignCenter', 'alignRight']
+            },
+            toolbar: ['imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight']
           }
         }}
       />
