@@ -24,15 +24,8 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
   };
 
   const handleEditorChange = (_event: any, editor: any) => {
-    if (!editor) return;
-    
-    try {
-      const data = editor.getData();
-      onChange(data || '');
-    } catch (error) {
-      console.error('CKEditor error:', error);
-      onChange('');
-    }
+    const data = editor.getData();
+    onChange(data);
   };
 
   return (
@@ -43,27 +36,8 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
         onReady={handleReady}
         onChange={handleEditorChange}
         config={{
-          removePlugins: ['Title'],
-          toolbar: {
-            items: [
-              'heading',
-              '|',
-              'bold',
-              'italic',
-              'link',
-              'bulletedList',
-              'numberedList',
-              '|',
-              'outdent',
-              'indent',
-              '|',
-              'blockQuote',
-              'insertTable',
-              'undo',
-              'redo'
-            ]
-          },
-          placeholder: 'Type your content here...'
+          toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
+          placeholder: 'Type your content here...',
         }}
       />
     </div>

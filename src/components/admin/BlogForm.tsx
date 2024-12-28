@@ -18,7 +18,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>(initialData?.category || "");
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<BlogFormData>({
     defaultValues: initialData || {
@@ -33,12 +32,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
       popular: false,
     },
   });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
-    }
-  };
 
   const generateSlug = async (title: string) => {
     const baseSlug = title
@@ -68,26 +61,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
 
       if (mode === 'create') {
         data.slug = await generateSlug(data.title);
-      }
-
-      if (imageFile) {
-        const fileExt = imageFile.name.split(".").pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from("blog-images")
-          .upload(filePath, imageFile);
-
-        if (uploadError) {
-          throw uploadError;
-        }
-
-        const { data: publicUrlData } = supabase.storage
-          .from("blog-images")
-          .getPublicUrl(filePath);
-
-        data.image_url = publicUrlData.publicUrl;
       }
 
       if (!data.category && selectedCategory) {
@@ -121,7 +94,6 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
         });
 
         form.reset();
-        setImageFile(null);
       }
     } catch (error: any) {
       toast({
@@ -134,6 +106,10 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
     }
   };
 
+  const handleImageUrl = (url: string) => {
+    form.setValue('image_url', url);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -141,7 +117,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
           form={form}
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
-          onImageChange={handleImageChange}
+          onImageChange={handleImageUrl}
         />
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (mode === 'edit' ? "Updating..." : "Creating...") : (mode === 'edit' ? "Update Blog Post" : "Create Blog Post")}

@@ -11,7 +11,7 @@ interface FormFieldsProps {
   form: UseFormReturn<BlogFormData>;
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
-  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onImageChange: (url: string) => void;
 }
 
 export function FormFields({ form, selectedCategory, onCategoryChange, onImageChange }: FormFieldsProps) {
