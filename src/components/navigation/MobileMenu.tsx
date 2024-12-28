@@ -13,8 +13,19 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 export function MobileMenu() {
+  const [openItems, setOpenItems] = useState<string[]>([]);
+
+  const toggleItem = (categoryName: string) => {
+    setOpenItems(prev => 
+      prev.includes(categoryName) 
+        ? prev.filter(item => item !== categoryName)
+        : [...prev, categoryName]
+    );
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -26,12 +37,26 @@ export function MobileMenu() {
         <div className="py-4">
           <div className="space-y-2">
             {navigationCategories.map((category) => (
-              <Collapsible key={category.name}>
+              <Collapsible 
+                key={category.name}
+                open={openItems.includes(category.name)}
+                onOpenChange={() => toggleItem(category.name)}
+              >
                 <CollapsibleTrigger className="flex items-center justify-between w-full p-3 hover:bg-gray-100">
-                  <Link to={category.path} className="flex-1">
+                  <Link 
+                    to={category.path} 
+                    className="flex-1"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering collapsible when clicking the link
+                    }}
+                  >
                     {category.name}
                   </Link>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown 
+                    className={`h-4 w-4 transition-transform duration-200 ${
+                      openItems.includes(category.name) ? 'transform rotate-180' : ''
+                    }`}
+                  />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pl-4 space-y-1">
                   {category.subcategories.map((subcategory) => (
