@@ -79,21 +79,24 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       if (imageFile) {
         const fileExt = imageFile.name.split(".").pop();
         const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError, data: uploadData } = await supabase.storage
           .from("blog-images")
-          .upload(filePath, imageFile);
+          .upload(fileName, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
         if (uploadError) {
           throw uploadError;
         }
 
-        const { data: publicUrlData } = supabase.storage
+        // Get the public URL after successful upload
+        const { data: { publicUrl } } = supabase.storage
           .from("blog-images")
-          .getPublicUrl(filePath);
+          .getPublicUrl(fileName);
 
-        data.image_url = publicUrlData.publicUrl;
+        data.image_url = publicUrl;
       }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
@@ -131,7 +134,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to save product",
       });
     } finally {
       setIsLoading(false);
