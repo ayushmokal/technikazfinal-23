@@ -176,12 +176,12 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
             ],
             styles: {
               options: [
-                { name: 'full', className: 'image-style-full-width' },
-                { name: 'side', className: 'image-style-side' },
-                { name: 'inline', className: 'image-style-inline' },
-                { name: 'alignLeft', className: 'image-style-align-left' },
-                { name: 'alignCenter', className: 'image-style-align-center' },
-                { name: 'alignRight', className: 'image-style-align-right' }
+                'inline',
+                'block',
+                'side',
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
               ]
             }
           },
