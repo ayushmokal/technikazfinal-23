@@ -165,13 +165,26 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
             ]
           },
           image: {
-            toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+            toolbar: ['imageTextAlternative'],
+            resizeOptions: [
+              {
+                name: 'imageResize:original',
+                value: null,
+                label: 'Original'
+              },
+              {
+                name: 'imageResize:50',
+                value: '50',
+                label: '50%'
+              },
+              {
+                name: 'imageResize:75',
+                value: '75',
+                label: '75%'
+              }
+            ],
             styles: {
-              options: [
-                'alignLeft',
-                'alignCenter',
-                'alignRight'
-              ]
+              options: ['full', 'side', 'alignLeft', 'alignCenter', 'alignRight']
             }
           }
         }}
