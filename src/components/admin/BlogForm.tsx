@@ -20,16 +20,17 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(initialData?.category || "");
 
   const form = useForm<BlogFormData>({
-    defaultValues: initialData || {
-      title: "",
-      content: "",
-      category: "",
-      subcategory: "",
-      author: "",
-      image_url: "",
-      slug: "",
-      featured: false,
-      popular: false,
+    defaultValues: {
+      title: initialData?.title || "",
+      content: initialData?.content || "",
+      category: initialData?.category || "",
+      subcategory: initialData?.subcategory || "",
+      author: initialData?.author || "",
+      image_url: initialData?.image_url || "",
+      slug: initialData?.slug || "",
+      featured: initialData?.featured || false,
+      popular: initialData?.popular || false,
+      featured_in_category: initialData?.featured_in_category || false,
     },
   });
 
@@ -40,19 +41,7 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
       .replace(/(^-|-$)/g, '');
     
     const timestamp = new Date().getTime();
-    const uniqueSlug = `${baseSlug}-${timestamp}`;
-    
-    const { data: existingPost } = await supabase
-      .from('blogs')
-      .select('slug')
-      .eq('slug', uniqueSlug)
-      .maybeSingle();
-
-    if (existingPost) {
-      return `${uniqueSlug}-${Math.floor(Math.random() * 1000)}`;
-    }
-
-    return uniqueSlug;
+    return `${baseSlug}-${timestamp}`;
   };
 
   const onSubmit = async (data: BlogFormData) => {
@@ -77,7 +66,10 @@ export function BlogForm({ initialData, mode = 'create' }: BlogFormProps) {
             .from("blogs")
             .insert([data]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Success",
