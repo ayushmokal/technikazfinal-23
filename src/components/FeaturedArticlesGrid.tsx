@@ -14,12 +14,14 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Main Featured Article - 60% width */}
       <div className="col-span-12 lg:col-span-7">
         <Link to={`/article/${articles[0].slug}`} className="block group">
-          <div className="relative overflow-hidden rounded-xl aspect-[16/10]">
-            <img
-              src={articles[0].image_url || '/placeholder.svg'}
-              alt={articles[0].title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+          <div className="relative overflow-hidden rounded-xl">
+            <div className="aspect-[16/9]">
+              <img
+                src={articles[0].image_url || '/placeholder.svg'}
+                alt={articles[0].title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </div>
           <h2 className="mt-4 text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
             {articles[0].title}
@@ -31,12 +33,14 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group">
-            <div className="relative overflow-hidden rounded-xl aspect-[16/10]">
-              <img
-                src={articles[1].image_url || '/placeholder.svg'}
-                alt={articles[1].title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+            <div className="relative overflow-hidden rounded-xl">
+              <div className="aspect-[16/9]">
+                <img
+                  src={articles[1].image_url || '/placeholder.svg'}
+                  alt={articles[1].title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             </div>
             <h2 className="mt-4 text-xl md:text-2xl font-bold group-hover:text-primary transition-colors">
               {articles[1].title}
