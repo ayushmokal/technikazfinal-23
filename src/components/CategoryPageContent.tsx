@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BlogFormData, Subcategory } from "@/types/blog";
+import { BlogFormData } from "@/types/blog";
 import { CategoryHero } from "@/components/CategoryHero";
 import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";

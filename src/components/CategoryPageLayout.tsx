@@ -13,7 +13,7 @@ interface CategoryPageLayoutProps {
   category: string;
   articles: BlogFormData[];
   featuredArticles: BlogFormData[];
-  subcategories: string[];
+  subcategories: readonly string[];
   selectedSubcategory: string;
   onSubcategoryChange: (subcategory: string) => void;
   children?: React.ReactNode;
