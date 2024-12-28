@@ -11,14 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ProductImage } from "./ProductImage";
-import { ProductSpecifications } from "./ProductSpecifications";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ProductForm } from "./ProductForm";
+import { ProductDetailsDialog } from "./ProductDetailsDialog";
+import { ProductEditDialog } from "./ProductEditDialog";
 
 interface Product {
   id: string;
@@ -26,21 +20,7 @@ interface Product {
   brand: string;
   price: number;
   image_url?: string;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  camera?: string;
-  os?: string;
-  chipset?: string;
-  graphics?: string;
-  ports?: string;
-  color?: string;
-  model_name?: string;
-  resolution?: string;
-  screen_size?: string;
-  charging_specs?: string;
+  [key: string]: any;
 }
 
 interface ProductManagerProps {
@@ -102,15 +82,6 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-  };
-
-  const handleEditComplete = () => {
-    setEditingProduct(null);
-    fetchProducts(); // Refresh the product list
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -152,7 +123,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleEdit(product)}
+                    onClick={() => setEditingProduct(product)}
                   >
                     Edit
                   </Button>
@@ -170,45 +141,20 @@ export function ProductManager({ productType }: ProductManagerProps) {
         </TableBody>
       </Table>
 
-      {/* View Details Dialog */}
-      <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>Product Details</DialogTitle>
-          </DialogHeader>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {selectedProduct?.image_url && (
-              <div className="w-full">
-                <ProductImage
-                  imageUrl={selectedProduct.image_url}
-                  productName={selectedProduct.name}
-                />
-              </div>
-            )}
-            {selectedProduct && (
-              <div className="w-full">
-                <ProductSpecifications product={selectedProduct} />
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ProductDetailsDialog 
+        product={selectedProduct} 
+        onClose={() => setSelectedProduct(null)} 
+      />
 
-      {/* Edit Product Dialog */}
-      <Dialog open={!!editingProduct} onOpenChange={() => setEditingProduct(null)}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-          </DialogHeader>
-          {editingProduct && (
-            <ProductForm 
-              initialData={editingProduct}
-              onSuccess={handleEditComplete}
-              productType={productType}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      <ProductEditDialog
+        product={editingProduct}
+        onClose={() => setEditingProduct(null)}
+        onSuccess={() => {
+          setEditingProduct(null);
+          fetchProducts();
+        }}
+        productType={productType}
+      />
     </div>
   );
 }
