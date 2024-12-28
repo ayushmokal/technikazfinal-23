@@ -174,13 +174,16 @@ export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) 
               'toggleImageCaption',
               'imageTextAlternative'
             ],
-            styles: [
-              'full',
-              'side',
-              'alignLeft',
-              'alignCenter',
-              'alignRight'
-            ]
+            styles: {
+              options: [
+                { name: 'full', className: 'image-style-full-width' },
+                { name: 'side', className: 'image-style-side' },
+                { name: 'inline', className: 'image-style-inline' },
+                { name: 'alignLeft', className: 'image-style-align-left' },
+                { name: 'alignCenter', className: 'image-style-align-center' },
+                { name: 'alignRight', className: 'image-style-align-right' }
+              ]
+            }
           },
           mediaEmbed: {
             previewsInData: true
