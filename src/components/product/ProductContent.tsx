@@ -10,13 +10,14 @@ interface ProductContentProps {
   activeSection: string;
 }
 
-export function ProductContent({ product, type, activeSection }: ProductContentProps) {
+export function ProductContent({ product, type }: ProductContentProps) {
   const isLaptop = type === 'laptop';
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'overview':
-        return (
+  return (
+    <div className="flex-1 space-y-16">
+      {/* Overview Section */}
+      <section id="overview" className="scroll-mt-24">
+        <div className="space-y-8">
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl font-bold">{product.name}</h1>
@@ -47,68 +48,67 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
               </ul>
             </div>
           </div>
-        );
+        </div>
+      </section>
 
-      case 'specifications':
-        return <ProductSpecifications product={product} />;
+      {/* Specifications Section */}
+      <section id="specifications" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Detailed Specifications</h2>
+        <ProductSpecifications product={product} />
+      </section>
 
-      case 'features':
-        return (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Product Features</h2>
-            <div className="grid gap-4">
-              {isLaptop ? (
-                <>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Performance</h3>
-                    <p>Powered by {product.processor} with {product.ram} RAM</p>
-                    <p>Graphics: {(product as LaptopProduct).graphics}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Display</h3>
-                    <p>{product.display_specs}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Storage</h3>
-                    <p>{product.storage}</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Camera System</h3>
-                    <p>{(product as MobileProduct).camera}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Display</h3>
-                    <p>{product.display_specs}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold">Performance</h3>
-                    <p>Processor: {product.processor}</p>
-                    <p>RAM: {product.ram}</p>
-                    <p>Storage: {product.storage}</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        );
+      {/* Features Section */}
+      <section id="features" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Product Features</h2>
+        <div className="grid gap-4">
+          {isLaptop ? (
+            <>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Performance</h3>
+                <p>Powered by {product.processor} with {product.ram} RAM</p>
+                <p>Graphics: {(product as LaptopProduct).graphics}</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Display</h3>
+                <p>{product.display_specs}</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Storage</h3>
+                <p>{product.storage}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Camera System</h3>
+                <p>{(product as MobileProduct).camera}</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Display</h3>
+                <p>{product.display_specs}</p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Performance</h3>
+                <p>Processor: {product.processor}</p>
+                <p>RAM: {product.ram}</p>
+                <p>Storage: {product.storage}</p>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
 
-      case 'reviews':
-        return <ProductReview productName={product.name} />;
+      {/* Reviews Section */}
+      <section id="reviews" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Product Reviews</h2>
+        <ProductReview productName={product.name} />
+      </section>
 
-      case 'compare':
-        return <CompareSection currentProduct={product} type={type} />;
-
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="flex-1 space-y-6">
-      {renderContent()}
+      {/* Compare Section */}
+      <section id="compare" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
+        <CompareSection currentProduct={product} type={type} />
+      </section>
     </div>
   );
 }

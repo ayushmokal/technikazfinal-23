@@ -94,6 +94,14 @@
     margin: 1em 0;
   }
 
+  iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    margin: 1em 0;
+    border: none;
+    border-radius: 0.5rem;
+  }
+
   ul,
   ol {
     padding: 0 1rem;

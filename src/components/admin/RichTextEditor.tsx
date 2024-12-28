@@ -1,101 +1,72 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import { Button } from "@/components/ui/button";
-import { ImageIcon, Bold, Italic, List, ListOrdered } from "lucide-react";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useEffect, useRef } from 'react';
 
 interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
 }
 
-export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Image,
-    ],
-    content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-  });
+export function RichTextEditor({ content = '', onChange }: RichTextEditorProps) {
+  const editorRef = useRef<any>(null);
 
-  const addImage = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
-    const url = window.prompt('Enter the URL of the image:');
-    if (url && editor) {
-      editor.chain().focus().setImage({ src: url }).run();
+  useEffect(() => {
+    if (editorRef.current && content !== editorRef.current.getData()) {
+      editorRef.current.setData(content);
+    }
+  }, [content]);
+
+  const handleReady = (editor: any) => {
+    editorRef.current = editor;
+    // Initialize with empty content to prevent undefined errors
+    editor.setData(content || '');
+  };
+
+  const handleEditorChange = (_event: any, editor: any) => {
+    if (!editor) return;
+    
+    try {
+      const data = editor.getData();
+      onChange(data || '');
+    } catch (error) {
+      console.error('CKEditor error:', error);
+      onChange('');
     }
   };
 
-  if (!editor) {
-    return null;
-  }
-
   return (
-    <div className="border rounded-md">
-      <div className="border-b p-2 flex gap-2 bg-secondary">
-        <Button
-          type="button" // Explicitly set button type
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault(); // Prevent form submission
-            editor.chain().focus().toggleBold().run();
-          }}
-          className={editor.isActive('bold') ? 'bg-muted' : ''}
-        >
-          <Bold className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleItalic().run();
-          }}
-          className={editor.isActive('italic') ? 'bg-muted' : ''}
-        >
-          <Italic className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleBulletList().run();
-          }}
-          className={editor.isActive('bulletList') ? 'bg-muted' : ''}
-        >
-          <List className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleOrderedList().run();
-          }}
-          className={editor.isActive('orderedList') ? 'bg-muted' : ''}
-        >
-          <ListOrdered className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={addImage}
-        >
-          <ImageIcon className="h-4 w-4" />
-        </Button>
-      </div>
-      <EditorContent 
-        editor={editor} 
-        className="prose max-w-none p-4 min-h-[200px] focus:outline-none"
+    <div className="border rounded-md min-h-[400px]">
+      <CKEditor
+        editor={ClassicEditor}
+        data={content || ''}
+        onReady={handleReady}
+        onChange={handleEditorChange}
+        config={{
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo'
+            ]
+          },
+          mediaEmbed: {
+            previewsInData: true
+          }
+        }}
       />
     </div>
   );
