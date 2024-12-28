@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ImageUploadProps {
-  onChange: (e: any) => void;
+  onChange: (url: string) => void;
   label?: string;
 }
 
@@ -44,42 +44,40 @@ export function ImageUpload({ onChange, label = "Image" }: ImageUploadProps) {
       // Generate a unique filename
       const fileExt = file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `${fileName}`;
 
       // Upload to Supabase storage
       const { error: uploadError, data } = await supabase.storage
         .from('blog-images')
-        .upload(filePath, file);
+        .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
       if (!data) throw new Error('Upload failed - no data returned');
 
-      // Get the public URL without any trailing colons
+      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
-        .getPublicUrl(filePath);
-
-      // Clean the URL by removing any trailing colons
-      const cleanUrl = publicUrl.replace(/:\/?$/, '');
+        .getPublicUrl(fileName);
 
       // Update the form
-      e.target.value = '';
-      onChange(cleanUrl);
+      onChange(publicUrl);
       
       toast({
-        title: "File selected",
-        description: `${file.type === 'image/webp' ? 'WebP image' : 'Image'} ready for upload`,
+        title: "Success",
+        description: "Image uploaded successfully",
       });
     } catch (error) {
+      console.error('Upload error:', error);
       toast({
         variant: "destructive",
         title: "Upload failed",
         description: error instanceof Error ? error.message : "Failed to upload image",
       });
-      console.error('Upload error:', error);
     } finally {
       setIsUploading(false);
+      if (e.target) {
+        e.target.value = '';
+      }
     }
   };
 
