@@ -86,11 +86,6 @@ export default function Index() {
           <FeaturedArticlesGrid articles={homepageFeatured} />
         </section>
 
-        {/* Advertisement Section */}
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
-          <span className="text-gray-500">Ads Here</span>
-        </div>
-
         {/* Tech Deals Section */}
         <CarouselSection 
           title="TECH DEALS"
@@ -98,22 +93,12 @@ export default function Index() {
           articles={techDeals}
         />
 
-        {/* Advertisement Section */}
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
-          <span className="text-gray-500">Ads Here</span>
-        </div>
-
         {/* Mobiles Section */}
         <CarouselSection 
           title="MOBILES"
           linkTo="/gadgets?subcategory=MOBILE"
           articles={mobileArticles}
         />
-
-        {/* Advertisement Section */}
-        <div className="w-full h-[100px] bg-gray-200 flex items-center justify-center mb-12">
-          <span className="text-gray-500">Ads Here</span>
-        </div>
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
