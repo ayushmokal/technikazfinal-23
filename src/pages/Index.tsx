@@ -7,27 +7,46 @@ import { useState } from "react";
 import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
 import { ArticleTabs } from "@/components/ArticleTabs";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState("popular");
+  const { toast } = useToast();
 
   const { data: blogs = [], isError, isLoading } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
-      console.log('Fetching all blogs');
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching blogs:', error);
+      try {
+        console.log('Fetching all blogs');
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error('Error fetching blogs:', error);
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to load blog posts. Please try again later.",
+          });
+          throw error;
+        }
+        
+        console.log('Blogs fetched:', data);
+        return data || [];
+      } catch (error) {
+        console.error('Error in blogs query:', error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "An unexpected error occurred. Please try again later.",
+        });
         throw error;
       }
-      
-      console.log('Blogs fetched:', data);
-      return data || [];
-    }
+    },
+    retry: 2,
+    retryDelay: 1000,
   });
 
   // Filter blogs after successful fetch
