@@ -7,59 +7,62 @@ declare global {
   }
 }
 
-export async function initializeGoogleAnalytics() {
-  const { data, error } = await supabase
-    .from('secrets')
-    .select('*')
-    .eq('name', 'GA_MEASUREMENT_ID')
-    .maybeSingle();
-
-  if (error) {
-    console.error('Error fetching Google Analytics Measurement ID:', error);
-    return;
-  }
-
-  if (!data) {
-    console.error('Google Analytics Measurement ID not found');
-    return;
-  }
-
-  const measurementId = data.value;
-
-  // Load Google Analytics Script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-  document.head.appendChild(script);
-
-  // Initialize gtag
-  window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
-    window.dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
-  gtag('config', measurementId);
+export type AnalyticsData = {
+  date: string;
+  pageViews: number;
+  sessions: number;
+  users: number;
 }
 
-export async function fetchAnalyticsData() {
+export type AggregatedMetrics = {
+  totalPageViews: number;
+  totalUsers: number;
+  avgSessionDuration: string;
+  pageViewsChange: string;
+  activeUsersChange: string;
+  sessionDurationChange: string;
+}
+
+export async function initializeGoogleAnalytics() {
   try {
-    const { data: clientEmail } = await supabase
+    const { data, error } = await supabase
       .from('secrets')
       .select('value')
-      .eq('name', 'GOOGLE_ANALYTICS_CLIENT_EMAIL')
+      .eq('name', 'GA_MEASUREMENT_ID')
       .maybeSingle();
 
-    const { data: privateKey } = await supabase
-      .from('secrets')
-      .select('value')
-      .eq('name', 'GOOGLE_ANALYTICS_PRIVATE_KEY')
-      .maybeSingle();
-
-    if (!clientEmail || !privateKey) {
-      console.error('Google Analytics credentials not found');
-      return null;
+    if (error) {
+      console.error('Error fetching Google Analytics Measurement ID:', error);
+      return;
     }
 
+    if (!data?.value) {
+      console.error('Google Analytics Measurement ID not found');
+      return;
+    }
+
+    const measurementId = data.value;
+
+    // Load Google Analytics Script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    document.head.appendChild(script);
+
+    // Initialize gtag
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args: any[]) {
+      window.dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', measurementId);
+  } catch (error) {
+    console.error('Error initializing Google Analytics:', error);
+  }
+}
+
+export async function fetchAnalyticsData(): Promise<AnalyticsData[]> {
+  try {
     // For now, return mock data until we implement the full GA API integration
     return [
       { date: '2024-01-01', pageViews: 1200, sessions: 800, users: 600 },
@@ -72,6 +75,38 @@ export async function fetchAnalyticsData() {
     ];
   } catch (error) {
     console.error('Error fetching analytics data:', error);
-    return null;
+    return [];
   }
+}
+
+export function calculateMetrics(data: AnalyticsData[]): AggregatedMetrics {
+  if (!data || data.length === 0) {
+    return {
+      totalPageViews: 0,
+      totalUsers: 0,
+      avgSessionDuration: '0m 0s',
+      pageViewsChange: '0%',
+      activeUsersChange: '0%',
+      sessionDurationChange: '0%'
+    };
+  }
+
+  const totalPageViews = data.reduce((sum, day) => sum + day.pageViews, 0);
+  const totalUsers = data.reduce((sum, day) => sum + day.users, 0);
+  
+  // Calculate percentage changes (comparing last day to first day)
+  const firstDay = data[0];
+  const lastDay = data[data.length - 1];
+  const pageViewsChange = ((lastDay.pageViews - firstDay.pageViews) / firstDay.pageViews * 100).toFixed(1);
+  const usersChange = ((lastDay.users - firstDay.users) / firstDay.users * 100).toFixed(1);
+  const sessionsChange = ((lastDay.sessions - firstDay.sessions) / firstDay.sessions * 100).toFixed(1);
+
+  return {
+    totalPageViews,
+    totalUsers,
+    avgSessionDuration: '2m 45s', // Placeholder - would be calculated from actual session data
+    pageViewsChange: `${pageViewsChange}%`,
+    activeUsersChange: `${usersChange}%`,
+    sessionDurationChange: `${sessionsChange}%`
+  };
 }
