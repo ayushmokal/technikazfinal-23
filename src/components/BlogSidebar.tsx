@@ -57,13 +57,13 @@ export function BlogSidebar() {
       <img
         src={item.image_url || "/placeholder.svg"}
         alt={item.title}
-        className="w-24 h-16 object-cover rounded"
+        className="w-32 h-24 object-cover rounded" // Updated from w-24 h-16 to w-32 h-24
       />
-      <div>
-        <h4 className="font-medium line-clamp-2">
+      <div className="flex-1">
+        <h4 className="font-medium line-clamp-2 text-base">
           {item.title}
         </h4>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 mt-1">
           {new Date(item.created_at).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
