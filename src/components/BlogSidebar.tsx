@@ -48,6 +48,40 @@ export function BlogSidebar() {
 
   const mainCategories = ["TECH", "GAMES", "ENTERTAINMENT", "STOCKS"];
 
+  const renderBlogItem = (item: BlogItem) => (
+    <Link 
+      to={`/article/${item.slug}`}
+      key={item.id} 
+      className="flex gap-4 p-4 hover:bg-gray-50"
+    >
+      <img
+        src={item.image_url || "/placeholder.svg"}
+        alt={item.title}
+        className="w-24 h-16 object-cover rounded"
+      />
+      <div>
+        <h4 className="font-medium line-clamp-2">
+          {item.title}
+        </h4>
+        <p className="text-sm text-gray-500">
+          {new Date(item.created_at).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })}
+        </p>
+      </div>
+    </Link>
+  );
+
+  const renderAdvertisement = (key: number) => (
+    <div key={`ad-${key}`} className="p-4 bg-gray-50">
+      <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center">
+        <span className="text-gray-500">Advertisement</span>
+      </div>
+    </div>
+  );
+
   return (
     <aside className="space-y-8">
       <div className="rounded-lg border-2 border-emerald-600">
@@ -77,45 +111,21 @@ export function BlogSidebar() {
           ))}
         </div>
 
-        {/* Infinite Scroll Content */}
+        {/* Content */}
         <div className="divide-y">
           {data?.pages.map((page, pageIndex) => (
             <div key={pageIndex}>
               {/* First 5 blog posts */}
-              {page.map((item: BlogItem) => (
-                <Link 
-                  to={`/article/${item.slug}`}
-                  key={item.id} 
-                  className="flex gap-4 p-4 hover:bg-gray-50"
-                >
-                  <img
-                    src={item.image_url || "/placeholder.svg"}
-                    alt={item.title}
-                    className="w-24 h-16 object-cover rounded"
-                  />
-                  <div>
-                    <h4 className="font-medium line-clamp-2">
-                      {item.title}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {new Date(item.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+              {page.slice(0, 5).map(renderBlogItem)}
               
-              {/* Advertisement Section */}
-              {page.length > 0 && (
-                <div className="p-4 bg-gray-50">
-                  <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">Advertisement</span>
-                  </div>
-                </div>
-              )}
+              {/* First Advertisement after 5 posts */}
+              {page.length > 0 && renderAdvertisement(pageIndex * 2)}
+              
+              {/* Next 5 blog posts */}
+              {page.slice(5).map(renderBlogItem)}
+              
+              {/* Second Advertisement after next 5 posts */}
+              {page.length > 5 && renderAdvertisement(pageIndex * 2 + 1)}
             </div>
           ))}
 
