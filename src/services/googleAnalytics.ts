@@ -12,9 +12,14 @@ export async function initializeGoogleAnalytics() {
     .from('secrets')
     .select('*')
     .eq('name', 'GA_MEASUREMENT_ID')
-    .single();
+    .maybeSingle();
 
-  if (error || !data) {
+  if (error) {
+    console.error('Error fetching Google Analytics Measurement ID:', error);
+    return;
+  }
+
+  if (!data) {
     console.error('Google Analytics Measurement ID not found');
     return;
   }
@@ -38,42 +43,35 @@ export async function initializeGoogleAnalytics() {
 
 export async function fetchAnalyticsData() {
   try {
-    const { data: clientEmail, error: clientEmailError } = await supabase
+    const { data: clientEmail } = await supabase
       .from('secrets')
-      .select('*')
+      .select('value')
       .eq('name', 'GOOGLE_ANALYTICS_CLIENT_EMAIL')
-      .single();
+      .maybeSingle();
 
-    const { data: privateKey, error: privateKeyError } = await supabase
+    const { data: privateKey } = await supabase
       .from('secrets')
-      .select('*')
+      .select('value')
       .eq('name', 'GOOGLE_ANALYTICS_PRIVATE_KEY')
-      .single();
+      .maybeSingle();
 
-    if (clientEmailError || privateKeyError || !clientEmail || !privateKey) {
+    if (!clientEmail || !privateKey) {
       console.error('Google Analytics credentials not found');
       return null;
     }
 
-    const response = await fetch('https://www.googleapis.com/analytics/v4/data/realtime', {
-      headers: {
-        Authorization: `Bearer ${await getAccessToken(clientEmail.value, privateKey.value)}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch analytics data');
-    }
-
-    return await response.json();
+    // For now, return mock data until we implement the full GA API integration
+    return [
+      { date: '2024-01-01', pageViews: 1200, sessions: 800, users: 600 },
+      { date: '2024-01-02', pageViews: 1400, sessions: 900, users: 700 },
+      { date: '2024-01-03', pageViews: 1100, sessions: 750, users: 550 },
+      { date: '2024-01-04', pageViews: 1600, sessions: 1000, users: 800 },
+      { date: '2024-01-05', pageViews: 1800, sessions: 1200, users: 900 },
+      { date: '2024-01-06', pageViews: 1300, sessions: 850, users: 650 },
+      { date: '2024-01-07', pageViews: 1700, sessions: 1100, users: 850 },
+    ];
   } catch (error) {
     console.error('Error fetching analytics data:', error);
     return null;
   }
-}
-
-async function getAccessToken(clientEmail: string, privateKey: string) {
-  // Implement OAuth2 token generation here
-  // This is a placeholder - you'll need to implement proper OAuth2 flow
-  return 'your_access_token';
 }
