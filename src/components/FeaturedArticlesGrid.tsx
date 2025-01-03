@@ -12,8 +12,8 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
 
   return (
     <div className="grid grid-cols-12 gap-6">
-      {/* Main Featured Article - 70% width */}
-      <div className="col-span-12 lg:col-span-9">
+      {/* Main Featured Article - 50% width */}
+      <div className="col-span-12 lg:col-span-6">
         <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
             <AspectRatio ratio={16/9} className="mb-4">
@@ -35,9 +35,9 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         </Link>
       </div>
 
-      {/* Second Article - 30% width */}
+      {/* Second Article - 50% width */}
       {articles[1] && (
-        <div className="col-span-12 lg:col-span-3">
+        <div className="col-span-12 lg:col-span-6">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
               <AspectRatio ratio={16/9} className="mb-4">
