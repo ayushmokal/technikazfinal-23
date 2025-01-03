@@ -10,7 +10,7 @@ declare global {
 export async function initializeGoogleAnalytics() {
   const { data, error } = await supabase
     .from('secrets')
-    .select('value')
+    .select('*')
     .eq('name', 'GA_MEASUREMENT_ID')
     .single();
 
@@ -40,13 +40,13 @@ export async function fetchAnalyticsData() {
   try {
     const { data: clientEmail, error: clientEmailError } = await supabase
       .from('secrets')
-      .select('value')
+      .select('*')
       .eq('name', 'GOOGLE_ANALYTICS_CLIENT_EMAIL')
       .single();
 
     const { data: privateKey, error: privateKeyError } = await supabase
       .from('secrets')
-      .select('value')
+      .select('*')
       .eq('name', 'GOOGLE_ANALYTICS_PRIVATE_KEY')
       .single();
 
