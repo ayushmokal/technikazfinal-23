@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import { BlogForm } from "@/components/admin/BlogForm";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
-import { GoogleAnalytics } from "@/components/admin/GoogleAnalytics";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { ProductManager } from "@/components/admin/ProductManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -167,8 +166,7 @@ export default function AdminPanel() {
         ) : (
           <Tabs defaultValue="analytics" className="space-y-6">
             <TabsList>
-              <TabsTrigger value="analytics">Blog Analytics</TabsTrigger>
-              <TabsTrigger value="google-analytics">Google Analytics</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="create-blog">Create Blog</TabsTrigger>
               <TabsTrigger value="add-product">Add Product</TabsTrigger>
             </TabsList>
@@ -176,11 +174,6 @@ export default function AdminPanel() {
             <TabsContent value="analytics" className="space-y-4">
               <h2 className="text-xl font-semibold">Blog Analytics</h2>
               <BlogAnalytics />
-            </TabsContent>
-
-            <TabsContent value="google-analytics" className="space-y-4">
-              <h2 className="text-xl font-semibold">Google Analytics</h2>
-              <GoogleAnalytics />
             </TabsContent>
 
             <TabsContent value="create-blog" className="space-y-4">
