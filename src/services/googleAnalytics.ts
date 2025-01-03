@@ -2,21 +2,24 @@ import { supabase } from "@/integrations/supabase/client";
 
 declare global {
   interface Window {
+    dataLayer: any[];
     gtag: (...args: any[]) => void;
   }
 }
 
 export async function initializeGoogleAnalytics() {
-  const { data: { value: measurementId } } = await supabase
+  const { data, error } = await supabase
     .from('secrets')
     .select('value')
     .eq('name', 'GA_MEASUREMENT_ID')
     .single();
 
-  if (!measurementId) {
+  if (error || !data) {
     console.error('Google Analytics Measurement ID not found');
     return;
   }
+
+  const measurementId = data.value;
 
   // Load Google Analytics Script
   const script = document.createElement('script');
@@ -35,9 +38,26 @@ export async function initializeGoogleAnalytics() {
 
 export async function fetchAnalyticsData() {
   try {
+    const { data: clientEmail, error: clientEmailError } = await supabase
+      .from('secrets')
+      .select('value')
+      .eq('name', 'GOOGLE_ANALYTICS_CLIENT_EMAIL')
+      .single();
+
+    const { data: privateKey, error: privateKeyError } = await supabase
+      .from('secrets')
+      .select('value')
+      .eq('name', 'GOOGLE_ANALYTICS_PRIVATE_KEY')
+      .single();
+
+    if (clientEmailError || privateKeyError || !clientEmail || !privateKey) {
+      console.error('Google Analytics credentials not found');
+      return null;
+    }
+
     const response = await fetch('https://www.googleapis.com/analytics/v4/data/realtime', {
       headers: {
-        Authorization: `Bearer ${await getAccessToken()}`,
+        Authorization: `Bearer ${await getAccessToken(clientEmail.value, privateKey.value)}`,
       },
     });
 
@@ -52,19 +72,7 @@ export async function fetchAnalyticsData() {
   }
 }
 
-async function getAccessToken() {
-  const { data: { value: clientEmail } } = await supabase
-    .from('secrets')
-    .select('value')
-    .eq('name', 'GOOGLE_ANALYTICS_CLIENT_EMAIL')
-    .single();
-
-  const { data: { value: privateKey } } = await supabase
-    .from('secrets')
-    .select('value')
-    .eq('name', 'GOOGLE_ANALYTICS_PRIVATE_KEY')
-    .single();
-
+async function getAccessToken(clientEmail: string, privateKey: string) {
   // Implement OAuth2 token generation here
   // This is a placeholder - you'll need to implement proper OAuth2 flow
   return 'your_access_token';
