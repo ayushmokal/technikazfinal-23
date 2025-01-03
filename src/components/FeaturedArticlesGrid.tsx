@@ -13,7 +13,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
   return (
     <div className="grid grid-cols-12 gap-6">
       {/* Main Featured Article - 70% width */}
-      <div className="col-span-12 lg:col-span-8">
+      <div className="col-span-12 lg:col-span-9">
         <Link to={`/article/${articles[0].slug}`} className="block group">
           <div className="relative overflow-hidden rounded-xl">
             <AspectRatio ratio={16/9} className="mb-4">
@@ -23,7 +23,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </AspectRatio>
-            <div className="flex flex-col h-[120px]">
+            <div className="flex flex-col justify-between h-[120px]">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
                 {articles[0].title}
               </h2>
@@ -37,7 +37,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
 
       {/* Second Article - 30% width */}
       {articles[1] && (
-        <div className="col-span-12 lg:col-span-4">
+        <div className="col-span-12 lg:col-span-3">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-xl">
               <AspectRatio ratio={16/9} className="mb-4">
@@ -47,7 +47,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </AspectRatio>
-              <div className="flex flex-col h-[120px]">
+              <div className="flex flex-col justify-between h-[120px]">
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
                   {articles[1].title}
                 </h2>
