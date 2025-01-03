@@ -16,6 +16,8 @@ import GadgetsPage from "./pages/GadgetsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ function App() {
             <Route path="/gadgets" element={<GadgetsPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/admin/edit/:id" element={<EditBlogPage />} />
