@@ -3,13 +3,19 @@ import { Button } from "./ui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { categories } from "@/types/blog";
 
 const ITEMS_PER_PAGE = 5;
 
+interface BlogItem {
+  id: string;
+  title: string;
+  image_url: string;
+  created_at: string;
+  slug: string;
+}
+
 export function BlogSidebar() {
   const [selectedCategory, setSelectedCategory] = useState("TECH");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("Tech Deals");
 
   const { 
     data, 
@@ -17,19 +23,13 @@ export function BlogSidebar() {
     hasNextPage, 
     isFetchingNextPage 
   } = useInfiniteQuery({
-    queryKey: ['sidebar-items', selectedCategory, selectedSubcategory],
+    queryKey: ['sidebar-items', selectedCategory],
     queryFn: async ({ pageParam = 0 }) => {
-      console.log('Fetching sidebar items for:', selectedCategory, selectedSubcategory, 'page:', pageParam);
-      let query = supabase
+      console.log('Fetching sidebar items for:', selectedCategory, 'page:', pageParam);
+      const { data, error } = await supabase
         .from('blogs')
         .select('*')
-        .eq('category', selectedCategory);
-      
-      if (selectedSubcategory) {
-        query = query.eq('subcategory', selectedSubcategory);
-      }
-      
-      const { data, error } = await query
+        .eq('category', selectedCategory)
         .order('created_at', { ascending: false })
         .range(pageParam * ITEMS_PER_PAGE, (pageParam + 1) * ITEMS_PER_PAGE - 1);
       
@@ -40,13 +40,13 @@ export function BlogSidebar() {
       
       return data || [];
     },
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage: BlogItem[], allPages: BlogItem[][]) => {
       return lastPage.length === ITEMS_PER_PAGE ? allPages.length : undefined;
     },
+    initialPageParam: 0,
   });
 
   const mainCategories = ["TECH", "GAMES", "ENTERTAINMENT", "STOCKS"];
-  const subcategories = categories[selectedCategory as keyof typeof categories] || [];
 
   return (
     <aside className="space-y-8">
@@ -70,27 +70,9 @@ export function BlogSidebar() {
               onClick={() => {
                 console.log('Switching to category:', category);
                 setSelectedCategory(category);
-                setSelectedSubcategory(categories[category as keyof typeof categories][0]);
               }}
             >
               {category.split(' ').map(word => word.charAt(0) + word.slice(1).toLowerCase()).join(' ')}
-            </Button>
-          ))}
-        </div>
-
-        {/* Subcategory Tabs */}
-        <div className="flex flex-wrap p-2 gap-2 border-b border-emerald-600">
-          {subcategories.map((subcategory) => (
-            <Button
-              key={subcategory}
-              variant={selectedSubcategory === subcategory ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                console.log('Switching to subcategory:', subcategory);
-                setSelectedSubcategory(subcategory);
-              }}
-            >
-              {subcategory}
             </Button>
           ))}
         </div>
@@ -100,7 +82,7 @@ export function BlogSidebar() {
           {data?.pages.map((page, pageIndex) => (
             <div key={pageIndex}>
               {/* First 5 blog posts */}
-              {page.map((item, itemIndex) => (
+              {page.map((item: BlogItem) => (
                 <Link 
                   to={`/article/${item.slug}`}
                   key={item.id} 
