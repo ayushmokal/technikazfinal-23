@@ -15,12 +15,12 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Main Featured Article - 50% width */}
       <div className="col-span-12 lg:col-span-6">
         <Link to={`/article/${articles[0].slug}`} className="block group">
-          <div className="relative overflow-hidden rounded-xl">
+          <div className="relative overflow-hidden rounded-t-xl">
             <AspectRatio ratio={16/9} className="mb-4">
               <img
                 src={articles[0].image_url || '/placeholder.svg'}
                 alt={articles[0].title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-b-[30px]"
               />
             </AspectRatio>
             <div className="flex flex-col justify-between h-[120px]">
@@ -39,12 +39,12 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {articles[1] && (
         <div className="col-span-12 lg:col-span-6">
           <Link to={`/article/${articles[1].slug}`} className="block group">
-            <div className="relative overflow-hidden rounded-xl">
+            <div className="relative overflow-hidden rounded-t-xl">
               <AspectRatio ratio={16/9} className="mb-4">
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-b-[30px]"
                 />
               </AspectRatio>
               <div className="flex flex-col justify-between h-[120px]">
