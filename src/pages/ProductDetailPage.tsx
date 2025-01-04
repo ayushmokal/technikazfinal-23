@@ -107,7 +107,7 @@ export default function ProductDetailPage() {
   return (
     <Layout>
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8">
           {/* Left Sidebar with Image and Navigation */}
           <div className="space-y-6">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
