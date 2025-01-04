@@ -44,13 +44,6 @@ export function CategoryPageLayout({
         <h1 className="text-4xl font-bold text-center mb-8">{title}</h1>
 
         <div className="flex justify-center gap-4 mb-8">
-          <Button
-            variant={selectedSubcategory === "ALL" ? "default" : "outline"}
-            onClick={() => onSubcategoryChange("ALL")}
-            className="min-w-[100px]"
-          >
-            All
-          </Button>
           {subcategories.map((sub) => (
             <Button
               key={sub}
@@ -63,7 +56,7 @@ export function CategoryPageLayout({
           ))}
         </div>
 
-        {selectedSubcategory === "ALL" && mainFeaturedArticle && (
+        {mainFeaturedArticle && (
           <CategoryHero 
             featuredArticle={mainFeaturedArticle} 
             gridArticles={gridFeaturedArticles} 

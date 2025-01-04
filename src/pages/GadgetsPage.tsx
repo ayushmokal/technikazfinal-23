@@ -7,7 +7,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { CategoryPageLayout } from "@/components/CategoryPageLayout";
 
 export default function GadgetsPage() {
-  const [subcategory, setSubcategory] = useState<"MOBILE" | "LAPTOPS" | "ALL">("ALL");
+  const [subcategory, setSubcategory] = useState<"MOBILE" | "LAPTOPS">("MOBILE");
 
   // Query for category-specific featured articles
   const { data: featuredArticles = [] } = useQuery({
@@ -31,17 +31,13 @@ export default function GadgetsPage() {
     queryKey: ['gadgets-articles', subcategory],
     queryFn: async () => {
       console.log('Fetching gadgets articles with subcategory:', subcategory);
-      let query = supabase
+      const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('category', 'GADGETS')
+        .eq('subcategory', subcategory)
         .order('created_at', { ascending: false });
       
-      if (subcategory !== "ALL") {
-        query = query.eq('subcategory', subcategory);
-      }
-      
-      const { data, error } = await query;
       if (error) throw error;
       return data || [];
     }
@@ -80,7 +76,7 @@ export default function GadgetsPage() {
   const ProductGrids = () => (
     <>
       {/* Mobile Products Grid */}
-      {(subcategory === "ALL" || subcategory === "MOBILE") && (
+      {subcategory === "MOBILE" && (
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Latest Mobile Phones</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -108,7 +104,7 @@ export default function GadgetsPage() {
       )}
 
       {/* Laptops Grid */}
-      {(subcategory === "ALL" || subcategory === "LAPTOPS") && (
+      {subcategory === "LAPTOPS" && (
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Latest Laptops</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
