@@ -2,7 +2,6 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { CategoryHero } from "@/components/CategoryHero";
-import { ArticleGrid } from "@/components/ArticleGrid";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { BlogSidebar } from "@/components/BlogSidebar";
 import { BlogFormData } from "@/types/blog";
@@ -64,8 +63,6 @@ export function CategoryPageLayout({
         )}
 
         {children}
-
-        <ArticleGrid articles={articles.slice(0, 4)} />
 
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
