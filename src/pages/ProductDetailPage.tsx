@@ -160,7 +160,7 @@ export default function ProductDetailPage() {
 
           {/* Main Content */}
           <div className="space-y-8">
-            <ProductHeader product={product} />
+            <ProductHeader product={product} type={type} />
             <ProductKeySpecs
               type={type}
               screenSize={isMobileProduct(product) ? product.screen_size : undefined}
