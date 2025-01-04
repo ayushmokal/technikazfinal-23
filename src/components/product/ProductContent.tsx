@@ -6,6 +6,7 @@ import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
+import { Smartphone, Camera, Cpu, Battery } from "lucide-react";
 
 interface ProductContentProps {
   product: LaptopProduct | MobileProduct;
@@ -13,15 +14,66 @@ interface ProductContentProps {
   activeSection: string;
 }
 
-export function ProductContent({ product, type }: ProductContentProps) {
+export function ProductContent({ product, type, activeSection }: ProductContentProps) {
   const isLaptop = type === 'laptop';
   const [isOpen, setIsOpen] = useState(false);
+
+  const getDisplaySize = () => {
+    if ('screen_size' in product && product.screen_size) {
+      return product.screen_size;
+    }
+    return product.display_specs.split(' ')[0];
+  };
 
   return (
     <div className="space-y-12">
       {/* Overview Section */}
       <section id="overview" className="scroll-mt-24">
-        <div className="space-y-6">
+        <div className="space-y-8">
+          {/* Key Specifications Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="flex flex-col items-center text-center space-y-2">
+              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-primary/10">
+                <Smartphone className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-lg font-bold">{getDisplaySize()}</p>
+                <p className="text-sm text-muted-foreground">Screen</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center text-center space-y-2">
+              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-primary/10">
+                <Camera className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-lg font-bold">{isLaptop ? 'HD Webcam' : product.camera}</p>
+                <p className="text-sm text-muted-foreground">Camera</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center text-center space-y-2">
+              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-primary/10">
+                <Cpu className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-lg font-bold">{isLaptop ? product.processor : ('chipset' in product ? product.chipset : product.processor)}</p>
+                <p className="text-sm text-muted-foreground">Processor</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center text-center space-y-2">
+              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-primary/10">
+                <Battery className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-lg font-bold">{product.battery}</p>
+                <p className="text-sm text-muted-foreground">Battery</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pros and Cons Section */}
           <div className="prose max-w-none">
             <h2 className="text-2xl font-bold mb-6">{product.name} REVIEW</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
