@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MobileProduct } from "@/types/product";
@@ -7,32 +8,48 @@ interface MobileProductListProps {
 }
 
 export function MobileProductList({ products }: MobileProductListProps) {
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+
   return (
     <section className="mb-12">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Latest Mobile Phones</h2>
         <div className="flex gap-4">
-          <button className="p-2 border rounded">
+          <button 
+            className={`p-2 border rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}
+            onClick={() => setViewMode('list')}
+            aria-label="List view"
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 9H21M3 15H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </button>
-          <button className="p-2 border rounded">
+          <button 
+            className={`p-2 border rounded transition-colors ${viewMode === 'grid' ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}
+            onClick={() => setViewMode('grid')}
+            aria-label="Grid view"
+          >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 3H10V10H3V3ZM14 3H21V10H14V3ZM3 14H10V21H3V14ZM14 14H21V21H14V14Z" stroke="currentColor" strokeWidth="2"/>
             </svg>
           </button>
         </div>
       </div>
-      <div className="space-y-6">
+      <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}`}>
         {products.map((product) => (
           <Link 
             key={product.id}
             to={`/product/${product.id}?type=mobile`}
-            className="block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow"
+            className={`block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow ${
+              viewMode === 'grid' ? 'h-full' : ''
+            }`}
           >
-            <div className="flex gap-6">
-              <div className="w-48 h-48 flex-shrink-0">
+            <div className={viewMode === 'grid' ? 'flex flex-col gap-4' : 'flex gap-6'}>
+              <div className={`${
+                viewMode === 'grid' 
+                  ? 'w-full aspect-square' 
+                  : 'w-48 h-48 flex-shrink-0'
+              }`}>
                 <img
                   src={product.image_url || "/placeholder.svg"}
                   alt={product.name}
