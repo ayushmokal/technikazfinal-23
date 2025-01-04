@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Checkbox } from "@/components/ui/checkbox";
 import { MobileProduct } from "@/types/product";
 
 interface MobileProductListProps {
@@ -81,22 +80,13 @@ export function MobileProductList({ products }: MobileProductListProps) {
                     <span>{product.battery}</span>
                   </div>
                 </div>
-                <div className="mt-4 flex justify-between items-center">
+                <div className="mt-4">
                   <Link 
                     to={`/product/${product.id}?type=mobile`}
                     className="text-primary hover:underline"
                   >
                     View Details →
                   </Link>
-                  <div className="flex items-center gap-2">
-                    <Checkbox id={`compare-${product.id}`} />
-                    <label 
-                      htmlFor={`compare-${product.id}`}
-                      className="text-sm text-gray-600"
-                    >
-                      Add to Compare
-                    </label>
-                  </div>
                 </div>
               </div>
             </div>
