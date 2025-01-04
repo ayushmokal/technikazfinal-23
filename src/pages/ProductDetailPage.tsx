@@ -88,6 +88,11 @@ export default function ProductDetailPage() {
     );
   }
 
+  // Type guard function to check if product is MobileProduct
+  const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
+    return 'screen_size' in product;
+  };
+
   return (
     <Layout>
       <div className="container mx-auto py-8">
@@ -118,11 +123,11 @@ export default function ProductDetailPage() {
                 </div>
                 <ProductKeySpecs
                   type={type}
-                  screenSize={type === 'mobile' ? product.screen_size : undefined}
-                  camera={type === 'mobile' ? (product as MobileProduct).camera : undefined}
+                  screenSize={isMobileProduct(product) ? product.screen_size : undefined}
+                  camera={isMobileProduct(product) ? product.camera : undefined}
                   processor={product.processor}
                   battery={product.battery}
-                  graphics={type === 'laptop' ? (product as LaptopProduct).graphics : undefined}
+                  graphics={!isMobileProduct(product) ? product.graphics : undefined}
                 />
               </div>
             </div>
