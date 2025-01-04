@@ -1,12 +1,18 @@
 import { Heart, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
+import { CompareSection } from "./CompareSection";
 
 interface ProductHeaderProps {
   product: LaptopProduct | MobileProduct;
+  type: 'mobile' | 'laptop';
 }
 
-export function ProductHeader({ product }: ProductHeaderProps) {
+export function ProductHeader({ product, type }: ProductHeaderProps) {
+  const [showCompareDialog, setShowCompareDialog] = useState(false);
+
   const getBrandUrl = (brand: string) => {
     const brandUrls: Record<string, string> = {
       'Apple': 'https://www.apple.com',
@@ -48,7 +54,7 @@ export function ProductHeader({ product }: ProductHeaderProps) {
             </a>
           </div>
         </div>
-        <Button>Compare</Button>
+        <Button onClick={() => setShowCompareDialog(true)}>Compare</Button>
       </div>
 
       {/* Price and Variants Section */}
@@ -74,6 +80,13 @@ export function ProductHeader({ product }: ProductHeaderProps) {
           </select>
         </div>
       </div>
+
+      {/* Compare Dialog */}
+      <Dialog open={showCompareDialog} onOpenChange={setShowCompareDialog}>
+        <DialogContent className="max-w-5xl">
+          <CompareSection currentProduct={product} type={type} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
