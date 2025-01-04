@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -50,6 +51,7 @@ export default function ProductDetailPage() {
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as ProductType || 'mobile';
   const { toast } = useToast();
+  const [activeSection, setActiveSection] = useState<string>('overview');
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
@@ -112,14 +114,19 @@ export default function ProductDetailPage() {
             <ScrollArea className="h-[300px] rounded-md border p-4">
               <nav className="space-y-2">
                 <button
-                  onClick={() => scrollToSection('overview')}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                  onClick={() => {
+                    scrollToSection('overview');
+                    setActiveSection('overview');
+                  }}
+                  className={`block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors ${
+                    activeSection === 'overview' ? 'text-primary underline' : ''
+                  }`}
                 >
                   Overview
                 </button>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors">
+                    <button className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors">
                       Pictures
                     </button>
                   </DialogTrigger>
@@ -136,8 +143,13 @@ export default function ProductDetailPage() {
                 {['Specifications', 'Expert Review', 'Comparison', 'User Comments'].map((item) => (
                   <button
                     key={item}
-                    onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
-                    className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                    onClick={() => {
+                      scrollToSection(item.toLowerCase().replace(' ', '-'));
+                      setActiveSection(item.toLowerCase().replace(' ', '-'));
+                    }}
+                    className={`block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors ${
+                      activeSection === item.toLowerCase().replace(' ', '-') ? 'text-primary underline' : ''
+                    }`}
                   >
                     {item}
                   </button>
@@ -149,7 +161,6 @@ export default function ProductDetailPage() {
           {/* Main Content */}
           <div className="space-y-8">
             <ProductHeader product={product} />
-
             <ProductKeySpecs
               type={type}
               screenSize={isMobileProduct(product) ? product.screen_size : undefined}
@@ -158,13 +169,11 @@ export default function ProductDetailPage() {
               battery={product.battery}
               graphics={!isMobileProduct(product) ? product.graphics : undefined}
             />
-
             <Separator />
-
             <ProductContent
               product={product}
               type={type}
-              activeSection="overview"
+              activeSection={activeSection}
             />
           </div>
         </div>
