@@ -9,7 +9,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Calendar, Heart } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -100,7 +99,34 @@ export default function ProductDetailPage() {
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
           {/* Left Sidebar - Fixed */}
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="hidden lg:block">
+            <div className="space-y-6 fixed w-[300px]">
+              <ProductGallery mainImage={product.image_url} productName={product.name} />
+              <div className="rounded-md border p-4 bg-background">
+                <nav className="space-y-2">
+                  {[
+                    'Overview',
+                    'Pictures',
+                    'Expert Review',
+                    'Full Specification',
+                    'Comparison',
+                    'User Comments'
+                  ].map((item) => (
+                    <a
+                      key={item}
+                      href={`#${item.toLowerCase().replace(' ', '-')}`}
+                      className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                    >
+                      {item}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Sidebar */}
+          <div className="lg:hidden space-y-6">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
             <div className="rounded-md border p-4">
               <nav className="space-y-2">
