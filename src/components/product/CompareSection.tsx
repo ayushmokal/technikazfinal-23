@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BaseProduct {
   id: string;
@@ -103,7 +104,7 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
               {product.id !== currentProduct.id && (
                 <button
                   onClick={() => removeFromCompare(product.id)}
-                  className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
+                  className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md z-10"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -119,27 +120,29 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
           ))}
         </div>
 
-        <div className="mt-8">
-          {specs.map((spec) => (
-            <div key={spec.key}>
-              <div className="grid grid-cols-3 gap-4 py-3">
-                <div className="font-medium">{spec.title}</div>
-                {selectedProducts.map((product) => (
-                  <div key={`${product.id}-${spec.key}`}>
-                    {product[spec.key as keyof typeof product]?.toString() || 'N/A'}
-                  </div>
-                ))}
+        <ScrollArea className="h-[400px] mt-8 rounded-md">
+          <div className="pr-4">
+            {specs.map((spec) => (
+              <div key={spec.key}>
+                <div className="grid grid-cols-3 gap-4 py-3">
+                  <div className="font-medium sticky left-0">{spec.title}</div>
+                  {selectedProducts.map((product) => (
+                    <div key={`${product.id}-${spec.key}`} className="break-words">
+                      {product[spec.key as keyof typeof product]?.toString() || 'N/A'}
+                    </div>
+                  ))}
+                </div>
+                <Separator />
               </div>
-              <Separator />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     );
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-h-[80vh] overflow-hidden">
       {selectedProducts.length < 3 && (
         <div>
           <h3 className="text-lg font-semibold mb-4">Add Products to Compare</h3>
@@ -152,30 +155,31 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
               className="max-w-sm"
             />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {products.map((product) => {
-              const isSelected = selectedProducts.some(p => p.id === product.id);
-              return (
-                <div key={product.id} className="border rounded-lg p-4">
-                  <img
-                    src={product.image_url || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-32 object-contain mb-2"
-                  />
-                  <h4 className="font-medium text-sm">{product.name}</h4>
-                  <p className="text-sm text-muted-foreground mb-2">₹{product.price.toLocaleString()}</p>
-                  <Button
-                    variant={isSelected ? "secondary" : "default"}
-                    className="w-full"
-                    onClick={() => addToCompare(product)}
-                    disabled={isSelected}
-                  >
-                    {isSelected ? "Added" : "Compare"}
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+          <ScrollArea className="h-[200px]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pr-4">
+              {products.map((product) => {
+                const isSelected = selectedProducts.some(p => p.id === product.id);
+                return (
+                  <div key={product.id} className="border rounded-lg p-4">
+                    <img
+                      src={product.image_url || "/placeholder.svg"}
+                      alt={product.name}
+                      className="w-full h-32 object-contain mb-2"
+                    />
+                    <h4 className="font-medium text-sm">{product.name}</h4>
+                    <p className="text-sm text-muted-foreground mb-2">₹{product.price.toLocaleString()}</p>
+                    <Button
+                      variant={isSelected ? "secondary" : "default"}
+                      className="w-full"
+                      onClick={() => addToCompare(product)}
+                      disabled={isSelected}
+                    >
+                      {isSelected ? "Added" : "Compare"}
+                    </Button>
+                  </div>
+                ))}
+            </div>
+          </ScrollArea>
         </div>
       )}
 
