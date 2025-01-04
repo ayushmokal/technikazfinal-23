@@ -11,8 +11,8 @@ export function ProductGallery({ mainImage, productName }: ProductGalleryProps) 
   const [selectedImage, setSelectedImage] = useState(mainImage);
 
   return (
-    <div className="space-y-4">
-      <div className="aspect-square relative overflow-hidden rounded-lg border bg-white">
+    <div className="space-y-2">
+      <div className="aspect-square relative overflow-hidden rounded-lg border bg-white h-[250px]">
         <img
           src={selectedImage || "/placeholder.svg"}
           alt={productName}
@@ -21,10 +21,10 @@ export function ProductGallery({ mainImage, productName }: ProductGalleryProps) 
       </div>
       <div className="relative">
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {[1, 2, 3, 4, 5].map((index) => (
+          {[1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className="w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer"
+              className="w-14 h-14 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer"
               onClick={() => setSelectedImage(mainImage)}
             >
               <img

@@ -97,13 +97,13 @@ export default function ProductDetailPage() {
   return (
     <Layout>
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
           {/* Left Sidebar - Fixed */}
           <div className="hidden lg:block">
-            <div className="space-y-6 fixed w-[300px]">
+            <div className="space-y-4 fixed w-[280px] bg-background">
               <ProductGallery mainImage={product.image_url} productName={product.name} />
-              <div className="rounded-md border p-4 bg-background">
-                <nav className="space-y-2">
+              <div className="rounded-md border p-3 bg-background">
+                <nav className="space-y-1.5">
                   {[
                     'Overview',
                     'Pictures',
@@ -115,7 +115,7 @@ export default function ProductDetailPage() {
                     <a
                       key={item}
                       href={`#${item.toLowerCase().replace(' ', '-')}`}
-                      className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                      className="block px-3 py-1.5 text-sm hover:bg-secondary rounded-md transition-colors"
                     >
                       {item}
                     </a>
@@ -126,10 +126,10 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Mobile Sidebar */}
-          <div className="lg:hidden space-y-6">
+          <div className="lg:hidden space-y-4">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
-            <div className="rounded-md border p-4">
-              <nav className="space-y-2">
+            <div className="rounded-md border p-3">
+              <nav className="space-y-1.5">
                 {[
                   'Overview',
                   'Pictures',
@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
                   <a
                     key={item}
                     href={`#${item.toLowerCase().replace(' ', '-')}`}
-                    className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                    className="block px-3 py-1.5 text-sm hover:bg-secondary rounded-md transition-colors"
                   >
                     {item}
                   </a>
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Main Content - Scrollable */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="flex flex-col space-y-6">
               {/* Header Section */}
               <div className="flex justify-between items-start">
