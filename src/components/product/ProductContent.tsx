@@ -7,6 +7,9 @@ import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 interface ProductContentProps {
   product: LaptopProduct | MobileProduct;
@@ -17,6 +20,21 @@ interface ProductContentProps {
 export function ProductContent({ product, type }: ProductContentProps) {
   const isLaptop = type === 'laptop';
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data: popularMobiles } = useQuery({
+    queryKey: ['popular-mobiles', product.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('mobile_products')
+        .select('*')
+        .neq('id', product.id)
+        .limit(6);
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: type === 'mobile',
+  });
 
   return (
     <div className="space-y-12">
@@ -123,6 +141,42 @@ export function ProductContent({ product, type }: ProductContentProps) {
       <section id="comments" className="scroll-mt-24">
         <ProductComments productId={product.id} />
       </section>
+
+      {type === 'mobile' && (
+        <>
+          <Separator />
+          {/* Popular Mobiles Section */}
+          <section id="popular-mobiles" className="scroll-mt-24">
+            <h2 className="text-2xl font-bold mb-6">Popular Mobile Phones</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {popularMobiles?.map((mobile) => (
+                <Link
+                  key={mobile.id}
+                  to={`/product/${mobile.id}?type=mobile`}
+                  className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4"
+                >
+                  <div className="aspect-square mb-4">
+                    <img
+                      src={mobile.image_url || "/placeholder.svg"}
+                      alt={mobile.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{mobile.name}</h3>
+                  <p className="text-2xl font-bold text-primary mb-2">
+                    ₹{mobile.price.toLocaleString()}
+                  </p>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>Display: {mobile.display_specs}</p>
+                    <p>Camera: {mobile.camera}</p>
+                    <p>Battery: {mobile.battery}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }
