@@ -83,6 +83,10 @@ export default function ProductDetailPage() {
     },
   });
 
+  const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
+    return 'screen_size' in product;
+  };
+
   if (isLoading || !product) {
     return (
       <Layout>
@@ -91,18 +95,14 @@ export default function ProductDetailPage() {
     );
   }
 
-  const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
-    return 'screen_size' in product;
-  };
-
   return (
     <Layout>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
-          {/* Left Sidebar with Image and Navigation */}
-          <div className="space-y-6">
+          {/* Left Sidebar - Fixed */}
+          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
-            <ScrollArea className="h-[300px] rounded-md border p-4">
+            <div className="rounded-md border p-4">
               <nav className="space-y-2">
                 {[
                   'Overview',
@@ -121,10 +121,10 @@ export default function ProductDetailPage() {
                   </a>
                 ))}
               </nav>
-            </ScrollArea>
+            </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content - Scrollable */}
           <div className="space-y-8">
             <div className="flex flex-col space-y-6">
               {/* Header Section */}
