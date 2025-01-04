@@ -9,54 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      comments: {
-        Row: {
-          id: string
-          blog_id: string
-          user_name: string
-          content: string
-          parent_id: string | null
-          upvotes: number
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          blog_id: string
-          user_name: string
-          content: string
-          parent_id?: string | null
-          upvotes?: number
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          blog_id?: string
-          user_name?: string
-          content?: string
-          parent_id?: string | null
-          upvotes?: number
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_blog_id_fkey"
-            columns: ["blog_id"]
-            isOneToOne: false
-            referencedRelation: "blogs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       blogs: {
         Row: {
           author: string
@@ -158,6 +110,54 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      comments: {
+        Row: {
+          blog_id: string
+          content: string
+          created_at: string
+          id: string
+          parent_id: string | null
+          updated_at: string
+          upvotes: number | null
+          user_name: string
+        }
+        Insert: {
+          blog_id: string
+          content: string
+          created_at?: string
+          id?: string
+          parent_id?: string | null
+          updated_at?: string
+          upvotes?: number | null
+          user_name: string
+        }
+        Update: {
+          blog_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          parent_id?: string | null
+          updated_at?: string
+          upvotes?: number | null
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       laptops: {
         Row: {
