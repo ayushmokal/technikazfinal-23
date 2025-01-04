@@ -7,6 +7,9 @@ import { ProductKeySpecs } from "@/components/product/ProductKeySpecs";
 import { ProductContent } from "@/components/product/ProductContent";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Calendar, Heart } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -88,7 +91,6 @@ export default function ProductDetailPage() {
     );
   }
 
-  // Type guard function to check if product is MobileProduct
   const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
     return 'screen_size' in product;
   };
@@ -96,40 +98,87 @@ export default function ProductDetailPage() {
   return (
     <Layout>
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-8">
-          {/* Left Sidebar */}
-          <div className="space-y-4 bg-white p-4 rounded-lg shadow-sm">
-            <nav className="space-y-2">
-              {['Overview', 'Pictures', 'Expert Review', 'Full Specification', 'Comparison', 'User Comments'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
-                >
-                  {item}
-                </a>
-              ))}
-            </nav>
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+          {/* Left Sidebar with Image and Navigation */}
+          <div className="space-y-6">
+            <ProductGallery mainImage={product.image_url} productName={product.name} />
+            <ScrollArea className="h-[300px] rounded-md border p-4">
+              <nav className="space-y-2">
+                {[
+                  'Overview',
+                  'Pictures',
+                  'Expert Review',
+                  'Full Specification',
+                  'Comparison',
+                  'User Comments'
+                ].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase().replace(' ', '-')}`}
+                    className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </nav>
+            </ScrollArea>
           </div>
 
           {/* Main Content */}
           <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <ProductGallery mainImage={product.image_url} productName={product.name} />
-              <div className="space-y-6">
+            <div className="flex flex-col space-y-6">
+              {/* Header Section */}
+              <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-2xl font-bold">{product.name}</h1>
-                  <p className="text-muted-foreground">By {product.brand}</p>
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-bold">{product.name}</h1>
+                    <Button variant="ghost" size="icon">
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>Released January 2024</span>
+                    </div>
+                    <span>About {product.brand}</span>
+                  </div>
                 </div>
-                <ProductKeySpecs
-                  type={type}
-                  screenSize={isMobileProduct(product) ? product.screen_size : undefined}
-                  camera={isMobileProduct(product) ? product.camera : undefined}
-                  processor={product.processor}
-                  battery={product.battery}
-                  graphics={!isMobileProduct(product) ? product.graphics : undefined}
-                />
+                <Button>Compare</Button>
               </div>
+
+              {/* Price and Variants Section */}
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-bold">₹{product.price.toLocaleString()}</span>
+                    <span className="text-sm text-muted-foreground">(onwards)</span>
+                  </div>
+                  <a href="#" className="text-sm text-primary hover:underline">
+                    See All Variants
+                  </a>
+                </div>
+                <div className="flex gap-4">
+                  <select className="px-4 py-2 border rounded-md">
+                    <option>256 GB Storage</option>
+                    <option>512 GB Storage</option>
+                  </select>
+                  <select className="px-4 py-2 border rounded-md">
+                    <option>Any Colour</option>
+                    <option>Black</option>
+                    <option>Gold</option>
+                  </select>
+                </div>
+              </div>
+
+              <ProductKeySpecs
+                type={type}
+                screenSize={isMobileProduct(product) ? product.screen_size : undefined}
+                camera={isMobileProduct(product) ? product.camera : undefined}
+                processor={product.processor}
+                battery={product.battery}
+                graphics={!isMobileProduct(product) ? product.graphics : undefined}
+              />
             </div>
 
             <Separator />
