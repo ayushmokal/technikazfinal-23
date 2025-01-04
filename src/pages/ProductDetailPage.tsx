@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Calendar, Heart } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -83,6 +84,13 @@ export default function ProductDetailPage() {
     },
   });
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   if (isLoading || !product) {
     return (
       <Layout>
@@ -104,21 +112,43 @@ export default function ProductDetailPage() {
             <ProductGallery mainImage={product.image_url} productName={product.name} />
             <ScrollArea className="h-[300px] rounded-md border p-4">
               <nav className="space-y-2">
-                {[
-                  'Overview',
-                  'Pictures',
-                  'Expert Review',
-                  'Full Specification',
-                  'Comparison',
-                  'User Comments'
-                ].map((item) => (
-                  <a
+                <button
+                  onClick={() => scrollToSection('overview')}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                >
+                  Overview
+                </button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors">
+                      Pictures
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                      <img
+                        src={product.image_url || "/placeholder.svg"}
+                        alt={product.name}
+                        className="w-full aspect-square object-cover rounded-lg"
+                      />
+                      {/* Add more images here when available */}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <button
+                  onClick={() => scrollToSection('specifications')}
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                >
+                  Full Specification
+                </button>
+                {['Expert Review', 'Comparison', 'User Comments'].map((item) => (
+                  <button
                     key={item}
-                    href={`#${item.toLowerCase().replace(' ', '-')}`}
-                    className="block px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                    onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
                   >
                     {item}
-                  </a>
+                  </button>
                 ))}
               </nav>
             </ScrollArea>
