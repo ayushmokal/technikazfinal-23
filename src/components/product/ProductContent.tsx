@@ -25,6 +25,10 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
     return product.display_specs.split(' ')[0];
   };
 
+  const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
+    return 'camera' in product;
+  };
+
   return (
     <div className="space-y-12">
       {/* Overview Section */}
@@ -47,7 +51,7 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
                 <Camera className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-lg font-bold">{isLaptop ? 'HD Webcam' : product.camera}</p>
+                <p className="text-lg font-bold">{isLaptop ? 'HD Webcam' : (isMobileProduct(product) ? product.camera : 'N/A')}</p>
                 <p className="text-sm text-muted-foreground">Camera</p>
               </div>
             </div>
@@ -57,7 +61,7 @@ export function ProductContent({ product, type, activeSection }: ProductContentP
                 <Cpu className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-lg font-bold">{isLaptop ? product.processor : ('chipset' in product ? product.chipset : product.processor)}</p>
+                <p className="text-lg font-bold">{isLaptop ? product.processor : (isMobileProduct(product) ? product.chipset || product.processor : product.processor)}</p>
                 <p className="text-sm text-muted-foreground">Processor</p>
               </div>
             </div>
