@@ -27,7 +27,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <h3 className="flex items-center gap-2 text-lg font-semibold text-green-600">
-                  <span className="text-2xl">👍</span> PROS
+                  PROS
                 </h3>
                 <ul className="list-none space-y-3">
                   <li className="flex items-start gap-2">
@@ -50,7 +50,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
               </div>
               <div className="space-y-4">
                 <h3 className="flex items-center gap-2 text-lg font-semibold text-red-600">
-                  <span className="text-2xl">👎</span> CONS
+                  CONS
                 </h3>
                 <ul className="list-none space-y-3">
                   <li className="flex items-start gap-2">
