@@ -1,25 +1,14 @@
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Link } from "react-router-dom";
 import { BlogFormData } from "@/types/blog";
+import { ArticleCard } from "@/components/ArticleCard";
+import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface FeaturedArticlesGridProps {
   articles: BlogFormData[];
 }
 
 export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
-  if (!articles || articles.length === 0) {
-    return null;
-  }
-
-  const getImageUrl = (url: string | null | undefined) => {
-    if (!url) return '/placeholder.svg';
-    // If it's already a full URL, return it
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
-    }
-    // If it's a relative URL, ensure it starts with /
-    return url.startsWith('/') ? url : `/${url}`;
-  };
+  if (!articles.length) return null;
 
   return (
     <div className="grid grid-cols-12 gap-6">
@@ -29,63 +18,59 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
           <div className="relative overflow-hidden rounded-t-xl">
             <AspectRatio ratio={16/9} className="mb-4">
               <img
-                src={getImageUrl(articles[0].image_url)}
+                src={articles[0].image_url || '/placeholder.svg'}
                 alt={articles[0].title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-b-[30px]"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder.svg';
-                }}
               />
             </AspectRatio>
             <div className="flex flex-col justify-between h-[120px]">
-              <h2 className="text-2xl font-bold line-clamp-2 mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
                 {articles[0].title}
               </h2>
-              <p className="text-gray-600">
-                {new Date(articles[0].created_at).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+              <p className="mt-2 text-gray-600 line-clamp-2">
+                {articles[0].meta_description || ''}
               </p>
             </div>
           </div>
         </Link>
       </div>
 
-      {/* Second Featured Article - 50% width */}
+      {/* Second Article - 50% width */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-6">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative overflow-hidden rounded-t-xl">
               <AspectRatio ratio={16/9} className="mb-4">
                 <img
-                  src={getImageUrl(articles[1].image_url)}
+                  src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 rounded-b-[30px]"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = '/placeholder.svg';
-                  }}
                 />
               </AspectRatio>
               <div className="flex flex-col justify-between h-[120px]">
-                <h2 className="text-2xl font-bold line-clamp-2 mb-2">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
                   {articles[1].title}
                 </h2>
-                <p className="text-gray-600">
-                  {new Date(articles[1].created_at).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
+                <p className="mt-2 text-gray-600 line-clamp-2">
+                  {articles[1].meta_description || ''}
                 </p>
               </div>
             </div>
           </Link>
         </div>
       )}
+
+      {/* Remaining Articles */}
+      {articles.slice(2).map((article) => (
+        <div key={article.slug} className="col-span-12 sm:col-span-6 lg:col-span-3">
+          <ArticleCard
+            title={article.title}
+            image={article.image_url || ''}
+            category={article.category}
+            slug={article.slug}
+          />
+        </div>
+      ))}
     </div>
   );
 }
