@@ -75,7 +75,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
             <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-6">
               <CollapsibleTrigger asChild>
                 <Button variant="link" className="text-primary hover:text-primary/90 p-0 h-auto font-semibold">
-                  Read Full Reviews >>
+                  Read Full Reviews {'>>'} 
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-4">
