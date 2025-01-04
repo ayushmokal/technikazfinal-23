@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProductGalleryProps {
@@ -35,13 +34,6 @@ export function ProductGallery({ mainImage, productName }: ProductGalleryProps) 
             </div>
           ))}
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
       </div>
     </div>
   );
