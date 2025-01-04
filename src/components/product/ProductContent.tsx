@@ -4,6 +4,8 @@ import { CompareSection } from "./CompareSection";
 import { Button } from "@/components/ui/button";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Separator } from "@/components/ui/separator";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
 
 interface ProductContentProps {
   product: LaptopProduct | MobileProduct;
@@ -13,6 +15,7 @@ interface ProductContentProps {
 
 export function ProductContent({ product, type }: ProductContentProps) {
   const isLaptop = type === 'laptop';
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="space-y-12">
@@ -20,24 +23,69 @@ export function ProductContent({ product, type }: ProductContentProps) {
       <section id="overview" className="scroll-mt-24">
         <div className="space-y-6">
           <div className="prose max-w-none">
-            <h2 className="text-xl font-semibold mb-4">Overview</h2>
+            <h2 className="text-2xl font-bold mb-6">{product.name} REVIEW</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-green-600 font-medium">Pros</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li>Premium build quality</li>
-                  <li>Excellent performance</li>
-                  <li>Great camera system</li>
+                <h3 className="flex items-center gap-2 text-lg font-semibold text-green-600">
+                  <span className="text-2xl">👍</span> PROS
+                </h3>
+                <ul className="list-none space-y-3">
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>AI & productivity features</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Strong performance & battery life</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Good display & cameras</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Useful Pen</span>
+                  </li>
                 </ul>
               </div>
               <div className="space-y-4">
-                <h3 className="text-red-600 font-medium">Cons</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li>Premium pricing</li>
-                  <li>Limited customization options</li>
+                <h3 className="flex items-center gap-2 text-lg font-semibold text-red-600">
+                  <span className="text-2xl">👎</span> CONS
+                </h3>
+                <ul className="list-none space-y-3">
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>AI & productivity features</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Strong performance & battery life</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Good display & cameras</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>•</span>
+                    <span>Useful Pen</span>
+                  </li>
                 </ul>
               </div>
             </div>
+            <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-6">
+              <CollapsibleTrigger asChild>
+                <Button variant="link" className="text-primary hover:text-primary/90 p-0 h-auto font-semibold">
+                  Read Full Reviews >>
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4">
+                <div className="prose max-w-none">
+                  <p>
+                    Detailed review content goes here. This section expands when the user clicks "Read Full Reviews".
+                  </p>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         </div>
       </section>
