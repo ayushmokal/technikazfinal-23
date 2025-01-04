@@ -42,7 +42,7 @@ export function ProductHeader({ product }: ProductHeaderProps) {
               href={getBrandUrl(product.brand)}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors"
             >
               About {product.brand}
             </a>
