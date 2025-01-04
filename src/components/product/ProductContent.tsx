@@ -1,6 +1,7 @@
 import { ProductSpecifications } from "@/components/admin/ProductSpecifications";
 import { ProductReview } from "./ProductReview";
 import { CompareSection } from "./CompareSection";
+import { ProductComments } from "./ProductComments";
 import { Button } from "@/components/ui/button";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Separator } from "@/components/ui/separator";
@@ -114,6 +115,13 @@ export function ProductContent({ product, type }: ProductContentProps) {
       <section id="compare" className="scroll-mt-24">
         <h2 className="text-xl font-semibold mb-6">Compare Products</h2>
         <CompareSection currentProduct={product} type={type} />
+      </section>
+
+      <Separator />
+
+      {/* Comments Section */}
+      <section id="comments" className="scroll-mt-24">
+        <ProductComments productId={product.id} />
       </section>
     </div>
   );
