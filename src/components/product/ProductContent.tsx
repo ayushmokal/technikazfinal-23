@@ -94,7 +94,9 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
       {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
-        <h2 className="text-xl font-semibold mb-6">Detailed Specifications</h2>
+        <a href="#specifications" className="no-underline hover:text-primary transition-colors">
+          <h2 className="text-xl font-semibold mb-6">Full Specification</h2>
+        </a>
         <ProductSpecifications product={product} />
       </section>
 
