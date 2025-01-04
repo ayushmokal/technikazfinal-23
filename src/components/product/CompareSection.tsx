@@ -177,7 +177,8 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
                       {isSelected ? "Added" : "Compare"}
                     </Button>
                   </div>
-                ))}
+                );
+              })}
             </div>
           </ScrollArea>
         </div>
