@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 
 interface BaseProduct {
   id: string;
@@ -37,16 +38,18 @@ interface CompareSectionProps {
 }
 
 export function CompareSection({ currentProduct, type }: CompareSectionProps) {
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedProducts, setSelectedProducts] = useState<(MobileProduct | LaptopProduct)[]>([currentProduct]);
 
   const { data: products = [] } = useQuery({
-    queryKey: ['products', type],
+    queryKey: ['products', type, searchQuery],
     queryFn: async () => {
       const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
         .from(tableName)
         .select('*')
         .neq('id', currentProduct.id)
+        .ilike('name', `%${searchQuery}%`)
         .limit(10);
 
       if (error) throw error;
@@ -140,6 +143,15 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
       {selectedProducts.length < 3 && (
         <div>
           <h3 className="text-lg font-semibold mb-4">Add Products to Compare</h3>
+          <div className="mb-4">
+            <Input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="max-w-sm"
+            />
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {products.map((product) => {
               const isSelected = selectedProducts.some(p => p.id === product.id);
