@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -52,6 +53,7 @@ export default function ProductDetailPage() {
   const type = searchParams.get('type') as ProductType || 'mobile';
   const { toast } = useToast();
   const [activeSection, setActiveSection] = useState<string>('overview');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
@@ -92,6 +94,22 @@ export default function ProductDetailPage() {
     }
   };
 
+  const images = [
+    product?.image_url || "/placeholder.svg",
+    "/placeholder.svg",
+    "/placeholder.svg",
+    "/placeholder.svg",
+    "/placeholder.svg"
+  ];
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const previousImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   if (isLoading || !product) {
     return (
       <Layout>
@@ -108,7 +126,6 @@ export default function ProductDetailPage() {
     <Layout>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8">
-          {/* Left Sidebar with Image and Navigation */}
           <div className="space-y-6">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
             <ScrollArea className="h-[300px] rounded-md border p-4">
@@ -130,13 +147,52 @@ export default function ProductDetailPage() {
                       Pictures
                     </button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                      <img
-                        src={product.image_url || "/placeholder.svg"}
-                        alt={product.name}
-                        className="w-full aspect-square object-cover rounded-lg"
-                      />
+                  <DialogContent className="max-w-4xl p-0 gap-0">
+                    <div className="relative">
+                      <div className="flex items-center">
+                        <button
+                          onClick={previousImage}
+                          className="absolute left-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white/90 transition-colors"
+                          aria-label="Previous image"
+                        >
+                          <ChevronLeft className="h-6 w-6" />
+                        </button>
+                        <div className="w-full overflow-hidden">
+                          <div 
+                            className="flex transition-transform duration-300 ease-in-out"
+                            style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+                          >
+                            {images.map((image, index) => (
+                              <div key={index} className="w-full flex-shrink-0">
+                                <img
+                                  src={image}
+                                  alt={`${product.name} view ${index + 1}`}
+                                  className="w-full h-[600px] object-contain"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <button
+                          onClick={nextImage}
+                          className="absolute right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white/90 transition-colors"
+                          aria-label="Next image"
+                        >
+                          <ChevronRight className="h-6 w-6" />
+                        </button>
+                      </div>
+                      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                        {images.map((_, index) => (
+                          <button
+                            key={index}
+                            className={`w-2 h-2 rounded-full transition-colors ${
+                              currentImageIndex === index ? 'bg-primary' : 'bg-gray-300'
+                            }`}
+                            onClick={() => setCurrentImageIndex(index)}
+                            aria-label={`Go to image ${index + 1}`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </DialogContent>
                 </Dialog>
@@ -158,7 +214,6 @@ export default function ProductDetailPage() {
             </ScrollArea>
           </div>
 
-          {/* Main Content */}
           <div className="space-y-8">
             <ProductHeader product={product} type={type} />
             <ProductKeySpecs
