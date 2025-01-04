@@ -7,15 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Comment {
-  id: string;
-  user_name: string;
-  content: string;
-  parent_id: string | null;
-  upvotes: number;
-  created_at: string;
-}
+type Comment = Database['public']['Tables']['comments']['Row'];
 
 interface ProductCommentsProps {
   productId: string;
@@ -43,14 +37,18 @@ export function ProductComments({ productId }: ProductCommentsProps) {
 
   const addCommentMutation = useMutation({
     mutationFn: async (newComment: { content: string; parent_id: string | null }) => {
-      const { data, error } = await supabase.from("comments").insert([
-        {
-          blog_id: productId,
-          user_name: "Anonymous User", // You can replace this with actual user name when auth is implemented
-          content: newComment.content,
-          parent_id: newComment.parent_id,
-        },
-      ]);
+      const { data, error } = await supabase
+        .from("comments")
+        .insert([
+          {
+            blog_id: productId,
+            user_name: "Anonymous User", // You can replace this with actual user name when auth is implemented
+            content: newComment.content,
+            parent_id: newComment.parent_id,
+          },
+        ])
+        .select()
+        .single();
 
       if (error) throw error;
       return data;
@@ -78,7 +76,9 @@ export function ProductComments({ productId }: ProductCommentsProps) {
       const { data, error } = await supabase
         .from("comments")
         .update({ upvotes: comments.find(c => c.id === commentId)!.upvotes + 1 })
-        .eq("id", commentId);
+        .eq("id", commentId)
+        .select()
+        .single();
 
       if (error) throw error;
       return data;
