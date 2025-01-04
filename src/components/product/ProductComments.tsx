@@ -102,7 +102,7 @@ export function ProductComments({ productId }: ProductCommentsProps) {
     const filteredComments = comments.filter(c => c.parent_id === parentId);
 
     return filteredComments.map((comment) => (
-      <div key={comment.id} className="space-y-4">
+      <div key={comment.id.toString()} className="space-y-4">
         <div className="flex gap-4 items-start bg-secondary/20 rounded-lg p-4">
           <Avatar>
             <AvatarFallback>{comment.user_name[0]}</AvatarFallback>
