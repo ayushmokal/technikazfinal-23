@@ -107,54 +107,55 @@ export default function ProductDetailPage() {
     <Layout>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
-          {/* Left Sidebar with Image and Navigation */}
+          {/* Left Sidebar with Image and Navigation - Now Sticky */}
           <div className="space-y-6">
-            <ProductGallery mainImage={product.image_url} productName={product.name} />
-            <ScrollArea className="h-[300px] rounded-md border p-4">
-              <nav className="space-y-2">
-                <button
-                  onClick={() => scrollToSection('overview')}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
-                >
-                  Overview
-                </button>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors">
-                      Pictures
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                      <img
-                        src={product.image_url || "/placeholder.svg"}
-                        alt={product.name}
-                        className="w-full aspect-square object-cover rounded-lg"
-                      />
-                      {/* Add more images here when available */}
-                    </div>
-                  </DialogContent>
-                </Dialog>
-                <button
-                  onClick={() => scrollToSection('specifications')}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
-                >
-                  Full Specification
-                </button>
-                {['Expert Review', 'Comparison', 'User Comments'].map((item) => (
+            <div className="sticky top-24">
+              <ProductGallery mainImage={product.image_url} productName={product.name} />
+              <ScrollArea className="h-[300px] rounded-md border p-4 mt-6">
+                <nav className="space-y-2">
                   <button
-                    key={item}
-                    onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
-                    className="block w-full text-left px-4 py-2 text-sm hover:bg-secondary rounded-md transition-colors"
+                    onClick={() => scrollToSection('overview')}
+                    className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors"
                   >
-                    {item}
+                    Overview
                   </button>
-                ))}
-              </nav>
-            </ScrollArea>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors">
+                        Pictures
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                        <img
+                          src={product.image_url || "/placeholder.svg"}
+                          alt={product.name}
+                          className="w-full aspect-square object-cover rounded-lg"
+                        />
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <button
+                    onClick={() => scrollToSection('specifications')}
+                    className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors"
+                  >
+                    Full Specification
+                  </button>
+                  {['Expert Review', 'Comparison', 'User Comments'].map((item) => (
+                    <button
+                      key={item}
+                      onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+                      className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </nav>
+              </ScrollArea>
+            </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content - Scrollable */}
           <div className="space-y-8">
             <div className="flex flex-col space-y-6">
               {/* Header Section */}
