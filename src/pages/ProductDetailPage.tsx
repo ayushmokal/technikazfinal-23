@@ -100,6 +100,8 @@ export default function ProductDetailPage() {
             <ProductSidebar
               activeSection={activeSection}
               onSectionChange={setActiveSection}
+              mainImage={product.image_url}
+              productName={product.name}
             />
           </div>
           <ProductContent
