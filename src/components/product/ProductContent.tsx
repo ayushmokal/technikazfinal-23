@@ -7,7 +7,7 @@ import { ProductKeySpecs } from "./ProductKeySpecs";
 import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
-import { Heart } from "lucide-react";
+import { Heart, Calendar } from "lucide-react";
 
 interface ProductContentProps {
   product: LaptopProduct | MobileProduct;
@@ -32,7 +32,10 @@ export function ProductContent({ product, type }: ProductContentProps) {
                   <Heart className="w-6 h-6 stroke-1" />
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                  <span>Released January 2024</span>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>Released January 2024</span>
+                  </div>
                   <span>•</span>
                   <a href="#" className="text-primary hover:underline">About {product.brand}</a>
                 </div>
