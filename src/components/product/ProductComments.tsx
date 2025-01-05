@@ -77,8 +77,6 @@ export function ProductComments({ productId }: { productId: string }) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Comments</h3>
-      
       <div className="space-y-2">
         <Textarea
           placeholder="Write a comment..."
