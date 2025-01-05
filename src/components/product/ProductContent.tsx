@@ -97,8 +97,52 @@ export function ProductContent({ product, type }: ProductContentProps) {
         <ProductSpecifications product={product} />
       </section>
 
+      {/* Expert Review Section */}
+      <section id="expert-review" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
+        <div className="space-y-6">
+          <h3 className="text-xl font-semibold">{product.name} REVIEW</h3>
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-green-600 mb-4">PROS</h4>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600">+</span>
+                  <span>Premium build quality</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600">+</span>
+                  <span>Excellent performance</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600">+</span>
+                  <span>Great camera system</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-red-600 mb-4">CONS</h4>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <span className="text-red-600">-</span>
+                  <span>Premium pricing</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-red-600">-</span>
+                  <span>No charger in box</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-red-600">-</span>
+                  <span>Average battery life</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Compare Section */}
-      <section id="compare" className="scroll-mt-24">
+      <section id="comparison" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
         <CompareSection currentProduct={product} type={type} />
       </section>
