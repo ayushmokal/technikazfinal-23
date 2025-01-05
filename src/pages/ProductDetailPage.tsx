@@ -6,12 +6,11 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductKeySpecs } from "@/components/product/ProductKeySpecs";
 import { ProductContent } from "@/components/product/ProductContent";
 import { ProductHeader } from "@/components/product/ProductHeader";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -53,7 +52,6 @@ export default function ProductDetailPage() {
   const type = searchParams.get('type') as ProductType || 'mobile';
   const { toast } = useToast();
   const [activeSection, setActiveSection] = useState<string>('overview');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
@@ -94,22 +92,6 @@ export default function ProductDetailPage() {
     }
   };
 
-  const images = [
-    product?.image_url || "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg"
-  ];
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const previousImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
   if (isLoading || !product) {
     return (
       <Layout>
@@ -141,61 +123,14 @@ export default function ProductDetailPage() {
                 >
                   Overview
                 </button>
-                <Dialog>
-                  <DialogTrigger asChild>
+                <ProductImageGallery 
+                  product={product}
+                  trigger={
                     <button className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors">
                       Pictures
                     </button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl p-0 gap-0">
-                    <div className="relative">
-                      <div className="flex items-center">
-                        <button
-                          onClick={previousImage}
-                          className="absolute left-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white/90 transition-colors"
-                          aria-label="Previous image"
-                        >
-                          <ChevronLeft className="h-6 w-6" />
-                        </button>
-                        <div className="w-full overflow-hidden">
-                          <div 
-                            className="flex transition-transform duration-300 ease-in-out"
-                            style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
-                          >
-                            {images.map((image, index) => (
-                              <div key={index} className="w-full flex-shrink-0">
-                                <img
-                                  src={image}
-                                  alt={`${product.name} view ${index + 1}`}
-                                  className="w-full h-[600px] object-contain"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <button
-                          onClick={nextImage}
-                          className="absolute right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white/90 transition-colors"
-                          aria-label="Next image"
-                        >
-                          <ChevronRight className="h-6 w-6" />
-                        </button>
-                      </div>
-                      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                        {images.map((_, index) => (
-                          <button
-                            key={index}
-                            className={`w-2 h-2 rounded-full transition-colors ${
-                              currentImageIndex === index ? 'bg-primary' : 'bg-gray-300'
-                            }`}
-                            onClick={() => setCurrentImageIndex(index)}
-                            aria-label={`Go to image ${index + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                  }
+                />
                 {['Specifications', 'Expert Review', 'Comparison', 'User Comments'].map((item) => (
                   <button
                     key={item}
