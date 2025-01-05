@@ -52,7 +52,7 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
       </div>
 
       <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-5xl">
           <ProductGalleryTabs mainImage={mainImage} productName={productName} />
         </DialogContent>
       </Dialog>
