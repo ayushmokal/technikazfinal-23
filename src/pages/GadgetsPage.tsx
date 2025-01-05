@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
 import { CategoryPageLayout } from "@/components/CategoryPageLayout";
 import { MobileProductList } from "@/components/product/MobileProductList";
-import { LaptopProductList } from "@/components/product/LaptopProductList";
+import { LaptopProductGrid } from "@/components/product/LaptopProductGrid";
 import type { MobileProduct, LaptopProduct } from "@/types/product";
 
 export default function GadgetsPage() {
@@ -51,7 +51,8 @@ export default function GadgetsPage() {
       const { data, error } = await supabase
         .from('mobile_products')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(4);
       
       if (error) throw error;
       return data as MobileProduct[];
@@ -65,7 +66,8 @@ export default function GadgetsPage() {
       const { data, error } = await supabase
         .from('laptops')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(4);
       
       if (error) throw error;
       return data as LaptopProduct[];
@@ -75,7 +77,7 @@ export default function GadgetsPage() {
   const ProductGrids = () => (
     <>
       {subcategory === "MOBILE" && <MobileProductList products={mobileProducts} />}
-      {subcategory === "LAPTOPS" && <LaptopProductList products={laptops} />}
+      {subcategory === "LAPTOPS" && <LaptopProductGrid products={laptops} />}
     </>
   );
 

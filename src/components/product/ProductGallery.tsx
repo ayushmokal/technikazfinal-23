@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 interface ProductGalleryProps {
-  mainImage: string | null;
+  mainImage: string;
   productName: string;
 }
 
@@ -18,21 +17,16 @@ export function ProductGallery({ mainImage, productName }: ProductGalleryProps) 
           className="object-contain w-full h-full p-4"
         />
       </div>
-      <div className="relative">
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {[1, 2, 3, 4, 5].map((index) => (
-            <div
-              key={index}
-              className="w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer"
-              onClick={() => setSelectedImage(mainImage)}
-            >
-              <img
-                src={mainImage || "/placeholder.svg"}
-                alt={`${productName} view ${index}`}
-                className="w-full h-full object-contain p-2"
-              />
-            </div>
-          ))}
+      <div className="flex gap-2 overflow-x-auto pb-2">
+        <div
+          className="w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer"
+          onClick={() => setSelectedImage(mainImage)}
+        >
+          <img
+            src={mainImage || "/placeholder.svg"}
+            alt={`${productName} main view`}
+            className="w-full h-full object-contain p-2"
+          />
         </div>
       </div>
     </div>
