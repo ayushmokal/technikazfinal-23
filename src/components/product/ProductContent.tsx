@@ -47,7 +47,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
             </div>
 
             {isMobile && (
-              <div className="flex gap-4">
+              <div className="flex items-center gap-6">
                 <Select>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="256 GB Storage" />
