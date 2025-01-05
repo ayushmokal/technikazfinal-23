@@ -111,54 +111,6 @@ export type Database = {
         }
         Relationships: []
       }
-      comments: {
-        Row: {
-          blog_id: string
-          content: string
-          created_at: string
-          id: string
-          parent_id: string | null
-          updated_at: string
-          upvotes: number | null
-          user_name: string
-        }
-        Insert: {
-          blog_id: string
-          content: string
-          created_at?: string
-          id?: string
-          parent_id?: string | null
-          updated_at?: string
-          upvotes?: number | null
-          user_name: string
-        }
-        Update: {
-          blog_id?: string
-          content?: string
-          created_at?: string
-          id?: string
-          parent_id?: string | null
-          updated_at?: string
-          upvotes?: number | null
-          user_name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_blog_id_fkey"
-            columns: ["blog_id"]
-            isOneToOne: false
-            referencedRelation: "blogs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       laptops: {
         Row: {
           battery: string
