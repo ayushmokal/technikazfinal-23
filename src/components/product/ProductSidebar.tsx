@@ -9,9 +9,9 @@ export function ProductSidebar({ activeSection, onSectionChange }: ProductSideba
   const sections = [
     { id: 'overview', label: 'Overview' },
     { id: 'specifications', label: 'Specifications' },
-    { id: 'features', label: 'Features' },
-    { id: 'reviews', label: 'Reviews' },
-    { id: 'compare', label: 'Compare' },
+    { id: 'expert-review', label: 'Expert Review' },
+    { id: 'compare', label: 'Compare Products' },
+    { id: 'comments', label: 'User Comments' },
   ];
 
   const scrollToSection = (sectionId: string) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MobileProduct } from "@/types/product";
+import { LaptopProduct } from "@/types/product";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import {
@@ -11,11 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface MobileProductListProps {
-  products: MobileProduct[];
+interface LaptopProductListProps {
+  products: LaptopProduct[];
 }
 
-export function MobileProductList({ products }: MobileProductListProps) {
+export function LaptopProductList({ products }: LaptopProductListProps) {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [sortBy, setSortBy] = useState<string>("default");
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
@@ -46,7 +46,7 @@ export function MobileProductList({ products }: MobileProductListProps) {
     <section className="mb-12">
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold flex-grow">Latest Mobile Phones</h2>
+          <h2 className="text-2xl font-bold flex-grow">Latest Laptops</h2>
           <div className="flex items-center gap-2 border rounded-lg p-1">
             <button 
               className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}
@@ -74,7 +74,7 @@ export function MobileProductList({ products }: MobileProductListProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="search"
-              placeholder="Search products..."
+              placeholder="Search laptops..."
               className="pl-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,10 +109,10 @@ export function MobileProductList({ products }: MobileProductListProps) {
       </div>
 
       <div className={`mt-6 ${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}`}>
-        {filteredAndSortedProducts.map((product) => (
+        {filteredAndSortedProducts.map((laptop) => (
           <Link 
-            key={product.id}
-            to={`/product/${product.id}?type=mobile`}
+            key={laptop.id}
+            to={`/product/${laptop.id}?type=laptop`}
             className={`block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow ${
               viewMode === 'grid' ? 'h-full' : ''
             }`}
@@ -124,39 +124,39 @@ export function MobileProductList({ products }: MobileProductListProps) {
                   : 'w-48 h-48 flex-shrink-0'
               }`}>
                 <img
-                  src={product.image_url || "/placeholder.svg"}
-                  alt={product.name}
+                  src={laptop.image_url || "/placeholder.svg"}
+                  alt={laptop.name}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex-grow">
                 <h3 className="text-xl font-medium text-primary mb-2">
-                  {product.name} – Full Phone Specification
+                  {laptop.name} – Full Laptop Specification
                 </h3>
                 <div className="text-2xl font-bold mb-4">
-                  ₹{product.price.toLocaleString()}
+                  ₹{laptop.price.toLocaleString()}
                 </div>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex gap-2">
                     <span className="font-medium">Display:</span>
-                    <span>{product.display_specs}</span>
+                    <span>{laptop.display_specs}</span>
                   </div>
                   <div className="flex gap-2">
                     <span className="font-medium">Processor & RAM:</span>
-                    <span>{product.ram} | {product.processor}</span>
+                    <span>{laptop.ram} | {laptop.processor}</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="font-medium">Camera:</span>
-                    <span>{product.camera}</span>
+                    <span className="font-medium">Graphics:</span>
+                    <span>{laptop.graphics}</span>
                   </div>
                   <div className="flex gap-2">
                     <span className="font-medium">Battery:</span>
-                    <span>{product.battery}</span>
+                    <span>{laptop.battery}</span>
                   </div>
                 </div>
                 <div className="mt-4">
                   <Link 
-                    to={`/product/${product.id}?type=mobile`}
+                    to={`/product/${laptop.id}?type=laptop`}
                     className="text-primary hover:underline"
                   >
                     View Details →

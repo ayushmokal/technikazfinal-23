@@ -1,12 +1,16 @@
-import { useState } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/Layout";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { ProductSidebar } from "@/components/product/ProductSidebar";
+import { ProductKeySpecs } from "@/components/product/ProductKeySpecs";
 import { ProductContent } from "@/components/product/ProductContent";
+import { ProductHeader } from "@/components/product/ProductHeader";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
 
 export type ProductType = 'mobile' | 'laptop';
 
@@ -43,12 +47,11 @@ export interface MobileProduct extends BaseProduct {
 }
 
 export default function ProductDetailPage() {
-  const [activeSection, setActiveSection] = useState('overview');
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') as ProductType || 'mobile';
-  const navigate = useNavigate();
   const { toast } = useToast();
+  const [activeSection, setActiveSection] = useState<string>('overview');
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
@@ -75,13 +78,19 @@ export default function ProductDetailPage() {
           title: "Not Found",
           description: "Product not found",
         });
-        navigate('/gadgets');
         return null;
       }
 
       return data as LaptopProduct | MobileProduct;
     },
   });
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   if (isLoading || !product) {
     return (
@@ -91,22 +100,72 @@ export default function ProductDetailPage() {
     );
   }
 
+  const isMobileProduct = (product: LaptopProduct | MobileProduct): product is MobileProduct => {
+    return 'screen_size' in product;
+  };
+
   return (
     <Layout>
       <div className="container mx-auto py-8">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-8">
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8">
+          <div className="space-y-6">
             <ProductGallery mainImage={product.image_url} productName={product.name} />
-            <ProductSidebar
+            <ScrollArea className="h-[300px] rounded-md border p-4">
+              <nav className="space-y-2">
+                <button
+                  onClick={() => {
+                    scrollToSection('overview');
+                    setActiveSection('overview');
+                  }}
+                  className={`block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors ${
+                    activeSection === 'overview' ? 'text-primary underline' : ''
+                  }`}
+                >
+                  Overview
+                </button>
+                <ProductImageGallery 
+                  product={product}
+                  trigger={
+                    <button className="block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors">
+                      Pictures
+                    </button>
+                  }
+                />
+                {['Specifications', 'Expert Review', 'Comparison', 'User Comments'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      scrollToSection(item.toLowerCase().replace(' ', '-'));
+                      setActiveSection(item.toLowerCase().replace(' ', '-'));
+                    }}
+                    className={`block w-full text-left px-4 py-2 text-sm font-bold hover:bg-secondary rounded-md transition-colors ${
+                      activeSection === item.toLowerCase().replace(' ', '-') ? 'text-primary underline' : ''
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </nav>
+            </ScrollArea>
+          </div>
+
+          <div className="space-y-8">
+            <ProductHeader product={product} type={type} />
+            <ProductKeySpecs
+              type={type}
+              screenSize={isMobileProduct(product) ? product.screen_size : undefined}
+              camera={isMobileProduct(product) ? product.camera : undefined}
+              processor={product.processor}
+              battery={product.battery}
+              graphics={!isMobileProduct(product) ? product.graphics : undefined}
+            />
+            <Separator />
+            <ProductContent
+              product={product}
+              type={type}
               activeSection={activeSection}
-              onSectionChange={setActiveSection}
             />
           </div>
-          <ProductContent
-            product={product}
-            type={type}
-            activeSection={activeSection}
-          />
         </div>
       </div>
     </Layout>

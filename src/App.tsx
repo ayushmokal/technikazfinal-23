@@ -1,7 +1,7 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import AdminLogin from "./pages/AdminLogin";
@@ -23,9 +23,9 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
           <Sonner />
           <Routes>
             <Route path="/" element={<Index />} />
@@ -45,9 +45,9 @@ function App() {
             <Route path="/admin/edit/:id" element={<EditBlogPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
