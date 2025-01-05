@@ -8,7 +8,7 @@ export function PopularMobiles() {
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
 
-  const { data, isLoading: isLoadingMore, fetchNextPage, hasNextPage } = useQuery({
+  const { data, isLoading: isLoadingMore } = useQuery({
     queryKey: ['popular-mobiles', page],
     queryFn: async () => {
       const from = (page - 1) * itemsPerPage;
