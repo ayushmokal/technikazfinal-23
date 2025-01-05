@@ -92,7 +92,9 @@ export function ProductContent({ product, type }: ProductContentProps) {
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">{product.name} REVIEW</h2>
           <ProductReview productName={product.name} />
-          <a href="#" className="text-primary hover:underline text-sm">Read Full Reviews →</a>
+          <div className="mb-12">
+            <a href="#" className="text-primary hover:underline text-sm">Read Full Reviews →</a>
+          </div>
         </div>
       </section>
 
