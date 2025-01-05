@@ -38,20 +38,20 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">PHOTO ALBUMS</h2>
-        <a href="#" className="text-primary hover:underline">
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold">PHOTO ALBUMS</h2>
+        <a href="#" className="text-emerald-600 text-sm hover:underline">
           View {productName} Images →
         </a>
       </div>
       
       <Tabs defaultValue="design" className="w-full">
-        <TabsList className="w-full h-auto p-0 bg-transparent space-x-1">
+        <TabsList className="flex w-full h-auto p-0 bg-transparent border-b border-gray-200">
           {categories.map((category) => (
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className="px-4 py-2 whitespace-nowrap data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="px-4 py-2 text-sm font-medium text-gray-600 whitespace-nowrap border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-600 hover:text-emerald-600 transition-colors"
             >
               {category.label} ({category.count})
             </TabsTrigger>
@@ -59,18 +59,20 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
         </TabsList>
 
         {categories.map((category) => (
-          <TabsContent key={category.id} value={category.id} className="mt-6">
-            <div className="aspect-[4/3] relative overflow-hidden rounded-lg border bg-white">
-              <img
-                src={images[currentIndex]}
-                alt={`${productName} - ${category.label}`}
-                className="object-contain w-full h-full p-4"
-              />
-              <div className="absolute inset-0 flex items-center justify-between p-4">
+          <TabsContent key={category.id} value={category.id} className="mt-4">
+            <div className="relative bg-gray-50 rounded-lg">
+              <div className="aspect-[4/3] flex items-center justify-center p-4">
+                <img
+                  src={images[currentIndex]}
+                  alt={`${productName} - ${category.label}`}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 rounded-full bg-white"
+                  className="h-8 w-8 rounded-full bg-white/90 hover:bg-white"
                   onClick={handlePrevious}
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -78,28 +80,30 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 rounded-full bg-white"
+                  className="h-8 w-8 rounded-full bg-white/90 hover:bg-white"
                   onClick={handleNext}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            <div className="flex gap-2 overflow-x-auto pb-2 mt-4">
+            <div className="flex gap-2 mt-4 pb-2 overflow-x-auto">
               {images.map((image, index) => (
-                <div
+                <button
                   key={index}
-                  className={`w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer ${
-                    index === currentIndex ? 'ring-2 ring-primary' : ''
-                  }`}
                   onClick={() => setCurrentIndex(index)}
+                  className={`relative flex-shrink-0 w-16 h-16 rounded border overflow-hidden ${
+                    index === currentIndex 
+                      ? 'border-emerald-600 ring-1 ring-emerald-600' 
+                      : 'border-gray-200 hover:border-emerald-600'
+                  }`}
                 >
                   <img
                     src={image}
                     alt={`${productName} view ${index + 1}`}
-                    className="w-full h-full object-contain p-2"
+                    className="w-full h-full object-cover"
                   />
-                </div>
+                </button>
               ))}
             </div>
           </TabsContent>
