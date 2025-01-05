@@ -1,5 +1,6 @@
 import { ProductSpecifications } from "@/components/admin/ProductSpecifications";
 import { ProductReview } from "./ProductReview";
+import { CompareSection } from "./CompareSection";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductKeySpecs } from "./ProductKeySpecs";
@@ -139,6 +140,18 @@ export function ProductContent({ product, type }: ProductContentProps) {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Compare Section */}
+      <section id="comparison" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
+        <div className="bg-white rounded-lg p-8 border">
+          <p className="text-center text-gray-600 mb-4">Add devices to compare with the current device</p>
+          <div className="flex justify-center">
+            <Button variant="default" className="bg-teal-600 hover:bg-teal-700">Compare</Button>
+          </div>
+        </div>
+        <CompareSection currentProduct={product} type={type} />
       </section>
 
       {/* Comments Section */}
