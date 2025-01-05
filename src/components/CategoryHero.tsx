@@ -1,5 +1,5 @@
 import { BlogFormData } from "@/types/blog";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface CategoryHeroProps {
@@ -8,7 +8,14 @@ interface CategoryHeroProps {
 }
 
 export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProps) {
+  const location = useLocation();
+  const isGadgetsPage = location.pathname === "/gadgets";
+  
   if (!featuredArticle) return null;
+
+  const imageClassName = `w-full h-full object-cover transition-transform duration-300 ${
+    !isGadgetsPage ? "group-hover:scale-105" : ""
+  }`;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 animate-fadeIn">
@@ -20,7 +27,7 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
               <img
                 src={featuredArticle.image_url}
                 alt={featuredArticle.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className={imageClassName}
               />
             </AspectRatio>
           </div>
@@ -42,7 +49,7 @@ export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProp
                   <img
                     src={article.image_url}
                     alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className={imageClassName}
                   />
                 </AspectRatio>
               </div>
