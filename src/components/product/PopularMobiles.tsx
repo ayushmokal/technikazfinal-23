@@ -3,38 +3,74 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export function PopularMobiles() {
+  const { toast } = useToast();
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
 
-  const { data, isLoading: isLoadingMore } = useQuery({
+  const { data, isLoading: isLoadingMore, error } = useQuery({
     queryKey: ['popular-mobiles', page],
     queryFn: async () => {
       const from = (page - 1) * itemsPerPage;
-      const to = from + itemsPerPage - 1;
-
-      const { data, error, count } = await supabase
+      
+      // First, get the total count
+      const { count } = await supabase
         .from('mobile_products')
-        .select('*', { count: 'exact' })
-        .range(from, to);
+        .select('*', { count: 'exact', head: true });
 
-      if (error) throw error;
+      // If the requested range is beyond the total count, return current data
+      if (count !== null && from >= count) {
+        return {
+          items: [],
+          count,
+        };
+      }
+
+      // Fetch the actual data
+      const { data, error } = await supabase
+        .from('mobile_products')
+        .select('*')
+        .range(from, from + itemsPerPage - 1);
+
+      if (error) {
+        console.error('Error fetching mobiles:', error);
+        throw error;
+      }
       
       return {
         items: data,
         count,
       };
     },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load mobile products. Please try again.",
+      });
+      console.error('Query error:', error);
+    },
   });
 
   const popularMobiles = data?.items || [];
   const totalCount = data?.count || 0;
-  const hasMore = popularMobiles.length < totalCount;
+  const hasMore = popularMobiles.length > 0 && (page * itemsPerPage) < totalCount;
 
   const handleLoadMore = () => {
-    setPage(prev => prev + 1);
+    if (hasMore) {
+      setPage(prev => prev + 1);
+    }
   };
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500">Failed to load mobile products. Please try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <section className="mt-16">
