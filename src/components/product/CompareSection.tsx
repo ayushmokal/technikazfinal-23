@@ -140,30 +140,28 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
       {selectedProducts.length < 3 && (
         <div>
           <h3 className="text-lg font-semibold mb-4">Add Products to Compare</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {products.map((product) => {
-              const isSelected = selectedProducts.some(p => p.id === product.id);
-              return (
-                <div key={product.id} className="border rounded-lg p-4">
-                  <img
-                    src={product.image_url || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-32 object-contain mb-2"
-                  />
-                  <h4 className="font-medium text-sm">{product.name}</h4>
-                  <p className="text-sm text-muted-foreground mb-2">₹{product.price.toLocaleString()}</p>
-                  <Button
-                    variant={isSelected ? "secondary" : "default"}
-                    className="w-full"
-                    onClick={() => addToCompare(product)}
-                    disabled={isSelected}
-                  >
-                    {isSelected ? "Added" : "Compare"}
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+          {products.map((product) => {
+            const isSelected = selectedProducts.some(p => p.id === product.id);
+            return (
+              <div key={product.id} className="border rounded-lg p-4">
+                <img
+                  src={product.image_url || "/placeholder.svg"}
+                  alt={product.name}
+                  className="w-full h-32 object-contain mb-2"
+                />
+                <h4 className="font-medium text-sm">{product.name}</h4>
+                <p className="text-sm text-muted-foreground mb-2">₹{product.price.toLocaleString()}</p>
+                <Button
+                  variant={isSelected ? "secondary" : "default"}
+                  className="w-full"
+                  onClick={() => addToCompare(product)}
+                  disabled={isSelected}
+                >
+                  {isSelected ? "Added" : "Compare"}
+                </Button>
+              </div>
+            );
+          })}
         </div>
       )}
 
