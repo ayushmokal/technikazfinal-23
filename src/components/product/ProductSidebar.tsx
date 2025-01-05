@@ -8,10 +8,11 @@ interface ProductSidebarProps {
 export function ProductSidebar({ activeSection, onSectionChange }: ProductSidebarProps) {
   const sections = [
     { id: 'overview', label: 'Overview' },
+    { id: 'pictures', label: 'Pictures' },
     { id: 'specifications', label: 'Specifications' },
-    { id: 'features', label: 'Features' },
-    { id: 'reviews', label: 'Reviews' },
-    { id: 'compare', label: 'Compare' },
+    { id: 'expert-review', label: 'Expert Review' },
+    { id: 'comparison', label: 'Comparison' },
+    { id: 'user-comments', label: 'User Comments' },
   ];
 
   const scrollToSection = (sectionId: string) => {
