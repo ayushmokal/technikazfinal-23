@@ -39,8 +39,8 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">PHOTO ALBUMS</h2>
-        <a href="#" className="text-emerald-600 text-sm hover:underline">
+        <h2 className="text-lg font-bold">PHOTO ALBUMS</h2>
+        <a href="#" className="text-emerald-600 text-sm font-semibold hover:underline">
           View {productName} Images →
         </a>
       </div>
@@ -51,7 +51,7 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className="px-4 py-2 text-sm font-medium text-gray-600 whitespace-nowrap border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-600 hover:text-emerald-600 transition-colors"
+              className="px-4 py-2 text-sm font-bold text-gray-600 whitespace-nowrap border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-600 hover:text-emerald-600 transition-colors"
             >
               {category.label} ({category.count})
             </TabsTrigger>
