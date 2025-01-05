@@ -9,7 +9,7 @@ interface ProductComparisonCardProps {
 
 export function ProductComparisonCard({ product, onCompare, isSelected }: ProductComparisonCardProps) {
   return (
-    <div className="border rounded-lg p-4">
+    <div className="border rounded-lg p-4 bg-white shadow-sm">
       <img
         src={product.image_url || "/placeholder.svg"}
         alt={product.name}
@@ -23,7 +23,7 @@ export function ProductComparisonCard({ product, onCompare, isSelected }: Produc
         onClick={() => onCompare(product)}
         disabled={isSelected}
       >
-        {isSelected ? "Added" : "Compare"}
+        {isSelected ? "Added" : "Add to Compare"}
       </Button>
     </div>
   );
