@@ -1,20 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export function PopularMobiles() {
-  const { data: popularMobiles = [] } = useQuery({
-    queryKey: ['popular-mobiles'],
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const { data, isLoading: isLoadingMore, fetchNextPage, hasNextPage } = useQuery({
+    queryKey: ['popular-mobiles', page],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const from = (page - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+
+      const { data, error, count } = await supabase
         .from('mobile_products')
-        .select('*')
-        .limit(6);
+        .select('*', { count: 'exact' })
+        .range(from, to);
 
       if (error) throw error;
-      return data;
+      
+      return {
+        items: data,
+        count,
+      };
     },
   });
+
+  const popularMobiles = data?.items || [];
+  const totalCount = data?.count || 0;
+  const hasMore = popularMobiles.length < totalCount;
+
+  const handleLoadMore = () => {
+    setPage(prev => prev + 1);
+  };
 
   return (
     <section className="mt-16">
@@ -57,6 +77,19 @@ export function PopularMobiles() {
           </Link>
         ))}
       </div>
+      
+      {hasMore && (
+        <div className="flex justify-center mt-8">
+          <Button
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            variant="outline"
+            size="lg"
+          >
+            {isLoadingMore ? "Loading..." : "Load More Mobiles"}
+          </Button>
+        </div>
+      )}
     </section>
   );
 }
