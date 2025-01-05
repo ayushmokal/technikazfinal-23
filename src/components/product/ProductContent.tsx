@@ -9,6 +9,21 @@ import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Heart, Calendar } from "lucide-react";
 
+const getBrandWebsite = (brand: string): string => {
+  const brandWebsites: { [key: string]: string } = {
+    'Apple': 'https://www.apple.com',
+    'Samsung': 'https://www.samsung.com',
+    'OnePlus': 'https://www.oneplus.com',
+    'Xiaomi': 'https://www.mi.com',
+    'ASUS': 'https://www.asus.com',
+    'Dell': 'https://www.dell.com',
+    'HP': 'https://www.hp.com',
+    'Lenovo': 'https://www.lenovo.com',
+    // Add more brands as needed
+  };
+  return brandWebsites[brand] || '#';
+};
+
 interface ProductContentProps {
   product: LaptopProduct | MobileProduct;
   type: 'mobile' | 'laptop';
@@ -18,6 +33,7 @@ interface ProductContentProps {
 export function ProductContent({ product, type }: ProductContentProps) {
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
+  const brandWebsite = getBrandWebsite(product.brand);
 
   return (
     <div className="flex-1 space-y-16">
@@ -37,7 +53,14 @@ export function ProductContent({ product, type }: ProductContentProps) {
                     <span>Released January 2024</span>
                   </div>
                   <span>•</span>
-                  <a href="#" className="text-primary hover:underline">About {product.brand}</a>
+                  <a 
+                    href={brandWebsite} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-primary hover:underline"
+                  >
+                    About {product.brand}
+                  </a>
                 </div>
               </div>
               <Button variant="default" className="bg-teal-600 hover:bg-teal-700">Compare</Button>
