@@ -38,14 +38,20 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold mb-4">PHOTO ALBUMS</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">PHOTO ALBUMS</h2>
+        <a href="#" className="text-primary hover:underline">
+          View {productName} Images →
+        </a>
+      </div>
+      
       <Tabs defaultValue="design" className="w-full">
-        <TabsList className="w-full justify-start overflow-x-auto">
+        <TabsList className="w-full h-auto p-0 bg-transparent space-x-1">
           {categories.map((category) => (
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className="px-4 py-2 whitespace-nowrap"
+              className="px-4 py-2 whitespace-nowrap data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               {category.label} ({category.count})
             </TabsTrigger>
@@ -53,8 +59,8 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
         </TabsList>
 
         {categories.map((category) => (
-          <TabsContent key={category.id} value={category.id}>
-            <div className="aspect-square relative overflow-hidden rounded-lg border bg-white">
+          <TabsContent key={category.id} value={category.id} className="mt-6">
+            <div className="aspect-[4/3] relative overflow-hidden rounded-lg border bg-white">
               <img
                 src={images[currentIndex]}
                 alt={`${productName} - ${category.label}`}
