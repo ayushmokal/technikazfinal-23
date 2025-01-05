@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductKeySpecs } from "./ProductKeySpecs";
 import { ProductComments } from "./ProductComments";
+import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Heart } from "lucide-react";
 
@@ -159,6 +160,9 @@ export function ProductContent({ product, type }: ProductContentProps) {
         <h2 className="text-2xl font-bold mb-6">Comments</h2>
         <ProductComments productId={product.id} />
       </section>
+
+      {/* Popular Mobiles Section */}
+      {isMobile && <PopularMobiles />}
     </div>
   );
 }
