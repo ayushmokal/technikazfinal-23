@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 export function PopularMobiles() {
@@ -20,29 +19,42 @@ export function PopularMobiles() {
   return (
     <section className="mt-16">
       <h2 className="text-2xl font-bold mb-6">Popular Mobiles</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {popularMobiles.map((mobile) => (
-          <div key={mobile.id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
-            <div className="aspect-w-4 aspect-h-3 mb-4">
-              <img
-                src={mobile.image_url || "/placeholder.svg"}
-                alt={mobile.name}
-                className="w-full h-48 object-contain"
-              />
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold text-lg">{mobile.name}</h3>
-              <p className="text-muted-foreground">₹{mobile.price.toLocaleString()}</p>
-              <div className="text-sm text-muted-foreground space-y-1">
-                <p>{mobile.display_specs}</p>
-                <p>{mobile.processor}</p>
-                <p>{mobile.camera}</p>
+          <Link 
+            key={mobile.id} 
+            to={`/product/${mobile.id}?type=mobile`}
+            className="group"
+          >
+            <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow border border-gray-200">
+              <div className="aspect-w-4 aspect-h-3 mb-6">
+                <img
+                  src={mobile.image_url || "/placeholder.svg"}
+                  alt={mobile.name}
+                  className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <Link to={`/product/${mobile.id}?type=mobile`}>
-                <Button variant="outline" className="w-full mt-2">View Details</Button>
-              </Link>
+              <div className="space-y-3">
+                <h3 className="font-semibold text-lg text-gray-900 group-hover:text-primary/90 transition-colors">
+                  {mobile.name}
+                </h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-lg font-bold text-primary">₹{mobile.price.toLocaleString()}</span>
+                </div>
+                <div className="space-y-1.5 text-sm text-gray-600">
+                  <p className="line-clamp-1">
+                    Display: {mobile.display_specs}
+                  </p>
+                  <p className="line-clamp-1">
+                    Camera: {mobile.camera}
+                  </p>
+                  <p className="line-clamp-1">
+                    Battery: {mobile.battery}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
