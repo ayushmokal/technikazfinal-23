@@ -44,14 +44,15 @@ export function PopularMobiles() {
         count,
       };
     },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load mobile products. Please try again.",
-      });
-      console.error('Query error:', error);
-    },
+    meta: {
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load mobile products. Please try again.",
+        });
+      }
+    }
   });
 
   const popularMobiles = data?.items || [];
