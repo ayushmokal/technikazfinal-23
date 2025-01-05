@@ -60,7 +60,7 @@ export function ProductGallery({ mainImage, productName }: ProductGalleryProps) 
         {images.map((image, index) => (
           <div
             key={index}
-            className={`w-20 h-20 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer ${
+            className={`w-16 h-16 flex-shrink-0 rounded-lg border overflow-hidden cursor-pointer ${
               index === currentIndex ? 'ring-2 ring-primary' : ''
             }`}
             onClick={() => {
