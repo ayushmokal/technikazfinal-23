@@ -22,7 +22,7 @@ export function ProductKeySpecs({
       <div className="flex flex-col items-center text-center">
         <Monitor className="h-8 w-8 mb-2 text-primary stroke-1" />
         <span className="text-sm font-medium">6.73 inches</span>
-        <span className="text-xs text-muted-foreground">Screen</span>
+        <span className="text-xs text-muted-foreground">Mobile Display</span>
       </div>
       
       <div className="flex flex-col items-center text-center">
