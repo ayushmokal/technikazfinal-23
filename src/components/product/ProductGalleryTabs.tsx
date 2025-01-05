@@ -40,9 +40,6 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">PHOTO ALBUMS</h2>
-        <a href="#" className="text-emerald-600 text-sm font-semibold hover:underline">
-          View {productName} Images →
-        </a>
       </div>
       
       <Tabs defaultValue="design" className="w-full">
