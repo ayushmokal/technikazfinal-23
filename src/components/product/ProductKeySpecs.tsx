@@ -1,4 +1,4 @@
-import { Battery, Camera, Cpu, Laptop, Monitor, Smartphone } from "lucide-react";
+import { Battery, Camera, Cpu, Laptop, Smartphone } from "lucide-react";
 
 interface ProductKeySpecsProps {
   type?: 'mobile' | 'laptop';
@@ -20,7 +20,7 @@ export function ProductKeySpecs({
   return (
     <div className="grid grid-cols-4 gap-8 py-6 border-y">
       <div className="flex flex-col items-center text-center">
-        <Monitor className="h-8 w-8 mb-2 text-primary stroke-1" />
+        <Smartphone className="h-8 w-8 mb-2 text-primary stroke-1" />
         <span className="text-sm font-medium">{screenSize || "6.73 inches"}</span>
         <span className="text-xs text-muted-foreground">Screen</span>
       </div>
