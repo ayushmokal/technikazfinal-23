@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ProductGallery } from "./ProductGallery";
+import { ProductGalleryTabs } from "./ProductGalleryTabs";
 import { useState } from "react";
 
 interface ProductSidebarProps {
@@ -52,8 +52,8 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
       </div>
 
       <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
-        <DialogContent className="max-w-4xl">
-          <ProductGallery mainImage={mainImage} productName={productName} />
+        <DialogContent className="max-w-5xl">
+          <ProductGalleryTabs mainImage={mainImage} productName={productName} />
         </DialogContent>
       </Dialog>
     </>
