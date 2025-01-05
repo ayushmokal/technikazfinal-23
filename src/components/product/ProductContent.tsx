@@ -27,10 +27,12 @@ export function ProductContent({ product, type }: ProductContentProps) {
               <div>
                 <div className="flex items-center gap-4">
                   <h1 className="text-3xl font-bold">{product.name}</h1>
-                  <Heart className="w-6 h-6 stroke-1" />
+                  <Heart className="w-6 h-6 stroke-1 cursor-pointer" />
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                  <span>Released January 2024</span>
+                  <span className="flex items-center gap-1">
+                    <span>Released January 2024</span>
+                  </span>
                   <span>•</span>
                   <a href="#" className="text-primary hover:underline">About {product.brand}</a>
                 </div>
@@ -47,7 +49,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
             </div>
 
             {isMobile && (
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-8 mt-6">
                 <Select>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="256 GB Storage" />
