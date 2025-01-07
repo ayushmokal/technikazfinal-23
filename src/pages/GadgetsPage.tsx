@@ -5,6 +5,7 @@ import { categories } from "@/types/blog";
 import { CategoryPageLayout } from "@/components/CategoryPageLayout";
 import { MobileProductList } from "@/components/product/MobileProductList";
 import { LaptopProductGrid } from "@/components/product/LaptopProductGrid";
+import { BlogSidebar } from "@/components/BlogSidebar";
 import type { MobileProduct, LaptopProduct } from "@/types/product";
 
 export default function GadgetsPage() {
@@ -75,10 +76,10 @@ export default function GadgetsPage() {
   });
 
   const ProductGrids = () => (
-    <>
+    <div className="lg:col-span-8">
       {subcategory === "MOBILE" && <MobileProductList products={mobileProducts} />}
       {subcategory === "LAPTOPS" && <LaptopProductGrid products={laptops} />}
-    </>
+    </div>
   );
 
   return (
@@ -91,7 +92,12 @@ export default function GadgetsPage() {
       selectedSubcategory={subcategory}
       onSubcategoryChange={(sub) => setSubcategory(sub as typeof subcategory)}
     >
-      <ProductGrids />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <ProductGrids />
+        <div className="lg:col-span-4">
+          <BlogSidebar />
+        </div>
+      </div>
     </CategoryPageLayout>
   );
 }
