@@ -1,11 +1,10 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/Layout";
 import { ProductSpecTable } from "@/components/product/ProductSpecTable";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 
@@ -19,6 +18,10 @@ export default function ProductSpecificationsPage() {
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
     queryFn: async () => {
+      if (!id) {
+        throw new Error('Product ID is required');
+      }
+
       const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
         .from(tableName)
@@ -47,6 +50,7 @@ export default function ProductSpecificationsPage() {
 
       return data as LaptopProduct | MobileProduct;
     },
+    enabled: !!id,
   });
 
   if (isLoading || !product) {
