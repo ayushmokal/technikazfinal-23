@@ -58,6 +58,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       ram: "",
       storage: "",
       battery: "",
+      camera: "", // Initialize camera field
       gallery_images: [],
     },
   });
@@ -110,6 +111,11 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
+
+      // Ensure camera field is set for mobile products
+      if (productType === 'mobile' && !data.camera) {
+        throw new Error('Camera specifications are required for mobile products');
+      }
 
       // Handle main image upload
       if (mainImageFile) {

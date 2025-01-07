@@ -58,9 +58,10 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
           <FormField
             control={form.control}
             name="camera"
+            rules={{ required: "Camera specifications are required for mobile products" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Camera</FormLabel>
+                <FormLabel className="font-medium">Camera*</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter camera specifications" {...field} />
                 </FormControl>
