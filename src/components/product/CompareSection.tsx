@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductComparisonCard } from "./ProductComparisonCard";
 import { ComparisonTable } from "./ComparisonTable";
 import { MobileProduct, LaptopProduct } from "@/types/product";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface CompareSectionProps {
   currentProduct: MobileProduct | LaptopProduct;
@@ -12,6 +15,8 @@ interface CompareSectionProps {
 
 export function CompareSection({ currentProduct, type }: CompareSectionProps) {
   const [selectedProducts, setSelectedProducts] = useState<(MobileProduct | LaptopProduct)[]>([currentProduct]);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const { data: products = [] } = useQuery({
     queryKey: ['products', type],
@@ -31,11 +36,33 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
   const addToCompare = (product: MobileProduct | LaptopProduct) => {
     if (selectedProducts.length < 3) {
       setSelectedProducts([...selectedProducts, product]);
+    } else {
+      toast({
+        title: "Maximum products reached",
+        description: "You can compare up to 3 products at a time",
+      });
     }
   };
 
   const removeFromCompare = (productId: string) => {
     setSelectedProducts(selectedProducts.filter(p => p.id !== productId));
+  };
+
+  const handleCompare = () => {
+    if (selectedProducts.length > 1) {
+      navigate('/comparison', {
+        state: {
+          selectedProducts,
+          type,
+          currentProduct,
+        },
+      });
+    } else {
+      toast({
+        title: "Add more products",
+        description: "Please select at least one more product to compare",
+      });
+    }
   };
 
   return (
@@ -57,12 +84,23 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
       )}
 
       {selectedProducts.length > 0 && (
-        <ComparisonTable
-          selectedProducts={selectedProducts}
-          currentProduct={currentProduct}
-          type={type}
-          onRemove={removeFromCompare}
-        />
+        <>
+          <ComparisonTable
+            selectedProducts={selectedProducts}
+            currentProduct={currentProduct}
+            type={type}
+            onRemove={removeFromCompare}
+          />
+          <div className="flex justify-end">
+            <Button
+              onClick={handleCompare}
+              className="bg-teal-600 hover:bg-teal-700"
+              disabled={selectedProducts.length < 2}
+            >
+              Compare Products
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
