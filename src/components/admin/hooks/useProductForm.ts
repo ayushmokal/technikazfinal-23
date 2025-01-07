@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   mobileProductSchema, 
   laptopProductSchema,
   type ProductFormData 
 } from "@/schemas/productSchemas";
+import { useImageUpload } from "./useImageUpload";
+import { useAuthCheck } from "./useAuthCheck";
 
 interface UseProductFormProps {
   initialData?: ProductFormData & { id?: string };
@@ -17,12 +17,17 @@ interface UseProductFormProps {
 }
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [mainImageFile, setMainImageFile] = useState<File | null>(null);
-  const [galleryImageFiles, setGalleryImageFiles] = useState<File[]>([]);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
+  const { toast, navigate } = useAuthCheck();
+  const { 
+    mainImageFile, 
+    galleryImageFiles, 
+    handleMainImageChange, 
+    handleGalleryImagesChange, 
+    handleRemoveGalleryImage,
+    uploadImage 
+  } = useImageUpload();
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
@@ -46,60 +51,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       setProductType(propProductType);
     }
   }, [propProductType]);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error || !session) {
-        toast({
-          variant: "destructive",
-          title: "Authentication Error",
-          description: "Please login again to continue.",
-        });
-        navigate("/admin/login");
-      }
-    };
-    checkAuth();
-  }, [navigate, toast]);
-
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setMainImageFile(e.target.files[0]);
-    }
-  };
-
-  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setGalleryImageFiles(Array.from(e.target.files));
-    }
-  };
-
-  const handleRemoveGalleryImage = (index: number) => {
-    const currentImages = form.getValues().gallery_images || [];
-    const updatedImages = [...currentImages];
-    updatedImages.splice(index, 1);
-    form.setValue('gallery_images', updatedImages);
-  };
-
-  const uploadImage = async (file: File, folder: string) => {
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `${folder}/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from("blog-images")
-      .upload(filePath, file);
-
-    if (uploadError) {
-      throw uploadError;
-    }
-
-    const { data: publicUrlData } = supabase.storage
-      .from("blog-images")
-      .getPublicUrl(filePath);
-
-    return publicUrlData.publicUrl;
-  };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
@@ -149,18 +100,16 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
+        const insertData = productType === 'mobile' 
+          ? {
+              ...data,
+              camera: (data as any).camera || "",
+            }
+          : data;
+
         const { data: insertedData, error } = await supabase
           .from(table)
-          .insert({
-            ...data,
-            battery: data.battery || "",
-            brand: data.brand || "",
-            display_specs: data.display_specs || "",
-            processor: data.processor || "",
-            ram: data.ram || "",
-            storage: data.storage || "",
-            ...(productType === 'mobile' ? { camera: (data as any).camera || "" } : {})
-          })
+          .insert(insertData)
           .select()
           .single();
 
@@ -174,8 +123,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       }
 
       form.reset();
-      setMainImageFile(null);
-      setGalleryImageFiles([]);
       onSuccess?.(result.id);
     } catch (error: any) {
       console.error('Error submitting form:', error);
@@ -204,7 +151,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     productType,
     handleMainImageChange,
     handleGalleryImagesChange,
-    handleRemoveGalleryImage,
+    handleRemoveGalleryImage: (index: number) => handleRemoveGalleryImage(index, form),
     onSubmit,
   };
 }
