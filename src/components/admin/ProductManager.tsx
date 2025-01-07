@@ -1,16 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ProductImage } from "./ProductImage";
+import { ProductTable } from "./ProductTable";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
@@ -106,68 +97,16 @@ export function ProductManager({ productType }: ProductManagerProps) {
 
   return (
     <div className="space-y-6">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Brand</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>
-                {product.image_url && (
-                  <div className="w-20 h-20">
-                    <ProductImage imageUrl={product.image_url} productName={product.name} />
-                  </div>
-                )}
-              </TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{product.brand}</TableCell>
-              <TableCell>₹{product.price.toLocaleString()}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedProduct(product)}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setEditingProduct(product)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedProductForReview(product);
-                      setShowExpertReview(true);
-                    }}
-                  >
-                    Add Review
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(product.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <ProductTable
+        products={products}
+        onView={setSelectedProduct}
+        onEdit={setEditingProduct}
+        onAddReview={(product) => {
+          setSelectedProductForReview(product);
+          setShowExpertReview(true);
+        }}
+        onDelete={handleDelete}
+      />
 
       <ProductDetailsDialog 
         product={selectedProduct} 
