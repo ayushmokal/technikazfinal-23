@@ -1,12 +1,12 @@
 import { ProductSpecifications } from "@/components/admin/ProductSpecifications";
-import { ProductReview } from "./ProductReview";
+import { ProductReviewCard } from "./ProductReviewCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductKeySpecs } from "./ProductKeySpecs";
 import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
-import { Heart, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
 
@@ -118,63 +118,26 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
       {/* Review Section */}
       <section id="review" className="scroll-mt-24">
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold">{product.name} REVIEW</h2>
-          <ProductReview productName={product.name} />
-          <div className="mb-12">
-            <a href="#" className="text-primary hover:underline text-sm">Read Full Reviews →</a>
-          </div>
-        </div>
+        <ProductReviewCard 
+          productName={product.name}
+          pros={[
+            "Crisp display",
+            "Reliable performance",
+            "Sleek design",
+            "Solid battery"
+          ]}
+          cons={[
+            "Lowlight photography needs improvements",
+            "No stereo speakers"
+          ]}
+          verdict="The device offers a bunch of thoughtful improvements over its predecessor, making it a value-for-money option for many customers. Its display is still one of the best in the segment. The new processor also offers a decent performance, gaming included. However, some aspects need refinement. Its cameras (in daylight) are decent if not the best."
+        />
       </section>
 
       {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Full Specification</h2>
         <ProductSpecifications product={product} />
-      </section>
-
-      {/* Expert Review Section */}
-      <section id="expert-review" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
-        <div className="space-y-6">
-          <h3 className="text-xl font-semibold">{product.name} REVIEW</h3>
-          <div className="grid grid-cols-2 gap-8">
-            <div>
-              <h4 className="font-semibold text-green-600 mb-4">PROS</h4>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <span className="text-green-600">+</span>
-                  <span>Premium build quality</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-600">+</span>
-                  <span>Excellent performance</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-600">+</span>
-                  <span>Great camera system</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-red-600 mb-4">CONS</h4>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <span className="text-red-600">-</span>
-                  <span>Premium pricing</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-red-600">-</span>
-                  <span>No charger in box</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-red-600">-</span>
-                  <span>Average battery life</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Compare Section */}
