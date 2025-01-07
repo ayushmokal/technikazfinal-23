@@ -1,15 +1,15 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
-import { ExpertReviewForm } from "./ExpertReviewForm";
-import { useToast } from "@/hooks/use-toast";
-import { type ProductFormData } from "@/schemas/productSchemas";
+import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface ProductFormProps {
   initialData?: ProductFormData & { id?: string };
@@ -18,18 +18,25 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
-  const { toast } = useToast();
+  const [showExpertReview, setShowExpertReview] = useState(false);
+  const [tempProductId, setTempProductId] = useState<string>("");
+  
   const {
     form,
     isLoading,
     productType,
-    showExpertReview,
-    setShowExpertReview,
     handleMainImageChange,
     handleGalleryImagesChange,
     handleRemoveGalleryImage,
     onSubmit,
-  } = useProductForm({ initialData, onSuccess, productType: propProductType });
+  } = useProductForm({ 
+    initialData, 
+    onSuccess: (productId) => {
+      setTempProductId(productId);
+      onSuccess?.();
+    }, 
+    productType: propProductType 
+  });
 
   return (
     <div className="space-y-6">
@@ -58,6 +65,22 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                 </div>
               </div>
 
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowExpertReview(!showExpertReview)}
+                className="w-full"
+              >
+                {showExpertReview ? 'Hide' : 'Add'} Expert Review
+              </Button>
+
+              {showExpertReview && (
+                <ExpertReviewForm 
+                  productId={initialData?.id || tempProductId} 
+                  className="mt-6"
+                />
+              )}
+
               <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
@@ -67,31 +90,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           </Form>
         </CardContent>
       </Card>
-
-      {(initialData?.id || showExpertReview) && (
-        <div className="space-y-4">
-          <Button
-            variant="outline"
-            onClick={() => setShowExpertReview(!showExpertReview)}
-            className="w-full"
-          >
-            {showExpertReview ? 'Hide' : 'Add'} Expert Review
-          </Button>
-          
-          {showExpertReview && (
-            <ExpertReviewForm 
-              productId={initialData?.id || ''} 
-              onSuccess={() => {
-                setShowExpertReview(false);
-                toast({
-                  title: "Success",
-                  description: "Expert review added successfully",
-                });
-              }}
-            />
-          )}
-        </div>
-      )}
     </div>
   );
 }

@@ -12,18 +12,17 @@ import {
 
 interface UseProductFormProps {
   initialData?: ProductFormData & { id?: string };
-  onSuccess?: () => void;
+  onSuccess?: (productId: string) => void;
   productType?: 'mobile' | 'laptop';
 }
 
-export const useProductForm = ({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) => {
+export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [galleryImageFiles, setGalleryImageFiles] = useState<File[]>([]);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
-  const [showExpertReview, setShowExpertReview] = useState(false);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
@@ -63,6 +62,25 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
     checkAuth();
   }, [navigate, toast]);
 
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setMainImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setGalleryImageFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    const currentImages = form.getValues().gallery_images || [];
+    const updatedImages = [...currentImages];
+    updatedImages.splice(index, 1);
+    form.setValue('gallery_images', updatedImages);
+  };
+
   const uploadImage = async (file: File, folder: string) => {
     const fileExt = file.name.split(".").pop();
     const fileName = `${Math.random()}.${fileExt}`;
@@ -81,25 +99,6 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
       .getPublicUrl(filePath);
 
     return publicUrlData.publicUrl;
-  };
-
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setMainImageFile(e.target.files[0]);
-    }
-  };
-
-  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setGalleryImageFiles(Array.from(e.target.files));
-    }
-  };
-
-  const handleRemoveGalleryImage = (index: number) => {
-    const currentImages = form.getValues().gallery_images || [];
-    const updatedImages = [...currentImages];
-    updatedImages.splice(index, 1);
-    form.setValue('gallery_images', updatedImages);
   };
 
   const onSubmit = async (data: ProductFormData) => {
@@ -137,16 +136,7 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
       if (initialData?.id) {
         const { data: updatedData, error } = await supabase
           .from(table)
-          .update({
-            ...data,
-            battery: data.battery || "",
-            brand: data.brand || "",
-            display_specs: data.display_specs || "",
-            processor: data.processor || "",
-            ram: data.ram || "",
-            storage: data.storage || "",
-            ...(productType === 'mobile' ? { camera: (data as any).camera || "" } : {})
-          })
+          .update(data)
           .eq('id', initialData.id)
           .select()
           .single();
@@ -186,11 +176,7 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
       form.reset();
       setMainImageFile(null);
       setGalleryImageFiles([]);
-      onSuccess?.();
-      
-      if (result?.id) {
-        setShowExpertReview(true);
-      }
+      onSuccess?.(result.id);
     } catch (error: any) {
       console.error('Error submitting form:', error);
       if (error.message?.includes('JWT')) {
@@ -216,11 +202,9 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
     form,
     isLoading,
     productType,
-    showExpertReview,
-    setShowExpertReview,
     handleMainImageChange,
     handleGalleryImagesChange,
     handleRemoveGalleryImage,
     onSubmit,
   };
-};
+}
