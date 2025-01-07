@@ -9,49 +9,43 @@ import { useEffect } from "react";
 export function PopularMobiles() {
   const { toast } = useToast();
   const [page, setPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 6;
   const { ref: loadMoreRef, inView } = useInView();
 
-  const { data, isLoading, error, isFetching } = useQuery({
+  const { data, isLoading: isLoadingMore, error } = useQuery({
     queryKey: ['popular-mobiles', page],
     queryFn: async () => {
-      try {
-        const from = (page - 1) * itemsPerPage;
-        
-        // First, get the total count
-        const { count, error: countError } = await supabase
-          .from('mobile_products')
-          .select('*', { count: 'exact', head: true });
+      const from = (page - 1) * itemsPerPage;
+      
+      // First, get the total count
+      const { count } = await supabase
+        .from('mobile_products')
+        .select('*', { count: 'exact', head: true });
 
-        if (countError) throw countError;
-
-        // If the requested range is beyond the total count, return current data
-        if (count !== null && from >= count) {
-          return {
-            items: [],
-            count,
-          };
-        }
-
-        // Fetch the actual data
-        const { data: newItems, error: fetchError } = await supabase
-          .from('mobile_products')
-          .select('*')
-          .range(from, from + itemsPerPage - 1)
-          .order('created_at', { ascending: false });
-
-        if (fetchError) throw fetchError;
-        
+      // If the requested range is beyond the total count, return current data
+      if (count !== null && from >= count) {
         return {
-          items: newItems || [],
-          count: count || 0,
+          items: [],
+          count,
         };
-      } catch (err) {
-        console.error('Error fetching mobile products:', err);
-        throw new Error('Failed to load mobile products');
       }
+
+      // Fetch the actual data
+      const { data, error } = await supabase
+        .from('mobile_products')
+        .select('*')
+        .range(from, from + itemsPerPage - 1);
+
+      if (error) {
+        console.error('Error fetching mobiles:', error);
+        throw error;
+      }
+      
+      return {
+        items: data,
+        count,
+      };
     },
-    placeholderData: (previousData) => previousData,
     meta: {
       onError: () => {
         toast({
@@ -68,10 +62,10 @@ export function PopularMobiles() {
   const hasMore = popularMobiles.length > 0 && (page * itemsPerPage) < totalCount;
 
   useEffect(() => {
-    if (inView && hasMore && !isFetching) {
+    if (inView && hasMore && !isLoadingMore) {
       setPage(prev => prev + 1);
     }
-  }, [inView, hasMore, isFetching]);
+  }, [inView, hasMore, isLoadingMore]);
 
   if (error) {
     return (
@@ -84,29 +78,29 @@ export function PopularMobiles() {
   return (
     <section className="mt-16">
       <h2 className="text-2xl font-bold mb-6">Popular Mobiles</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {popularMobiles.map((mobile) => (
           <Link 
             key={mobile.id} 
             to={`/product/${mobile.id}?type=mobile`}
             className="group"
           >
-            <div className="bg-white rounded-lg p-4 hover:shadow-lg transition-shadow border border-gray-200 h-full">
-              <div className="aspect-w-4 aspect-h-3 mb-4">
+            <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow border border-gray-200">
+              <div className="aspect-w-4 aspect-h-3 mb-6">
                 <img
                   src={mobile.image_url || "/placeholder.svg"}
                   alt={mobile.name}
                   className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="space-y-2">
-                <h3 className="font-semibold text-lg text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
+              <div className="space-y-3">
+                <h3 className="font-semibold text-lg text-gray-900 group-hover:text-primary/90 transition-colors">
                   {mobile.name}
                 </h3>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-bold text-primary">₹{mobile.price.toLocaleString()}</span>
                 </div>
-                <div className="space-y-1 text-sm text-gray-600">
+                <div className="space-y-1.5 text-sm text-gray-600">
                   <p className="line-clamp-1">
                     Display: {mobile.display_specs}
                   </p>
@@ -125,7 +119,7 @@ export function PopularMobiles() {
       
       {hasMore && (
         <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
-          {isFetching && (
+          {isLoadingMore && (
             <div className="text-gray-500">Loading more products...</div>
           )}
         </div>
