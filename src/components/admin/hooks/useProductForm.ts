@@ -5,7 +5,8 @@ import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchem
 import { useImageUpload } from "./useImageUpload";
 import { useAuthCheck } from "./useAuthCheck";
 import { useProductData } from "./useProductData";
-import type { UseProductFormProps } from "../types/productTypes";
+import { supabase } from "@/integrations/supabase/client";
+import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +45,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
 

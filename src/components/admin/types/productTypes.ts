@@ -1,6 +1,6 @@
 import type { Json } from "@/integrations/supabase/types";
 
-export type MobileProductData = {
+export type BaseProductData = {
   name: string;
   brand: string;
   model_name?: string;
@@ -10,46 +10,32 @@ export type MobileProductData = {
   ram: string;
   storage: string;
   battery: string;
-  camera: string;
   os?: string;
   color?: string;
   image_url?: string;
   gallery_images?: string[];
-  multimedia_specs?: Json;
-  sensor_specs?: Json;
-  network_specs?: Json;
   design_specs?: Json;
-  camera_details?: Json;
-  performance_specs?: Json;
   display_details?: Json;
-  general_specs?: Json;
+  performance_specs?: Json;
+  multimedia_specs?: Json;
+};
+
+export type MobileProductData = BaseProductData & {
+  camera: string;
   chipset?: string;
   charging_specs?: string;
   resolution?: string;
   screen_size?: string;
+  camera_details?: Json;
+  sensor_specs?: Json;
+  network_specs?: Json;
+  general_specs?: Json;
 };
 
-export type LaptopProductData = {
-  name: string;
-  brand: string;
-  model_name?: string;
-  price: number;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
+export type LaptopProductData = BaseProductData & {
   graphics?: string;
-  os?: string;
   ports?: string;
-  color?: string;
-  image_url?: string;
-  gallery_images?: string[];
-  multimedia_specs?: Json;
   connectivity_specs?: Json;
-  design_specs?: Json;
-  performance_specs?: Json;
-  display_details?: Json;
 };
 
 export interface UseProductFormProps {
