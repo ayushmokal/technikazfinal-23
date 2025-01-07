@@ -155,15 +155,27 @@ export function ProductContent({ product, type }: ProductContentProps) {
       <section id="comparison" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
         <div className="bg-white rounded-lg p-8 border">
-          <p className="text-center text-gray-600 mb-4">Add devices to compare with the current device</p>
-          <div className="flex justify-center">
-            <Button 
-              variant="default" 
-              className="bg-teal-600 hover:bg-teal-700"
-              onClick={() => setIsCompareDialogOpen(true)}
-            >
-              Compare
-            </Button>
+          <div className="flex items-center gap-8">
+            <div className="flex-shrink-0">
+              <img 
+                src={product.image_url || "/placeholder.svg"} 
+                alt={product.name} 
+                className="w-32 h-32 object-contain"
+              />
+              <h3 className="text-sm font-medium text-center mt-2">{product.name}</h3>
+            </div>
+            <div className="flex-grow">
+              <p className="text-gray-600 mb-4">Add devices to compare with {product.name}</p>
+              <div className="flex justify-end">
+                <Button 
+                  variant="default" 
+                  className="bg-teal-600 hover:bg-teal-700"
+                  onClick={() => setIsCompareDialogOpen(true)}
+                >
+                  Compare
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
