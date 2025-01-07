@@ -20,7 +20,11 @@ export function ProductKeySpecs({
   return (
     <div className="grid grid-cols-4 gap-8 py-6 border-y">
       <div className="flex flex-col items-center text-center">
-        <Smartphone className="h-8 w-8 mb-2 text-primary stroke-1" />
+        {type === 'mobile' ? (
+          <Smartphone className="h-8 w-8 mb-2 text-primary stroke-1" />
+        ) : (
+          <Laptop className="h-8 w-8 mb-2 text-primary stroke-1" />
+        )}
         <span className="text-sm font-medium">{screenSize || "6.73 inches"}</span>
         <span className="text-xs text-muted-foreground">Screen</span>
       </div>
