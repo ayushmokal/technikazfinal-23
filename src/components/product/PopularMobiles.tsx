@@ -1,50 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
 
 export function PopularMobiles() {
   const { toast } = useToast();
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 6;
-  const { ref: loadMoreRef, inView } = useInView();
 
-  const { data, isLoading: isLoadingMore, error } = useQuery({
-    queryKey: ['popular-mobiles', page],
+  const { data: popularMobiles = [], error } = useQuery({
+    queryKey: ['popular-mobiles'],
     queryFn: async () => {
-      const from = (page - 1) * itemsPerPage;
-      
-      // First, get the total count
-      const { count } = await supabase
-        .from('mobile_products')
-        .select('*', { count: 'exact', head: true });
-
-      // If the requested range is beyond the total count, return current data
-      if (count !== null && from >= count) {
-        return {
-          items: [],
-          count,
-        };
-      }
-
-      // Fetch the actual data
       const { data, error } = await supabase
         .from('mobile_products')
         .select('*')
-        .range(from, from + itemsPerPage - 1);
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching mobiles:', error);
         throw error;
       }
       
-      return {
-        items: data,
-        count,
-      };
+      return data || [];
     },
     meta: {
       onError: () => {
@@ -57,16 +32,6 @@ export function PopularMobiles() {
     }
   });
 
-  const popularMobiles = data?.items || [];
-  const totalCount = data?.count || 0;
-  const hasMore = popularMobiles.length > 0 && (page * itemsPerPage) < totalCount;
-
-  useEffect(() => {
-    if (inView && hasMore && !isLoadingMore) {
-      setPage(prev => prev + 1);
-    }
-  }, [inView, hasMore, isLoadingMore]);
-
   if (error) {
     return (
       <div className="text-center py-8">
@@ -78,14 +43,14 @@ export function PopularMobiles() {
   return (
     <section className="mt-16">
       <h2 className="text-2xl font-bold mb-6">Popular Mobiles</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {popularMobiles.map((mobile) => (
           <Link 
             key={mobile.id} 
             to={`/product/${mobile.id}?type=mobile`}
             className="group"
           >
-            <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow border border-gray-200">
+            <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow border border-gray-200 h-full">
               <div className="aspect-w-4 aspect-h-3 mb-6">
                 <img
                   src={mobile.image_url || "/placeholder.svg"}
@@ -116,14 +81,6 @@ export function PopularMobiles() {
           </Link>
         ))}
       </div>
-      
-      {hasMore && (
-        <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
-          {isLoadingMore && (
-            <div className="text-gray-500">Loading more products...</div>
-          )}
-        </div>
-      )}
     </section>
   );
 }
