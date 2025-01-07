@@ -79,13 +79,13 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       
       let result;
       if (initialData?.id) {
-        result = await updateProduct(table, initialData.id, data);
+        result = await updateProduct(table, initialData.id, data, productType);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        result = await insertProduct(table, data);
+        result = await insertProduct(table, data, productType);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
