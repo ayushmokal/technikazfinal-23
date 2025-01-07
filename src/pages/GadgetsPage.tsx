@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
@@ -7,7 +7,6 @@ import { MobileProductList } from "@/components/product/MobileProductList";
 import { LaptopProductGrid } from "@/components/product/LaptopProductGrid";
 import { BlogSidebar } from "@/components/BlogSidebar";
 import type { MobileProduct, LaptopProduct } from "@/types/product";
-import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 const ITEMS_PER_PAGE = 8;
@@ -17,10 +16,9 @@ export default function GadgetsPage() {
   const { ref, inView } = useInView();
 
   // Query for category-specific featured articles
-  const { data: featuredArticles = [] } = useInfiniteQuery({
+  const { data: featuredArticles } = useInfiniteQuery({
     queryKey: ['gadgets-featured-articles'],
     queryFn: async () => {
-      console.log('Fetching featured gadgets articles');
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -30,14 +28,15 @@ export default function GadgetsPage() {
       
       if (error) throw error;
       return data || [];
-    }
+    },
+    initialPageParam: 0,
+    getNextPageParam: () => null, // No pagination for featured articles
   });
 
   // Query for all gadgets articles
-  const { data: articles = [] } = useInfiniteQuery({
+  const { data: articles } = useInfiniteQuery({
     queryKey: ['gadgets-articles', subcategory],
     queryFn: async () => {
-      console.log('Fetching gadgets articles with subcategory:', subcategory);
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -47,7 +46,9 @@ export default function GadgetsPage() {
       
       if (error) throw error;
       return data || [];
-    }
+    },
+    initialPageParam: 0,
+    getNextPageParam: () => null, // No pagination for articles
   });
 
   // Infinite query for mobile products
@@ -69,9 +70,13 @@ export default function GadgetsPage() {
         .range(from, to);
       
       if (error) throw error;
-      return { data, nextPage: data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined };
+      return {
+        data: data || [],
+        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined
+      };
     },
     getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0,
   });
 
   // Infinite query for laptops
@@ -93,21 +98,25 @@ export default function GadgetsPage() {
         .range(from, to);
       
       if (error) throw error;
-      return { data, nextPage: data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined };
+      return {
+        data: data || [],
+        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined
+      };
     },
     getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0,
   });
 
   // Handle infinite scroll
   useEffect(() => {
-    if (inView) {
-      if (subcategory === "MOBILE" && hasNextMobile) {
-        fetchNextMobile();
-      } else if (subcategory === "LAPTOPS" && hasNextLaptop) {
-        fetchNextLaptop();
-      }
+    if (!inView) return;
+
+    if (subcategory === "MOBILE" && hasNextMobile) {
+      fetchNextMobile();
+    } else if (subcategory === "LAPTOPS" && hasNextLaptop) {
+      fetchNextLaptop();
     }
-  }, [inView, subcategory]);
+  }, [inView, subcategory, hasNextMobile, hasNextLaptop, fetchNextMobile, fetchNextLaptop]);
 
   // Flatten the pages data
   const mobileProducts = mobileData?.pages.flatMap(page => page.data) || [];
@@ -139,8 +148,8 @@ export default function GadgetsPage() {
     <CategoryPageLayout
       title="Gadgets"
       category="GADGETS"
-      articles={articles}
-      featuredArticles={featuredArticles}
+      articles={articles?.pages.flatMap(page => page) || []}
+      featuredArticles={featuredArticles?.pages.flatMap(page => page) || []}
       subcategories={categories.GADGETS}
       selectedSubcategory={subcategory}
       onSubcategoryChange={(sub) => setSubcategory(sub as typeof subcategory)}
