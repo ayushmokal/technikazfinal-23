@@ -37,7 +37,7 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
       ram: "",
       storage: "",
       battery: "",
-      camera: "",
+      ...(productType === 'mobile' ? { camera: "" } : {}),
       gallery_images: [],
     },
   });
@@ -137,7 +137,16 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
       if (initialData?.id) {
         const { data: updatedData, error } = await supabase
           .from(table)
-          .update(data)
+          .update({
+            ...data,
+            battery: data.battery || "",
+            brand: data.brand || "",
+            display_specs: data.display_specs || "",
+            processor: data.processor || "",
+            ram: data.ram || "",
+            storage: data.storage || "",
+            ...(productType === 'mobile' ? { camera: (data as any).camera || "" } : {})
+          })
           .eq('id', initialData.id)
           .select()
           .single();
@@ -160,7 +169,7 @@ export const useProductForm = ({ initialData, onSuccess, productType: propProduc
             processor: data.processor || "",
             ram: data.ram || "",
             storage: data.storage || "",
-            ...(productType === 'mobile' ? { camera: data.camera || "" } : {})
+            ...(productType === 'mobile' ? { camera: (data as any).camera || "" } : {})
           })
           .select()
           .single();
