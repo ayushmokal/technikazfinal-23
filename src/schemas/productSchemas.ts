@@ -16,12 +16,12 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
   multimedia_specs: z.custom<Json>().optional(),
   design_specs: z.custom<Json>().optional(),
   performance_specs: z.custom<Json>().optional(),
   display_details: z.custom<Json>().optional(),
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -42,9 +42,7 @@ export const laptopProductSchema = baseProductSchema.extend({
   connectivity_specs: z.custom<Json>().optional(),
 });
 
-export type MobileProductFormData = z.infer<typeof mobileProductSchema>;
-export type LaptopProductFormData = z.infer<typeof laptopProductSchema>;
-export type ProductFormData = MobileProductFormData | LaptopProductFormData;
+export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
 
 export const expertReviewSchema = z.object({
   rating: z.number().min(0).max(10),
