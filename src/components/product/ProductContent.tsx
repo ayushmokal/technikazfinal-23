@@ -9,7 +9,6 @@ import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
-import { ProductGalleryTabs } from "./ProductGalleryTabs";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -39,7 +38,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
   return (
     <div className="flex-1 space-y-16">
-      {/* 1. Overview Section */}
+      {/* Overview Section */}
       <section id="overview" className="scroll-mt-24">
         <div className="space-y-8">
           <div className="space-y-4">
@@ -117,13 +116,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
         </div>
       </section>
 
-      {/* 2. Pictures Section */}
-      <section id="pictures" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">Product Gallery</h2>
-        <ProductGalleryTabs mainImage={product.image_url} productName={product.name} />
-      </section>
-
-      {/* 3. Expert Review Section */}
+      {/* Review Section */}
       <section id="review" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
         <ProductReviewCard 
@@ -142,19 +135,19 @@ export function ProductContent({ product, type }: ProductContentProps) {
         />
       </section>
 
-      {/* 4. User Comments Section */}
-      <section id="user-comments" className="scroll-mt-24">
+      {/* User Reviews Section */}
+      <section id="user-reviews" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">User Reviews</h2>
         <ProductComments productId={product.id} />
       </section>
 
-      {/* 5. Specifications Section */}
+      {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Full Specification</h2>
         <ProductSpecifications product={product} />
       </section>
 
-      {/* 6. Compare Section */}
+      {/* Compare Section */}
       <section id="comparison" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
         <div className="bg-white rounded-lg p-8 border">
@@ -171,7 +164,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
         </div>
       </section>
 
-      {/* Popular Mobiles Section (if mobile) */}
+      {/* Popular Mobiles Section */}
       {isMobile && <PopularMobiles />}
 
       <CompareDialog
