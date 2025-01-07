@@ -65,7 +65,8 @@ export function CategoryPageLayout({
 
         {children}
 
-        <ArticleGrid articles={articles.slice(0, 4)} />
+        {/* Only show ArticleGrid if not on Gadgets page */}
+        {category !== "GADGETS" && <ArticleGrid articles={articles.slice(0, 4)} />}
 
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
