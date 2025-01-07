@@ -25,9 +25,8 @@ export function ProductReviewCard({
   const navigate = useNavigate();
 
   const handleReadFullReview = () => {
-    // Navigate to the blog post for this product
-    // This should be replaced with actual blog navigation logic
-    navigate(`/blog/product-review-${productName.toLowerCase().replace(/\s+/g, '-')}`);
+    // Navigate to the product reviews page
+    navigate(`/product-reviews/${productName.toLowerCase().replace(/\s+/g, '-')}`);
   };
 
   return (
