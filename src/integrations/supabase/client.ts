@@ -15,7 +15,8 @@ export const supabase = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true
+      detectSessionInUrl: true,
+      flowType: 'pkce'
     },
     global: {
       headers: {
@@ -25,14 +26,23 @@ export const supabase = createClient<Database>(
   }
 );
 
-// Add error handling for auth state changes
+// Add better error handling for auth state changes
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT') {
-    // Clear any cached data
     console.log('User signed out');
   } else if (event === 'SIGNED_IN') {
     console.log('User signed in:', session?.user?.id);
   } else if (event === 'TOKEN_REFRESHED') {
-    console.log('Token refreshed');
+    console.log('Token refreshed successfully');
+  } else if (event === 'USER_UPDATED') {
+    console.log('User updated:', session?.user?.id);
+  }
+});
+
+// Add error handling for failed requests
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'TOKEN_REFRESHED' && !session) {
+    console.error('Token refresh failed');
+    // Optionally redirect to login or handle error
   }
 });
