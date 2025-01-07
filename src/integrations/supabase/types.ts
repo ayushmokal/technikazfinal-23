@@ -164,14 +164,19 @@ export type Database = {
           battery: string
           brand: string
           color: string | null
+          connectivity_specs: Json | null
           created_at: string
+          design_specs: Json | null
+          display_details: Json | null
           display_specs: string
           graphics: string | null
           id: string
           image_url: string | null
           model_name: string | null
+          multimedia_specs: Json | null
           name: string
           os: string | null
+          performance_specs: Json | null
           ports: string | null
           price: number
           processor: string
@@ -183,14 +188,19 @@ export type Database = {
           battery: string
           brand: string
           color?: string | null
+          connectivity_specs?: Json | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs: string
           graphics?: string | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name: string
           os?: string | null
+          performance_specs?: Json | null
           ports?: string | null
           price: number
           processor: string
@@ -202,14 +212,19 @@ export type Database = {
           battery?: string
           brand?: string
           color?: string | null
+          connectivity_specs?: Json | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs?: string
           graphics?: string | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name?: string
           os?: string | null
+          performance_specs?: Json | null
           ports?: string | null
           price?: number
           processor?: string
@@ -224,21 +239,29 @@ export type Database = {
           battery: string
           brand: string | null
           camera: string
+          camera_details: Json | null
           charging_specs: string | null
           chipset: string | null
           color: string | null
           created_at: string
+          design_specs: Json | null
+          display_details: Json | null
           display_specs: string
+          general_specs: Json | null
           id: string
           image_url: string | null
           model_name: string | null
+          multimedia_specs: Json | null
           name: string
+          network_specs: Json | null
           os: string | null
+          performance_specs: Json | null
           price: number
           processor: string
           ram: string | null
           resolution: string | null
           screen_size: string | null
+          sensor_specs: Json | null
           storage: string | null
           updated_at: string
         }
@@ -246,21 +269,29 @@ export type Database = {
           battery: string
           brand?: string | null
           camera: string
+          camera_details?: Json | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs: string
+          general_specs?: Json | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name: string
+          network_specs?: Json | null
           os?: string | null
+          performance_specs?: Json | null
           price: number
           processor: string
           ram?: string | null
           resolution?: string | null
           screen_size?: string | null
+          sensor_specs?: Json | null
           storage?: string | null
           updated_at?: string
         }
@@ -268,21 +299,29 @@ export type Database = {
           battery?: string
           brand?: string | null
           camera?: string
+          camera_details?: Json | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs?: string
+          general_specs?: Json | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name?: string
+          network_specs?: Json | null
           os?: string | null
+          performance_specs?: Json | null
           price?: number
           processor?: string
           ram?: string | null
           resolution?: string | null
           screen_size?: string | null
+          sensor_specs?: Json | null
           storage?: string | null
           updated_at?: string
         }
