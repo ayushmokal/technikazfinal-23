@@ -22,21 +22,22 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     uploadImage 
   } = useImageUpload();
 
+  const defaultValues = initialData || {
+    name: "",
+    brand: "",
+    model_name: "",
+    price: 0,
+    display_specs: "",
+    processor: "",
+    ram: "",
+    storage: "",
+    battery: "",
+    ...(productType === 'mobile' ? { camera: "" } : {}),
+  };
+
   const form = useForm({
     resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
-    defaultValues: initialData || {
-      name: "",
-      brand: "",
-      model_name: "",
-      price: 0,
-      display_specs: "",
-      processor: "",
-      ram: "",
-      storage: "",
-      battery: "",
-      ...(productType === 'mobile' ? { camera: "" } : {}),
-      gallery_images: [],
-    },
+    defaultValues: defaultValues as any,
   });
 
   useEffect(() => {
@@ -78,13 +79,13 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       
       let result;
       if (initialData?.id) {
-        result = await updateProduct(table, initialData.id, data, productType);
+        result = await updateProduct(table, initialData.id, data);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        result = await insertProduct(table, data, productType);
+        result = await insertProduct(table, data);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,

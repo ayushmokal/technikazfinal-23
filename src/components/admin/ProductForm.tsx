@@ -9,10 +9,10 @@ import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
-import type { ProductFormData } from "@/schemas/productSchemas";
+import type { MobileProductData, LaptopProductData } from "./types/productTypes";
 
 interface ProductFormProps {
-  initialData?: ProductFormData & { id?: string };
+  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
   onSuccess?: () => void;
   productType?: 'mobile' | 'laptop';
 }
