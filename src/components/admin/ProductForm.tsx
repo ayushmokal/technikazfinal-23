@@ -114,24 +114,31 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
+      let result;
       if (initialData?.id) {
-        const { error } = await supabase
+        const { data: updatedData, error } = await supabase
           .from(table)
           .update(data)
-          .eq('id', initialData.id);
+          .eq('id', initialData.id)
+          .select()
+          .single();
 
         if (error) throw error;
+        result = updatedData;
 
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        const { error } = await supabase
+        const { data: insertedData, error } = await supabase
           .from(table)
-          .insert(data);
+          .insert(data)
+          .select()
+          .single();
 
         if (error) throw error;
+        result = insertedData;
 
         toast({
           title: "Success",
@@ -143,6 +150,11 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setMainImageFile(null);
       setGalleryImageFiles([]);
       onSuccess?.();
+      
+      // Show expert review form after successful product creation/update
+      if (result?.id) {
+        setShowExpertReview(true);
+      }
     } catch (error: any) {
       console.error('Error submitting form:', error);
       toast({
@@ -192,18 +204,19 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         </CardContent>
       </Card>
 
-      {initialData?.id && (
+      {(initialData?.id || showExpertReview) && (
         <div className="space-y-4">
           <Button
             variant="outline"
             onClick={() => setShowExpertReview(!showExpertReview)}
+            className="w-full"
           >
             {showExpertReview ? 'Hide' : 'Add'} Expert Review
           </Button>
           
           {showExpertReview && (
             <ExpertReviewForm 
-              productId={initialData.id} 
+              productId={initialData?.id || ''} 
               onSuccess={() => {
                 setShowExpertReview(false);
                 toast({
