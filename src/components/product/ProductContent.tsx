@@ -154,9 +154,9 @@ export function ProductContent({ product, type }: ProductContentProps) {
       {/* Compare Section */}
       <section id="comparison" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
-        <div className="bg-white rounded-lg p-8 border">
+        <div className="bg-white rounded-lg p-8 border shadow-sm hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center gap-8">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 bg-gray-50 p-4 rounded-lg">
               <img 
                 src={product.image_url || "/placeholder.svg"} 
                 alt={product.name} 
@@ -164,15 +164,18 @@ export function ProductContent({ product, type }: ProductContentProps) {
               />
               <h3 className="text-sm font-medium text-center mt-2">{product.name}</h3>
             </div>
-            <div className="flex-grow">
-              <p className="text-gray-600 mb-4">Add devices to compare with {product.name}</p>
+            <div className="flex-grow space-y-4">
+              <div className="flex flex-col">
+                <h4 className="text-lg font-semibold text-gray-900">Add devices to compare</h4>
+                <p className="text-gray-600">Compare {product.name} with other devices to find the best match for you</p>
+              </div>
               <div className="flex justify-end">
                 <Button 
                   variant="default" 
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-teal-600 hover:bg-teal-700 px-6 py-2 text-base font-medium transition-colors duration-200"
                   onClick={() => setIsCompareDialogOpen(true)}
                 >
-                  Compare
+                  Compare Now
                 </Button>
               </div>
             </div>
