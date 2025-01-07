@@ -51,7 +51,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
                 <Input placeholder="Enter RAM specifications" {...field} />
               </FormControl>
               <FormMessage />
-            </Item>
+            </FormItem>
           )}
         />
 
