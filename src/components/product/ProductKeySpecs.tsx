@@ -1,4 +1,4 @@
-import { Battery, Camera, Cpu, Laptop, Smartphone } from "lucide-react";
+import { Battery, Camera, CircuitBoard, Cpu, Laptop, Smartphone } from "lucide-react";
 
 interface ProductKeySpecsProps {
   type?: 'mobile' | 'laptop';
@@ -37,7 +37,7 @@ export function ProductKeySpecs({
         </div>
       ) : (
         <div className="flex flex-col items-center text-center">
-          <Laptop className="h-8 w-8 mb-2 text-primary stroke-1" />
+          <CircuitBoard className="h-8 w-8 mb-2 text-primary stroke-1" />
           <span className="text-sm font-medium">{graphics || "N/A"}</span>
           <span className="text-xs text-muted-foreground">Graphics</span>
         </div>
