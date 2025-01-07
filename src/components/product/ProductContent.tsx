@@ -9,6 +9,7 @@ import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
+import { ProductRatingSystem } from "./ProductRatingSystem";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -138,7 +139,10 @@ export function ProductContent({ product, type }: ProductContentProps) {
       {/* User Reviews Section */}
       <section id="user-reviews" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">User Reviews</h2>
-        <ProductComments productId={product.id} />
+        <ProductRatingSystem productId={product.id} />
+        <div className="mt-8">
+          <ProductComments productId={product.id} />
+        </div>
       </section>
 
       {/* Specifications Section */}
