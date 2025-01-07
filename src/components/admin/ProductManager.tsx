@@ -13,6 +13,8 @@ import {
 import { ProductImage } from "./ProductImage";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
+import { ExpertReviewForm } from "./ExpertReviewForm";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface Product {
   id: string;
@@ -47,10 +49,8 @@ export function ProductManager({ productType }: ProductManagerProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [productType]);
+  const [showExpertReview, setShowExpertReview] = useState(false);
+  const [selectedProductForReview, setSelectedProductForReview] = useState<Product | null>(null);
 
   const fetchProducts = async () => {
     try {
@@ -71,6 +71,10 @@ export function ProductManager({ productType }: ProductManagerProps) {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [productType]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -142,6 +146,16 @@ export function ProductManager({ productType }: ProductManagerProps) {
                     Edit
                   </Button>
                   <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedProductForReview(product);
+                      setShowExpertReview(true);
+                    }}
+                  >
+                    Add Review
+                  </Button>
+                  <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => handleDelete(product.id)}
@@ -169,6 +183,29 @@ export function ProductManager({ productType }: ProductManagerProps) {
         }}
         productType={productType}
       />
+
+      <Dialog open={showExpertReview} onOpenChange={(open) => {
+        if (!open) {
+          setShowExpertReview(false);
+          setSelectedProductForReview(null);
+        }
+      }}>
+        <DialogContent className="max-w-3xl">
+          {selectedProductForReview && (
+            <ExpertReviewForm
+              productId={selectedProductForReview.id}
+              onSuccess={() => {
+                setShowExpertReview(false);
+                setSelectedProductForReview(null);
+                toast({
+                  title: "Success",
+                  description: "Expert review added successfully",
+                });
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
