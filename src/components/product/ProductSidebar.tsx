@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ProductGalleryTabs } from "./ProductGalleryTabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ProductSidebarProps {
   activeSection: string;
@@ -12,6 +12,7 @@ interface ProductSidebarProps {
 
 export function ProductSidebar({ activeSection, onSectionChange, mainImage, productName }: ProductSidebarProps) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState('overview');
 
   const sections = [
     { id: 'overview', label: 'Overview' },
@@ -21,6 +22,37 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
     { id: 'specifications', label: 'Specifications' },
     { id: 'comparison', label: 'Comparison' },
   ];
+
+  useEffect(() => {
+    const observers = new Map();
+    
+    sections.forEach(section => {
+      if (section.id !== 'pictures') {
+        const element = document.getElementById(section.id);
+        if (element) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  setCurrentSection(section.id);
+                }
+              });
+            },
+            {
+              rootMargin: '-20% 0px -70% 0px'
+            }
+          );
+          
+          observer.observe(element);
+          observers.set(section.id, observer);
+        }
+      }
+    });
+
+    return () => {
+      observers.forEach(observer => observer.disconnect());
+    };
+  }, []);
 
   const handleSectionClick = (sectionId: string) => {
     if (sectionId === 'pictures') {
@@ -43,7 +75,7 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
             onClick={() => handleSectionClick(section.id)}
             className={cn(
               "w-full text-left py-2 px-4 hover:text-primary transition-colors",
-              activeSection === section.id && "text-primary border-l-2 border-primary bg-primary/5"
+              currentSection === section.id && "text-primary border-l-2 border-primary bg-primary/5"
             )}
           >
             {section.label}
