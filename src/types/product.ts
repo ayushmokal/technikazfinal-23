@@ -14,12 +14,12 @@ export interface BaseProduct {
   created_at: string;
   updated_at: string;
   gallery_images?: string[];
+  model_name?: string | null;
 }
 
 export interface LaptopProduct extends BaseProduct {
   graphics: string | null;
   ports: string | null;
-  model_name: string | null;
 }
 
 export interface MobileProduct extends BaseProduct {
@@ -28,5 +28,4 @@ export interface MobileProduct extends BaseProduct {
   charging_specs: string | null;
   resolution: string | null;
   screen_size: string | null;
-  model_name: string | null;
 }
