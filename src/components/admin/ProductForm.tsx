@@ -12,6 +12,7 @@ import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./ExpertReviewForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
+import { useNavigate } from "react-router-dom";
 import { 
   mobileProductSchema, 
   laptopProductSchema,
@@ -26,6 +27,7 @@ interface ProductFormProps {
 
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [galleryImageFiles, setGalleryImageFiles] = useState<File[]>([]);
@@ -54,6 +56,22 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setProductType(propProductType);
     }
   }, [propProductType]);
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error || !session) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please login again to continue.",
+        });
+        navigate("/admin/login");
+      }
+    };
+    checkAuth();
+  }, [navigate, toast]);
 
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -98,6 +116,18 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     try {
       setIsLoading(true);
 
+      // Check authentication before proceeding
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please login again to continue.",
+        });
+        navigate("/admin/login");
+        return;
+      }
+
       if (mainImageFile) {
         data.image_url = await uploadImage(mainImageFile, 'main');
       }
@@ -133,7 +163,16 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       } else {
         const { data: insertedData, error } = await supabase
           .from(table)
-          .insert(data)
+          .insert({
+            ...data,
+            battery: data.battery || "",  // Ensure required fields are not undefined
+            brand: data.brand || "",
+            display_specs: data.display_specs || "",
+            processor: data.processor || "",
+            ram: data.ram || "",
+            storage: data.storage || "",
+            ...(productType === 'mobile' ? { camera: data.camera || "" } : {})
+          })
           .select()
           .single();
 
@@ -151,17 +190,25 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setGalleryImageFiles([]);
       onSuccess?.();
       
-      // Show expert review form after successful product creation/update
       if (result?.id) {
         setShowExpertReview(true);
       }
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to save product",
-      });
+      if (error.message?.includes('JWT')) {
+        toast({
+          variant: "destructive",
+          title: "Session Expired",
+          description: "Please login again to continue.",
+        });
+        navigate("/admin/login");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to save product",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -230,4 +277,3 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       )}
     </div>
   );
-}
