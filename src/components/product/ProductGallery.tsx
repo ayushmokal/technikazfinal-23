@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 interface ProductGalleryProps {
   mainImage: string | null;
   productName: string;
-  galleryImages?: string[];
+  galleryImages?: string[] | null;
 }
 
 export function ProductGallery({ mainImage, productName, galleryImages = [] }: ProductGalleryProps) {
@@ -23,11 +23,19 @@ export function ProductGallery({ mainImage, productName, galleryImages = [] }: P
     setSelectedImage(allImages[currentIndex === allImages.length - 1 ? 0 : currentIndex + 1]);
   };
 
+  // Ensure the image URL is properly formatted
+  const formatImageUrl = (url: string) => {
+    if (!url) return "/placeholder.svg";
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/")) return url;
+    return `/${url}`;
+  };
+
   return (
     <div className="space-y-4">
       <div className="aspect-square relative overflow-hidden rounded-lg border bg-white">
         <img
-          src={selectedImage}
+          src={formatImageUrl(selectedImage)}
           alt={`${productName} - View ${currentIndex + 1}`}
           className="object-contain w-full h-full p-4"
         />
@@ -66,7 +74,7 @@ export function ProductGallery({ mainImage, productName, galleryImages = [] }: P
               }}
             >
               <img
-                src={image}
+                src={formatImageUrl(image)}
                 alt={`${productName} view ${index + 1}`}
                 className="w-full h-full object-contain p-2"
               />
