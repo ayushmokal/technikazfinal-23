@@ -13,7 +13,10 @@ const ITEMS_PER_PAGE = 8;
 
 export default function GadgetsPage() {
   const [subcategory, setSubcategory] = useState<"MOBILE" | "LAPTOPS">("MOBILE");
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    rootMargin: "100px",
+  });
 
   // Query for category-specific featured articles
   const { data: featuredArticles } = useInfiniteQuery({
@@ -107,16 +110,36 @@ export default function GadgetsPage() {
     initialPageParam: 0,
   });
 
-  // Handle infinite scroll
+  // Handle infinite scroll with debounce
   useEffect(() => {
-    if (!inView) return;
+    let timeoutId: NodeJS.Timeout;
 
-    if (subcategory === "MOBILE" && hasNextMobile) {
-      fetchNextMobile();
-    } else if (subcategory === "LAPTOPS" && hasNextLaptop) {
-      fetchNextLaptop();
-    }
-  }, [inView, subcategory, hasNextMobile, hasNextLaptop, fetchNextMobile, fetchNextLaptop]);
+    const handleFetch = () => {
+      if (!inView) return;
+
+      if (subcategory === "MOBILE" && hasNextMobile && !isFetchingNextMobile) {
+        fetchNextMobile();
+      } else if (subcategory === "LAPTOPS" && hasNextLaptop && !isFetchingNextLaptop) {
+        fetchNextLaptop();
+      }
+    };
+
+    // Debounce the fetch call
+    timeoutId = setTimeout(handleFetch, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [
+    inView,
+    subcategory,
+    hasNextMobile,
+    hasNextLaptop,
+    fetchNextMobile,
+    fetchNextLaptop,
+    isFetchingNextMobile,
+    isFetchingNextLaptop
+  ]);
 
   // Flatten the pages data
   const mobileProducts = mobileData?.pages.flatMap(page => page.data) || [];
