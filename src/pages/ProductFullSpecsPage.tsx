@@ -50,7 +50,7 @@ function SpecificationSection({ title, specs }: SpecificationSectionProps) {
 
 export default function ProductFullSpecsPage() {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(window.location.search);
   const type = searchParams.get('type') as 'mobile' | 'laptop' || 'mobile';
 
   const { data: product, isLoading } = useQuery({
