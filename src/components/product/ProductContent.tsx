@@ -10,6 +10,7 @@ import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
 import { ProductRatingSystem } from "./ProductRatingSystem";
+import { ProductReview } from "./ProductReview"; // Import the new ProductReview component
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -120,20 +121,7 @@ export function ProductContent({ product, type }: ProductContentProps) {
       {/* Review Section */}
       <section id="review" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
-        <ProductReviewCard 
-          productName={product.name}
-          pros={[
-            "Crisp display",
-            "Reliable performance",
-            "Sleek design",
-            "Solid battery"
-          ]}
-          cons={[
-            "Lowlight photography needs improvements",
-            "No stereo speakers"
-          ]}
-          verdict="The device offers a bunch of thoughtful improvements over its predecessor, making it a value-for-money option for many customers. Its display is still one of the best in the segment. The new processor also offers a decent performance, gaming included. However, some aspects need refinement. Its cameras (in daylight) are decent if not the best."
-        />
+        <ProductReview productId={product.id} />
       </section>
 
       {/* User Reviews Section */}

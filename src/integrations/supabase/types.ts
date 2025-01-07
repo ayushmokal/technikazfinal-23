@@ -159,6 +159,56 @@ export type Database = {
           },
         ]
       }
+      expert_reviews: {
+        Row: {
+          author: string
+          cons: string[]
+          created_at: string | null
+          date: string | null
+          id: string
+          product_id: string
+          pros: string[]
+          rating: number
+          summary: string
+          updated_at: string | null
+          verdict: string
+        }
+        Insert: {
+          author: string
+          cons?: string[]
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          product_id: string
+          pros?: string[]
+          rating: number
+          summary: string
+          updated_at?: string | null
+          verdict: string
+        }
+        Update: {
+          author?: string
+          cons?: string[]
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          product_id?: string
+          pros?: string[]
+          rating?: number
+          summary?: string
+          updated_at?: string | null
+          verdict?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expert_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       laptops: {
         Row: {
           battery: string
