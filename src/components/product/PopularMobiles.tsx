@@ -47,7 +47,7 @@ export function PopularMobiles() {
         count,
       };
     },
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     meta: {
       onError: () => {
         toast({
