@@ -13,6 +13,7 @@ export interface BaseProduct {
   color: string | null;
   created_at: string;
   updated_at: string;
+  gallery_images?: string[];
 }
 
 export interface LaptopProduct extends BaseProduct {
