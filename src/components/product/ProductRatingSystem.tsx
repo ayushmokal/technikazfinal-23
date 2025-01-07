@@ -99,23 +99,23 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
 
   const renderStars = (rating: number, interactive = false) => {
     return (
-      <div className="flex gap-1">
+      <div className="flex gap-1.5">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
-            className={`text-2xl ${
-              interactive ? "cursor-pointer" : "cursor-default"
+            className={`transition-all duration-200 ${
+              interactive ? "cursor-pointer hover:scale-110" : "cursor-default"
             } ${
               star <= (interactive ? hoveredRating || selectedRating : rating)
                 ? "text-yellow-400"
-                : "text-gray-300"
+                : "text-gray-200"
             }`}
             onMouseEnter={() => interactive && setHoveredRating(star)}
             onMouseLeave={() => interactive && setHoveredRating(0)}
             onClick={() => interactive && setSelectedRating(star)}
             disabled={!interactive}
           >
-            <Star className="w-6 h-6" />
+            <Star className="w-7 h-7" />
           </button>
         ))}
       </div>
@@ -123,24 +123,24 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl mx-auto">
       {/* Rating Statistics */}
       {ratingStats && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-6 bg-white rounded-lg shadow-sm">
-          <div className="text-center">
-            <div className="text-4xl font-bold text-primary">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-white rounded-xl shadow-md border border-gray-100">
+          <div className="flex flex-col items-center justify-center space-y-3 p-4 bg-primary/5 rounded-lg">
+            <div className="text-5xl font-bold text-primary">
               {ratingStats.average_rating}
             </div>
             <div className="mt-2">{renderStars(ratingStats.average_rating)}</div>
-            <div className="text-sm text-gray-500 mt-2">
+            <div className="text-sm text-gray-600 font-medium">
               Based on {ratingStats.total_ratings} ratings
             </div>
           </div>
 
-          <div className="col-span-2 space-y-2">
+          <div className="col-span-2 space-y-4 p-4">
             {[5, 4, 3, 2, 1].map((stars, index) => (
               <div key={stars} className="flex items-center gap-4">
-                <span className="w-12 text-sm text-gray-600">
+                <span className="w-16 text-sm font-medium text-gray-600">
                   {stars} stars
                 </span>
                 <Progress
@@ -151,9 +151,9 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
                         100
                       : 0
                   }
-                  className="h-2"
+                  className="h-2.5 flex-1"
                 />
-                <span className="w-12 text-sm text-gray-600">
+                <span className="w-12 text-sm text-gray-600 font-medium">
                   {ratingStats.rating_distribution[index]}
                 </span>
               </div>
@@ -163,17 +163,22 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
       )}
 
       {/* Rating Input */}
-      <div className="p-6 bg-white rounded-lg shadow-sm space-y-4">
-        <h3 className="text-lg font-semibold">Rate this product</h3>
-        <div className="flex flex-col items-center gap-4">
+      <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 space-y-6">
+        <h3 className="text-xl font-semibold text-gray-800 text-center">
+          Rate this product
+        </h3>
+        <div className="flex flex-col items-center gap-6">
           {renderStars(selectedRating, true)}
           <Textarea
             placeholder="Write your review (optional)"
             value={review}
             onChange={(e) => setReview(e.target.value)}
-            className="w-full mt-4"
+            className="w-full min-h-[120px] resize-none border-gray-200 focus:border-primary"
           />
-          <Button onClick={handleRatingSubmit} className="w-full md:w-auto">
+          <Button 
+            onClick={handleRatingSubmit}
+            className="w-full md:w-auto min-w-[200px] bg-primary hover:bg-primary/90 text-white"
+          >
             Submit Rating & Review
           </Button>
         </div>
