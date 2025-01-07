@@ -52,10 +52,10 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
     if (selectedProducts.length > 1) {
       navigate('/comparison', {
         state: {
-          selectedProducts,
+          products: selectedProducts,
           type,
-          currentProduct,
         },
+        replace: true
       });
     } else {
       toast({
@@ -70,7 +70,7 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
       {selectedProducts.length < 3 && (
         <div>
           <h3 className="text-lg font-semibold mb-4">Add Products to Compare</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {products.map((product) => (
               <ProductComparisonCard
                 key={product.id}
