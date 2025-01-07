@@ -181,7 +181,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
           <BasicInfoSection form={form} />
-          <SpecificationsSection form={form} />
+          <SpecificationsSection form={form} productType={productType} />
           <AdditionalSpecsSection form={form} productType={productType} />
           
           <div className="space-y-4">
