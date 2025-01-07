@@ -25,14 +25,14 @@ export function ProductReview({ productId }: ProductReviewProps) {
         .from('expert_reviews')
         .select('*')
         .eq('product_id', productId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching expert review:', error);
         return null;
       }
 
-      return data as ExpertReview;
+      return data as ExpertReview | null;
     },
   });
 
@@ -41,7 +41,11 @@ export function ProductReview({ productId }: ProductReviewProps) {
   }
 
   if (!review) {
-    return <div>No expert review available.</div>;
+    return (
+      <div className="p-6 bg-gray-50 rounded-lg">
+        <p className="text-gray-600">No expert review available for this product yet.</p>
+      </div>
+    );
   }
 
   return (
