@@ -15,37 +15,41 @@ export function PopularMobiles() {
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['popular-mobiles', page],
     queryFn: async () => {
-      const from = (page - 1) * itemsPerPage;
-      
-      // First, get the total count
-      const { count } = await supabase
-        .from('mobile_products')
-        .select('*', { count: 'exact', head: true });
+      try {
+        const from = (page - 1) * itemsPerPage;
+        
+        // First, get the total count
+        const { count, error: countError } = await supabase
+          .from('mobile_products')
+          .select('*', { count: 'exact', head: true });
 
-      // If the requested range is beyond the total count, return current data
-      if (count !== null && from >= count) {
+        if (countError) throw countError;
+
+        // If the requested range is beyond the total count, return current data
+        if (count !== null && from >= count) {
+          return {
+            items: [],
+            count,
+          };
+        }
+
+        // Fetch the actual data
+        const { data: newItems, error: fetchError } = await supabase
+          .from('mobile_products')
+          .select('*')
+          .range(from, from + itemsPerPage - 1)
+          .order('created_at', { ascending: false });
+
+        if (fetchError) throw fetchError;
+        
         return {
-          items: [],
-          count,
+          items: newItems || [],
+          count: count || 0,
         };
+      } catch (err) {
+        console.error('Error fetching mobile products:', err);
+        throw new Error('Failed to load mobile products');
       }
-
-      // Fetch the actual data
-      const { data: newItems, error } = await supabase
-        .from('mobile_products')
-        .select('*')
-        .range(from, from + itemsPerPage - 1)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching mobiles:', error);
-        throw error;
-      }
-      
-      return {
-        items: newItems || [],
-        count,
-      };
     },
     placeholderData: (previousData) => previousData,
     meta: {
