@@ -2,6 +2,7 @@ import * as z from "zod";
 import type { Json } from "@/integrations/supabase/types";
 
 const baseProductSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
   model_name: z.string().optional(),
@@ -19,6 +20,8 @@ const baseProductSchema = z.object({
   design_specs: z.custom<Json>().optional(),
   performance_specs: z.custom<Json>().optional(),
   display_details: z.custom<Json>().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({

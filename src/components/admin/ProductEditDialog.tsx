@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
 import type { ProductFormData } from "@/schemas/productSchemas";
@@ -45,9 +46,12 @@ export function ProductEditDialog({ product, onClose, onSuccess, productType }: 
       <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
+          <DialogDescription>
+            Make changes to your product here. Click save when you're done.
+          </DialogDescription>
         </DialogHeader>
         <ProductForm 
-          initialData={product}
+          initialData={{ ...product, id: product.id }}
           onSuccess={onSuccess}
           productType={productType}
         />

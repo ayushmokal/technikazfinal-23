@@ -19,7 +19,7 @@ import {
 } from "@/schemas/productSchemas";
 
 interface ProductFormProps {
-  initialData?: ProductFormData;
+  initialData?: ProductFormData & { id?: string };
   onSuccess?: () => void;
   productType?: 'mobile' | 'laptop';
 }
