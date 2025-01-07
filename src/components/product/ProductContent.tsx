@@ -7,6 +7,8 @@ import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
 import { Heart, Calendar } from "lucide-react";
+import { useState } from "react";
+import { CompareDeviceDialog } from "./CompareDeviceDialog";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -18,7 +20,6 @@ const getBrandWebsite = (brand: string): string => {
     'Dell': 'https://www.dell.com',
     'HP': 'https://www.hp.com',
     'Lenovo': 'https://www.lenovo.com',
-    // Add more brands as needed
   };
   return brandWebsites[brand] || '#';
 };
@@ -30,6 +31,7 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product, type }: ProductContentProps) {
+  const [compareDialogOpen, setCompareDialogOpen] = useState(false);
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
   const brandWebsite = getBrandWebsite(product.brand);
@@ -62,7 +64,13 @@ export function ProductContent({ product, type }: ProductContentProps) {
                   </a>
                 </div>
               </div>
-              <Button variant="default" className="bg-teal-600 hover:bg-teal-700">Compare</Button>
+              <Button 
+                variant="default" 
+                className="bg-teal-600 hover:bg-teal-700"
+                onClick={() => setCompareDialogOpen(true)}
+              >
+                Compare
+              </Button>
             </div>
 
             <div className="space-y-2">
@@ -189,6 +197,13 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
       {/* Popular Mobiles Section */}
       {isMobile && <PopularMobiles />}
+
+      <CompareDeviceDialog
+        open={compareDialogOpen}
+        onOpenChange={setCompareDialogOpen}
+        currentProduct={product}
+        type={type}
+      />
     </div>
   );
 }
