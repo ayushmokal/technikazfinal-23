@@ -33,13 +33,15 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
           const observer = new IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
                   setCurrentSection(section.id);
                 }
               });
             },
             {
-              rootMargin: '-20% 0px -70% 0px'
+              root: null,
+              rootMargin: '-10% 0px -80% 0px',
+              threshold: [0.3, 0.7]
             }
           );
           
@@ -61,7 +63,14 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
       onSectionChange(sectionId);
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        const offset = 100; // Adjust this value based on your header height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     }
   };
@@ -74,7 +83,7 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
             key={section.id}
             onClick={() => handleSectionClick(section.id)}
             className={cn(
-              "w-full text-left py-2 px-4 hover:text-primary transition-colors",
+              "w-full text-left py-2 px-4 hover:text-primary transition-colors duration-200",
               currentSection === section.id && "text-primary border-l-2 border-primary bg-primary/5"
             )}
           >
