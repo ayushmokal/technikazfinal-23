@@ -53,6 +53,10 @@ export default function ProductDetailPage() {
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id, type],
     queryFn: async () => {
+      if (!id) {
+        throw new Error('Product ID is required');
+      }
+
       const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
         .from(tableName)
@@ -81,6 +85,7 @@ export default function ProductDetailPage() {
 
       return data as LaptopProduct | MobileProduct;
     },
+    enabled: !!id,
   });
 
   if (isLoading || !product) {

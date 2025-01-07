@@ -39,10 +39,15 @@ supabase.auth.onAuthStateChange((event, session) => {
   }
 });
 
-// Add error handling for failed requests
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'TOKEN_REFRESHED' && !session) {
-    console.error('Token refresh failed');
-    // Optionally redirect to login or handle error
+// Handle token refresh errors
+supabase.auth.onAuthStateChange(async (event) => {
+  if (event === 'TOKEN_REFRESHED') {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error || !session) {
+      console.error('Token refresh failed:', error);
+      // Force a new sign in if token refresh fails
+      await supabase.auth.signOut();
+      window.location.href = '/login';
+    }
   }
 });
