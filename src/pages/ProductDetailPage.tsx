@@ -7,40 +7,9 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductSidebar } from "@/components/product/ProductSidebar";
 import { ProductContent } from "@/components/product/ProductContent";
 import { useToast } from "@/hooks/use-toast";
+import { LaptopProduct, MobileProduct } from "@/types/product";
 
 export type ProductType = 'mobile' | 'laptop';
-
-export interface BaseProduct {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  image_url: string | null;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  os: string | null;
-  color: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface LaptopProduct extends BaseProduct {
-  graphics: string | null;
-  ports: string | null;
-  model_name: string | null;
-}
-
-export interface MobileProduct extends BaseProduct {
-  camera: string;
-  chipset: string | null;
-  charging_specs: string | null;
-  resolution: string | null;
-  screen_size: string | null;
-  model_name: string | null;
-}
 
 export default function ProductDetailPage() {
   const [activeSection, setActiveSection] = useState('overview');
