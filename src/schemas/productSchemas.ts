@@ -18,6 +18,10 @@ const baseProductSchema = z.object({
   gallery_images: z.array(z.string()).optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
+  multimedia_specs: z.custom<Json>().optional(),
+  design_specs: z.custom<Json>().optional(),
+  performance_specs: z.custom<Json>().optional(),
+  display_details: z.custom<Json>().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -29,21 +33,13 @@ export const mobileProductSchema = baseProductSchema.extend({
   camera_details: z.custom<Json>().optional(),
   sensor_specs: z.custom<Json>().optional(),
   network_specs: z.custom<Json>().optional(),
-  design_specs: z.custom<Json>().optional(),
-  performance_specs: z.custom<Json>().optional(),
-  display_details: z.custom<Json>().optional(),
   general_specs: z.custom<Json>().optional(),
-  multimedia_specs: z.custom<Json>().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
-  multimedia_specs: z.custom<Json>().optional(),
   connectivity_specs: z.custom<Json>().optional(),
-  design_specs: z.custom<Json>().optional(),
-  performance_specs: z.custom<Json>().optional(),
-  display_details: z.custom<Json>().optional(),
 });
 
 export type MobileProductFormData = z.infer<typeof mobileProductSchema>;

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "./ImageUpload";
 import { Form } from "@/components/ui/form";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
@@ -15,6 +15,7 @@ import {
   laptopProductSchema,
   type ProductFormData 
 } from "@/schemas/productSchemas";
+import { Separator } from "@/components/ui/separator";
 
 interface ProductFormProps {
   initialData?: ProductFormData;
@@ -41,7 +42,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       ram: "",
       storage: "",
       battery: "",
-      camera: "", // Default value for mobile
+      camera: "",
       gallery_images: [],
     },
   });
@@ -153,39 +154,51 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   };
 
   return (
-    <Tabs defaultValue="mobile" className="w-full" onValueChange={(value) => setProductType(value as 'mobile' | 'laptop')}>
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="mobile">Mobile Phone</TabsTrigger>
-        <TabsTrigger value="laptop">Laptop</TabsTrigger>
-      </TabsList>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>{initialData ? 'Edit' : 'Add'} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="grid gap-8">
+              <div className="space-y-6">
+                <BasicInfoSection form={form} />
+                <Separator />
+                <SpecificationsSection form={form} productType={productType} />
+                <Separator />
+                <AdditionalSpecsSection form={form} productType={productType} />
+                <Separator />
+                
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Product Images</h3>
+                  <div className="grid gap-6">
+                    <ImageUpload 
+                      onChange={handleMainImageChange} 
+                      currentImageUrl={initialData?.image_url}
+                      label="Main Product Image"
+                    />
+                    
+                    <ImageUpload 
+                      onChange={handleGalleryImagesChange} 
+                      currentGalleryImages={initialData?.gallery_images}
+                      label="Product Gallery Images"
+                      multiple
+                      onRemoveImage={handleRemoveGalleryImage}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
-          <BasicInfoSection form={form} />
-          <SpecificationsSection form={form} productType={productType} />
-          <AdditionalSpecsSection form={form} productType={productType} />
-          
-          <div className="space-y-4">
-            <ImageUpload 
-              onChange={handleMainImageChange} 
-              currentImageUrl={initialData?.image_url}
-              label="Main Product Image"
-            />
-            
-            <ImageUpload 
-              onChange={handleGalleryImagesChange} 
-              currentGalleryImages={initialData?.gallery_images}
-              label="Product Gallery Images"
-              multiple
-              onRemoveImage={handleRemoveGalleryImage}
-            />
-          </div>
-
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
-          </Button>
-        </form>
-      </Form>
-    </Tabs>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
