@@ -5,48 +5,8 @@ import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ProductSpecTable } from "@/components/product/ProductSpecTable";
 import type { LaptopProduct, MobileProduct } from "./ProductDetailPage";
-
-interface SpecificationItemProps {
-  label: string;
-  value: string | number;
-  image?: string;
-}
-
-function SpecificationItem({ label, value, image }: SpecificationItemProps) {
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-start">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium text-right">{value}</span>
-      </div>
-      {image && (
-        <AspectRatio ratio={16 / 9} className="bg-muted">
-          <img src={image} alt={`${label} illustration`} className="rounded-md object-cover" />
-        </AspectRatio>
-      )}
-    </div>
-  );
-}
-
-interface SpecificationSectionProps {
-  title: string;
-  specs: SpecificationItemProps[];
-}
-
-function SpecificationSection({ title, specs }: SpecificationSectionProps) {
-  return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold">{title}</h3>
-      <div className="space-y-6">
-        {specs.map((spec, index) => (
-          <SpecificationItem key={index} {...spec} />
-        ))}
-      </div>
-      <Separator className="my-6" />
-    </div>
-  );
-}
 
 export default function ProductFullSpecsPage() {
   const { id } = useParams<{ id: string }>();
@@ -78,48 +38,159 @@ export default function ProductFullSpecsPage() {
 
   const isMobile = 'camera' in product;
 
-  const basicSpecs = [
-    { label: "Brand", value: product.brand },
-    { label: "Model", value: product.name },
-    { label: "Price", value: `₹${product.price.toLocaleString()}` },
-  ];
-
-  const displaySpecs = [
-    { label: "Display", value: product.display_specs },
-    ...(isMobile ? [
-      { label: "Resolution", value: (product as MobileProduct).resolution || 'N/A' },
-      { label: "Screen Size", value: (product as MobileProduct).screen_size || 'N/A' },
-    ] : []),
-  ];
-
-  const performanceSpecs = [
-    { label: "Processor", value: product.processor },
-    { label: "RAM", value: product.ram },
-    { label: "Storage", value: product.storage },
-    ...(isMobile ? [
-      { label: "Chipset", value: (product as MobileProduct).chipset || 'N/A' },
-    ] : [
-      { label: "Graphics", value: (product as LaptopProduct).graphics || 'N/A' },
-    ]),
-  ];
-
-  const cameraSpecs = isMobile ? [
-    { 
-      label: "Main Camera", 
-      value: (product as MobileProduct).camera,
-      image: product.image_url || undefined
+  const specifications = isMobile ? [
+    {
+      title: "General Information",
+      specs: [
+        { label: "Brand", value: product.brand },
+        { label: "Model", value: product.name },
+        { label: "Price", value: `₹${product.price.toLocaleString()}` },
+        ...(product.general_specs ? Object.entries(product.general_specs).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
     },
-  ] : [];
-
-  const otherSpecs = [
-    { label: "Battery", value: product.battery },
-    { label: "Operating System", value: product.os || 'N/A' },
-    { label: "Color", value: product.color || 'N/A' },
-    ...(isMobile ? [
-      { label: "Charging", value: (product as MobileProduct).charging_specs || 'N/A' },
-    ] : [
-      { label: "Ports", value: (product as LaptopProduct).ports || 'N/A' },
-    ]),
+    {
+      title: "Display",
+      specs: [
+        { label: "Display Specifications", value: product.display_specs },
+        { label: "Resolution", value: product.resolution },
+        { label: "Screen Size", value: product.screen_size },
+        ...(product.display_details ? Object.entries(product.display_details).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Camera",
+      specs: [
+        { 
+          label: "Camera Setup", 
+          value: product.camera,
+          image: product.image_url
+        },
+        ...(product.camera_details ? Object.entries(product.camera_details).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Performance",
+      specs: [
+        { label: "Processor", value: product.processor },
+        { label: "RAM", value: product.ram },
+        { label: "Storage", value: product.storage },
+        { label: "Chipset", value: product.chipset },
+        ...(product.performance_specs ? Object.entries(product.performance_specs).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Battery & Charging",
+      specs: [
+        { label: "Battery", value: product.battery },
+        { label: "Charging", value: product.charging_specs }
+      ]
+    },
+    {
+      title: "Design",
+      specs: [
+        { label: "Color", value: product.color },
+        ...(product.design_specs ? Object.entries(product.design_specs).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Multimedia",
+      specs: product.multimedia_specs ? Object.entries(product.multimedia_specs).map(([key, value]) => ({
+        label: key,
+        value: value as string
+      })) : []
+    },
+    {
+      title: "Sensors",
+      specs: product.sensor_specs ? Object.entries(product.sensor_specs).map(([key, value]) => ({
+        label: key,
+        value: value as string
+      })) : []
+    },
+    {
+      title: "Network",
+      specs: product.network_specs ? Object.entries(product.network_specs).map(([key, value]) => ({
+        label: key,
+        value: value as string
+      })) : []
+    }
+  ] : [
+    {
+      title: "General Information",
+      specs: [
+        { label: "Brand", value: product.brand },
+        { label: "Model", value: product.name },
+        { label: "Price", value: `₹${product.price.toLocaleString()}` }
+      ]
+    },
+    {
+      title: "Display",
+      specs: [
+        { label: "Display", value: product.display_specs },
+        ...(product.display_details ? Object.entries(product.display_details).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Performance",
+      specs: [
+        { label: "Processor", value: product.processor },
+        { label: "RAM", value: product.ram },
+        { label: "Storage", value: product.storage },
+        { label: "Graphics", value: product.graphics },
+        ...(product.performance_specs ? Object.entries(product.performance_specs).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Design & Ports",
+      specs: [
+        { label: "Color", value: product.color },
+        { label: "Ports", value: product.ports },
+        ...(product.design_specs ? Object.entries(product.design_specs).map(([key, value]) => ({
+          label: key,
+          value: value as string
+        })) : [])
+      ]
+    },
+    {
+      title: "Battery & Power",
+      specs: [
+        { label: "Battery", value: product.battery }
+      ]
+    },
+    {
+      title: "Multimedia",
+      specs: product.multimedia_specs ? Object.entries(product.multimedia_specs).map(([key, value]) => ({
+        label: key,
+        value: value as string
+      })) : []
+    },
+    {
+      title: "Connectivity",
+      specs: product.connectivity_specs ? Object.entries(product.connectivity_specs).map(([key, value]) => ({
+        label: key,
+        value: value as string
+      })) : []
+    }
   ];
 
   return (
@@ -130,13 +201,15 @@ export default function ProductFullSpecsPage() {
             <CardTitle className="text-2xl">Full Specifications</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8">
-            <SpecificationSection title="Basic Information" specs={basicSpecs} />
-            <SpecificationSection title="Display" specs={displaySpecs} />
-            <SpecificationSection title="Performance" specs={performanceSpecs} />
-            {isMobile && cameraSpecs.length > 0 && (
-              <SpecificationSection title="Camera" specs={cameraSpecs} />
-            )}
-            <SpecificationSection title="Other Specifications" specs={otherSpecs} />
+            {specifications.map((section, index) => (
+              section.specs.length > 0 && (
+                <div key={index}>
+                  <h3 className="text-xl font-semibold mb-4">{section.title}</h3>
+                  <ProductSpecTable specifications={[section]} />
+                  {index < specifications.length - 1 && <Separator className="my-6" />}
+                </div>
+              )
+            ))}
           </CardContent>
         </Card>
       </div>
