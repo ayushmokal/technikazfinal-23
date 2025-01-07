@@ -101,7 +101,11 @@ export default function ProductDetailPage() {
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-8">
           <div className="space-y-8">
-            <ProductGallery mainImage={product.image_url} productName={product.name} />
+            <ProductGallery 
+              mainImage={product.image_url} 
+              productName={product.name}
+              galleryImages={product.gallery_images}
+            />
             <ProductSidebar
               activeSection={activeSection}
               onSectionChange={setActiveSection}
