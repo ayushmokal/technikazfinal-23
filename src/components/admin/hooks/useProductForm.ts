@@ -1,78 +1,17 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "@/integrations/supabase/client";
-import { 
-  mobileProductSchema, 
-  laptopProductSchema,
-  type ProductFormData 
-} from "@/schemas/productSchemas";
+import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
 import { useImageUpload } from "./useImageUpload";
 import { useAuthCheck } from "./useAuthCheck";
-import type { Json } from "@/integrations/supabase/types";
-
-interface UseProductFormProps {
-  initialData?: ProductFormData & { id?: string };
-  onSuccess?: (productId: string) => void;
-  productType?: 'mobile' | 'laptop';
-}
-
-type MobileProductData = {
-  name: string;
-  brand: string;
-  model_name?: string;
-  price: number;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  camera: string;
-  os?: string;
-  color?: string;
-  image_url?: string;
-  gallery_images?: string[];
-  multimedia_specs?: Json;
-  sensor_specs?: Json;
-  network_specs?: Json;
-  design_specs?: Json;
-  camera_details?: Json;
-  performance_specs?: Json;
-  display_details?: Json;
-  general_specs?: Json;
-  chipset?: string;
-  charging_specs?: string;
-  resolution?: string;
-  screen_size?: string;
-};
-
-type LaptopProductData = {
-  name: string;
-  brand: string;
-  model_name?: string;
-  price: number;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  graphics?: string;
-  os?: string;
-  ports?: string;
-  color?: string;
-  image_url?: string;
-  gallery_images?: string[];
-  multimedia_specs?: Json;
-  connectivity_specs?: Json;
-  design_specs?: Json;
-  performance_specs?: Json;
-  display_details?: Json;
-};
+import { useProductData } from "./useProductData";
+import type { UseProductFormProps } from "../types/productTypes";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
   const { toast, navigate } = useAuthCheck();
+  const { updateProduct, insertProduct } = useProductData();
   const { 
     mainImageFile, 
     galleryImageFiles, 
@@ -82,7 +21,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     uploadImage 
   } = useImageUpload();
 
-  const form = useForm<ProductFormData>({
+  const form = useForm({
     resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
     defaultValues: initialData || {
       name: "",
@@ -105,7 +44,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
 
@@ -138,78 +77,13 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       
       let result;
       if (initialData?.id) {
-        // Ensure all required fields are present for the update
-        const updateData = productType === 'mobile' 
-          ? {
-              ...data,
-              camera: (data as MobileProductData).camera || "",
-              battery: data.battery || "",
-              brand: data.brand || "",
-              display_specs: data.display_specs || "",
-              processor: data.processor || "",
-              ram: data.ram || "",
-              storage: data.storage || "",
-              name: data.name || "",
-            } as MobileProductData
-          : {
-              ...data,
-              battery: data.battery || "",
-              brand: data.brand || "",
-              display_specs: data.display_specs || "",
-              processor: data.processor || "",
-              ram: data.ram || "",
-              storage: data.storage || "",
-              name: data.name || "",
-            } as LaptopProductData;
-
-        const { data: updatedData, error } = await supabase
-          .from(table)
-          .update(updateData)
-          .eq('id', initialData.id)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = updatedData;
-
+        result = await updateProduct(table, initialData.id, data, productType);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        // Ensure all required fields are present for the insert
-        const insertData = productType === 'mobile' 
-          ? {
-              ...data,
-              camera: (data as MobileProductData).camera || "",
-              battery: data.battery || "",
-              brand: data.brand || "",
-              display_specs: data.display_specs || "",
-              processor: data.processor || "",
-              ram: data.ram || "",
-              storage: data.storage || "",
-              name: data.name || "",
-            } as MobileProductData
-          : {
-              ...data,
-              battery: data.battery || "",
-              brand: data.brand || "",
-              display_specs: data.display_specs || "",
-              processor: data.processor || "",
-              ram: data.ram || "",
-              storage: data.storage || "",
-              name: data.name || "",
-            } as LaptopProductData;
-
-        const { data: insertedData, error } = await supabase
-          .from(table)
-          .insert(insertData)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = insertedData;
-
+        result = await insertProduct(table, data, productType);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
