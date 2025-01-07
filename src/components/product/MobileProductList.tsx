@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MobileProduct } from "@/types/product";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,16 +12,29 @@ import {
 import { Search, LayoutGrid, List } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useInView } from "react-intersection-observer";
 
 interface MobileProductListProps {
   products: MobileProduct[];
+  onLoadMore: () => void;
+  hasMore: boolean;
+  isLoading: boolean;
 }
 
-export function MobileProductList({ products: initialProducts }: MobileProductListProps) {
+export function MobileProductList({ 
+  products: initialProducts,
+  onLoadMore,
+  hasMore,
+  isLoading
+}: MobileProductListProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [sortBy, setSortBy] = useState("default");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
 
   // Get unique brands from products
   const { data: brands = [] } = useQuery({
@@ -37,6 +50,12 @@ export function MobileProductList({ products: initialProducts }: MobileProductLi
       return uniqueBrands;
     }
   });
+
+  useEffect(() => {
+    if (inView && hasMore && !isLoading) {
+      onLoadMore();
+    }
+  }, [inView, hasMore, isLoading, onLoadMore]);
 
   // Filter and sort products
   const filteredProducts = initialProducts
@@ -173,6 +192,13 @@ export function MobileProductList({ products: initialProducts }: MobileProductLi
           </Link>
         ))}
       </div>
+
+      {/* Infinite scroll trigger */}
+      {(hasMore || isLoading) && (
+        <div ref={ref} className="py-4 text-center">
+          {isLoading && <p>Loading more products...</p>}
+        </div>
+      )}
     </section>
   );
 }

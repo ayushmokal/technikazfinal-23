@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/types/blog";
@@ -7,16 +7,11 @@ import { MobileProductList } from "@/components/product/MobileProductList";
 import { LaptopProductGrid } from "@/components/product/LaptopProductGrid";
 import { BlogSidebar } from "@/components/BlogSidebar";
 import type { MobileProduct, LaptopProduct } from "@/types/product";
-import { useInView } from "react-intersection-observer";
 
 const ITEMS_PER_PAGE = 8;
 
 export default function GadgetsPage() {
   const [subcategory, setSubcategory] = useState<"MOBILE" | "LAPTOPS">("MOBILE");
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    rootMargin: "100px",
-  });
 
   // Query for category-specific featured articles
   const { data: featuredArticles } = useInfiniteQuery({
@@ -66,20 +61,22 @@ export default function GadgetsPage() {
       const from = pageParam * ITEMS_PER_PAGE;
       const to = from + ITEMS_PER_PAGE - 1;
       
-      const { data, error } = await supabase
+      const { data, error, count } = await supabase
         .from('mobile_products')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(from, to);
       
       if (error) throw error;
+      
       return {
         data: data || [],
-        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined
+        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined,
+        totalCount: count
       };
     },
     getNextPageParam: (lastPage) => lastPage.nextPage,
-    initialPageParam: 0,
+    initialPageParam: 0
   });
 
   // Infinite query for laptops
@@ -94,52 +91,23 @@ export default function GadgetsPage() {
       const from = pageParam * ITEMS_PER_PAGE;
       const to = from + ITEMS_PER_PAGE - 1;
       
-      const { data, error } = await supabase
+      const { data, error, count } = await supabase
         .from('laptops')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(from, to);
       
       if (error) throw error;
+      
       return {
         data: data || [],
-        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined
+        nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined,
+        totalCount: count
       };
     },
     getNextPageParam: (lastPage) => lastPage.nextPage,
-    initialPageParam: 0,
+    initialPageParam: 0
   });
-
-  // Handle infinite scroll with debounce
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const handleFetch = () => {
-      if (!inView) return;
-
-      if (subcategory === "MOBILE" && hasNextMobile && !isFetchingNextMobile) {
-        fetchNextMobile();
-      } else if (subcategory === "LAPTOPS" && hasNextLaptop && !isFetchingNextLaptop) {
-        fetchNextLaptop();
-      }
-    };
-
-    // Debounce the fetch call
-    timeoutId = setTimeout(handleFetch, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [
-    inView,
-    subcategory,
-    hasNextMobile,
-    hasNextLaptop,
-    fetchNextMobile,
-    fetchNextLaptop,
-    isFetchingNextMobile,
-    isFetchingNextLaptop
-  ]);
 
   // Flatten the pages data
   const mobileProducts = mobileData?.pages.flatMap(page => page.data) || [];
@@ -148,22 +116,21 @@ export default function GadgetsPage() {
   const ProductGrids = () => (
     <div className="lg:col-span-8">
       {subcategory === "MOBILE" && (
-        <>
-          <MobileProductList products={mobileProducts} />
-          {isFetchingNextMobile && (
-            <div className="text-center py-4">Loading more products...</div>
-          )}
-        </>
+        <MobileProductList 
+          products={mobileProducts}
+          onLoadMore={fetchNextMobile}
+          hasMore={hasNextMobile}
+          isLoading={isFetchingNextMobile}
+        />
       )}
       {subcategory === "LAPTOPS" && (
-        <>
-          <LaptopProductGrid products={laptops} />
-          {isFetchingNextLaptop && (
-            <div className="text-center py-4">Loading more products...</div>
-          )}
-        </>
+        <LaptopProductGrid 
+          products={laptops}
+          onLoadMore={fetchNextLaptop}
+          hasMore={hasNextLaptop}
+          isLoading={isFetchingNextLaptop}
+        />
       )}
-      <div ref={ref} className="h-10" /> {/* Intersection observer target */}
     </div>
   );
 
