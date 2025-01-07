@@ -107,7 +107,7 @@ export default function ProductReviewsPage() {
                   </p>
                 </div>
                 <div className="bg-primary/10 px-2 py-1 rounded">
-                  <span className="font-semibold">{review.rating}/10</span>
+                  <span className="font-semibold">{review.rating}/5</span>
                 </div>
               </div>
               <p className="text-gray-700">{review.review_text}</p>
