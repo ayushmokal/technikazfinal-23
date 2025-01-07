@@ -25,8 +25,10 @@ export function ProductReviewCard({
   const navigate = useNavigate();
 
   const handleReadFullReview = () => {
-    // Navigate to the product reviews page
-    navigate(`/product-reviews/${productName.toLowerCase().replace(/\s+/g, '-')}`);
+    // Get the product ID from the URL
+    const pathSegments = window.location.pathname.split('/');
+    const productId = pathSegments[pathSegments.length - 1];
+    navigate(`/product-reviews/${productId}`);
   };
 
   return (

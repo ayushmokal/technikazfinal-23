@@ -47,7 +47,7 @@ export default function ProductReviewsPage() {
         .from("mobile_products")
         .select("*")
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         toast({
