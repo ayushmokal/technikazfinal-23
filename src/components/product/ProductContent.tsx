@@ -118,7 +118,6 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
       {/* Review Section */}
       <section id="review" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
         <ProductReviewCard 
           productName={product.name}
           pros={[
@@ -133,12 +132,6 @@ export function ProductContent({ product, type }: ProductContentProps) {
           ]}
           verdict="The device offers a bunch of thoughtful improvements over its predecessor, making it a value-for-money option for many customers. Its display is still one of the best in the segment. The new processor also offers a decent performance, gaming included. However, some aspects need refinement. Its cameras (in daylight) are decent if not the best."
         />
-      </section>
-
-      {/* User Reviews Section */}
-      <section id="user-reviews" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">User Reviews</h2>
-        <ProductComments productId={product.id} />
       </section>
 
       {/* Specifications Section */}
@@ -162,6 +155,12 @@ export function ProductContent({ product, type }: ProductContentProps) {
             </Button>
           </div>
         </div>
+      </section>
+
+      {/* Comments Section */}
+      <section id="user-comments" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Comments</h2>
+        <ProductComments productId={product.id} />
       </section>
 
       {/* Popular Mobiles Section */}

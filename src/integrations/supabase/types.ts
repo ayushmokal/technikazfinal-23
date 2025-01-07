@@ -288,36 +288,6 @@ export type Database = {
         }
         Relationships: []
       }
-      product_reviews: {
-        Row: {
-          created_at: string
-          id: string
-          product_id: string
-          rating: number
-          review_text: string | null
-          updated_at: string
-          user_name: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          product_id: string
-          rating: number
-          review_text?: string | null
-          updated_at?: string
-          user_name: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          product_id?: string
-          rating?: number
-          review_text?: string | null
-          updated_at?: string
-          user_name?: string
-        }
-        Relationships: []
-      }
       ratings: {
         Row: {
           blog_id: string
