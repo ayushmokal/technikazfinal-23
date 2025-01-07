@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 export function PopularMobiles() {
   const { toast } = useToast();
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
+  const { ref: loadMoreRef, inView } = useInView();
 
   const { data, isLoading: isLoadingMore, error } = useQuery({
     queryKey: ['popular-mobiles', page],
@@ -59,11 +61,11 @@ export function PopularMobiles() {
   const totalCount = data?.count || 0;
   const hasMore = popularMobiles.length > 0 && (page * itemsPerPage) < totalCount;
 
-  const handleLoadMore = () => {
-    if (hasMore) {
+  useEffect(() => {
+    if (inView && hasMore && !isLoadingMore) {
       setPage(prev => prev + 1);
     }
-  };
+  }, [inView, hasMore, isLoadingMore]);
 
   if (error) {
     return (
@@ -116,15 +118,10 @@ export function PopularMobiles() {
       </div>
       
       {hasMore && (
-        <div className="flex justify-center mt-8">
-          <Button
-            onClick={handleLoadMore}
-            disabled={isLoadingMore}
-            variant="outline"
-            size="lg"
-          >
-            {isLoadingMore ? "Loading..." : "Load More Mobiles"}
-          </Button>
+        <div ref={loadMoreRef} className="h-20 flex items-center justify-center">
+          {isLoadingMore && (
+            <div className="text-gray-500">Loading more products...</div>
+          )}
         </div>
       )}
     </section>
