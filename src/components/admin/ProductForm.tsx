@@ -58,6 +58,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       ram: "",
       storage: "",
       battery: "",
+      gallery_images: [],
     },
   });
 
@@ -77,6 +78,13 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     if (e.target.files) {
       setGalleryImageFiles(Array.from(e.target.files));
     }
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    const currentImages = form.getValues().gallery_images || [];
+    const updatedImages = [...currentImages];
+    updatedImages.splice(index, 1);
+    form.setValue('gallery_images', updatedImages);
   };
 
   const uploadImage = async (file: File, folder: string) => {
@@ -113,7 +121,11 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         const uploadPromises = galleryImageFiles.map(file => 
           uploadImage(file, 'gallery')
         );
-        data.gallery_images = await Promise.all(uploadPromises);
+        const newGalleryImages = await Promise.all(uploadPromises);
+        
+        // Combine existing and new gallery images
+        const existingGalleryImages = data.gallery_images || [];
+        data.gallery_images = [...existingGalleryImages, ...newGalleryImages];
       }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
@@ -181,9 +193,10 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             
             <ImageUpload 
               onChange={handleGalleryImagesChange} 
-              currentImageUrl={initialData?.gallery_images?.[0]}
+              currentGalleryImages={initialData?.gallery_images}
               label="Product Gallery Images"
               multiple
+              onRemoveImage={handleRemoveGalleryImage}
             />
           </div>
 

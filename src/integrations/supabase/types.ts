@@ -169,6 +169,7 @@ export type Database = {
           design_specs: Json | null
           display_details: Json | null
           display_specs: string
+          gallery_images: string[] | null
           graphics: string | null
           id: string
           image_url: string | null
@@ -193,6 +194,7 @@ export type Database = {
           design_specs?: Json | null
           display_details?: Json | null
           display_specs: string
+          gallery_images?: string[] | null
           graphics?: string | null
           id?: string
           image_url?: string | null
@@ -217,6 +219,7 @@ export type Database = {
           design_specs?: Json | null
           display_details?: Json | null
           display_specs?: string
+          gallery_images?: string[] | null
           graphics?: string | null
           id?: string
           image_url?: string | null
@@ -247,6 +250,7 @@ export type Database = {
           design_specs: Json | null
           display_details: Json | null
           display_specs: string
+          gallery_images: string[] | null
           general_specs: Json | null
           id: string
           image_url: string | null
@@ -277,6 +281,7 @@ export type Database = {
           design_specs?: Json | null
           display_details?: Json | null
           display_specs: string
+          gallery_images?: string[] | null
           general_specs?: Json | null
           id?: string
           image_url?: string | null
@@ -307,6 +312,7 @@ export type Database = {
           design_specs?: Json | null
           display_details?: Json | null
           display_specs?: string
+          gallery_images?: string[] | null
           general_specs?: Json | null
           id?: string
           image_url?: string | null

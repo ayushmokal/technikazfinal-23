@@ -3,15 +3,25 @@ import { Input } from "@/components/ui/input";
 import { FormLabel } from "@/components/ui/form";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface ImageUploadProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   currentImageUrl?: string;
+  currentGalleryImages?: string[];
   multiple?: boolean;
+  onRemoveImage?: (index: number) => void;
 }
 
-export function ImageUpload({ onChange, label = "Product Image", currentImageUrl, multiple = false }: ImageUploadProps) {
+export function ImageUpload({ 
+  onChange, 
+  label = "Product Image", 
+  currentImageUrl, 
+  currentGalleryImages = [],
+  multiple = false,
+  onRemoveImage 
+}: ImageUploadProps) {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,15 +56,28 @@ export function ImageUpload({ onChange, label = "Product Image", currentImageUrl
         </span>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {(previewUrls.length > 0 ? previewUrls : (currentImageUrl ? [currentImageUrl] : [])).map((url, index) => (
-          <div key={index} className="relative">
+        {(previewUrls.length > 0 ? previewUrls : 
+          multiple ? currentGalleryImages : 
+          (currentImageUrl ? [currentImageUrl] : [])
+        ).map((url, index) => (
+          <div key={index} className="relative group">
             <AspectRatio ratio={1}>
               <img
                 src={url}
                 alt={`Preview ${index + 1}`}
-                className="object-contain w-full h-full rounded-md"
+                className="object-contain w-full h-full rounded-md border border-gray-200"
               />
             </AspectRatio>
+            {onRemoveImage && (
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => onRemoveImage(index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         ))}
       </div>
