@@ -2,7 +2,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
-import { ProductFormData } from "../ProductForm";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface AdditionalSpecsSectionProps {
   form: UseFormReturn<ProductFormData>;

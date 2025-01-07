@@ -15,6 +15,8 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -23,11 +25,24 @@ export const mobileProductSchema = baseProductSchema.extend({
   charging_specs: z.string().optional(),
   screen_size: z.string().optional(),
   resolution: z.string().optional(),
+  camera_details: z.any().optional(),
+  sensor_specs: z.any().optional(),
+  network_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
+  general_specs: z.any().optional(),
+  multimedia_specs: z.any().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  connectivity_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
 });
 
 export type MobileProductFormData = z.infer<typeof mobileProductSchema>;

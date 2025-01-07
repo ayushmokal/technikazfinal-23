@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
-import { ProductFormData } from "./ProductForm";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface Product {
   id: string;
