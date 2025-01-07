@@ -9,30 +9,49 @@ import { Form } from "@/components/ui/form";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export interface ProductFormData {
-  id?: string;
-  name: string;
-  brand: string;
-  model_name?: string;
-  price: number;
-  image_url?: string;
-  gallery_images?: string[];
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  os?: string;
-  color?: string;
-  camera?: string;
-  chipset?: string;
-  resolution?: string;
-  screen_size?: string;
-  charging_specs?: string;
-  graphics?: string;
-  ports?: string;
-}
+const mobileProductSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  brand: z.string().min(1, "Brand is required"),
+  model_name: z.string().optional(),
+  price: z.number().min(0, "Price must be positive"),
+  display_specs: z.string().min(1, "Display specifications are required"),
+  processor: z.string().min(1, "Processor is required"),
+  ram: z.string().min(1, "RAM is required"),
+  storage: z.string().min(1, "Storage is required"),
+  battery: z.string().min(1, "Battery specifications are required"),
+  camera: z.string().min(1, "Camera specifications are required"),
+  os: z.string().optional(),
+  chipset: z.string().optional(),
+  charging_specs: z.string().optional(),
+  screen_size: z.string().optional(),
+  resolution: z.string().optional(),
+  color: z.string().optional(),
+  image_url: z.string().optional(),
+  gallery_images: z.array(z.string()).optional(),
+});
+
+const laptopProductSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  brand: z.string().min(1, "Brand is required"),
+  model_name: z.string().optional(),
+  price: z.number().min(0, "Price must be positive"),
+  display_specs: z.string().min(1, "Display specifications are required"),
+  processor: z.string().min(1, "Processor is required"),
+  ram: z.string().min(1, "RAM is required"),
+  storage: z.string().min(1, "Storage is required"),
+  battery: z.string().min(1, "Battery specifications are required"),
+  graphics: z.string().optional(),
+  os: z.string().optional(),
+  ports: z.string().optional(),
+  color: z.string().optional(),
+  image_url: z.string().optional(),
+  gallery_images: z.array(z.string()).optional(),
+});
+
+export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
 
 interface ProductFormProps {
   initialData?: ProductFormData;
@@ -48,6 +67,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
 
   const form = useForm<ProductFormData>({
+    resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
     defaultValues: initialData || {
       name: "",
       brand: "",
@@ -58,6 +78,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       ram: "",
       storage: "",
       battery: "",
+      camera: "", // Default value for mobile
       gallery_images: [],
     },
   });
@@ -111,19 +132,16 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     try {
       setIsLoading(true);
 
-      // Handle main image upload
       if (mainImageFile) {
         data.image_url = await uploadImage(mainImageFile, 'main');
       }
 
-      // Handle gallery images upload
       if (galleryImageFiles.length > 0) {
         const uploadPromises = galleryImageFiles.map(file => 
           uploadImage(file, 'gallery')
         );
         const newGalleryImages = await Promise.all(uploadPromises);
         
-        // Combine existing and new gallery images
         const existingGalleryImages = data.gallery_images || [];
         data.gallery_images = [...existingGalleryImages, ...newGalleryImages];
       }
