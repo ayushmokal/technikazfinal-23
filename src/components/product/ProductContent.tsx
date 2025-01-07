@@ -46,7 +46,6 @@ export function ProductContent({ product, type }: ProductContentProps) {
               <div>
                 <div className="flex items-center gap-4">
                   <h1 className="text-3xl font-bold">{product.name}</h1>
-                  <Heart className="w-6 h-6 stroke-1" />
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                   <div className="flex items-center gap-1">
