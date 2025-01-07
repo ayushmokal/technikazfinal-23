@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ProductKeySpecs } from "./ProductKeySpecs";
 import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
-import type { LaptopProduct, MobileProduct } from "@/pages/ProductDetailPage";
+import type { LaptopProduct, MobileProduct } from "@/types/product";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
