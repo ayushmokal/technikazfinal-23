@@ -16,10 +16,10 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
   const sections = [
     { id: 'overview', label: 'Overview' },
     { id: 'pictures', label: 'Pictures' },
-    { id: 'specifications', label: 'Specifications' },
-    { id: 'expert-review', label: 'Expert Review' },
-    { id: 'comparison', label: 'Comparison' },
+    { id: 'review', label: 'Expert Review' },
     { id: 'user-comments', label: 'User Comments' },
+    { id: 'specifications', label: 'Specifications' },
+    { id: 'comparison', label: 'Comparison' },
   ];
 
   const handleSectionClick = (sectionId: string) => {
