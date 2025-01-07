@@ -2,7 +2,6 @@ import * as z from "zod";
 import type { Json } from "@/integrations/supabase/types";
 
 const baseProductSchema = z.object({
-  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
   model_name: z.string().optional(),
@@ -16,8 +15,6 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
   multimedia_specs: z.custom<Json>().optional(),
   design_specs: z.custom<Json>().optional(),
   performance_specs: z.custom<Json>().optional(),
@@ -45,3 +42,14 @@ export const laptopProductSchema = baseProductSchema.extend({
 export type MobileProductFormData = z.infer<typeof mobileProductSchema>;
 export type LaptopProductFormData = z.infer<typeof laptopProductSchema>;
 export type ProductFormData = MobileProductFormData | LaptopProductFormData;
+
+export const expertReviewSchema = z.object({
+  rating: z.number().min(0).max(10),
+  author: z.string().min(1, "Author is required"),
+  summary: z.string().min(1, "Summary is required"),
+  pros: z.array(z.string()).min(1, "At least one pro is required"),
+  cons: z.array(z.string()).min(1, "At least one con is required"),
+  verdict: z.string().min(1, "Verdict is required"),
+});
+
+export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;

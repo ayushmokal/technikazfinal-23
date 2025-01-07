@@ -11,12 +11,12 @@ import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./ExpertReviewForm";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "@/components/ui/separator";
 import { 
   mobileProductSchema, 
   laptopProductSchema,
   type ProductFormData 
 } from "@/schemas/productSchemas";
-import { Separator } from "@/components/ui/separator";
 
 interface ProductFormProps {
   initialData?: ProductFormData;
@@ -129,7 +129,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       } else {
         const { error } = await supabase
           .from(table)
-          .insert([data]);
+          .insert(data);
 
         if (error) throw error;
 

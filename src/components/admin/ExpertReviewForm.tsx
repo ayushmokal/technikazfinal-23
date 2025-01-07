@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -9,17 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-const expertReviewSchema = z.object({
-  rating: z.number().min(0).max(10),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()).min(1, "At least one pro is required"),
-  cons: z.array(z.string()).min(1, "At least one con is required"),
-  verdict: z.string().min(1, "Verdict is required"),
-});
-
-type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
+import { expertReviewSchema, type ExpertReviewFormData } from "@/schemas/productSchemas";
 
 interface ExpertReviewFormProps {
   productId: string;
@@ -66,7 +55,15 @@ export function ExpertReviewForm({ productId, onSuccess }: ExpertReviewFormProps
       setIsLoading(true);
       const { error } = await supabase
         .from("expert_reviews")
-        .insert([{ ...data, product_id: productId }]);
+        .insert({
+          product_id: productId,
+          rating: data.rating,
+          author: data.author,
+          summary: data.summary,
+          pros: data.pros,
+          cons: data.cons,
+          verdict: data.verdict,
+        });
 
       if (error) throw error;
 
