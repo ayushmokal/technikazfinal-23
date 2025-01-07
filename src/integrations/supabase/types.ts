@@ -327,6 +327,38 @@ export type Database = {
         }
         Relationships: []
       }
+      product_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_ratings_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_reviews: {
         Row: {
           created_at: string
@@ -418,6 +450,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_product_rating: {
+        Args: {
+          p_id: string
+        }
+        Returns: {
+          average_rating: number
+          total_ratings: number
+          rating_distribution: number[]
+        }[]
+      }
       increment_share_count: {
         Args: {
           blog_id: string

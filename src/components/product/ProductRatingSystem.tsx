@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Star, StarHalf } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -32,8 +32,14 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
       return;
     }
 
-    setRatingStats(data[0]);
+    if (data && data.length > 0) {
+      setRatingStats(data[0]);
+    }
   };
+
+  useEffect(() => {
+    fetchRatingStats();
+  }, [productId]);
 
   const handleRatingSubmit = async () => {
     if (!selectedRating) {
@@ -45,14 +51,14 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
       return;
     }
 
-    const { error } = await supabase
+    const { error: ratingError } = await supabase
       .from('product_ratings')
       .insert({
         product_id: productId,
         rating: selectedRating,
       });
 
-    if (error) {
+    if (ratingError) {
       toast({
         title: "Error",
         description: "Failed to submit rating. Please try again.",
@@ -139,9 +145,11 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
                 </span>
                 <Progress
                   value={
-                    (ratingStats.rating_distribution[index] /
-                      ratingStats.total_ratings) *
-                    100
+                    ratingStats.total_ratings > 0
+                      ? (ratingStats.rating_distribution[index] /
+                          ratingStats.total_ratings) *
+                        100
+                      : 0
                   }
                   className="h-2"
                 />
