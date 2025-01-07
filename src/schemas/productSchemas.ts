@@ -1,4 +1,5 @@
 import * as z from "zod";
+import type { Json } from "@/integrations/supabase/types";
 
 const baseProductSchema = z.object({
   id: z.string().optional(),
@@ -25,24 +26,24 @@ export const mobileProductSchema = baseProductSchema.extend({
   charging_specs: z.string().optional(),
   screen_size: z.string().optional(),
   resolution: z.string().optional(),
-  camera_details: z.any().optional(),
-  sensor_specs: z.any().optional(),
-  network_specs: z.any().optional(),
-  design_specs: z.any().optional(),
-  performance_specs: z.any().optional(),
-  display_details: z.any().optional(),
-  general_specs: z.any().optional(),
-  multimedia_specs: z.any().optional(),
+  camera_details: z.custom<Json>().optional(),
+  sensor_specs: z.custom<Json>().optional(),
+  network_specs: z.custom<Json>().optional(),
+  design_specs: z.custom<Json>().optional(),
+  performance_specs: z.custom<Json>().optional(),
+  display_details: z.custom<Json>().optional(),
+  general_specs: z.custom<Json>().optional(),
+  multimedia_specs: z.custom<Json>().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
-  multimedia_specs: z.any().optional(),
-  connectivity_specs: z.any().optional(),
-  design_specs: z.any().optional(),
-  performance_specs: z.any().optional(),
-  display_details: z.any().optional(),
+  multimedia_specs: z.custom<Json>().optional(),
+  connectivity_specs: z.custom<Json>().optional(),
+  design_specs: z.custom<Json>().optional(),
+  performance_specs: z.custom<Json>().optional(),
+  display_details: z.custom<Json>().optional(),
 });
 
 export type MobileProductFormData = z.infer<typeof mobileProductSchema>;
