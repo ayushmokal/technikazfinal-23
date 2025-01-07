@@ -1,55 +1,49 @@
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import CategoryPage from "./pages/CategoryPage";
-import AdminLogin from "./pages/AdminLogin";
-import AdminPanel from "./pages/AdminPanel";
-import EditBlogPage from "./pages/EditBlogPage";
-import ArticlePage from "./pages/ArticlePage";
-import GamesPage from "./pages/GamesPage";
-import TechPage from "./pages/TechPage";
-import StocksPage from "./pages/StocksPage";
-import EntertainmentPage from "./pages/EntertainmentPage";
-import GadgetsPage from "./pages/GadgetsPage";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
-import ProductReviewsPage from "./pages/ProductReviewsPage";
-import AboutUs from "./pages/AboutUs";
-import NotFound from "./pages/NotFound";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsAndConditions from "./pages/TermsAndConditions";
+import ProductSpecificationsPage from "./pages/ProductSpecificationsPage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminProductsPage from "./pages/admin/AdminProductsPage";
+import AdminAddProductPage from "./pages/admin/AdminAddProductPage";
+import AdminEditProductPage from "./pages/admin/AdminEditProductPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Sonner />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/category/:category" element={<CategoryPage />} />
-            <Route path="/article/:slug" element={<ArticlePage />} />
-            <Route path="/games" element={<GamesPage />} />
-            <Route path="/tech" element={<TechPage />} />
-            <Route path="/stocks" element={<StocksPage />} />
-            <Route path="/entertainment" element={<EntertainmentPage />} />
-            <Route path="/gadgets" element={<GadgetsPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
-            <Route path="/product-reviews/:id" element={<ProductReviewsPage />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsAndConditions />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/admin/edit/:id" element={<EditBlogPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/gadgets" element={<ProductsPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/product/:id/specifications" element={<ProductSpecificationsPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
+          <Route path="/admin/products/add" element={<AdminAddProductPage />} />
+          <Route path="/admin/products/edit/:id" element={<AdminEditProductPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <Toaster />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

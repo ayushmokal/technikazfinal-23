@@ -10,6 +10,7 @@ import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { CompareDialog } from "./CompareDialog";
 import { ProductRatingSystem } from "./ProductRatingSystem";
+import { Link } from "react-router-dom";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -147,7 +148,15 @@ export function ProductContent({ product, type }: ProductContentProps) {
 
       {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">Full Specification</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">Full Specification</h2>
+          <Link 
+            to={`/product/${product.id}/specifications?type=${type}`}
+            className="text-primary hover:underline"
+          >
+            See Full Specs
+          </Link>
+        </div>
         <ProductSpecifications product={product} />
       </section>
 
