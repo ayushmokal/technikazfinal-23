@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GadgetsPage from "./pages/GadgetsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ProductReviewsPage from "./pages/ProductReviewsPage";
-import ProductFullSpecsPage from "./pages/ProductFullSpecsPage";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +18,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/product/:id/reviews",
-    element: <ProductReviewsPage />,
-  },
-  {
-    path: "/product/:id/specifications",
-    element: <ProductFullSpecsPage />,
-  },
+    element: <ProductReviewsPage />
+  }
 ]);
 
 export default function App() {
