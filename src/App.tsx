@@ -14,6 +14,7 @@ import StocksPage from "./pages/StocksPage";
 import EntertainmentPage from "./pages/EntertainmentPage";
 import GadgetsPage from "./pages/GadgetsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import ProductReviewsPage from "./pages/ProductReviewsPage";
 import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -37,6 +38,7 @@ function App() {
             <Route path="/entertainment" element={<EntertainmentPage />} />
             <Route path="/gadgets" element={<GadgetsPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
+            <Route path="/product-reviews/:id" element={<ProductReviewsPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />
