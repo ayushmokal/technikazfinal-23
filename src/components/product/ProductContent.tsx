@@ -1,18 +1,18 @@
 import { ProductSpecifications } from "@/components/admin/ProductSpecifications";
 import { ProductReviewCard } from "./ProductReviewCard";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProductKeySpecs } from "./ProductKeySpecs";
 import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/types/product";
 import { Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CompareDialog } from "./CompareDialog";
 import { ProductRatingSystem } from "./ProductRatingSystem";
 import { ProductReview } from "./ProductReview";
-import { ProductVariantSelector } from "./ProductVariantSelector";
-import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -34,16 +34,37 @@ interface ProductContentProps {
   activeSection: string;
 }
 
-export function ProductContent({ product: initialProduct, type, activeSection }: ProductContentProps) {
+export function ProductContent({ product, type }: ProductContentProps) {
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(initialProduct);
+  const [selectedStorage, setSelectedStorage] = useState<string>(product.storage || '');
+  const [selectedColor, setSelectedColor] = useState<string>(product.color || '');
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
-  const brandWebsite = getBrandWebsite(currentProduct.brand || '');
+  const brandWebsite = getBrandWebsite(product.brand || '');
 
-  const handleVariantChange = (variant: LaptopProduct | MobileProduct) => {
-    setCurrentProduct(variant);
-  };
+  // Fetch product variants
+  const { data: variants } = useQuery({
+    queryKey: ['product-variants', product.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from(type === 'laptop' ? 'laptops' : 'mobile_products')
+        .select('*')
+        .eq('name', product.name)
+        .eq('brand', product.brand);
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Get unique storage and color options
+  const storageOptions = [...new Set(variants?.map(v => v.storage))].filter(Boolean);
+  const colorOptions = [...new Set(variants?.map(v => v.color))].filter(Boolean);
+
+  useEffect(() => {
+    if (product.storage) setSelectedStorage(product.storage);
+    if (product.color) setSelectedColor(product.color);
+  }, [product]);
 
   return (
     <div className="flex-1 space-y-16">
@@ -54,7 +75,7 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-4">
-                  <h1 className="text-3xl font-bold">{currentProduct.name}</h1>
+                  <h1 className="text-3xl font-bold">{product.name}</h1>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                   <div className="flex items-center gap-1">
@@ -68,7 +89,7 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
                     rel="noopener noreferrer" 
                     className="text-primary hover:underline"
                   >
-                    About {currentProduct.brand}
+                    About {product.brand}
                   </a>
                 </div>
               </div>
@@ -83,27 +104,48 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold">₹{currentProduct.price.toLocaleString()}</span>
+                <span className="text-2xl font-bold">₹{product.price.toLocaleString()}</span>
                 <span className="text-sm text-muted-foreground">(onwards)</span>
               </div>
               <a href="#variants" className="text-sm text-primary hover:underline">See All Variants</a>
             </div>
 
             {isMobile && (
-              <ProductVariantSelector
-                product={currentProduct}
-                type={type}
-                onVariantChange={handleVariantChange}
-              />
+              <div className="flex items-center gap-6">
+                <Select value={selectedStorage} onValueChange={setSelectedStorage}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Storage" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {storageOptions.map((storage) => (
+                      <SelectItem key={storage} value={storage || ''}>
+                        {storage} Storage
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={selectedColor} onValueChange={setSelectedColor}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Color" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {colorOptions.map((color) => (
+                      <SelectItem key={color} value={color || ''}>
+                        {color}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             )}
 
             <ProductKeySpecs
               type={type}
-              screenSize={currentProduct.display_specs}
-              camera={isMobile ? (currentProduct as MobileProduct).camera : undefined}
-              processor={currentProduct.processor}
-              battery={currentProduct.battery}
-              graphics={isLaptop ? (currentProduct as LaptopProduct).graphics : undefined}
+              screenSize={product.display_specs}
+              camera={isMobile ? (product as MobileProduct).camera : undefined}
+              processor={product.processor}
+              battery={product.battery}
+              graphics={isLaptop ? (product as LaptopProduct).graphics : undefined}
             />
           </div>
         </div>
@@ -112,22 +154,22 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
       {/* Review Section */}
       <section id="review" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Expert Review</h2>
-        <ProductReview productId={currentProduct.id} />
+        <ProductReview productId={product.id} />
       </section>
 
       {/* User Reviews Section */}
       <section id="user-reviews" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">User Reviews</h2>
-        <ProductRatingSystem productId={currentProduct.id} />
+        <ProductRatingSystem productId={product.id} />
         <div className="mt-8">
-          <ProductComments productId={currentProduct.id} />
+          <ProductComments productId={product.id} />
         </div>
       </section>
 
       {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Full Specification</h2>
-        <ProductSpecifications product={currentProduct} />
+        <ProductSpecifications product={product} />
       </section>
 
       {/* Compare Section */}
@@ -137,16 +179,16 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
           <div className="flex items-center gap-8">
             <div className="flex-shrink-0 bg-gray-50 p-4 rounded-lg">
               <img 
-                src={currentProduct.image_url || "/placeholder.svg"} 
-                alt={currentProduct.name} 
+                src={product.image_url || "/placeholder.svg"} 
+                alt={product.name} 
                 className="w-32 h-32 object-contain"
               />
-              <h3 className="text-sm font-medium text-center mt-2">{currentProduct.name}</h3>
+              <h3 className="text-sm font-medium text-center mt-2">{product.name}</h3>
             </div>
             <div className="flex-grow space-y-4">
               <div className="flex flex-col">
                 <h4 className="text-lg font-semibold text-gray-900">Add devices to compare</h4>
-                <p className="text-gray-600">Compare {currentProduct.name} with other devices to find the best match for you</p>
+                <p className="text-gray-600">Compare {product.name} with other devices to find the best match for you</p>
               </div>
               <div className="flex justify-end">
                 <Button 
@@ -166,7 +208,15 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
       <section id="variants" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Available Variants</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Assuming variants are fetched and displayed here */}
+          {variants?.map((variant) => (
+            <div key={variant.id} className="border rounded-lg p-4 space-y-2">
+              <h3 className="font-semibold">{variant.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {variant.storage} • {variant.color}
+              </p>
+              <p className="font-medium">₹{variant.price.toLocaleString()}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -175,7 +225,7 @@ export function ProductContent({ product: initialProduct, type, activeSection }:
       <CompareDialog
         isOpen={isCompareDialogOpen}
         onClose={() => setIsCompareDialogOpen(false)}
-        currentProduct={currentProduct}
+        currentProduct={product}
         type={type}
       />
     </div>
