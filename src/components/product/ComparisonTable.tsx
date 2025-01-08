@@ -39,26 +39,28 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
 
   return (
     <div className="mt-6">
-      <div className="grid grid-cols-3 gap-4">
-        {selectedProducts.map((product) => (
-          <div key={product.id} className="relative">
-            {product.id !== currentProduct.id && (
-              <button
-                onClick={() => onRemove(product.id)}
-                className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-            <img
-              src={product.image_url || "/placeholder.svg"}
-              alt={product.name}
-              className="w-full h-48 object-contain mb-2"
-            />
-            <h3 className="font-semibold text-lg">{product.name}</h3>
-            <p className="text-sm text-muted-foreground mb-4">₹{product.price.toLocaleString()}</p>
-          </div>
-        ))}
+      <div className="sticky top-0 bg-white z-10 pb-4">
+        <div className="grid grid-cols-3 gap-4">
+          {selectedProducts.map((product) => (
+            <div key={product.id} className="relative">
+              {product.id !== currentProduct.id && (
+                <button
+                  onClick={() => onRemove(product.id)}
+                  className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+              <img
+                src={product.image_url || "/placeholder.svg"}
+                alt={product.name}
+                className="w-full h-48 object-contain mb-2"
+              />
+              <h3 className="font-semibold text-lg">{product.name}</h3>
+              <p className="text-sm text-muted-foreground mb-4">₹{product.price.toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mt-8">
