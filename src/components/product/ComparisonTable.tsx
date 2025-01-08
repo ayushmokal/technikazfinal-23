@@ -36,44 +36,28 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
   ];
 
   const specs = type === 'laptop' ? laptopSpecs : mobileSpecs;
-
-  // Take only the first three products for comparison
-  const displayProducts = selectedProducts.slice(0, 3);
+  const displayProducts = selectedProducts.slice(1, 3);
 
   return (
     <div className="mt-6">
-      <div className="sticky top-0 bg-white z-10 pb-4">
-        <div className="grid grid-cols-4 gap-4">
-          <div className="font-semibold text-lg">Specifications</div>
-          <div>
-            <img
-              src={currentProduct.image_url || "/placeholder.svg"}
-              alt={currentProduct.name}
-              className="w-full h-48 object-contain mb-2"
-            />
-            <h3 className="font-semibold text-lg">{currentProduct.name}</h3>
-            <p className="text-sm text-muted-foreground mb-4">₹{currentProduct.price.toLocaleString()}</p>
-          </div>
-          {displayProducts.slice(1).map((product) => (
-            <div key={product.id} className="relative">
-              {product.id !== currentProduct.id && (
-                <button
-                  onClick={() => onRemove(product.id)}
-                  className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-              <img
-                src={product.image_url || "/placeholder.svg"}
-                alt={product.name}
-                className="w-full h-48 object-contain mb-2"
-              />
-              <h3 className="font-semibold text-lg">{product.name}</h3>
-              <p className="text-sm text-muted-foreground mb-4">₹{product.price.toLocaleString()}</p>
-            </div>
-          ))}
+      <div className="grid grid-cols-4 gap-4">
+        <div className="font-semibold text-lg">Specifications</div>
+        <div>
+          <h3 className="font-semibold text-lg">{currentProduct.name}</h3>
+          <p className="text-sm text-muted-foreground mb-4">₹{currentProduct.price.toLocaleString()}</p>
         </div>
+        {displayProducts.map((product) => (
+          <div key={product.id} className="relative">
+            <button
+              onClick={() => onRemove(product.id)}
+              className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <h3 className="font-semibold text-lg">{product.name}</h3>
+            <p className="text-sm text-muted-foreground mb-4">₹{product.price.toLocaleString()}</p>
+          </div>
+        ))}
       </div>
 
       <div className="mt-8">
@@ -86,7 +70,7 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
                   ? `₹${currentProduct[spec.key]?.toLocaleString()}` 
                   : currentProduct[spec.key as keyof typeof currentProduct]?.toString() || 'N/A'}
               </div>
-              {displayProducts.slice(1).map((product) => (
+              {displayProducts.map((product) => (
                 <div key={`${product.id}-${spec.key}`} className="text-gray-600">
                   {spec.key === 'price' 
                     ? `₹${product[spec.key]?.toLocaleString()}` 

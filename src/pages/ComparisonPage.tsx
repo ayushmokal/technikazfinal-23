@@ -45,24 +45,24 @@ export default function ComparisonPage() {
         </Button>
 
         <div className="bg-white rounded-lg p-8 border">
-          <h1 className="text-2xl font-bold mb-8">Product Comparison</h1>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="space-y-4">
-                {products[index] ? (
+          <div className="grid grid-cols-4 gap-6 mb-8">
+            <div className="font-semibold text-lg">Specifications</div>
+            <div>
+              <h3 className="font-semibold text-lg">{initialProduct.name}</h3>
+            </div>
+            {Array.from({ length: 2 }).map((_, index) => (
+              <div key={index}>
+                {products[index + 1] ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium">{products[index].name}</h3>
-                      {index > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleRemoveProduct(products[index].id)}
-                        >
-                          Remove
-                        </Button>
-                      )}
+                      <h3 className="font-medium">{products[index + 1].name}</h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveProduct(products[index + 1].id)}
+                      >
+                        Remove
+                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -76,14 +76,12 @@ export default function ComparisonPage() {
             ))}
           </div>
 
-          {products.length > 1 && (
-            <ComparisonTable
-              selectedProducts={products}
-              currentProduct={products[0]}
-              type={type}
-              onRemove={handleRemoveProduct}
-            />
-          )}
+          <ComparisonTable
+            selectedProducts={products}
+            currentProduct={products[0]}
+            type={type}
+            onRemove={handleRemoveProduct}
+          />
         </div>
       </div>
     </Layout>
