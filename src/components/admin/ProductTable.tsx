@@ -74,7 +74,7 @@ export function ProductTable({
               <TableCell>{product.brand}</TableCell>
               <TableCell>₹{product.price.toLocaleString()}</TableCell>
               <TableCell>
-                <ScrollArea className="w-[300px]" orientation="horizontal">
+                <div className="w-[300px] overflow-x-auto">
                   <div className="flex items-center gap-2 p-1 pr-4 min-w-max">
                     <Button
                       variant="outline"
@@ -105,7 +105,7 @@ export function ProductTable({
                       Delete
                     </Button>
                   </div>
-                </ScrollArea>
+                </div>
               </TableCell>
             </TableRow>
           ))}
