@@ -40,26 +40,6 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
 
   return (
     <div className="mt-6">
-      <div className="grid grid-cols-4 gap-4">
-        <div className="font-semibold text-lg">Specifications</div>
-        <div>
-          <h3 className="font-semibold text-lg">{currentProduct.name}</h3>
-          <p className="text-sm text-muted-foreground mb-4">₹{currentProduct.price.toLocaleString()}</p>
-        </div>
-        {displayProducts.map((product) => (
-          <div key={product.id} className="relative">
-            <button
-              onClick={() => onRemove(product.id)}
-              className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md"
-            >
-              <X className="h-4 w-4" />
-            </button>
-            <h3 className="font-semibold text-lg">{product.name}</h3>
-            <p className="text-sm text-muted-foreground mb-4">₹{product.price.toLocaleString()}</p>
-          </div>
-        ))}
-      </div>
-
       <div className="mt-8">
         {specs.map((spec) => (
           <div key={spec.key}>
