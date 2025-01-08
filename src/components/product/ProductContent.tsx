@@ -7,10 +7,12 @@ import { ProductComments } from "./ProductComments";
 import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/types/product";
 import { Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CompareDialog } from "./CompareDialog";
 import { ProductRatingSystem } from "./ProductRatingSystem";
-import { ProductReview } from "./ProductReview"; // Import the new ProductReview component
+import { ProductReview } from "./ProductReview";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -34,9 +36,35 @@ interface ProductContentProps {
 
 export function ProductContent({ product, type }: ProductContentProps) {
   const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
+  const [selectedStorage, setSelectedStorage] = useState<string>(product.storage || '');
+  const [selectedColor, setSelectedColor] = useState<string>(product.color || '');
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
-  const brandWebsite = getBrandWebsite(product.brand);
+  const brandWebsite = getBrandWebsite(product.brand || '');
+
+  // Fetch product variants
+  const { data: variants } = useQuery({
+    queryKey: ['product-variants', product.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from(type === 'laptop' ? 'laptops' : 'mobile_products')
+        .select('*')
+        .eq('name', product.name)
+        .eq('brand', product.brand);
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Get unique storage and color options
+  const storageOptions = [...new Set(variants?.map(v => v.storage))].filter(Boolean);
+  const colorOptions = [...new Set(variants?.map(v => v.color))].filter(Boolean);
+
+  useEffect(() => {
+    if (product.storage) setSelectedStorage(product.storage);
+    if (product.color) setSelectedColor(product.color);
+  }, [product]);
 
   return (
     <div className="flex-1 space-y-16">
@@ -79,28 +107,33 @@ export function ProductContent({ product, type }: ProductContentProps) {
                 <span className="text-2xl font-bold">₹{product.price.toLocaleString()}</span>
                 <span className="text-sm text-muted-foreground">(onwards)</span>
               </div>
-              <a href="#" className="text-sm text-primary hover:underline">See All Variants</a>
+              <a href="#variants" className="text-sm text-primary hover:underline">See All Variants</a>
             </div>
 
             {isMobile && (
               <div className="flex items-center gap-6">
-                <Select>
+                <Select value={selectedStorage} onValueChange={setSelectedStorage}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="256 GB Storage" />
+                    <SelectValue placeholder="Select Storage" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="256">256 GB Storage</SelectItem>
-                    <SelectItem value="512">512 GB Storage</SelectItem>
+                    {storageOptions.map((storage) => (
+                      <SelectItem key={storage} value={storage || ''}>
+                        {storage} Storage
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-                <Select>
+                <Select value={selectedColor} onValueChange={setSelectedColor}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Any Colour" />
+                    <SelectValue placeholder="Select Color" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="any">Any Colour</SelectItem>
-                    <SelectItem value="black">Black</SelectItem>
-                    <SelectItem value="blue">Blue</SelectItem>
+                    {colorOptions.map((color) => (
+                      <SelectItem key={color} value={color || ''}>
+                        {color}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -171,7 +204,22 @@ export function ProductContent({ product, type }: ProductContentProps) {
         </div>
       </section>
 
-      {/* Popular Mobiles Section */}
+      {/* Variants Section */}
+      <section id="variants" className="scroll-mt-24">
+        <h2 className="text-2xl font-bold mb-6">Available Variants</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {variants?.map((variant) => (
+            <div key={variant.id} className="border rounded-lg p-4 space-y-2">
+              <h3 className="font-semibold">{variant.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {variant.storage} • {variant.color}
+              </p>
+              <p className="font-medium">₹{variant.price.toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {isMobile && <PopularMobiles />}
 
       <CompareDialog
