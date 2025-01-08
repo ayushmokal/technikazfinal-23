@@ -37,12 +37,15 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
 
   const specs = type === 'laptop' ? laptopSpecs : mobileSpecs;
 
+  // Take only the first three products for comparison
+  const displayProducts = selectedProducts.slice(0, 3);
+
   return (
     <div className="mt-6">
       <div className="sticky top-0 bg-white z-10 pb-4">
         <div className="grid grid-cols-4 gap-4">
           <div className="font-semibold text-lg">Specifications</div>
-          {selectedProducts.map((product) => (
+          {displayProducts.map((product) => (
             <div key={product.id} className="relative">
               {product.id !== currentProduct.id && (
                 <button
@@ -69,7 +72,7 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
           <div key={spec.key}>
             <div className="grid grid-cols-4 gap-4 py-3">
               <div className="font-medium text-gray-700">{spec.title}</div>
-              {selectedProducts.map((product) => (
+              {displayProducts.map((product) => (
                 <div key={`${product.id}-${spec.key}`} className="text-gray-600">
                   {spec.key === 'price' 
                     ? `₹${product[spec.key]?.toLocaleString()}` 
