@@ -8,9 +8,16 @@ interface ProductSidebarProps {
   onSectionChange: (section: string) => void;
   mainImage: string | null;
   productName: string;
+  galleryImages?: string[] | null;
 }
 
-export function ProductSidebar({ activeSection, onSectionChange, mainImage, productName }: ProductSidebarProps) {
+export function ProductSidebar({ 
+  activeSection, 
+  onSectionChange, 
+  mainImage, 
+  productName,
+  galleryImages = []
+}: ProductSidebarProps) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState('overview');
 
@@ -63,7 +70,7 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
       onSectionChange(sectionId);
       const element = document.getElementById(sectionId);
       if (element) {
-        const offset = 100; // Adjust this value based on your header height
+        const offset = 100;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
         
@@ -94,7 +101,11 @@ export function ProductSidebar({ activeSection, onSectionChange, mainImage, prod
 
       <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-          <ProductGalleryTabs mainImage={mainImage} productName={productName} />
+          <ProductGalleryTabs 
+            mainImage={mainImage} 
+            productName={productName} 
+            galleryImages={galleryImages}
+          />
         </DialogContent>
       </Dialog>
     </>

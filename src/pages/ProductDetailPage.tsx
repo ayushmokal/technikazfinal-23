@@ -80,6 +80,7 @@ export default function ProductDetailPage() {
               onSectionChange={setActiveSection}
               mainImage={product.image_url}
               productName={product.name}
+              galleryImages={product.gallery_images}
             />
           </div>
           <ProductContent
