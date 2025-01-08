@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Star } from "lucide-react";
+import { Star, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ProductRatingSystemProps {
   productId: string;
@@ -16,11 +17,21 @@ interface RatingStats {
   rating_distribution: number[];
 }
 
+interface UserReview {
+  id: string;
+  user_name: string;
+  rating: number;
+  review_text: string;
+  created_at: string;
+}
+
 export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [review, setReview] = useState("");
   const [ratingStats, setRatingStats] = useState<RatingStats | null>(null);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [userReviews, setUserReviews] = useState<UserReview[]>([]);
   const { toast } = useToast();
 
   const fetchRatingStats = async () => {
@@ -37,8 +48,24 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
     }
   };
 
+  const fetchUserReviews = async () => {
+    const { data, error } = await supabase
+      .from('product_reviews')
+      .select('*')
+      .eq('product_id', productId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching user reviews:', error);
+      return;
+    }
+
+    setUserReviews(data || []);
+  };
+
   useEffect(() => {
     fetchRatingStats();
+    fetchUserReviews();
   }, [productId]);
 
   const handleRatingSubmit = async () => {
@@ -95,6 +122,7 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
     setSelectedRating(0);
     setReview("");
     fetchRatingStats();
+    fetchUserReviews();
   };
 
   const renderStars = (rating: number, interactive = false) => {
@@ -161,6 +189,49 @@ export function ProductRatingSystem({ productId }: ProductRatingSystemProps) {
           </div>
         </div>
       )}
+
+      {/* User Reviews Section */}
+      <div className="space-y-4">
+        <Button
+          variant="link"
+          onClick={() => setShowAllReviews(!showAllReviews)}
+          className="flex items-center gap-2 text-primary hover:text-primary/90"
+        >
+          {showAllReviews ? (
+            <>
+              Show Less <ChevronUp className="w-4 h-4" />
+            </>
+          ) : (
+            <>
+              See All User Reviews <ChevronDown className="w-4 h-4" />
+            </>
+          )}
+        </Button>
+
+        {showAllReviews && (
+          <ScrollArea className="h-[400px] w-full rounded-md border p-4">
+            <div className="space-y-4">
+              {userReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="p-4 border rounded-lg bg-white space-y-2"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium">{review.user_name}</p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>{renderStars(review.rating)}</div>
+                  </div>
+                  <p className="text-gray-700">{review.review_text}</p>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        )}
+      </div>
 
       {/* Rating Input */}
       <div className="p-8 bg-white rounded-xl shadow-md border border-gray-100 space-y-6">
