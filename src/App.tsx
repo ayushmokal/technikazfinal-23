@@ -15,6 +15,7 @@ import EntertainmentPage from "./pages/EntertainmentPage";
 import GadgetsPage from "./pages/GadgetsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ProductReviewsPage from "./pages/ProductReviewsPage";
+import ComparisonPage from "./pages/ComparisonPage";
 import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/gadgets" element={<GadgetsPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/product-reviews/:id" element={<ProductReviewsPage />} />
+            <Route path="/comparison" element={<ComparisonPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />

@@ -7,7 +7,7 @@ import { PopularMobiles } from "./PopularMobiles";
 import type { LaptopProduct, MobileProduct } from "@/types/product";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
-import { CompareDialog } from "./CompareDialog";
+import { useNavigate } from "react-router-dom";
 import { ProductRatingSystem } from "./ProductRatingSystem";
 import { ProductReview } from "./ProductReview";
 import { ProductVariantSelector } from "./ProductVariantSelector";
@@ -35,15 +35,23 @@ interface ProductContentProps {
 }
 
 export function ProductContent({ product: initialProduct, type }: ProductContentProps) {
-  const [isCompareDialogOpen, setIsCompareDialogOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(initialProduct);
+  const navigate = useNavigate();
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
   const brandWebsite = getBrandWebsite(currentProduct.brand || '');
 
   const handleVariantChange = (variant: LaptopProduct | MobileProduct) => {
-    console.log('Variant changed:', variant);
     setCurrentProduct(variant);
+  };
+
+  const handleCompare = () => {
+    navigate('/comparison', {
+      state: {
+        product: currentProduct,
+        type,
+      },
+    });
   };
 
   // Fetch product variants
@@ -56,11 +64,7 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
         .eq('name', currentProduct.name)
         .eq('brand', currentProduct.brand);
 
-      if (error) {
-        console.error('Error fetching variants:', error);
-        throw error;
-      }
-
+      if (error) throw error;
       return data || [];
     },
   });
@@ -95,7 +99,7 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
               <Button 
                 variant="default" 
                 className="bg-teal-600 hover:bg-teal-700"
-                onClick={() => setIsCompareDialogOpen(true)}
+                onClick={handleCompare}
               >
                 Compare
               </Button>
@@ -172,7 +176,7 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
                 <Button 
                   variant="default" 
                   className="bg-teal-600 hover:bg-teal-700 px-6 py-2 text-base font-medium transition-colors duration-200"
-                  onClick={() => setIsCompareDialogOpen(true)}
+                  onClick={handleCompare}
                 >
                   Compare Now
                 </Button>
@@ -199,13 +203,6 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
       </section>
 
       {isMobile && <PopularMobiles />}
-
-      <CompareDialog
-        isOpen={isCompareDialogOpen}
-        onClose={() => setIsCompareDialogOpen(false)}
-        currentProduct={currentProduct}
-        type={type}
-      />
     </div>
   );
 }
