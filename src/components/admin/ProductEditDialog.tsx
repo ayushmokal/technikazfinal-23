@@ -43,7 +43,7 @@ export function ProductEditDialog({ product, onClose, onSuccess, productType }: 
 
   return (
     <Dialog open={!!product} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
           <DialogDescription>
@@ -51,7 +51,7 @@ export function ProductEditDialog({ product, onClose, onSuccess, productType }: 
           </DialogDescription>
         </DialogHeader>
         <ProductForm 
-          initialData={{ ...product, id: product.id }}
+          initialData={product}
           onSuccess={onSuccess}
           productType={productType}
         />
