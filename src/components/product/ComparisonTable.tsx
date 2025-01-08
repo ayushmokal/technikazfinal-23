@@ -40,7 +40,8 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
   return (
     <div className="mt-6">
       <div className="sticky top-0 bg-white z-10 pb-4">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
+          <div className="font-semibold text-lg">Specifications</div>
           {selectedProducts.map((product) => (
             <div key={product.id} className="relative">
               {product.id !== currentProduct.id && (
@@ -66,11 +67,13 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
       <div className="mt-8">
         {specs.map((spec) => (
           <div key={spec.key}>
-            <div className="grid grid-cols-3 gap-4 py-3">
-              <div className="font-medium">{spec.title}</div>
+            <div className="grid grid-cols-4 gap-4 py-3">
+              <div className="font-medium text-gray-700">{spec.title}</div>
               {selectedProducts.map((product) => (
-                <div key={`${product.id}-${spec.key}`}>
-                  {product[spec.key as keyof typeof product]?.toString() || 'N/A'}
+                <div key={`${product.id}-${spec.key}`} className="text-gray-600">
+                  {spec.key === 'price' 
+                    ? `₹${product[spec.key]?.toLocaleString()}` 
+                    : product[spec.key as keyof typeof product]?.toString() || 'N/A'}
                 </div>
               ))}
             </div>
