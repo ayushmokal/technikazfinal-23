@@ -42,6 +42,7 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
   const brandWebsite = getBrandWebsite(currentProduct.brand || '');
 
   const handleVariantChange = (variant: LaptopProduct | MobileProduct) => {
+    console.log('Variant changed:', variant);
     setCurrentProduct(variant);
   };
 
@@ -55,7 +56,11 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
         .eq('name', currentProduct.name)
         .eq('brand', currentProduct.brand);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching variants:', error);
+        throw error;
+      }
+
       return data || [];
     },
   });

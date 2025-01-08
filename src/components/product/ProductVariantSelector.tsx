@@ -19,32 +19,54 @@ export function ProductVariantSelector({ product, type, onVariantChange }: Produ
         .eq('name', product.name)
         .eq('brand', product.brand);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching variants:', error);
+        throw error;
+      }
+
       return data || [];
     },
   });
 
-  // Get unique storage and color options
-  const storageOptions = [...new Set(variants?.map(v => v.storage))].filter(Boolean);
+  // Get unique storage and color options for this product model
+  const storageOptions = [...new Set(variants?.map(v => v.storage))].filter(Boolean).sort((a, b) => {
+    const aNum = parseInt(a?.replace(/\D/g, '') || '0');
+    const bNum = parseInt(b?.replace(/\D/g, '') || '0');
+    return aNum - bNum;
+  });
+
   const colorOptions = [...new Set(variants?.map(v => v.color))].filter(Boolean);
 
   const handleStorageChange = (newStorage: string) => {
     const variant = variants?.find(v => 
-      v.storage === newStorage && v.color === product.color
+      v.storage === newStorage && 
+      (product.color ? v.color === product.color : true)
     );
-    if (variant) onVariantChange(variant);
+    
+    if (variant) {
+      console.log('Storage changed, new variant:', variant);
+      onVariantChange(variant);
+    }
   };
 
   const handleColorChange = (newColor: string) => {
     const variant = variants?.find(v => 
-      v.color === newColor && v.storage === product.storage
+      v.color === newColor && 
+      (product.storage ? v.storage === product.storage : true)
     );
-    if (variant) onVariantChange(variant);
+    
+    if (variant) {
+      console.log('Color changed, new variant:', variant);
+      onVariantChange(variant);
+    }
   };
 
   return (
     <div className="flex items-center gap-6">
-      <Select value={product.storage || ''} onValueChange={handleStorageChange}>
+      <Select 
+        value={product.storage || ''} 
+        onValueChange={handleStorageChange}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select Storage" />
         </SelectTrigger>
@@ -56,7 +78,11 @@ export function ProductVariantSelector({ product, type, onVariantChange }: Produ
           ))}
         </SelectContent>
       </Select>
-      <Select value={product.color || ''} onValueChange={handleColorChange}>
+
+      <Select 
+        value={product.color || ''} 
+        onValueChange={handleColorChange}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select Color" />
         </SelectTrigger>
