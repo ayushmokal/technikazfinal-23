@@ -8,11 +8,14 @@ import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { useToast } from "@/hooks/use-toast";
+import { MobileProduct } from "@/types/product";
+import { BlogFormData } from "@/types/blog";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState("popular");
   const { toast } = useToast();
 
+  // Query for blogs
   const { data: blogs = [], isError, isLoading } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
@@ -49,17 +52,37 @@ export default function Index() {
     retryDelay: 1000,
   });
 
+  // Query for mobile products
+  const { data: mobileProducts = [] } = useQuery({
+    queryKey: ['mobile-products-carousel'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('mobile_products')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(8);
+      
+      if (error) throw error;
+      
+      // Transform mobile products to match blog format for carousel
+      return data.map((product: MobileProduct): BlogFormData => ({
+        title: product.name,
+        image_url: product.image_url || '',
+        category: 'GADGETS',
+        subcategory: 'MOBILE',
+        slug: `/product/${product.id}?type=mobile`,
+        content: '',
+        author: '',
+      }));
+    },
+  });
+
   // Filter blogs after successful fetch
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
   const techDeals = blogs?.filter(blog => 
     blog.category === 'TECH' && 
     blog.subcategory === 'Tech Deals'
   ) || [];
-  
-  const mobileArticles = blogs?.filter(blog => 
-    blog.category === 'GADGETS' && 
-    blog.subcategory === 'MOBILE'
-  ).slice(0, 4) || [];
   
   const popularArticles = blogs?.filter(blog => blog.popular) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
@@ -118,7 +141,7 @@ export default function Index() {
         <CarouselSection 
           title="MOBILES"
           linkTo="/gadgets?subcategory=MOBILE"
-          articles={mobileArticles}
+          articles={mobileProducts}
         />
 
         {/* Advertisement Section Below Mobiles */}
