@@ -8,12 +8,14 @@ import { FeaturedArticlesGrid } from "@/components/FeaturedArticlesGrid";
 import { CarouselSection } from "@/components/CarouselSection";
 import { ArticleTabs } from "@/components/ArticleTabs";
 import { useToast } from "@/hooks/use-toast";
+import { BlogFormData } from "@/types/blog";
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState("popular");
   const { toast } = useToast();
 
-  const { data: blogs = [], isError, isLoading } = useQuery({
+  // Fetch blogs
+  const { data: blogs = [], isError: isBlogsError, isLoading: isBlogsLoading } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
       try {
@@ -49,6 +51,48 @@ export default function Index() {
     retryDelay: 1000,
   });
 
+  // Fetch mobile products
+  const { data: mobileProducts = [], isError: isMobileError, isLoading: isMobileLoading } = useQuery({
+    queryKey: ['mobile_products'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('mobile_products')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(8);
+
+        if (error) {
+          console.error('Error fetching mobile products:', error);
+          throw error;
+        }
+
+        // Map mobile products to match BlogFormData structure
+        return data?.map(product => ({
+          title: product.name,
+          content: `${product.processor} | ${product.ram} | ${product.storage}`,
+          category: 'GADGETS',
+          subcategory: 'MOBILE',
+          author: product.brand || 'Unknown',
+          image_url: product.image_url || '',
+          slug: product.id,
+          created_at: product.created_at,
+          updated_at: product.updated_at
+        } as BlogFormData)) || [];
+      } catch (error) {
+        console.error('Error fetching mobile products:', error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load mobile products. Please try again later.",
+        });
+        throw error;
+      }
+    },
+    retry: 2,
+    retryDelay: 1000,
+  });
+
   // Filter blogs after successful fetch
   const homepageFeatured = blogs?.filter(blog => blog.featured).slice(0, 6) || [];
   const techDeals = blogs?.filter(blog => 
@@ -56,15 +100,10 @@ export default function Index() {
     blog.subcategory === 'Tech Deals'
   ) || [];
   
-  const mobileArticles = blogs?.filter(blog => 
-    blog.category === 'GADGETS' && 
-    blog.subcategory === 'MOBILE'
-  ).slice(0, 4) || [];
-  
   const popularArticles = blogs?.filter(blog => blog.popular) || [];
   const recentArticles = blogs?.slice(0, 6) || [];
 
-  if (isError) {
+  if (isBlogsError || isMobileError) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation />
@@ -79,7 +118,7 @@ export default function Index() {
     );
   }
 
-  if (isLoading) {
+  if (isBlogsLoading || isMobileLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation />
@@ -118,7 +157,7 @@ export default function Index() {
         <CarouselSection 
           title="MOBILES"
           linkTo="/gadgets?subcategory=MOBILE"
-          articles={mobileArticles}
+          articles={mobileProducts}
         />
 
         {/* Advertisement Section Below Mobiles */}
