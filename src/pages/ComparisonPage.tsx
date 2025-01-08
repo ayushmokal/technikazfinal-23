@@ -64,11 +64,6 @@ export default function ComparisonPage() {
                         </Button>
                       )}
                     </div>
-                    <img
-                      src={products[index].image_url || "/placeholder.svg"}
-                      alt={products[index].name}
-                      className="w-full h-48 object-contain bg-gray-50 rounded-lg"
-                    />
                   </div>
                 ) : (
                   <CompareSearchBar
@@ -86,7 +81,7 @@ export default function ComparisonPage() {
               selectedProducts={products}
               currentProduct={products[0]}
               type={type}
-              onRemove={() => {}}
+              onRemove={handleRemoveProduct}
             />
           )}
         </div>
