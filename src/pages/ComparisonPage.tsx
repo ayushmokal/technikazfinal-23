@@ -47,8 +47,17 @@ export default function ComparisonPage() {
         <div className="bg-white rounded-lg p-8 border">
           <div className="grid grid-cols-4 gap-6 mb-8">
             <div className="font-semibold text-lg">Specifications</div>
-            <div>
+            <div className="space-y-4">
               <h3 className="font-semibold text-lg">{initialProduct.name}</h3>
+              {initialProduct.image_url && (
+                <div className="w-full h-32 flex items-center justify-center">
+                  <img
+                    src={initialProduct.image_url}
+                    alt={initialProduct.name}
+                    className="max-h-full object-contain"
+                  />
+                </div>
+              )}
             </div>
             {Array.from({ length: 2 }).map((_, index) => (
               <div key={index}>
@@ -64,6 +73,15 @@ export default function ComparisonPage() {
                         Remove
                       </Button>
                     </div>
+                    {products[index + 1].image_url && (
+                      <div className="w-full h-32 flex items-center justify-center">
+                        <img
+                          src={products[index + 1].image_url}
+                          alt={products[index + 1].name}
+                          className="max-h-full object-contain"
+                        />
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <CompareSearchBar
