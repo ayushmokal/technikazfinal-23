@@ -6,7 +6,6 @@ import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Product {
   id: string;
@@ -111,7 +110,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
 
   return (
     <div className="space-y-6">
-      <ScrollArea className="h-[600px] rounded-md border">
+      <div className="rounded-md border">
         <ProductTable
           products={products}
           onView={handleView}
@@ -119,7 +118,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
           onAddReview={handleAddReview}
           onDelete={handleDelete}
         />
-      </ScrollArea>
+      </div>
 
       <ProductDetailsDialog 
         product={selectedProduct} 

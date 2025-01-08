@@ -21,6 +21,16 @@ interface Product {
   ram: string;
   storage: string;
   battery: string;
+  camera?: string;
+  os?: string;
+  chipset?: string;
+  color?: string;
+  graphics?: string;
+  ports?: string;
+  model_name?: string;
+  resolution?: string;
+  screen_size?: string;
+  charging_specs?: string;
 }
 
 interface ProductTableProps {
@@ -39,7 +49,7 @@ export function ProductTable({
   onDelete,
 }: ProductTableProps) {
   return (
-    <ScrollArea className="h-[600px] rounded-md border">
+    <ScrollArea className="h-[600px]">
       <Table>
         <TableHeader>
           <TableRow>
@@ -47,7 +57,7 @@ export function ProductTable({
             <TableHead>Name</TableHead>
             <TableHead>Brand</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead className="w-[200px]">Actions</TableHead>
+            <TableHead className="w-[300px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,8 +74,8 @@ export function ProductTable({
               <TableCell>{product.brand}</TableCell>
               <TableCell>₹{product.price.toLocaleString()}</TableCell>
               <TableCell>
-                <ScrollArea className="w-[200px] whitespace-nowrap">
-                  <div className="flex gap-2">
+                <ScrollArea className="w-[300px]">
+                  <div className="flex items-center gap-2 p-1">
                     <Button
                       variant="outline"
                       size="sm"
