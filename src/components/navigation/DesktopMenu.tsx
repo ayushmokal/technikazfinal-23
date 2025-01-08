@@ -8,7 +8,7 @@ export function DesktopMenu() {
         <Link
           key={category.name}
           to={category.path}
-          className="text-gray-700 font-medium hover:text-primary transition-colors duration-200"
+          className="text-gray-700 font-bold hover:text-primary transition-colors duration-200"
         >
           {category.name}
         </Link>
