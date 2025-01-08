@@ -4,12 +4,19 @@ import type { Database } from './types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+// Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
+// Clean and validate URL format
+const cleanUrl = supabaseUrl.trim().replace(/\/$/, ''); // Remove trailing slash
+if (!cleanUrl.startsWith('https://')) {
+  throw new Error('Invalid Supabase URL format');
+}
+
 export const supabase = createClient<Database>(
-  supabaseUrl.trim(),
+  cleanUrl,
   supabaseAnonKey.trim(),
   {
     auth: {
