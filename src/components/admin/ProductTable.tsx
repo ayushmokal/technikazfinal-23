@@ -84,7 +84,7 @@ export function ProductTable({
                       View Details
                     </Button>
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       size="sm"
                       onClick={() => onEdit(product)}
                     >
