@@ -5,7 +5,8 @@ import { ProductTable } from "./ProductTable";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Product {
   id: string;
@@ -110,7 +111,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-md border">
+      <ScrollArea className="h-[600px] rounded-md border">
         <ProductTable
           products={products}
           onView={handleView}
@@ -118,30 +119,40 @@ export function ProductManager({ productType }: ProductManagerProps) {
           onAddReview={handleAddReview}
           onDelete={handleDelete}
         />
-      </div>
+      </ScrollArea>
 
-      <ProductDetailsDialog 
-        product={selectedProduct} 
-        onClose={() => setSelectedProduct(null)} 
-      />
+      {selectedProduct && (
+        <ProductDetailsDialog 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
 
-      <ProductEditDialog
-        product={editingProduct}
-        onClose={() => setEditingProduct(null)}
-        onSuccess={() => {
-          setEditingProduct(null);
-          fetchProducts();
+      {editingProduct && (
+        <ProductEditDialog
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onSuccess={() => {
+            setEditingProduct(null);
+            fetchProducts();
+          }}
+          productType={productType}
+        />
+      )}
+
+      <Dialog 
+        open={showExpertReview} 
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowExpertReview(false);
+            setSelectedProductForReview(null);
+          }
         }}
-        productType={productType}
-      />
-
-      <Dialog open={showExpertReview} onOpenChange={(open) => {
-        if (!open) {
-          setShowExpertReview(false);
-          setSelectedProductForReview(null);
-        }
-      }}>
+      >
         <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Add Expert Review</DialogTitle>
+          </DialogHeader>
           {selectedProductForReview && (
             <ExpertReviewForm
               productId={selectedProductForReview.id}
