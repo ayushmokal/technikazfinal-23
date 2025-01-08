@@ -49,66 +49,68 @@ export function ProductTable({
   onDelete,
 }: ProductTableProps) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Image</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Brand</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead className="w-[300px]">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {products.map((product) => (
-          <TableRow key={product.id}>
-            <TableCell>
-              {product.image_url && (
-                <div className="w-20 h-20">
-                  <ProductImage imageUrl={product.image_url} productName={product.name} />
-                </div>
-              )}
-            </TableCell>
-            <TableCell>{product.name}</TableCell>
-            <TableCell>{product.brand}</TableCell>
-            <TableCell>₹{product.price.toLocaleString()}</TableCell>
-            <TableCell>
-              <ScrollArea className="w-[300px]">
-                <div className="flex items-center gap-2 p-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onView(product)}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => onEdit(product)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onAddReview(product)}
-                  >
-                    Add Review
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => onDelete(product.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </ScrollArea>
-            </TableCell>
+    <div className="border rounded-md">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Image</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Brand</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead className="w-[300px]">Actions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell>
+                {product.image_url && (
+                  <div className="w-20 h-20">
+                    <ProductImage imageUrl={product.image_url} productName={product.name} />
+                  </div>
+                )}
+              </TableCell>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>{product.brand}</TableCell>
+              <TableCell>₹{product.price.toLocaleString()}</TableCell>
+              <TableCell>
+                <ScrollArea className="w-[300px]">
+                  <div className="flex items-center gap-2 p-1 pr-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onView(product)}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => onEdit(product)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onAddReview(product)}
+                    >
+                      Add Review
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => onDelete(product.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </ScrollArea>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
