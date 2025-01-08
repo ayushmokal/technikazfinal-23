@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -40,11 +41,14 @@ export function ProductDetailsDialog({ product, onClose }: ProductDetailsDialogP
 
   return (
     <Dialog open={!!product} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Product Details</DialogTitle>
+          <DialogDescription>
+            View detailed information about {product.name}
+          </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           {product.image_url && (
             <div className="w-full">
               <ProductImage

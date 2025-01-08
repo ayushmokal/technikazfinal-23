@@ -5,7 +5,7 @@ import { ProductTable } from "./ProductTable";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Product {
@@ -149,9 +149,12 @@ export function ProductManager({ productType }: ProductManagerProps) {
           }
         }}
       >
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add Expert Review</DialogTitle>
+            <DialogDescription>
+              Add a detailed expert review for this product
+            </DialogDescription>
           </DialogHeader>
           {selectedProductForReview && (
             <ExpertReviewForm
