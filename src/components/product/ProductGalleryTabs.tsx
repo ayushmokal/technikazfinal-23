@@ -5,25 +5,20 @@ import { useState } from "react";
 interface ProductGalleryTabsProps {
   mainImage: string | null;
   productName: string;
+  galleryImages?: string[] | null;
 }
 
-export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTabsProps) {
+export function ProductGalleryTabs({ mainImage, productName, galleryImages = [] }: ProductGalleryTabsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const images = [
-    mainImage || "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg"
-  ];
+  const allImages = [mainImage || "/placeholder.svg", ...(galleryImages || [])].filter(Boolean);
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
   };
 
   return (
@@ -36,7 +31,7 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
         <div className="relative bg-gray-50 rounded-lg">
           <div className="aspect-[4/3] flex items-center justify-center p-4">
             <img
-              src={images[currentIndex]}
+              src={allImages[currentIndex]}
               alt={`${productName}`}
               className="max-h-full max-w-full object-contain"
             />
@@ -61,7 +56,7 @@ export function ProductGalleryTabs({ mainImage, productName }: ProductGalleryTab
           </div>
         </div>
         <div className="flex gap-2 mt-4 pb-2 overflow-x-auto">
-          {images.map((image, index) => (
+          {allImages.map((image, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
