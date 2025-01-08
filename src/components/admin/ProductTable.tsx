@@ -16,6 +16,11 @@ interface Product {
   brand: string;
   price: number;
   image_url?: string;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
 }
 
 interface ProductTableProps {
@@ -42,7 +47,7 @@ export function ProductTable({
             <TableHead>Name</TableHead>
             <TableHead>Brand</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead className="w-[200px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -59,36 +64,38 @@ export function ProductTable({
               <TableCell>{product.brand}</TableCell>
               <TableCell>₹{product.price.toLocaleString()}</TableCell>
               <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onView(product)}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => onEdit(product)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onAddReview(product)}
-                  >
-                    Add Review
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => onDelete(product.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                <ScrollArea className="w-[200px] whitespace-nowrap">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onView(product)}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => onEdit(product)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onAddReview(product)}
+                    >
+                      Add Review
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => onDelete(product.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </ScrollArea>
               </TableCell>
             </TableRow>
           ))}
