@@ -77,6 +77,3 @@ export const handleAuthError = async (error: any) => {
     window.location.href = '/admin/login';
   }
 };
-
-// Export the error handler for use in components
-export { handleAuthError };
