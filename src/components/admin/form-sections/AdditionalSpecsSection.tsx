@@ -1,6 +1,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
@@ -158,6 +158,20 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
 
             <FormField
               control={form.control}
+              name="display_type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Type</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter display type" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="screen_size"
               render={({ field }) => (
                 <FormItem>
@@ -175,9 +189,225 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
               name="resolution"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Screen Resolution</FormLabel>
+                  <FormLabel>Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter screen resolution" {...field} />
+                    <Input placeholder="Enter resolution" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="aspect_ratio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Aspect Ratio</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter aspect ratio" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pixel_density"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pixel Density</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter pixel density (PPI)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="screen_protection"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Screen Protection</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter screen protection details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bezel_less"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bezel-less Display</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="touch_screen"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Touch Screen</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="peak_brightness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Peak Brightness</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter peak brightness (nits)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hdr_support"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>HDR Support</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter HDR support details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="refresh_rate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Refresh Rate</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter refresh rate (Hz)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="height"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Height</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter height (mm)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="width"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Width</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter width (mm)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="thickness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thickness</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter thickness (mm)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="weight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Weight</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter weight (g)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="build_material"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Build Material</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter build material" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="waterproof"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Waterproof</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter waterproof rating" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ruggedness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ruggedness</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter ruggedness details" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

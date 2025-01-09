@@ -24,7 +24,7 @@ const baseProductSchema = z.object({
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Rear camera specifications are required"),
+  camera: z.string().min(1, "Camera specifications are required"),
   front_camera: z.string().min(1, "Front camera specifications are required"),
   chipset: z.string().optional(),
   charging_specs: z.string().optional(),
@@ -39,6 +39,22 @@ export const mobileProductSchema = baseProductSchema.extend({
   software_support: z.string().optional(),
   architecture: z.string().optional(),
   fabrication: z.string().optional(),
+  display_type: z.string().optional(),
+  aspect_ratio: z.string().optional(),
+  pixel_density: z.string().optional(),
+  screen_protection: z.string().optional(),
+  bezel_less: z.boolean().optional(),
+  touch_screen: z.boolean().optional(),
+  peak_brightness: z.string().optional(),
+  hdr_support: z.string().optional(),
+  refresh_rate: z.string().optional(),
+  height: z.string().optional(),
+  width: z.string().optional(),
+  thickness: z.string().optional(),
+  weight: z.string().optional(),
+  build_material: z.string().optional(),
+  waterproof: z.string().optional(),
+  ruggedness: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({

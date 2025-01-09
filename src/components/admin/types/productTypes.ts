@@ -27,8 +27,8 @@ export type MobileProductData = BaseProductData & {
   front_camera: string;
   chipset?: string;
   charging_specs?: string;
-  resolution?: string;
   screen_size?: string;
+  resolution?: string;
   camera_details?: Json;
   sensor_specs?: Json;
   network_specs?: Json;
@@ -38,6 +38,22 @@ export type MobileProductData = BaseProductData & {
   software_support?: string;
   architecture?: string;
   fabrication?: string;
+  display_type?: string;
+  aspect_ratio?: string;
+  pixel_density?: string;
+  screen_protection?: string;
+  bezel_less?: boolean;
+  touch_screen?: boolean;
+  peak_brightness?: string;
+  hdr_support?: string;
+  refresh_rate?: string;
+  height?: string;
+  width?: string;
+  thickness?: string;
+  weight?: string;
+  build_material?: string;
+  waterproof?: string;
+  ruggedness?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
