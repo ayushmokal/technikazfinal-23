@@ -11,7 +11,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Clean and validate URL format
-const cleanUrl = supabaseUrl.trim().replace(/\/$/, ''); // Remove trailing slash
+const cleanUrl = supabaseUrl.trim().replace(/\/$/, '');
 if (!cleanUrl.startsWith('https://')) {
   throw new Error('Invalid Supabase URL format');
 }
@@ -66,10 +66,10 @@ supabase.auth.onAuthStateChange(async (event) => {
 });
 
 // Add a custom error handler for auth errors
-const handleAuthError = async (error: any) => {
+export const handleAuthError = async (error: any) => {
   console.error('Auth error:', error);
   
-  if (error.message?.includes('refresh_token_not_found') || 
+  if (error.message?.includes('JWT expired') || 
       error.message?.includes('invalid_grant') ||
       error.message?.includes('Token expired')) {
     console.log('Invalid or expired token, signing out...');
