@@ -10,33 +10,10 @@ import { ProductSpecifications } from "./ProductSpecifications";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-
-interface Product {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  image_url?: string;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  camera?: string;
-  os?: string;
-  chipset?: string;
-  color?: string;
-  graphics?: string;
-  ports?: string;
-  model_name?: string;
-  resolution?: string;
-  screen_size?: string;
-  charging_specs?: string;
-  gallery_images?: string[];
-}
+import { LaptopProduct, MobileProduct } from "@/types/product";
 
 interface ProductDetailsDialogProps {
-  product: Product | null;
+  product: LaptopProduct | MobileProduct | null;
   onClose: () => void;
 }
 
