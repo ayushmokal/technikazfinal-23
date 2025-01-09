@@ -92,7 +92,6 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
                 { label: "CPU", value: (product as MobileProduct).cpu },
                 { label: "Architecture", value: (product as MobileProduct).architecture },
                 { label: "Fabrication", value: (product as MobileProduct).fabrication },
-                { label: "Graphics", value: (product as MobileProduct).graphics },
                 { label: "RAM", value: product.ram },
                 { label: "RAM Type", value: (product as MobileProduct).ram_type },
               ]}
