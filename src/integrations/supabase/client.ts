@@ -40,8 +40,9 @@ export const supabase = createClient<Database>(
 supabase.auth.onAuthStateChange(async (event, session) => {
   console.log('Auth state changed:', event);
   
-  if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+  if (event === 'SIGNED_OUT' || (!session && event === 'TOKEN_REFRESHED')) {
     console.log('Session state:', session);
+    window.location.href = '/admin/login';
   }
 
   if (event === 'TOKEN_REFRESHED' && !session) {
