@@ -65,12 +65,10 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
             ...(isMobile ? [
               { label: "Rear Camera", value: (product as MobileProduct).camera },
               { label: "Front Camera", value: (product as MobileProduct).front_camera }
-            ] : [
-              { label: "Graphics", value: (product as LaptopProduct).graphics }
-            ]),
+            ] : []),
             { label: "Battery", value: product.battery },
             { label: "Display", value: product.display_specs },
-          ].filter(Boolean)}
+          ]}
         />
         
         {isMobile && (
