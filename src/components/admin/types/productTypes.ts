@@ -54,6 +54,14 @@ export type MobileProductData = BaseProductData & {
   build_material?: string;
   waterproof?: string;
   ruggedness?: string;
+  camera_setup?: string;
+  camera_autofocus?: boolean;
+  camera_ois?: boolean;
+  camera_flash?: string;
+  camera_modes?: string;
+  video_recording?: string;
+  front_camera_setup?: string;
+  front_camera_video?: string;
 };
 
 export type LaptopProductData = BaseProductData & {

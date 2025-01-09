@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
+import { CameraSection } from "./form-sections/CameraSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
@@ -54,6 +55,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                   <SpecificationsSection form={form} productType={productType} />
                   <Separator />
                   <AdditionalSpecsSection form={form} productType={productType} />
+                  <Separator />
+                  <CameraSection form={form} productType={productType} />
                   <Separator />
                   <ImageSection 
                     onMainImageChange={handleMainImageChange}
