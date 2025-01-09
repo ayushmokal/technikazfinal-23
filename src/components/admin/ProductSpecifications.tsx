@@ -13,7 +13,6 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   const getCameraSpecs = (product: MobileProduct) => {
     const specs = [];
     
-    // Main camera specs
     if (product.camera_setup || product.camera) {
       const mainCameraText = [
         product.camera_setup,
@@ -24,7 +23,6 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
       specs.push(mainCameraText);
     }
     
-    // Front camera specs
     if (product.front_camera_setup || product.front_camera) {
       const frontCameraText = [
         product.front_camera_setup,
@@ -64,6 +62,54 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     }
   };
 
+  const getGeneralSpecs = () => {
+    const specs = [
+      { label: "Brand", value: product.brand },
+      { label: "Model", value: product.model_name },
+      { label: "Operating System", value: product.os },
+    ];
+
+    if (isMobile) {
+      specs.push({ 
+        label: "Custom UI", 
+        value: (product as MobileProduct).custom_ui 
+      });
+    } else {
+      specs.push({ 
+        label: "Ports", 
+        value: (product as LaptopProduct).ports 
+      });
+    }
+
+    return specs;
+  };
+
+  const getDisplaySpecs = () => {
+    if (!isMobile) return null;
+    
+    const mobileProduct = product as MobileProduct;
+    return [
+      { label: "Screen Size", value: mobileProduct.screen_size },
+      { label: "Resolution", value: mobileProduct.resolution },
+      { label: "Display Type", value: mobileProduct.display_type },
+      { label: "Screen Protection", value: mobileProduct.screen_protection },
+    ];
+  };
+
+  const getCameraDetails = () => {
+    if (!isMobile) return null;
+    
+    const mobileProduct = product as MobileProduct;
+    return [
+      { label: "Camera Setup", value: mobileProduct.camera_setup },
+      { label: "Resolution", value: mobileProduct.camera },
+      { label: "Autofocus", value: mobileProduct.camera_autofocus ? 'Yes' : 'No' },
+      { label: "OIS", value: mobileProduct.camera_ois ? 'Yes' : 'No' },
+      { label: "Flash", value: mobileProduct.camera_flash },
+      { label: "Front Camera", value: mobileProduct.front_camera },
+    ];
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -82,23 +128,18 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
 
         <Separator />
 
-        {isMobile ? (
-          <>
-            <div>
-              <h3 className="font-semibold mb-4">General</h3>
-              <ProductSpecTable
-                specifications={[{
-                  title: "General Features",
-                  specs: [
-                    { label: "Brand", value: product.brand },
-                    { label: "Model", value: product.model_name },
-                    { label: "Operating System", value: product.os },
-                    { label: "Custom UI", value: (product as MobileProduct).custom_ui },
-                  ]
-                }]}
-              />
-            </div>
+        <div>
+          <h3 className="font-semibold mb-4">General</h3>
+          <ProductSpecTable
+            specifications={[{
+              title: "General Features",
+              specs: getGeneralSpecs()
+            }]}
+          />
+        </div>
 
+        {isMobile && (
+          <>
             <Separator />
 
             <div>
@@ -106,12 +147,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
               <ProductSpecTable
                 specifications={[{
                   title: "Display Features",
-                  specs: [
-                    { label: "Screen Size", value: (product as MobileProduct).screen_size },
-                    { label: "Resolution", value: (product as MobileProduct).resolution },
-                    { label: "Display Type", value: (product as MobileProduct).display_type },
-                    { label: "Screen Protection", value: (product as MobileProduct).screen_protection },
-                  ]
+                  specs: getDisplaySpecs() || []
                 }]}
               />
             </div>
@@ -123,31 +159,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
               <ProductSpecTable
                 specifications={[{
                   title: "Camera",
-                  specs: [
-                    { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
-                    { label: "Resolution", value: (product as MobileProduct).camera },
-                    { label: "Autofocus", value: (product as MobileProduct).camera_autofocus ? 'Yes' : 'No' },
-                    { label: "OIS", value: (product as MobileProduct).camera_ois ? 'Yes' : 'No' },
-                    { label: "Flash", value: (product as MobileProduct).camera_flash },
-                    { label: "Front Camera", value: (product as MobileProduct).front_camera },
-                  ]
-                }]}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div>
-              <h3 className="font-semibold mb-4">General</h3>
-              <ProductSpecTable
-                specifications={[{
-                  title: "General Features",
-                  specs: [
-                    { label: "Brand", value: product.brand },
-                    { label: "Model", value: product.model_name },
-                    { label: "Operating System", value: product.os },
-                    { label: "Ports", value: (product as LaptopProduct).ports },
-                  ]
+                  specs: getCameraDetails() || []
                 }]}
               />
             </div>
