@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { MobileProduct, LaptopProduct } from "@/types/product";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ComparisonTableProps {
   selectedProducts: (MobileProduct | LaptopProduct)[];
@@ -10,6 +11,8 @@ interface ComparisonTableProps {
 }
 
 export function ComparisonTable({ selectedProducts, currentProduct, type, onRemove }: ComparisonTableProps) {
+  const isMobile = useIsMobile();
+  
   const baseSpecs = [
     { title: "Price", key: "price" },
     { title: "Brand", key: "brand" },
@@ -39,18 +42,18 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
   const displayProducts = selectedProducts.slice(1, 3);
 
   return (
-    <div className="mt-6">
-      <div className="mt-8">
+    <div className="mt-4 md:mt-6">
+      <div className="mt-6 md:mt-8">
         {specs.map((spec) => (
           <div key={spec.key}>
-            <div className="grid grid-cols-4 gap-4 py-3">
+            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-4'} gap-3 md:gap-4 py-3`}>
               <div className="font-medium text-gray-700">{spec.title}</div>
               <div className="text-gray-600">
                 {spec.key === 'price' 
                   ? `₹${currentProduct[spec.key]?.toLocaleString()}` 
                   : currentProduct[spec.key as keyof typeof currentProduct]?.toString() || 'N/A'}
               </div>
-              {displayProducts.map((product) => (
+              {!isMobile && displayProducts.map((product) => (
                 <div key={`${product.id}-${spec.key}`} className="text-gray-600">
                   {spec.key === 'price' 
                     ? `₹${product[spec.key]?.toLocaleString()}` 

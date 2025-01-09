@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { MobileProduct, LaptopProduct } from "@/types/product";
 import { ComparisonTable } from "@/components/product/ComparisonTable";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ComparisonPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const initialProduct = location.state?.product as MobileProduct | LaptopProduct;
   const type = location.state?.type as 'mobile' | 'laptop';
 
@@ -34,18 +36,18 @@ export default function ComparisonPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-4 px-4 md:py-8 md:px-8">
         <Button
           variant="ghost"
-          className="mb-6 gap-2"
+          className="mb-4 md:mb-6 gap-2"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Product
         </Button>
 
-        <div className="bg-white rounded-lg p-8 border">
-          <div className="grid grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-lg p-4 md:p-8 border">
+          <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-4'} gap-4 md:gap-6 mb-6 md:mb-8`}>
             <div className="font-semibold text-lg">Specifications</div>
             <div className="space-y-4">
               <h3 className="font-semibold text-lg">{initialProduct.name}</h3>
@@ -60,7 +62,7 @@ export default function ComparisonPage() {
               )}
             </div>
             {Array.from({ length: 2 }).map((_, index) => (
-              <div key={index}>
+              <div key={index} className="w-full">
                 {products[index + 1] ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
