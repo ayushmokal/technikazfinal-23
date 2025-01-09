@@ -289,97 +289,193 @@ export type Database = {
       }
       mobile_products: {
         Row: {
+          architecture: string | null
+          aspect_ratio: string | null
           battery: string
+          bezel_less: boolean | null
           brand: string | null
+          build_material: string | null
           camera: string
+          camera_autofocus: boolean | null
           camera_details: Json | null
+          camera_flash: string | null
+          camera_modes: string | null
+          camera_ois: boolean | null
+          camera_setup: string | null
           charging_specs: string | null
           chipset: string | null
           color: string | null
+          cpu: string | null
           created_at: string
+          custom_ui: string | null
           design_specs: Json | null
           display_details: Json | null
           display_specs: string
+          display_type: string | null
+          fabrication: string | null
+          front_camera: string | null
+          front_camera_setup: string | null
+          front_camera_video: string | null
           gallery_images: string[] | null
           general_specs: Json | null
+          hdr_support: string | null
+          height: string | null
           id: string
           image_url: string | null
+          launch_date: string | null
           model_name: string | null
           multimedia_specs: Json | null
           name: string
           network_specs: Json | null
           os: string | null
+          peak_brightness: string | null
           performance_specs: Json | null
+          pixel_density: string | null
           price: number
           processor: string
           ram: string | null
+          ram_type: string | null
+          refresh_rate: string | null
           resolution: string | null
+          ruggedness: string | null
+          screen_protection: string | null
           screen_size: string | null
           sensor_specs: Json | null
+          software_support: string | null
           storage: string | null
+          thickness: string | null
+          touch_screen: boolean | null
           updated_at: string
+          video_recording: string | null
+          waterproof: string | null
+          weight: string | null
+          width: string | null
         }
         Insert: {
+          architecture?: string | null
+          aspect_ratio?: string | null
           battery: string
+          bezel_less?: boolean | null
           brand?: string | null
+          build_material?: string | null
           camera: string
+          camera_autofocus?: boolean | null
           camera_details?: Json | null
+          camera_flash?: string | null
+          camera_modes?: string | null
+          camera_ois?: boolean | null
+          camera_setup?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          cpu?: string | null
           created_at?: string
+          custom_ui?: string | null
           design_specs?: Json | null
           display_details?: Json | null
           display_specs: string
+          display_type?: string | null
+          fabrication?: string | null
+          front_camera?: string | null
+          front_camera_setup?: string | null
+          front_camera_video?: string | null
           gallery_images?: string[] | null
           general_specs?: Json | null
+          hdr_support?: string | null
+          height?: string | null
           id?: string
           image_url?: string | null
+          launch_date?: string | null
           model_name?: string | null
           multimedia_specs?: Json | null
           name: string
           network_specs?: Json | null
           os?: string | null
+          peak_brightness?: string | null
           performance_specs?: Json | null
+          pixel_density?: string | null
           price: number
           processor: string
           ram?: string | null
+          ram_type?: string | null
+          refresh_rate?: string | null
           resolution?: string | null
+          ruggedness?: string | null
+          screen_protection?: string | null
           screen_size?: string | null
           sensor_specs?: Json | null
+          software_support?: string | null
           storage?: string | null
+          thickness?: string | null
+          touch_screen?: boolean | null
           updated_at?: string
+          video_recording?: string | null
+          waterproof?: string | null
+          weight?: string | null
+          width?: string | null
         }
         Update: {
+          architecture?: string | null
+          aspect_ratio?: string | null
           battery?: string
+          bezel_less?: boolean | null
           brand?: string | null
+          build_material?: string | null
           camera?: string
+          camera_autofocus?: boolean | null
           camera_details?: Json | null
+          camera_flash?: string | null
+          camera_modes?: string | null
+          camera_ois?: boolean | null
+          camera_setup?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          cpu?: string | null
           created_at?: string
+          custom_ui?: string | null
           design_specs?: Json | null
           display_details?: Json | null
           display_specs?: string
+          display_type?: string | null
+          fabrication?: string | null
+          front_camera?: string | null
+          front_camera_setup?: string | null
+          front_camera_video?: string | null
           gallery_images?: string[] | null
           general_specs?: Json | null
+          hdr_support?: string | null
+          height?: string | null
           id?: string
           image_url?: string | null
+          launch_date?: string | null
           model_name?: string | null
           multimedia_specs?: Json | null
           name?: string
           network_specs?: Json | null
           os?: string | null
+          peak_brightness?: string | null
           performance_specs?: Json | null
+          pixel_density?: string | null
           price?: number
           processor?: string
           ram?: string | null
+          ram_type?: string | null
+          refresh_rate?: string | null
           resolution?: string | null
+          ruggedness?: string | null
+          screen_protection?: string | null
           screen_size?: string | null
           sensor_specs?: Json | null
+          software_support?: string | null
           storage?: string | null
+          thickness?: string | null
+          touch_screen?: boolean | null
           updated_at?: string
+          video_recording?: string | null
+          waterproof?: string | null
+          weight?: string | null
+          width?: string | null
         }
         Relationships: []
       }

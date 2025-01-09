@@ -13,6 +13,7 @@ import { ProductReview } from "./ProductReview";
 import { ProductVariantSelector } from "./ProductVariantSelector";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { ProductDetailedSpecs } from "./ProductDetailedSpecs";
 
 const getBrandWebsite = (brand: string): string => {
   const brandWebsites: { [key: string]: string } = {
@@ -151,7 +152,10 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
       {/* Specifications Section */}
       <section id="specifications" className="scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Full Specification</h2>
-        <ProductSpecifications product={currentProduct} />
+        <div className="space-y-8">
+          <ProductSpecifications product={currentProduct} />
+          {isMobile && <ProductDetailedSpecs product={currentProduct as MobileProduct} />}
+        </div>
       </section>
 
       {/* Compare Section */}
