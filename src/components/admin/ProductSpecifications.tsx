@@ -36,6 +36,34 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     return specs.join(' + ');
   };
 
+  const getKeySpecs = () => {
+    const baseSpecs = [
+      { label: "RAM", value: product.ram },
+      { label: "Processor", value: product.processor },
+      { label: "Battery", value: product.battery },
+      { label: "Display", value: product.display_specs },
+      { label: "Storage", value: product.storage },
+    ];
+
+    if (isMobile) {
+      return [
+        ...baseSpecs,
+        { 
+          label: "Camera", 
+          value: getCameraSpecs(product as MobileProduct)
+        }
+      ];
+    } else {
+      return [
+        ...baseSpecs,
+        { 
+          label: "Graphics", 
+          value: (product as LaptopProduct).graphics 
+        }
+      ];
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -47,24 +75,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
           <ProductSpecTable
             specifications={[{
               title: "Key Features",
-              specs: [
-                { label: "RAM", value: product.ram },
-                { label: "Processor", value: product.processor },
-                ...(isMobile ? [
-                  { 
-                    label: "Camera", 
-                    value: getCameraSpecs(product as MobileProduct)
-                  }
-                ] : [
-                  { 
-                    label: "Graphics", 
-                    value: (product as LaptopProduct).graphics 
-                  }
-                ]),
-                { label: "Battery", value: product.battery },
-                { label: "Display", value: product.display_specs },
-                { label: "Storage", value: product.storage },
-              ]
+              specs: getKeySpecs()
             }]}
           />
         </div>
