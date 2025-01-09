@@ -24,7 +24,9 @@ export const supabase = createClient<Database>(
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
-      flowType: 'pkce'
+      flowType: 'pkce',
+      storage: window.localStorage,
+      storageKey: 'supabase.auth.token',
     },
     global: {
       headers: {
@@ -35,15 +37,18 @@ export const supabase = createClient<Database>(
 );
 
 // Add better error handling for auth state changes
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') {
-    console.log('User signed out');
-  } else if (event === 'SIGNED_IN') {
-    console.log('User signed in:', session?.user?.id);
-  } else if (event === 'TOKEN_REFRESHED') {
-    console.log('Token refreshed successfully');
-  } else if (event === 'USER_UPDATED') {
-    console.log('User updated:', session?.user?.id);
+supabase.auth.onAuthStateChange(async (event, session) => {
+  console.log('Auth state changed:', event);
+  
+  if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+    console.log('Session state:', session);
+  }
+
+  if (event === 'TOKEN_REFRESHED' && !session) {
+    console.error('Token refresh failed');
+    // Clear any stale session data
+    await supabase.auth.signOut();
+    window.location.href = '/admin/login';
   }
 });
 
@@ -55,7 +60,23 @@ supabase.auth.onAuthStateChange(async (event) => {
       console.error('Token refresh failed:', error);
       // Force a new sign in if token refresh fails
       await supabase.auth.signOut();
-      window.location.href = '/login';
+      window.location.href = '/admin/login';
     }
   }
 });
+
+// Add a custom error handler for auth errors
+const handleAuthError = async (error: any) => {
+  console.error('Auth error:', error);
+  
+  if (error.message?.includes('refresh_token_not_found') || 
+      error.message?.includes('invalid_grant') ||
+      error.message?.includes('Token expired')) {
+    console.log('Invalid or expired token, signing out...');
+    await supabase.auth.signOut();
+    window.location.href = '/admin/login';
+  }
+};
+
+// Export the error handler for use in components
+export { handleAuthError };
