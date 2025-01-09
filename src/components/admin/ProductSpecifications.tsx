@@ -51,6 +51,32 @@ interface ProductSpecificationsProps {
 export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   const isMobile = 'camera' in product;
 
+  const getCameraSpecs = (product: MobileProduct) => {
+    const specs = [];
+    
+    // Main camera specs
+    if (product.camera_setup || product.camera) {
+      const mainCameraText = [
+        product.camera_setup,
+        product.camera,
+        product.camera_ois ? 'with OIS' : '',
+        product.camera_autofocus ? 'with Autofocus' : ''
+      ].filter(Boolean).join(' ');
+      specs.push(mainCameraText);
+    }
+    
+    // Front camera specs
+    if (product.front_camera_setup || product.front_camera) {
+      const frontCameraText = [
+        product.front_camera_setup,
+        product.front_camera
+      ].filter(Boolean).join(' ');
+      if (frontCameraText) specs.push(frontCameraText);
+    }
+    
+    return specs.join(' + ');
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -63,8 +89,10 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
             { label: "RAM", value: product.ram },
             { label: "Processor", value: product.processor },
             ...(isMobile ? [
-              { label: "Rear Camera", value: (product as MobileProduct).camera },
-              { label: "Front Camera", value: (product as MobileProduct).front_camera }
+              { 
+                label: "Camera", 
+                value: getCameraSpecs(product as MobileProduct)
+              }
             ] : []),
             { label: "Battery", value: product.battery },
             { label: "Display", value: product.display_specs },
@@ -130,6 +158,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
               title="Camera"
               specs={[
                 { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
+                { label: "Resolution", value: (product as MobileProduct).camera },
                 { label: "Autofocus", value: (product as MobileProduct).camera_autofocus },
                 { label: "OIS", value: (product as MobileProduct).camera_ois },
                 { label: "Flash", value: (product as MobileProduct).camera_flash },
