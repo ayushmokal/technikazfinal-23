@@ -19,6 +19,8 @@ const baseProductSchema = z.object({
   design_specs: z.custom<Json>().optional(),
   performance_specs: z.custom<Json>().optional(),
   display_details: z.custom<Json>().optional(),
+  graphics: z.string().optional(),
+  ram_type: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -32,6 +34,11 @@ export const mobileProductSchema = baseProductSchema.extend({
   sensor_specs: z.custom<Json>().optional(),
   network_specs: z.custom<Json>().optional(),
   general_specs: z.custom<Json>().optional(),
+  launch_date: z.string().optional(),
+  custom_ui: z.string().optional(),
+  software_support: z.string().optional(),
+  architecture: z.string().optional(),
+  fabrication: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({

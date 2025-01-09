@@ -18,6 +18,8 @@ export type BaseProductData = {
   display_details?: Json;
   performance_specs?: Json;
   multimedia_specs?: Json;
+  graphics?: string;
+  ram_type?: string;
 };
 
 export type MobileProductData = BaseProductData & {
@@ -31,6 +33,11 @@ export type MobileProductData = BaseProductData & {
   sensor_specs?: Json;
   network_specs?: Json;
   general_specs?: Json;
+  launch_date?: string;
+  custom_ui?: string;
+  software_support?: string;
+  architecture?: string;
+  fabrication?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
