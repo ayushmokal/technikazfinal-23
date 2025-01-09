@@ -115,8 +115,8 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
                   specs: [
                     { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
                     { label: "Resolution", value: (product as MobileProduct).camera },
-                    { label: "Autofocus", value: (product as MobileProduct).camera_autofocus },
-                    { label: "OIS", value: (product as MobileProduct).camera_ois },
+                    { label: "Autofocus", value: (product as MobileProduct).camera_autofocus ? 'Yes' : 'No' },
+                    { label: "OIS", value: (product as MobileProduct).camera_ois ? 'Yes' : 'No' },
                     { label: "Flash", value: (product as MobileProduct).camera_flash },
                     { label: "Front Camera", value: (product as MobileProduct).front_camera },
                   ]
