@@ -32,6 +32,104 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
           <>
             <FormField
               control={form.control}
+              name="launch_date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Launch Date</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter launch date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="custom_ui"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Custom UI</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter custom UI details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="software_support"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Software Support</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter software support details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="architecture"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Architecture</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter architecture details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fabrication"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fabrication</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter fabrication details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="graphics"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Graphics</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter graphics details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ram_type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>RAM Type</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter RAM type" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="chipset"
               render={({ field }) => (
                 <FormItem>
