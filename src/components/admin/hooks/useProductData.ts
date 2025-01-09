@@ -49,37 +49,47 @@ export const useProductData = () => {
     data: MobileProductData | LaptopProductData,
     productType: 'mobile' | 'laptop'
   ) => {
+    // Create a clean data object without undefined values
+    const cleanData = Object.fromEntries(
+      Object.entries(data).filter(([_, value]) => value !== undefined)
+    );
+
     const insertData = productType === 'mobile'
       ? {
-          ...data,
-          camera: (data as MobileProductData).camera,
-          battery: data.battery,
-          brand: data.brand,
-          display_specs: data.display_specs,
-          processor: data.processor,
-          ram: data.ram,
-          storage: data.storage,
-          name: data.name,
+          ...cleanData,
+          camera: (cleanData as MobileProductData).camera,
+          battery: cleanData.battery,
+          brand: cleanData.brand,
+          display_specs: cleanData.display_specs,
+          processor: cleanData.processor,
+          ram: cleanData.ram,
+          storage: cleanData.storage,
+          name: cleanData.name,
         }
       : {
-          ...data,
-          battery: data.battery,
-          brand: data.brand,
-          display_specs: data.display_specs,
-          processor: data.processor,
-          ram: data.ram,
-          storage: data.storage,
-          name: data.name,
+          ...cleanData,
+          battery: cleanData.battery,
+          brand: cleanData.brand,
+          display_specs: cleanData.display_specs,
+          processor: cleanData.processor,
+          ram: cleanData.ram,
+          storage: cleanData.storage,
+          name: cleanData.name,
         };
 
-    const { data: insertedData, error } = await supabase
-      .from(table)
-      .insert(insertData)
-      .select()
-      .single();
+    try {
+      const { data: insertedData, error } = await supabase
+        .from(table)
+        .insert(insertData)
+        .select()
+        .single();
 
-    if (error) throw error;
-    return insertedData;
+      if (error) throw error;
+      return insertedData;
+    } catch (error) {
+      console.error('Error inserting product:', error);
+      throw error;
+    }
   };
 
   return {
