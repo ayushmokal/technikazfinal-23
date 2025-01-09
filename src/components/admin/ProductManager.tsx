@@ -7,29 +7,7 @@ import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface Product {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  image_url?: string;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
-  camera?: string;
-  os?: string;
-  chipset?: string;
-  color?: string;
-  graphics?: string;
-  ports?: string;
-  model_name?: string;
-  resolution?: string;
-  screen_size?: string;
-  charging_specs?: string;
-}
+import type { LaptopProduct, MobileProduct } from "@/types/product";
 
 interface ProductManagerProps {
   productType: 'mobile' | 'laptop';
@@ -37,12 +15,12 @@ interface ProductManagerProps {
 
 export function ProductManager({ productType }: ProductManagerProps) {
   const { toast } = useToast();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<(LaptopProduct | MobileProduct)[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<LaptopProduct | MobileProduct | null>(null);
+  const [editingProduct, setEditingProduct] = useState<LaptopProduct | MobileProduct | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showExpertReview, setShowExpertReview] = useState(false);
-  const [selectedProductForReview, setSelectedProductForReview] = useState<Product | null>(null);
+  const [selectedProductForReview, setSelectedProductForReview] = useState<LaptopProduct | MobileProduct | null>(null);
 
   const fetchProducts = async () => {
     try {
@@ -92,15 +70,15 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
-  const handleView = (product: Product) => {
+  const handleView = (product: LaptopProduct | MobileProduct) => {
     setSelectedProduct(product);
   };
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: LaptopProduct | MobileProduct) => {
     setEditingProduct(product);
   };
 
-  const handleAddReview = (product: Product) => {
+  const handleAddReview = (product: LaptopProduct | MobileProduct) => {
     setSelectedProductForReview(product);
     setShowExpertReview(true);
   };
