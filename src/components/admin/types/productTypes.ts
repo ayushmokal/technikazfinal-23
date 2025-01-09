@@ -22,6 +22,7 @@ export type BaseProductData = {
 
 export type MobileProductData = BaseProductData & {
   camera: string;
+  front_camera: string;
   chipset?: string;
   charging_specs?: string;
   resolution?: string;

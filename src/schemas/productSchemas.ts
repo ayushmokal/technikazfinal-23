@@ -22,7 +22,8 @@ const baseProductSchema = z.object({
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera specifications are required"),
+  camera: z.string().min(1, "Rear camera specifications are required"),
+  front_camera: z.string().min(1, "Front camera specifications are required"),
   chipset: z.string().optional(),
   charging_specs: z.string().optional(),
   screen_size: z.string().optional(),
