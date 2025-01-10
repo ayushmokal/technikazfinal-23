@@ -1,44 +1,36 @@
-import * as z from "zod";
-import type { Json } from "@/integrations/supabase/types";
+import { z } from "zod";
 
 const baseProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
   model_name: z.string().optional(),
-  price: z.number().min(0, "Price must be positive"),
-  display_specs: z.string().min(1, "Display specifications are required"),
+  price: z.number().min(0, "Price must be greater than 0"),
+  display_specs: z.string().min(1, "Display specs are required"),
   processor: z.string().min(1, "Processor is required"),
-  ram: z.string().min(1, "RAM is required"),
-  storage: z.string().min(1, "Storage is required"),
-  battery: z.string().min(1, "Battery specifications are required"),
+  ram: z.string().optional(),
+  storage: z.string().optional(),
+  battery: z.string().min(1, "Battery specs are required"),
   os: z.string().optional(),
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
-  multimedia_specs: z.custom<Json>().optional(),
-  design_specs: z.custom<Json>().optional(),
-  performance_specs: z.custom<Json>().optional(),
-  display_details: z.custom<Json>().optional(),
-  graphics: z.string().optional(),
-  ram_type: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera specifications are required"),
-  front_camera: z.string().min(1, "Front camera specifications are required"),
+  camera: z.string().min(1, "Camera specs are required"),
+  front_camera: z.string().optional(),
   chipset: z.string().optional(),
   charging_specs: z.string().optional(),
   screen_size: z.string().optional(),
   resolution: z.string().optional(),
-  camera_details: z.custom<Json>().optional(),
-  sensor_specs: z.custom<Json>().optional(),
-  network_specs: z.custom<Json>().optional(),
-  general_specs: z.custom<Json>().optional(),
   launch_date: z.string().optional(),
+  release_date: z.string().optional(),
   custom_ui: z.string().optional(),
   software_support: z.string().optional(),
+  cpu: z.string().optional(),
   architecture: z.string().optional(),
   fabrication: z.string().optional(),
+  ram_type: z.string().optional(),
   display_type: z.string().optional(),
   aspect_ratio: z.string().optional(),
   pixel_density: z.string().optional(),
@@ -55,23 +47,34 @@ export const mobileProductSchema = baseProductSchema.extend({
   build_material: z.string().optional(),
   waterproof: z.string().optional(),
   ruggedness: z.string().optional(),
+  camera_setup: z.string().optional(),
+  camera_autofocus: z.boolean().optional(),
+  camera_ois: z.boolean().optional(),
+  camera_flash: z.string().optional(),
+  camera_modes: z.string().optional(),
+  video_recording: z.string().optional(),
+  front_camera_setup: z.string().optional(),
+  front_camera_video: z.string().optional(),
+  wlan: z.string().optional(),
+  bluetooth: z.string().optional(),
+  nfc: z.string().optional(),
+  positioning: z.string().optional(),
+  usb: z.string().optional(),
+  network_technology: z.string().optional(),
+  network_2g_bands: z.string().optional(),
+  network_3g_bands: z.string().optional(),
+  network_4g_bands: z.string().optional(),
+  network_5g_bands: z.string().optional(),
+  network_speed: z.string().optional(),
+  loudspeaker: z.string().optional(),
+  audio_jack: z.string().optional(),
+  sensors: z.string().optional(),
+  models: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
-  connectivity_specs: z.custom<Json>().optional(),
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
-
-export const expertReviewSchema = z.object({
-  rating: z.number().min(0).max(10),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()).min(1, "At least one pro is required"),
-  cons: z.array(z.string()).min(1, "At least one con is required"),
-  verdict: z.string().min(1, "Verdict is required"),
-});
-
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;

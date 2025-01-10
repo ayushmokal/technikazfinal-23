@@ -63,251 +63,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
 
         <Separator />
 
-        {/* Platform Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Platform</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="os"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Operating System</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., iOS 18" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="chipset"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Chipset</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Apple A18" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Memory Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Memory</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="ram_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>RAM Type</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 8GB RAM" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="storage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Storage</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 256GB" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Display Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Display</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="display_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Super Retina XDR OLED" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="resolution"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Resolution</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 1290 x 2796 pixels" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="screen_protection"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Protection</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Ceramic Shield glass" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="peak_brightness"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Peak Brightness</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 2000 nits" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Body Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Body</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="height"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Height</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 160.9 mm" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="width"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Width</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 77.8 mm" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="thickness"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Thickness</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 7.8 mm" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="weight"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Weight</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 199 g" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="build_material"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Build</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Glass front, aluminum frame" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="waterproof"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Protection Rating</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., IP68 dust/water resistant" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Battery Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Battery</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="battery"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Li-Ion 4000 mAh" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="charging_specs"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Charging</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 25W wired, 15W wireless" {...field} value={field.value || ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <Separator />
-
         {/* Communications Section */}
         <div>
           <h3 className="text-lg font-semibold mb-4">Communications</h3>
@@ -319,7 +74,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>WLAN</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Wi-Fi 802.11 a/b/g/n/ac/6/7, dual-band, hotspot" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., Wi-Fi 802.11 a/b/g/n/ac/6/7" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -332,7 +91,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Bluetooth</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 5.3, A2DP, LE" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., 5.3, A2DP, LE" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -345,7 +108,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>NFC</FormLabel>
                   <FormControl>
-                    <Input placeholder="Yes/No" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="Yes/No" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -358,7 +125,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Positioning</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., GPS, GLONASS, GALILEO, BDS, QZSS" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., GPS, GLONASS, GALILEO" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -371,7 +142,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>USB</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., USB Type-C 2.0, DisplayPort" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., USB Type-C 2.0" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -393,7 +168,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Technology</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., GSM / CDMA / HSPA / EVDO / LTE / 5G" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., GSM / HSPA / LTE / 5G" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -406,7 +185,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>2G bands</FormLabel>
                   <FormControl>
-                    <Input placeholder="GSM bands" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="GSM bands" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -419,7 +202,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>3G bands</FormLabel>
                   <FormControl>
-                    <Input placeholder="HSDPA bands" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="HSDPA bands" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -432,7 +219,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>4G bands</FormLabel>
                   <FormControl>
-                    <Input placeholder="LTE bands" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="LTE bands" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -445,7 +236,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>5G bands</FormLabel>
                   <FormControl>
-                    <Input placeholder="5G bands" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="5G bands" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -458,7 +253,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Speed</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., HSPA, LTE, 5G, EV-DO Rev.A 3.1 Mbps" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., HSPA, LTE-A, 5G" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -480,7 +279,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Loudspeaker</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Yes, with stereo speakers" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., Yes, with stereo speakers" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -493,7 +296,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>3.5mm jack</FormLabel>
                   <FormControl>
-                    <Input placeholder="Yes/No" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="Yes/No" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -516,7 +323,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                   <FormLabel>Sensors</FormLabel>
                   <FormControl>
                     <Input 
-                      placeholder="e.g., Face ID, accelerometer, gyro, proximity, compass, barometer" 
+                      placeholder="e.g., Fingerprint, accelerometer, gyro" 
                       {...field} 
                       value={field.value || ''} 
                     />
@@ -541,7 +348,11 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Models</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., A3287, A3081, A3286, A3288" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., A2345, A2346" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -549,12 +360,16 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
             />
             <FormField
               control={form.control}
-              name="colors"
+              name="color"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Colors</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Black, White, Pink, Teal, Ultramarine" {...field} value={field.value || ''} />
+                    <Input 
+                      placeholder="e.g., Black, White, Gold" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -6,8 +6,8 @@ export interface BaseProduct {
   image_url: string | null;
   display_specs: string;
   processor: string;
-  ram: string;
-  storage: string;
+  ram: string | null;
+  storage: string | null;
   battery: string;
   os: string | null;
   color: string | null;
