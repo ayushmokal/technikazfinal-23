@@ -3,16 +3,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
 import { useImageUpload } from "./useImageUpload";
-import { useAuthCheck } from "./useAuthCheck";
 import { useProductData } from "./useProductData";
 import { supabase } from "@/integrations/supabase/client";
 import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
-import { useToast } from "@/hooks/use-toast";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
-  const { toast } = useToast();
   const { updateProduct, insertProduct } = useProductData();
   const { 
     mainImageFile, 

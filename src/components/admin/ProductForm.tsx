@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
-import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
+import { ExpertReviewForm } from "./ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
 import { useToast } from "@/hooks/use-toast";
 import type { MobileProductData, LaptopProductData } from "./types/productTypes";
@@ -22,6 +23,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   const [showExpertReview, setShowExpertReview] = useState(false);
   const [tempProductId, setTempProductId] = useState<string>("");
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const {
     form,
@@ -34,29 +36,21 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   } = useProductForm({ 
     initialData, 
     onSuccess: async (productId) => {
-      try {
-        setTempProductId(productId);
-        toast({
-          title: "Success",
-          description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
-        });
-        if (onSuccess) {
-          await onSuccess();
-        }
-      } catch (error: any) {
-        console.error("Error in onSuccess callback:", error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message || "Failed to process product",
-        });
+      setTempProductId(productId);
+      if (onSuccess) {
+        await onSuccess();
       }
+      toast({
+        title: "Success",
+        description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
+      });
     }, 
     productType: propProductType 
   });
 
   const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
+      setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
       // Basic validation
@@ -115,6 +109,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         title: "Error",
         description: error.message || "Failed to submit form",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -147,12 +143,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 className="w-full mb-4"
               >
-                {isLoading ? (
+                {isSubmitting ? (
                   <span className="flex items-center gap-2">
-                    <span className="animate-spin">⌛</span>
+                    <Loader2 className="h-4 w-4 animate-spin" />
                     Saving...
                   </span>
                 ) : (
