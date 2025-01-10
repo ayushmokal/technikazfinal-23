@@ -1,36 +1,37 @@
-import * as z from "zod";
-import type { Json } from "@/integrations/supabase/types";
+import { z } from "zod";
 
-const baseProductSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  brand: z.string().min(1, "Brand is required"),
-  model_name: z.string().optional(),
-  price: z.number().min(0, "Price must be positive"),
-  display_specs: z.string().min(1, "Display specifications are required"),
-  processor: z.string().min(1, "Processor is required"),
-  ram: z.string().min(1, "RAM is required"),
-  storage: z.string().min(1, "Storage is required"),
-  battery: z.string().min(1, "Battery specifications are required"),
-  os: z.string().optional(),
-  color: z.string().optional(),
-  image_url: z.string().optional(),
-  gallery_images: z.array(z.string()).optional(),
-  multimedia_specs: z.custom<Json>().optional(),
-  design_specs: z.custom<Json>().optional(),
-  performance_specs: z.custom<Json>().optional(),
-  display_details: z.custom<Json>().optional(),
+export const expertReviewSchema = z.object({
+  rating: z.number().min(1).max(5),
+  date: z.string().optional(),
+  author: z.string().min(1),
+  summary: z.string().min(1),
+  pros: z.array(z.string()),
+  cons: z.array(z.string()),
+  verdict: z.string().min(1),
 });
 
-export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera specifications are required"),
+export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
+
+export const productFormSchema = z.object({
+  name: z.string().min(1),
+  brand: z.string().min(1),
+  model_name: z.string().optional(),
+  price: z.number().min(0),
+  display_specs: z.string().min(1),
+  processor: z.string().min(1),
+  ram: z.string().min(1),
+  storage: z.string().min(1),
+  battery: z.string().min(1),
+  os: z.string().optional(),
+  color: z.string().optional(),
+  image_url: z.string().url().optional(),
+  gallery_images: z.array(z.string().url()).optional(),
+  camera: z.string().optional(),
   chipset: z.string().optional(),
   charging_specs: z.string().optional(),
-  screen_size: z.string().optional(),
   resolution: z.string().optional(),
-  camera_details: z.custom<Json>().optional(),
-  sensor_specs: z.custom<Json>().optional(),
-  network_specs: z.custom<Json>().optional(),
-  general_specs: z.custom<Json>().optional(),
+  screen_size: z.string().optional(),
+  front_camera: z.string().optional(),
   network_technology: z.string().optional(),
   network_2g_bands: z.string().optional(),
   network_3g_bands: z.string().optional(),
@@ -67,23 +68,43 @@ export const mobileProductSchema = baseProductSchema.extend({
   models_list: z.string().optional(),
   colors_list: z.string().optional(),
   price_details: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  sensor_specs: z.any().optional(),
+  network_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  camera_details: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
+  general_specs: z.any().optional(),
+  cpu: z.string().optional(),
+  architecture: z.string().optional(),
+  fabrication: z.string().optional(),
+  ram_type: z.string().optional(),
+  display_type: z.string().optional(),
+  aspect_ratio: z.string().optional(),
+  pixel_density: z.string().optional(),
+  screen_protection: z.string().optional(),
+  bezel_less: z.boolean().optional(),
+  touch_screen: z.boolean().optional(),
+  peak_brightness: z.string().optional(),
+  hdr_support: z.string().optional(),
+  refresh_rate: z.string().optional(),
+  height: z.string().optional(),
+  width: z.string().optional(),
+  thickness: z.string().optional(),
+  weight: z.string().optional(),
+  build_material: z.string().optional(),
+  waterproof: z.string().optional(),
+  ruggedness: z.string().optional(),
+  camera_setup: z.string().optional(),
+  camera_autofocus: z.boolean().optional(),
+  camera_ois: z.boolean().optional(),
+  camera_flash: z.string().optional(),
+  camera_modes: z.string().optional(),
+  video_recording: z.string().optional(),
+  front_camera_setup: z.string().optional(),
+  front_camera_video: z.string().optional(),
+  launch_date: z.string().optional(),
+  custom_ui: z.string().optional(),
+  software_support: z.string().optional(),
 });
-
-export const laptopProductSchema = baseProductSchema.extend({
-  graphics: z.string().optional(),
-  ports: z.string().optional(),
-  connectivity_specs: z.custom<Json>().optional(),
-});
-
-export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
-
-export const expertReviewSchema = z.object({
-  rating: z.number().min(0).max(10),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()),
-  cons: z.array(z.string()),
-  verdict: z.string().min(1, "Verdict is required"),
-});
-
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
