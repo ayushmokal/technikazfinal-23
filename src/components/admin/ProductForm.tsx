@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
 import { useProductForm } from "./hooks/useProductForm";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
@@ -59,37 +60,39 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
   return (
     <div className="space-y-6">
-      <form onSubmit={form.handleSubmit(handleFormSubmit)}>
-        <Card className="p-6 space-y-8">
-          <BasicInfoSection form={form} />
-          
-          <ImageSection
-            form={form}
-            onMainImageChange={handleMainImageChange}
-            onGalleryImagesChange={handleGalleryImagesChange}
-            onRemoveGalleryImage={handleRemoveGalleryImage}
-          />
-          
-          <SpecificationsSection form={form} productType={productType} />
-          
-          {productType === 'mobile' && (
-            <>
-              <CameraSection form={form} productType={productType} />
-              <AdditionalSpecsSection form={form} productType={productType} />
-            </>
-          )}
-          
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Saving...' : initialData ? 'Update Product' : 'Add Product'}
-            </button>
-          </div>
-        </Card>
-      </form>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleFormSubmit)}>
+          <Card className="p-6 space-y-8">
+            <BasicInfoSection form={form} />
+            
+            <ImageSection
+              form={form}
+              onMainImageChange={handleMainImageChange}
+              onGalleryImagesChange={handleGalleryImagesChange}
+              onRemoveGalleryImage={handleRemoveGalleryImage}
+            />
+            
+            <SpecificationsSection form={form} productType={productType} />
+            
+            {productType === 'mobile' && (
+              <>
+                <CameraSection form={form} productType={productType} />
+                <AdditionalSpecsSection form={form} productType={productType} />
+              </>
+            )}
+            
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Saving...' : initialData ? 'Update Product' : 'Add Product'}
+              </button>
+            </div>
+          </Card>
+        </form>
+      </Form>
     </div>
   );
 }
