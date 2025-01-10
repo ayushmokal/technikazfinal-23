@@ -73,8 +73,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         return;
       }
 
+      // Ensure numeric price
+      const formattedData = {
+        ...data,
+        price: typeof data.price === 'string' ? parseFloat(data.price) : data.price
+      };
+
       // Submit form data
-      const result = await onSubmit(data);
+      const result = await onSubmit(formattedData);
       
       if (result) {
         setTempProductId(result.id);
