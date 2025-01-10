@@ -103,7 +103,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             ports: (data as LaptopProductData).ports,
           };
 
-      await onSubmit(formData);
+      // If updating, ensure we pass the ID
+      if (initialData?.id) {
+        await onSubmit({ ...formData, id: initialData.id });
+      } else {
+        await onSubmit(formData);
+      }
     } catch (error: any) {
       console.error('Error submitting form:', error);
       toast({
