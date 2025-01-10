@@ -14,27 +14,25 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
     <div className="grid grid-cols-12 gap-6">
       {/* Main Featured Article - 60% width */}
       <div className="col-span-12 lg:col-span-7">
-        <Link to={`/article/${articles[0].slug}`} className="block group">
-          <div className="relative overflow-hidden">
-            <AspectRatio ratio={16/9} className="mb-4">
+        <Link to={`/article/${articles[0].slug}`} className="block group h-full">
+          <div className="relative h-full flex flex-col">
+            <AspectRatio ratio={16/9}>
               <img
                 src={articles[0].image_url || '/placeholder.svg'}
                 alt={articles[0].title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </AspectRatio>
-            <div className="flex flex-col justify-between">
-              <div className="space-y-2">
-                <span className="text-sm font-medium text-primary uppercase">
-                  {articles[0].category}
-                </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
-                  {articles[0].title}
-                </h2>
-                <p className="mt-2 text-gray-600 line-clamp-2">
-                  {articles[0].meta_description || ''}
-                </p>
-              </div>
+            <div className="mt-4 flex flex-col flex-1">
+              <span className="text-sm font-medium text-primary uppercase mb-2">
+                {articles[0].category}
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
+                {articles[0].title}
+              </h2>
+              <p className="mt-2 text-gray-600 line-clamp-2">
+                {articles[0].meta_description || ''}
+              </p>
             </div>
           </div>
         </Link>
@@ -43,27 +41,25 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Second Article - 40% width */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
-          <Link to={`/article/${articles[1].slug}`} className="block group">
-            <div className="relative overflow-hidden">
-              <AspectRatio ratio={16/9} className="mb-4">
+          <Link to={`/article/${articles[1].slug}`} className="block group h-full">
+            <div className="relative h-full flex flex-col">
+              <AspectRatio ratio={16/9}>
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </AspectRatio>
-              <div className="flex flex-col justify-between">
-                <div className="space-y-2">
-                  <span className="text-sm font-medium text-primary uppercase">
-                    {articles[1].category}
-                  </span>
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
-                    {articles[1].title}
-                  </h2>
-                  <p className="mt-2 text-gray-600 line-clamp-2">
-                    {articles[1].meta_description || ''}
-                  </p>
-                </div>
+              <div className="mt-4 flex flex-col flex-1">
+                <span className="text-sm font-medium text-primary uppercase mb-2">
+                  {articles[1].category}
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
+                  {articles[1].title}
+                </h2>
+                <p className="mt-2 text-gray-600 line-clamp-2">
+                  {articles[1].meta_description || ''}
+                </p>
               </div>
             </div>
           </Link>
