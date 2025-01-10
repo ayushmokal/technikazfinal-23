@@ -1,9 +1,9 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { UseFormReturn } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface AdditionalSpecsSectionProps {
@@ -350,23 +350,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                   <FormControl>
                     <Input 
                       placeholder="e.g., A2345, A2346" 
-                      {...field} 
-                      value={field.value || ''} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="color"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Colors</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="e.g., Black, White, Gold" 
                       {...field} 
                       value={field.value || ''} 
                     />
