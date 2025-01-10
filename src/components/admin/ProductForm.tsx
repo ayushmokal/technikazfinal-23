@@ -47,21 +47,28 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
   const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
-      // Ensure all form data is included
-      const formData = {
+      // Create base form data with common fields
+      const baseFormData = {
         ...data,
-        multimedia_specs: data.multimedia_specs || {},
-        connectivity_specs: data.connectivity_specs || {},
-        design_specs: data.design_specs || {},
-        performance_specs: data.performance_specs || {},
-        display_details: data.display_details || {},
-        ...(productType === 'mobile' && {
-          sensor_specs: (data as MobileProductData).sensor_specs || {},
-          network_specs: (data as MobileProductData).network_specs || {},
-          camera_details: (data as MobileProductData).camera_details || {},
-          general_specs: (data as MobileProductData).general_specs || {},
-        }),
+        multimedia_specs: {},
+        design_specs: {},
+        performance_specs: {},
+        display_details: {},
       };
+
+      // Add type-specific fields based on product type
+      const formData = productType === 'mobile' 
+        ? {
+            ...baseFormData,
+            sensor_specs: (data as MobileProductData).sensor_specs || {},
+            network_specs: (data as MobileProductData).network_specs || {},
+            camera_details: (data as MobileProductData).camera_details || {},
+            general_specs: (data as MobileProductData).general_specs || {},
+          }
+        : {
+            ...baseFormData,
+            connectivity_specs: (data as LaptopProductData).connectivity_specs || {},
+          };
 
       await onSubmit(formData);
     } catch (error) {
