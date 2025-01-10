@@ -29,7 +29,9 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
         .limit(10);
 
       if (error) throw error;
-      return data;
+      return type === 'laptop' 
+        ? (data as LaptopProduct[]) 
+        : (data as MobileProduct[]);
     },
   });
 

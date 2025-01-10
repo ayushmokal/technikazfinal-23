@@ -24,7 +24,9 @@ export function ProductVariantSelector({ product, type, onVariantChange }: Produ
         throw error;
       }
 
-      return data || [];
+      return type === 'laptop' 
+        ? (data as LaptopProduct[] || [])
+        : (data as MobileProduct[] || []);
     },
   });
 

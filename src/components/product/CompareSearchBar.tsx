@@ -31,7 +31,9 @@ export function CompareSearchBar({ type, onProductSelect, currentProductId }: Co
         .limit(5);
 
       if (error) throw error;
-      return data;
+      return type === 'laptop' 
+        ? (data as LaptopProduct[]) 
+        : (data as MobileProduct[]);
     },
     enabled: searchQuery.length > 0,
   });

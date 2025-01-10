@@ -28,7 +28,7 @@ export default function GadgetsPage() {
       return data || [];
     },
     initialPageParam: 0,
-    getNextPageParam: () => null, // No pagination for featured articles
+    getNextPageParam: () => null,
   });
 
   // Query for all gadgets articles
@@ -46,7 +46,7 @@ export default function GadgetsPage() {
       return data || [];
     },
     initialPageParam: 0,
-    getNextPageParam: () => null, // No pagination for articles
+    getNextPageParam: () => null,
   });
 
   // Infinite query for mobile products
@@ -70,7 +70,7 @@ export default function GadgetsPage() {
       if (error) throw error;
       
       return {
-        data: data || [],
+        data: data as MobileProduct[] || [],
         nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined,
         totalCount: count
       };
@@ -100,7 +100,7 @@ export default function GadgetsPage() {
       if (error) throw error;
       
       return {
-        data: data || [],
+        data: data as LaptopProduct[] || [],
         nextPage: data && data.length === ITEMS_PER_PAGE ? pageParam + 1 : undefined,
         totalCount: count
       };
