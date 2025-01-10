@@ -15,6 +15,7 @@ export interface BaseProduct {
   updated_at: string;
   gallery_images: string[] | null;
   model_name: string | null;
+  release_date: string | null;
 }
 
 export interface LaptopProduct extends BaseProduct {
@@ -30,7 +31,6 @@ export interface MobileProduct extends BaseProduct {
   screen_size: string | null;
   front_camera: string | null;
   launch_date: string | null;
-  release_date: string | null;
   custom_ui: string | null;
   software_support: string | null;
   cpu: string | null;
