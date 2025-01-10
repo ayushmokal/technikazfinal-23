@@ -43,14 +43,14 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group h-full">
             <div className="relative h-full flex flex-col">
-              <div className="aspect-[16/9]"> {/* Using aspect ratio instead of fixed height */}
+              <AspectRatio ratio={1}>
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-              </div>
-              <div className="mt-4 flex flex-col flex-1 justify-between"> {/* Using justify-between for better alignment */}
+              </AspectRatio>
+              <div className="mt-4 flex flex-col flex-1 justify-between">
                 <div>
                   <span className="text-sm font-medium text-primary uppercase mb-2">
                     {articles[1].category}
