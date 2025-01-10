@@ -50,10 +50,10 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       // Create base form data with common fields
       const baseFormData = {
         ...data,
-        multimedia_specs: {},
-        design_specs: {},
-        performance_specs: {},
-        display_details: {},
+        multimedia_specs: data.multimedia_specs || {},
+        design_specs: data.design_specs || {},
+        performance_specs: data.performance_specs || {},
+        display_details: data.display_details || {},
       };
 
       // Add type-specific fields based on product type
@@ -64,6 +64,34 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             network_specs: (data as MobileProductData).network_specs || {},
             camera_details: (data as MobileProductData).camera_details || {},
             general_specs: (data as MobileProductData).general_specs || {},
+            // Add all the additional specifications
+            launch_date: (data as MobileProductData).launch_date,
+            release_date: (data as MobileProductData).release_date,
+            wlan: (data as MobileProductData).wlan,
+            bluetooth: (data as MobileProductData).bluetooth,
+            nfc: (data as MobileProductData).nfc,
+            positioning: (data as MobileProductData).positioning,
+            usb: (data as MobileProductData).usb,
+            network_technology: (data as MobileProductData).network_technology,
+            network_2g_bands: (data as MobileProductData).network_2g_bands,
+            network_3g_bands: (data as MobileProductData).network_3g_bands,
+            network_4g_bands: (data as MobileProductData).network_4g_bands,
+            network_5g_bands: (data as MobileProductData).network_5g_bands,
+            network_speed: (data as MobileProductData).network_speed,
+            loudspeaker: (data as MobileProductData).loudspeaker,
+            audio_jack: (data as MobileProductData).audio_jack,
+            sensors: (data as MobileProductData).sensors,
+            models: (data as MobileProductData).models,
+            camera: (data as MobileProductData).camera,
+            front_camera: (data as MobileProductData).front_camera,
+            camera_setup: (data as MobileProductData).camera_setup,
+            camera_autofocus: (data as MobileProductData).camera_autofocus,
+            camera_ois: (data as MobileProductData).camera_ois,
+            camera_flash: (data as MobileProductData).camera_flash,
+            camera_modes: (data as MobileProductData).camera_modes,
+            video_recording: (data as MobileProductData).video_recording,
+            front_camera_setup: (data as MobileProductData).front_camera_setup,
+            front_camera_video: (data as MobileProductData).front_camera_video,
           }
         : {
             ...baseFormData,
@@ -98,8 +126,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                   <Separator />
                   <AdditionalSpecsSection form={form} productType={productType} />
                   <Separator />
-                  <CameraSection form={form} productType={productType} />
-                  <Separator />
+                  {productType === 'mobile' && (
+                    <>
+                      <CameraSection form={form} productType={productType} />
+                      <Separator />
+                    </>
+                  )}
                   <ImageSection 
                     onMainImageChange={handleMainImageChange}
                     onGalleryImagesChange={handleGalleryImagesChange}
