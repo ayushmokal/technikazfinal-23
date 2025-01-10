@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
-  const { toast, navigate } = useAuthCheck();
+  const { toast } = useAuthCheck();
   const { updateProduct, insertProduct } = useProductData();
   const { 
     mainImageFile, 
@@ -59,7 +59,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           title: "Authentication Error",
           description: "Please login again to continue.",
         });
-        navigate("/admin/login");
         return;
       }
 
@@ -97,7 +96,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error updating product:", error);
+          throw error;
+        }
         result = updatedData;
         
         toast({
@@ -105,14 +107,17 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        console.log("Inserting new product");
+        console.log("Inserting new product with data:", transformedData);
         const { data: insertedData, error } = await supabase
           .from(table)
           .insert([transformedData])
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error inserting product:", error);
+          throw error;
+        }
         result = insertedData;
 
         toast({
@@ -122,8 +127,12 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       }
 
       console.log("Operation successful, result:", result);
-      form.reset();
-      onSuccess?.(result.id);
+      if (result) {
+        form.reset();
+        onSuccess?.(result.id);
+      } else {
+        throw new Error("No result returned from database operation");
+      }
     } catch (error: any) {
       console.error('Error submitting form:', error);
       if (error.message?.includes('JWT')) {
@@ -132,7 +141,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           title: "Session Expired",
           description: "Please login again to continue.",
         });
-        navigate("/admin/login");
       } else {
         toast({
           variant: "destructive",
