@@ -107,7 +107,6 @@ export interface MobileProduct extends BaseProduct {
   usb: string | null;
   sensors: string | null;
   positioning: string | null;
-  // Add the missing properties
   launch_date: string | null;
   custom_ui: string | null;
   software_support: string | null;

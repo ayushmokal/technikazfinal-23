@@ -62,9 +62,9 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
         <SpecificationSection
           title="Launch Details"
           specs={[
-            { label: "Launch Date", value: product.launch_date },
-            { label: "Status", value: product.status },
             { label: "Announced", value: product.announced },
+            { label: "Status", value: product.status },
+            { label: "Launch Date", value: product.launch_date },
           ]}
         />
         
@@ -73,12 +73,12 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
           specs={[
             { label: "Operating System", value: product.os },
             { label: "Custom UI", value: product.custom_ui },
+            { label: "Software Support", value: product.software_support },
             { label: "Chipset", value: product.chipset },
             { label: "CPU", value: product.cpu },
             { label: "Architecture", value: product.architecture },
             { label: "Fabrication", value: product.fabrication },
             { label: "GPU", value: product.gpu },
-            { label: "Software Support", value: product.software_support },
           ]}
         />
 
@@ -97,7 +97,7 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
           title="Display"
           specs={[
             { label: "Display Type", value: product.display_type },
-            { label: "Screen Size", value: product.screen_size },
+            { label: "Display Size", value: product.screen_size },
             { label: "Resolution", value: product.resolution },
             { label: "Aspect Ratio", value: product.aspect_ratio },
             { label: "Pixel Density", value: product.pixel_density },
@@ -147,6 +147,7 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
             { label: "Protection Details", value: product.protection_details },
             { label: "Waterproof", value: product.waterproof },
             { label: "Ruggedness", value: product.ruggedness },
+            { label: "SIM", value: product.sim },
           ]}
         />
 
@@ -165,11 +166,11 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
           specs={[
             { label: "WLAN", value: product.wlan_details },
             { label: "Bluetooth", value: product.bluetooth_details },
-            { label: "GPS", value: product.positioning },
             { label: "NFC", value: product.nfc },
             { label: "Infrared", value: product.infrared },
             { label: "Radio", value: product.radio },
             { label: "USB", value: product.usb },
+            { label: "Positioning", value: product.positioning },
           ]}
         />
 
@@ -203,8 +204,8 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
         <SpecificationSection
           title="Miscellaneous"
           specs={[
-            { label: "Color", value: product.color },
             { label: "Models", value: product.models },
+            { label: "Colors", value: product.colors_list },
             { label: "Price Details", value: product.price_details },
           ]}
         />
