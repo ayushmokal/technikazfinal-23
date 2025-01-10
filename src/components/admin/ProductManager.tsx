@@ -24,6 +24,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
 
   const fetchProducts = async () => {
     try {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from(productType === 'mobile' ? 'mobile_products' : 'laptops')
         .select('*')
@@ -42,6 +43,29 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
+  // Set up real-time subscription for product updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('product-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: productType === 'mobile' ? 'mobile_products' : 'laptops'
+        },
+        () => {
+          fetchProducts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [productType]);
+
+  // Initial fetch
   useEffect(() => {
     fetchProducts();
   }, [productType]);
@@ -60,7 +84,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         description: "Product deleted successfully",
       });
 
-      setProducts(products.filter((product) => product.id !== id));
+      await fetchProducts(); // Refresh the list after deletion
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -110,9 +134,13 @@ export function ProductManager({ productType }: ProductManagerProps) {
         <ProductEditDialog
           product={editingProduct}
           onClose={() => setEditingProduct(null)}
-          onSuccess={() => {
+          onSuccess={async () => {
             setEditingProduct(null);
-            fetchProducts();
+            await fetchProducts(); // Refresh the list after successful edit
+            toast({
+              title: "Success",
+              description: "Product updated successfully",
+            });
           }}
           productType={productType}
         />
