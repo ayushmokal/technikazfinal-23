@@ -10,6 +10,7 @@ export const useProductData = () => {
     data: MobileProductData | LaptopProductData,
     productType: 'mobile' | 'laptop'
   ) => {
+    console.log("Updating product with data:", data);
     const { data: updatedData, error } = await supabase
       .from(table)
       .update(data)
@@ -21,6 +22,7 @@ export const useProductData = () => {
       console.error("Error updating product:", error);
       throw error;
     }
+    console.log("Product updated successfully:", updatedData);
     return updatedData;
   };
 
@@ -29,6 +31,7 @@ export const useProductData = () => {
     data: MobileProductData | LaptopProductData,
     productType: 'mobile' | 'laptop'
   ) => {
+    console.log("Inserting new product with data:", data);
     const { data: insertedData, error } = await supabase
       .from(table)
       .insert(data)
@@ -39,6 +42,7 @@ export const useProductData = () => {
       console.error("Error inserting product:", error);
       throw error;
     }
+    console.log("Product inserted successfully:", insertedData);
     return insertedData;
   };
 
