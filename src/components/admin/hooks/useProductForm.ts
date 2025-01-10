@@ -50,10 +50,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
   const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
-      console.log("Submitting form with data:", data);
+      console.log("Starting form submission with data:", data);
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
+        console.log("No active session found");
         toast({
           variant: "destructive",
           title: "Authentication Error",
@@ -68,13 +69,17 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
       };
 
+      console.log("Transformed data:", transformedData);
+
       // Handle image uploads
       if (mainImageFile) {
+        console.log("Uploading main image");
         const imageUrl = await uploadImage(mainImageFile, 'main');
         transformedData.image_url = imageUrl;
       }
 
       if (galleryImageFiles.length > 0) {
+        console.log("Uploading gallery images");
         const uploadPromises = galleryImageFiles.map(file => 
           uploadImage(file, 'gallery')
         );
@@ -85,10 +90,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
+      console.log(`Using table: ${table}`);
       
       let result;
       if (initialData?.id) {
-        console.log("Updating product with ID:", initialData.id);
+        console.log("Updating existing product");
         const { data: updatedData, error } = await supabase
           .from(table)
           .update(transformedData)
@@ -100,6 +106,8 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           console.error("Error updating product:", error);
           throw error;
         }
+        
+        console.log("Product updated successfully:", updatedData);
         result = updatedData;
         
         toast({
@@ -107,7 +115,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        console.log("Inserting new product with data:", transformedData);
+        console.log("Inserting new product");
         const { data: insertedData, error } = await supabase
           .from(table)
           .insert([transformedData])
@@ -118,6 +126,8 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           console.error("Error inserting product:", error);
           throw error;
         }
+        
+        console.log("Product inserted successfully:", insertedData);
         result = insertedData;
 
         toast({
@@ -126,8 +136,8 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         });
       }
 
-      console.log("Operation successful, result:", result);
       if (result) {
+        console.log("Operation completed successfully, resetting form");
         form.reset();
         onSuccess?.(result.id);
       } else {
