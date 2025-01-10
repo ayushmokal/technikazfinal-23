@@ -64,6 +64,16 @@ export const mobileProductSchema = baseProductSchema.extend({
   performance_specs: z.any().optional(),
   display_details: z.any().optional(),
   general_specs: z.any().optional(),
+  // Add the missing fields that caused TypeScript errors
+  camera_setup: z.string().optional(),
+  front_camera_setup: z.string().optional(),
+  weight: z.string().optional(),
+  build_material: z.string().optional(),
+  positioning: z.string().optional(),
+  nfc: z.string().optional(),
+  usb: z.string().optional(),
+  loudspeaker: z.string().optional(),
+  audio_jack: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
