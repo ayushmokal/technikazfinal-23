@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase, handleAuthError } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
+import { handleAuthError } from "@/hooks/useAuthError";
 
 export function useAuthCheck() {
   const { toast } = useToast();
@@ -24,7 +25,7 @@ export function useAuthCheck() {
             navigate("/admin/login");
             return;
           }
-          handleAuthError(error);
+          handleAuthError(error, toast);
           return;
         }
 
@@ -40,7 +41,7 @@ export function useAuthCheck() {
         console.error('Auth check error:', error);
         // Force signout on any auth error to clear stale tokens
         await supabase.auth.signOut();
-        handleAuthError(error);
+        handleAuthError(error, toast);
         navigate("/admin/login");
       }
     };
