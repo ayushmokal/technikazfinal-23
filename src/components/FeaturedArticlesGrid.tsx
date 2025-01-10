@@ -14,16 +14,16 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
     <div className="grid grid-cols-12 gap-6">
       {/* Main Featured Article - 60% width */}
       <div className="col-span-12 lg:col-span-7">
-        <Link to={`/article/${articles[0].slug}`} className="block group">
-          <div className="relative flex flex-col h-full">
-            <AspectRatio ratio={16/9} className="mb-4">
+        <Link to={`/article/${articles[0].slug}`} className="block group h-full">
+          <div className="relative h-full flex flex-col">
+            <AspectRatio ratio={16/9}>
               <img
                 src={articles[0].image_url || '/placeholder.svg'}
                 alt={articles[0].title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </AspectRatio>
-            <div className="flex flex-col">
+            <div className="mt-4 flex flex-col flex-1">
               <span className="text-sm font-medium text-primary uppercase mb-2">
                 {articles[0].category}
               </span>
@@ -41,25 +41,27 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
       {/* Second Article - 40% width */}
       {articles[1] && (
         <div className="col-span-12 lg:col-span-5">
-          <Link to={`/article/${articles[1].slug}`} className="block group">
-            <div className="relative flex flex-col h-full">
-              <div className="relative w-full h-0 pb-[100%] mb-4">
+          <Link to={`/article/${articles[1].slug}`} className="block group h-full">
+            <div className="relative h-full flex flex-col">
+              <div className="aspect-[16/9]"> {/* Using aspect ratio instead of fixed height */}
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-primary uppercase mb-2">
-                  {articles[1].category}
-                </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
-                  {articles[1].title}
-                </h2>
-                <p className="mt-2 text-gray-600 line-clamp-2">
-                  {articles[1].meta_description || ''}
-                </p>
+              <div className="mt-4 flex flex-col flex-1 justify-between"> {/* Using justify-between for better alignment */}
+                <div>
+                  <span className="text-sm font-medium text-primary uppercase mb-2">
+                    {articles[1].category}
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
+                    {articles[1].title}
+                  </h2>
+                  <p className="mt-2 text-gray-600 line-clamp-2">
+                    {articles[1].meta_description || ''}
+                  </p>
+                </div>
               </div>
             </div>
           </Link>
