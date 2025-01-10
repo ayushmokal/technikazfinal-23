@@ -46,7 +46,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
+  const onSubmit = async (data: MobileProductData | LaptopProductData & { id?: string }) => {
     try {
       setIsLoading(true);
 
@@ -78,7 +78,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
       let result;
-      if ('id' in data) {
+      if (data.id) {
         result = await updateProduct(table, data.id, data, productType);
       } else {
         result = await insertProduct(table, data, productType);
@@ -96,11 +96,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         });
         navigate("/admin/login");
       } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message || "Failed to save product",
-        });
+        throw error;
       }
     } finally {
       setIsLoading(false);

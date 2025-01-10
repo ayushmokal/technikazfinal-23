@@ -7,12 +7,15 @@ export const useProductData = () => {
   const updateProduct = async (
     table: TableName,
     id: string,
-    data: MobileProductData | LaptopProductData,
+    data: (MobileProductData | LaptopProductData) & { id?: string },
     productType: 'mobile' | 'laptop'
   ) => {
+    // Remove id from the data before update
+    const { id: _, ...updateData } = data;
+    
     const { data: updatedData, error } = await supabase
       .from(table)
-      .update(data)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
