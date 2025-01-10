@@ -64,7 +64,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             network_specs: (data as MobileProductData).network_specs || {},
             camera_details: (data as MobileProductData).camera_details || {},
             general_specs: (data as MobileProductData).general_specs || {},
-            // Add all the additional specifications
+            camera: (data as MobileProductData).camera,
+            front_camera: (data as MobileProductData).front_camera,
+            chipset: (data as MobileProductData).chipset,
+            charging_specs: (data as MobileProductData).charging_specs,
+            screen_size: (data as MobileProductData).screen_size,
+            resolution: (data as MobileProductData).resolution,
             launch_date: (data as MobileProductData).launch_date,
             release_date: (data as MobileProductData).release_date,
             wlan: (data as MobileProductData).wlan,
@@ -82,8 +87,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             audio_jack: (data as MobileProductData).audio_jack,
             sensors: (data as MobileProductData).sensors,
             models: (data as MobileProductData).models,
-            camera: (data as MobileProductData).camera,
-            front_camera: (data as MobileProductData).front_camera,
             camera_setup: (data as MobileProductData).camera_setup,
             camera_autofocus: (data as MobileProductData).camera_autofocus,
             camera_ois: (data as MobileProductData).camera_ois,
@@ -96,15 +99,17 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         : {
             ...baseFormData,
             connectivity_specs: (data as LaptopProductData).connectivity_specs || {},
+            graphics: (data as LaptopProductData).graphics,
+            ports: (data as LaptopProductData).ports,
           };
 
       await onSubmit(formData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to save product. Please try again.",
+        description: error.message || "Failed to save product",
       });
     }
   };
