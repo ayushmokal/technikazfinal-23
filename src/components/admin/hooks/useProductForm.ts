@@ -50,6 +50,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
   const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
+      console.log("Submitting form with data:", data);
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -88,13 +89,23 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       
       let result;
       if (initialData?.id) {
-        result = await updateProduct(table, initialData.id, transformedData, productType);
+        console.log("Updating product with ID:", initialData.id);
+        const { data: updatedData, error } = await supabase
+          .from(table)
+          .update(transformedData)
+          .eq('id', initialData.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        result = updatedData;
+        
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        // For new products
+        console.log("Inserting new product");
         const { data: insertedData, error } = await supabase
           .from(table)
           .insert([transformedData])
@@ -110,6 +121,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         });
       }
 
+      console.log("Operation successful, result:", result);
       form.reset();
       onSuccess?.(result.id);
     } catch (error: any) {
