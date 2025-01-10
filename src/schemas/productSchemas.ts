@@ -14,7 +14,7 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
-  release_date: z.string().optional(),
+  release_date: z.string().optional().nullable(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({

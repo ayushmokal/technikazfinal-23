@@ -15,12 +15,17 @@ export interface BaseProduct {
   updated_at: string;
   gallery_images: string[] | null;
   model_name: string | null;
-  release_date: string | null;  // Make it optional (null)
+  release_date: string | null;
 }
 
 export interface LaptopProduct extends BaseProduct {
   graphics: string | null;
   ports: string | null;
+  connectivity_specs: Json | null;
+  design_specs: Json | null;
+  display_details: Json | null;
+  performance_specs: Json | null;
+  multimedia_specs: Json | null;
 }
 
 export interface MobileProduct extends BaseProduct {
@@ -76,4 +81,12 @@ export interface MobileProduct extends BaseProduct {
   audio_jack: string | null;
   sensors: string | null;
   models: string | null;
+  multimedia_specs: Json | null;
+  sensor_specs: Json | null;
+  network_specs: Json | null;
+  design_specs: Json | null;
+  camera_details: Json | null;
+  performance_specs: Json | null;
+  display_details: Json | null;
+  general_specs: Json | null;
 }
