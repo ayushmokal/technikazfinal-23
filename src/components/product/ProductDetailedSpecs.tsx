@@ -60,21 +60,36 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <SpecificationSection
-          title="General"
+          title="Launch Details"
           specs={[
             { label: "Launch Date", value: product.launch_date },
-            { label: "Custom UI", value: product.custom_ui },
-            { label: "Software Support", value: product.software_support },
+            { label: "Status", value: product.status },
+            { label: "Announced", value: product.announced },
           ]}
         />
         
         <SpecificationSection
-          title="Performance"
+          title="Platform"
           specs={[
+            { label: "Operating System", value: product.os },
+            { label: "Custom UI", value: product.custom_ui },
+            { label: "Chipset", value: product.chipset },
             { label: "CPU", value: product.cpu },
             { label: "Architecture", value: product.architecture },
             { label: "Fabrication", value: product.fabrication },
+            { label: "GPU", value: product.gpu },
+            { label: "Software Support", value: product.software_support },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Memory"
+          specs={[
+            { label: "RAM", value: product.ram },
             { label: "RAM Type", value: product.ram_type },
+            { label: "Storage", value: product.storage },
+            { label: "Storage Type", value: product.storage_type },
+            { label: "Card Slot", value: product.card_slot },
           ]}
         />
 
@@ -82,47 +97,115 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
           title="Display"
           specs={[
             { label: "Display Type", value: product.display_type },
+            { label: "Screen Size", value: product.screen_size },
+            { label: "Resolution", value: product.resolution },
             { label: "Aspect Ratio", value: product.aspect_ratio },
             { label: "Pixel Density", value: product.pixel_density },
             { label: "Screen Protection", value: product.screen_protection },
-            { label: "Bezel-less Display", value: product.bezel_less },
-            { label: "Touch Screen", value: product.touch_screen },
             { label: "Peak Brightness", value: product.peak_brightness },
             { label: "HDR Support", value: product.hdr_support },
             { label: "Refresh Rate", value: product.refresh_rate },
+            { label: "Bezel-less Display", value: product.bezel_less },
+            { label: "Touch Screen", value: product.touch_screen },
           ]}
         />
 
         <SpecificationSection
-          title="Design"
-          specs={[
-            { label: "Height", value: product.height },
-            { label: "Width", value: product.width },
-            { label: "Thickness", value: product.thickness },
-            { label: "Weight", value: product.weight },
-            { label: "Build Material", value: product.build_material },
-            { label: "Waterproof", value: product.waterproof },
-            { label: "Ruggedness", value: product.ruggedness },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Camera"
+          title="Main Camera"
           specs={[
             { label: "Camera Setup", value: product.camera_setup },
+            { label: "Main Camera", value: product.camera },
+            { label: "Features", value: product.main_camera_features },
+            { label: "Video Recording", value: product.main_camera_video },
             { label: "Autofocus", value: product.camera_autofocus },
             { label: "OIS", value: product.camera_ois },
             { label: "Flash", value: product.camera_flash },
             { label: "Camera Modes", value: product.camera_modes },
-            { label: "Video Recording", value: product.video_recording },
           ]}
         />
 
         <SpecificationSection
           title="Front Camera"
           specs={[
+            { label: "Front Camera", value: product.front_camera },
             { label: "Setup", value: product.front_camera_setup },
-            { label: "Video Recording", value: product.front_camera_video },
+            { label: "Features", value: product.selfie_camera_features },
+            { label: "Video Recording", value: product.selfie_camera_video },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Body"
+          specs={[
+            { label: "Dimensions", value: product.dimensions },
+            { label: "Height", value: product.height },
+            { label: "Width", value: product.width },
+            { label: "Thickness", value: product.thickness },
+            { label: "Weight", value: product.weight },
+            { label: "Build Material", value: product.build_material },
+            { label: "Build Details", value: product.build_details },
+            { label: "Protection Details", value: product.protection_details },
+            { label: "Waterproof", value: product.waterproof },
+            { label: "Ruggedness", value: product.ruggedness },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Battery"
+          specs={[
+            { label: "Battery", value: product.battery },
+            { label: "Battery Type", value: product.battery_type },
+            { label: "Charging", value: product.charging_specs },
+            { label: "Charging Details", value: product.charging_details },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Communications"
+          specs={[
+            { label: "WLAN", value: product.wlan_details },
+            { label: "Bluetooth", value: product.bluetooth_details },
+            { label: "GPS", value: product.positioning },
+            { label: "NFC", value: product.nfc },
+            { label: "Infrared", value: product.infrared },
+            { label: "Radio", value: product.radio },
+            { label: "USB", value: product.usb },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Network"
+          specs={[
+            { label: "Technology", value: product.network_technology },
+            { label: "2G Bands", value: product.network_2g_bands },
+            { label: "3G Bands", value: product.network_3g_bands },
+            { label: "4G Bands", value: product.network_4g_bands },
+            { label: "5G Bands", value: product.network_5g_bands },
+            { label: "Speed", value: product.network_speed },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Sound"
+          specs={[
+            { label: "Loudspeaker", value: product.loudspeaker },
+            { label: "Audio Jack", value: product.audio_jack },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Features"
+          specs={[
+            { label: "Sensors", value: product.sensors },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Miscellaneous"
+          specs={[
+            { label: "Color", value: product.color },
+            { label: "Models", value: product.models },
+            { label: "Price Details", value: product.price_details },
           ]}
         />
       </CardContent>
