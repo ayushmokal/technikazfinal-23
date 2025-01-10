@@ -1,5 +1,3 @@
-import type { Json } from "@/integrations/supabase/types";
-
 export interface BaseProduct {
   id: string;
   name: string;
@@ -8,8 +6,8 @@ export interface BaseProduct {
   image_url: string | null;
   display_specs: string;
   processor: string;
-  ram: string | null;
-  storage: string | null;
+  ram: string;
+  storage: string;
   battery: string;
   os: string | null;
   color: string | null;
@@ -17,17 +15,11 @@ export interface BaseProduct {
   updated_at: string;
   gallery_images: string[] | null;
   model_name: string | null;
-  release_date: string | null;
 }
 
 export interface LaptopProduct extends BaseProduct {
   graphics: string | null;
   ports: string | null;
-  connectivity_specs: Json | null;
-  design_specs: Json | null;
-  display_details: Json | null;
-  performance_specs: Json | null;
-  multimedia_specs: Json | null;
 }
 
 export interface MobileProduct extends BaseProduct {
@@ -68,27 +60,4 @@ export interface MobileProduct extends BaseProduct {
   video_recording: string | null;
   front_camera_setup: string | null;
   front_camera_video: string | null;
-  wlan: string | null;
-  bluetooth: string | null;
-  nfc: string | null;
-  positioning: string | null;
-  usb: string | null;
-  network_technology: string | null;
-  network_2g_bands: string | null;
-  network_3g_bands: string | null;
-  network_4g_bands: string | null;
-  network_5g_bands: string | null;
-  network_speed: string | null;
-  loudspeaker: string | null;
-  audio_jack: string | null;
-  sensors: string | null;
-  models: string | null;
-  multimedia_specs: Json | null;
-  sensor_specs: Json | null;
-  network_specs: Json | null;
-  design_specs: Json | null;
-  camera_details: Json | null;
-  performance_specs: Json | null;
-  display_details: Json | null;
-  general_specs: Json | null;
 }

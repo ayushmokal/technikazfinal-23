@@ -60,59 +60,14 @@ export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <SpecificationSection
-          title="Launch Details"
+          title="General"
           specs={[
-            { label: "Announced", value: product.launch_date },
-            { label: "Status", value: product.release_date },
+            { label: "Launch Date", value: product.launch_date },
+            { label: "Custom UI", value: product.custom_ui },
+            { label: "Software Support", value: product.software_support },
           ]}
         />
         
-        <SpecificationSection
-          title="Network"
-          specs={[
-            { label: "Technology", value: product.network_technology },
-            { label: "2G bands", value: product.network_2g_bands },
-            { label: "3G bands", value: product.network_3g_bands },
-            { label: "4G bands", value: product.network_4g_bands },
-            { label: "5G bands", value: product.network_5g_bands },
-            { label: "Speed", value: product.network_speed },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Communications"
-          specs={[
-            { label: "WLAN", value: product.wlan },
-            { label: "Bluetooth", value: product.bluetooth },
-            { label: "NFC", value: product.nfc },
-            { label: "Positioning", value: product.positioning },
-            { label: "USB", value: product.usb },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Sound"
-          specs={[
-            { label: "Loudspeaker", value: product.loudspeaker },
-            { label: "3.5mm jack", value: product.audio_jack },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Features"
-          specs={[
-            { label: "Sensors", value: product.sensors },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Miscellaneous"
-          specs={[
-            { label: "Models", value: product.models },
-            { label: "Colors", value: product.color },
-          ]}
-        />
-
         <SpecificationSection
           title="Performance"
           specs={[

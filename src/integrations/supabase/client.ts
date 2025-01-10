@@ -11,7 +11,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Clean and validate URL format
-const cleanUrl = supabaseUrl.trim().replace(/\/$/, '');
+const cleanUrl = supabaseUrl.trim().replace(/\/$/, ''); // Remove trailing slash
 if (!cleanUrl.startsWith('https://')) {
   throw new Error('Invalid Supabase URL format');
 }
@@ -40,9 +40,8 @@ export const supabase = createClient<Database>(
 supabase.auth.onAuthStateChange(async (event, session) => {
   console.log('Auth state changed:', event);
   
-  if (event === 'SIGNED_OUT' || (!session && event === 'TOKEN_REFRESHED')) {
+  if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
     console.log('Session state:', session);
-    window.location.href = '/admin/login';
   }
 
   if (event === 'TOKEN_REFRESHED' && !session) {
@@ -67,10 +66,10 @@ supabase.auth.onAuthStateChange(async (event) => {
 });
 
 // Add a custom error handler for auth errors
-export const handleAuthError = async (error: any) => {
+const handleAuthError = async (error: any) => {
   console.error('Auth error:', error);
   
-  if (error.message?.includes('JWT expired') || 
+  if (error.message?.includes('refresh_token_not_found') || 
       error.message?.includes('invalid_grant') ||
       error.message?.includes('Token expired')) {
     console.log('Invalid or expired token, signing out...');
@@ -78,3 +77,6 @@ export const handleAuthError = async (error: any) => {
     window.location.href = '/admin/login';
   }
 };
+
+// Export the error handler for use in components
+export { handleAuthError };

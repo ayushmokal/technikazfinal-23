@@ -84,34 +84,19 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
         />
 
         {productType === 'mobile' ? (
-          <>
-            <FormField
-              control={form.control}
-              name="camera"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Rear Camera</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter rear camera specifications" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="front_camera"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Front Camera</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter front camera specifications" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
+          <FormField
+            control={form.control}
+            name="camera"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Camera</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter camera specifications" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         ) : (
           <FormField
             control={form.control}

@@ -46,7 +46,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
 
@@ -78,19 +78,22 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
       let result;
-      if (data.id) {
-        result = await updateProduct(table, data.id, data, productType);
+      if (initialData?.id) {
+        result = await updateProduct(table, initialData.id, data, productType);
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
+        });
       } else {
         result = await insertProduct(table, data, productType);
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
+        });
       }
 
-      onSuccess?.(result.id);
       form.reset();
-      
-      toast({
-        title: "Success",
-        description: `Product ${data.id ? 'updated' : 'created'} successfully`,
-      });
+      onSuccess?.(result.id);
     } catch (error: any) {
       console.error('Error submitting form:', error);
       if (error.message?.includes('JWT')) {
@@ -118,7 +121,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     productType,
     handleMainImageChange,
     handleGalleryImagesChange,
-    handleRemoveGalleryImage,
+    handleRemoveGalleryImage: (index: number) => handleRemoveGalleryImage(index, form),
     onSubmit,
   };
 }
