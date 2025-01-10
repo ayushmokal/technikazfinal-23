@@ -25,13 +25,27 @@ export function ImageUpload({
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e);
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const urls = files.map(file => URL.createObjectURL(file));
-      setPreviewUrls(urls);
+      
+      if (multiple) {
+        setPreviewUrls(prevUrls => [...prevUrls, ...urls]);
+      } else {
+        // Clean up previous preview URLs to prevent memory leaks
+        previewUrls.forEach(url => URL.revokeObjectURL(url));
+        setPreviewUrls([urls[0]]);
+      }
     }
+    onChange(e);
   };
+
+  // Clean up object URLs when component unmounts
+  useState(() => {
+    return () => {
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -60,7 +74,7 @@ export function ImageUpload({
           multiple ? currentGalleryImages : 
           (currentImageUrl ? [currentImageUrl] : [])
         ).map((url, index) => (
-          <div key={index} className="relative group">
+          <div key={url + index} className="relative group">
             <AspectRatio ratio={1}>
               <img
                 src={url}
