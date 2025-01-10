@@ -31,7 +31,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Operating System</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., iOS 18" {...field} />
+                    <Input placeholder="e.g., iOS 18" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -44,7 +44,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Chipset</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Apple A18" {...field} />
+                    <Input placeholder="e.g., Apple A18" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -66,7 +66,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>RAM Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 8GB RAM" {...field} />
+                    <Input placeholder="e.g., 8GB RAM" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +79,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Storage</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 256GB" {...field} />
+                    <Input placeholder="e.g., 256GB" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,7 +101,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Super Retina XDR OLED" {...field} />
+                    <Input placeholder="e.g., Super Retina XDR OLED" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,7 +114,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 1290 x 2796 pixels" {...field} />
+                    <Input placeholder="e.g., 1290 x 2796 pixels" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,7 +127,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Protection</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Ceramic Shield glass" {...field} />
+                    <Input placeholder="e.g., Ceramic Shield glass" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +140,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Peak Brightness</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 2000 nits" {...field} />
+                    <Input placeholder="e.g., 2000 nits" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -157,12 +157,38 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="dimensions"
+              name="height"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Dimensions</FormLabel>
+                  <FormLabel>Height</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 160.9 x 77.8 x 7.8 mm" {...field} />
+                    <Input placeholder="e.g., 160.9 mm" {...field} value={field.value || ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="width"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Width</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 77.8 mm" {...field} value={field.value || ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="thickness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thickness</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 7.8 mm" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -175,7 +201,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Weight</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 199 g" {...field} />
+                    <Input placeholder="e.g., 199 g" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,7 +214,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Build</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Glass front, aluminum frame" {...field} />
+                    <Input placeholder="e.g., Glass front, aluminum frame" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -201,7 +227,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Protection Rating</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., IP68 dust/water resistant" {...field} />
+                    <Input placeholder="e.g., IP68 dust/water resistant" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -223,7 +249,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Li-Ion 4000 mAh" {...field} />
+                    <Input placeholder="e.g., Li-Ion 4000 mAh" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -236,7 +262,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Charging</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 25W wired, 15W wireless" {...field} />
+                    <Input placeholder="e.g., 25W wired, 15W wireless" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
