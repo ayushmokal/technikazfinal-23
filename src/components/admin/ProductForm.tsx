@@ -7,7 +7,13 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { CameraSection } from "./form-sections/CameraSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
-import type { ProductFormProps } from "./types/productTypes";
+import type { MobileProductData, LaptopProductData } from "./types/productTypes";
+
+interface ProductFormProps {
+  initialData?: MobileProductData | LaptopProductData;
+  onSuccess?: (productId: string) => void;
+  productType?: 'mobile' | 'laptop';
+}
 
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const {
@@ -20,7 +26,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     onSubmit,
   } = useProductForm({ initialData, onSuccess, productType: propProductType });
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       const formData = {
         ...data,
@@ -30,12 +36,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         performance_specs: data.performance_specs || {},
         display_details: data.display_details || {},
         ...(productType === 'mobile' ? {
-          sensor_specs: data.sensor_specs || {},
-          network_specs: data.network_specs || {},
-          camera_details: data.camera_details || {},
-          general_specs: data.general_specs || {},
+          sensor_specs: (data as MobileProductData).sensor_specs || {},
+          network_specs: (data as MobileProductData).network_specs || {},
+          camera_details: (data as MobileProductData).camera_details || {},
+          general_specs: (data as MobileProductData).general_specs || {},
         } : {
-          connectivity_specs: data.connectivity_specs || {},
+          connectivity_specs: (data as LaptopProductData).connectivity_specs || {},
         })
       };
 
@@ -63,8 +69,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           
           {productType === 'mobile' && (
             <>
-              <CameraSection form={form} />
-              <AdditionalSpecsSection form={form} />
+              <CameraSection form={form} productType={productType} />
+              <AdditionalSpecsSection form={form} productType={productType} />
             </>
           )}
           
