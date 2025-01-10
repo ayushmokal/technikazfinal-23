@@ -30,6 +30,7 @@ export interface MobileProduct extends BaseProduct {
   screen_size: string | null;
   front_camera: string | null;
   launch_date: string | null;
+  release_date: string | null;
   custom_ui: string | null;
   software_support: string | null;
   cpu: string | null;
@@ -60,4 +61,19 @@ export interface MobileProduct extends BaseProduct {
   video_recording: string | null;
   front_camera_setup: string | null;
   front_camera_video: string | null;
+  wlan: string | null;
+  bluetooth: string | null;
+  nfc: string | null;
+  positioning: string | null;
+  usb: string | null;
+  network_technology: string | null;
+  network_2g_bands: string | null;
+  network_3g_bands: string | null;
+  network_4g_bands: string | null;
+  network_5g_bands: string | null;
+  network_speed: string | null;
+  loudspeaker: string | null;
+  audio_jack: string | null;
+  sensors: string | null;
+  models: string | null;
 }

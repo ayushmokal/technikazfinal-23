@@ -291,8 +291,10 @@ export type Database = {
         Row: {
           architecture: string | null
           aspect_ratio: string | null
+          audio_jack: string | null
           battery: string
           bezel_less: boolean | null
+          bluetooth: string | null
           brand: string | null
           build_material: string | null
           camera: string
@@ -323,14 +325,24 @@ export type Database = {
           id: string
           image_url: string | null
           launch_date: string | null
+          loudspeaker: string | null
           model_name: string | null
+          models: string | null
           multimedia_specs: Json | null
           name: string
+          network_2g_bands: string | null
+          network_3g_bands: string | null
+          network_4g_bands: string | null
+          network_5g_bands: string | null
           network_specs: Json | null
+          network_speed: string | null
+          network_technology: string | null
+          nfc: string | null
           os: string | null
           peak_brightness: string | null
           performance_specs: Json | null
           pixel_density: string | null
+          positioning: string | null
           price: number
           processor: string
           ram: string | null
@@ -341,21 +353,26 @@ export type Database = {
           screen_protection: string | null
           screen_size: string | null
           sensor_specs: Json | null
+          sensors: string | null
           software_support: string | null
           storage: string | null
           thickness: string | null
           touch_screen: boolean | null
           updated_at: string
+          usb: string | null
           video_recording: string | null
           waterproof: string | null
           weight: string | null
           width: string | null
+          wlan: string | null
         }
         Insert: {
           architecture?: string | null
           aspect_ratio?: string | null
+          audio_jack?: string | null
           battery: string
           bezel_less?: boolean | null
+          bluetooth?: string | null
           brand?: string | null
           build_material?: string | null
           camera: string
@@ -386,14 +403,24 @@ export type Database = {
           id?: string
           image_url?: string | null
           launch_date?: string | null
+          loudspeaker?: string | null
           model_name?: string | null
+          models?: string | null
           multimedia_specs?: Json | null
           name: string
+          network_2g_bands?: string | null
+          network_3g_bands?: string | null
+          network_4g_bands?: string | null
+          network_5g_bands?: string | null
           network_specs?: Json | null
+          network_speed?: string | null
+          network_technology?: string | null
+          nfc?: string | null
           os?: string | null
           peak_brightness?: string | null
           performance_specs?: Json | null
           pixel_density?: string | null
+          positioning?: string | null
           price: number
           processor: string
           ram?: string | null
@@ -404,21 +431,26 @@ export type Database = {
           screen_protection?: string | null
           screen_size?: string | null
           sensor_specs?: Json | null
+          sensors?: string | null
           software_support?: string | null
           storage?: string | null
           thickness?: string | null
           touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
           video_recording?: string | null
           waterproof?: string | null
           weight?: string | null
           width?: string | null
+          wlan?: string | null
         }
         Update: {
           architecture?: string | null
           aspect_ratio?: string | null
+          audio_jack?: string | null
           battery?: string
           bezel_less?: boolean | null
+          bluetooth?: string | null
           brand?: string | null
           build_material?: string | null
           camera?: string
@@ -449,14 +481,24 @@ export type Database = {
           id?: string
           image_url?: string | null
           launch_date?: string | null
+          loudspeaker?: string | null
           model_name?: string | null
+          models?: string | null
           multimedia_specs?: Json | null
           name?: string
+          network_2g_bands?: string | null
+          network_3g_bands?: string | null
+          network_4g_bands?: string | null
+          network_5g_bands?: string | null
           network_specs?: Json | null
+          network_speed?: string | null
+          network_technology?: string | null
+          nfc?: string | null
           os?: string | null
           peak_brightness?: string | null
           performance_specs?: Json | null
           pixel_density?: string | null
+          positioning?: string | null
           price?: number
           processor?: string
           ram?: string | null
@@ -467,15 +509,18 @@ export type Database = {
           screen_protection?: string | null
           screen_size?: string | null
           sensor_specs?: Json | null
+          sensors?: string | null
           software_support?: string | null
           storage?: string | null
           thickness?: string | null
           touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
           video_recording?: string | null
           waterproof?: string | null
           weight?: string | null
           width?: string | null
+          wlan?: string | null
         }
         Relationships: []
       }
