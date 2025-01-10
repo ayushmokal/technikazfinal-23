@@ -15,25 +15,19 @@ export type BaseProductData = {
   color?: string;
   image_url?: string;
   gallery_images?: string[];
-  design_specs?: Json;
-  display_details?: Json;
-  performance_specs?: Json;
   multimedia_specs?: Json;
-  graphics?: string;
-  ram_type?: string;
+  design_specs?: Json;
+  performance_specs?: Json;
+  display_details?: Json;
 };
 
 export type MobileProductData = BaseProductData & {
   camera: string;
-  front_camera: string;
+  front_camera?: string;
   chipset?: string;
   charging_specs?: string;
   screen_size?: string;
   resolution?: string;
-  camera_details?: Json;
-  sensor_specs?: Json;
-  network_specs?: Json;
-  general_specs?: Json;
   launch_date?: string;
   release_date?: string;
   wlan?: string;
@@ -59,6 +53,10 @@ export type MobileProductData = BaseProductData & {
   video_recording?: string;
   front_camera_setup?: string;
   front_camera_video?: string;
+  sensor_specs?: Json;
+  network_specs?: Json;
+  camera_details?: Json;
+  general_specs?: Json;
 };
 
 export type LaptopProductData = BaseProductData & {
