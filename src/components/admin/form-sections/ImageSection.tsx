@@ -1,5 +1,5 @@
 import { ImageUpload } from "../ImageUpload";
-import { FormLabel } from "@/components/ui/form";
+import { Form, FormLabel } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
@@ -13,6 +13,7 @@ interface ImageSectionProps {
 }
 
 export function ImageSection({
+  form,
   onMainImageChange,
   onGalleryImagesChange,
   currentImageUrl,
@@ -20,23 +21,25 @@ export function ImageSection({
   onRemoveGalleryImage,
 }: ImageSectionProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Product Images</h3>
-      <div className="grid gap-6">
-        <ImageUpload 
-          onChange={onMainImageChange} 
-          currentImageUrl={currentImageUrl}
-          label="Main Product Image"
-        />
-        
-        <ImageUpload 
-          onChange={onGalleryImagesChange} 
-          currentGalleryImages={currentGalleryImages}
-          label="Product Gallery Images"
-          multiple
-          onRemoveImage={onRemoveGalleryImage}
-        />
+    <Form {...form}>
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Product Images</h3>
+        <div className="grid gap-6">
+          <ImageUpload 
+            onChange={onMainImageChange} 
+            currentImageUrl={currentImageUrl}
+            label="Main Product Image"
+          />
+          
+          <ImageUpload 
+            onChange={onGalleryImagesChange} 
+            currentGalleryImages={currentGalleryImages}
+            label="Product Gallery Images"
+            multiple
+            onRemoveImage={onRemoveGalleryImage}
+          />
+        </div>
       </div>
-    </div>
+    </Form>
   );
 }
