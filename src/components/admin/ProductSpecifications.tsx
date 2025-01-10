@@ -8,7 +8,12 @@ interface SpecificationItemProps {
 }
 
 function SpecificationItem({ label, value }: SpecificationItemProps) {
-  if (value === null || value === undefined) return null;
+  if (value === null || value === undefined) return (
+    <div className="flex justify-between py-2">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">N/A</span>
+    </div>
+  );
   
   // Handle boolean values
   if (typeof value === 'boolean') {
@@ -29,14 +34,10 @@ interface SpecificationSectionProps {
 }
 
 function SpecificationSection({ title, specs }: SpecificationSectionProps) {
-  const filteredSpecs = specs.filter(spec => spec.value !== null && spec.value !== undefined);
-  
-  if (filteredSpecs.length === 0) return null;
-  
   return (
     <div className="space-y-2">
       <h3 className="font-semibold text-lg">{title}</h3>
-      {filteredSpecs.map((spec, index) => (
+      {specs.map((spec, index) => (
         <SpecificationItem key={index} {...spec} />
       ))}
       <Separator className="my-4" />
@@ -58,96 +59,121 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <SpecificationSection
-          title="Key Specs"
+          title="Network"
           specs={[
-            { label: "RAM", value: product.ram },
-            { label: "Processor", value: product.processor },
-            ...(isMobile ? [
-              { label: "Rear Camera", value: (product as MobileProduct).camera },
-              { label: "Front Camera", value: (product as MobileProduct).front_camera }
-            ] : []),
-            { label: "Battery", value: product.battery },
-            { label: "Display", value: product.display_specs },
+            { label: "Technology", value: (product as MobileProduct).network_technology },
+            { label: "2G bands", value: (product as MobileProduct).network_2g_bands },
+            { label: "3G bands", value: (product as MobileProduct).network_3g_bands },
+            { label: "4G bands", value: (product as MobileProduct).network_4g_bands },
+            { label: "5G bands", value: (product as MobileProduct).network_5g_bands },
+            { label: "Speed", value: (product as MobileProduct).network_speed },
           ]}
         />
-        
-        {isMobile && (
-          <>
-            <SpecificationSection
-              title="General"
-              specs={[
-                { label: "Launch Date", value: (product as MobileProduct).launch_date },
-                { label: "Operating System", value: product.os },
-                { label: "Custom UI", value: (product as MobileProduct).custom_ui },
-                { label: "Software Support", value: (product as MobileProduct).software_support },
-              ]}
-            />
-            
-            <SpecificationSection
-              title="Performance"
-              specs={[
-                { label: "Chipset", value: (product as MobileProduct).chipset },
-                { label: "CPU", value: (product as MobileProduct).cpu },
-                { label: "Architecture", value: (product as MobileProduct).architecture },
-                { label: "Fabrication", value: (product as MobileProduct).fabrication },
-                { label: "RAM", value: product.ram },
-                { label: "RAM Type", value: (product as MobileProduct).ram_type },
-              ]}
-            />
-            
-            <SpecificationSection
-              title="Display"
-              specs={[
-                { label: "Display Type", value: (product as MobileProduct).display_type },
-                { label: "Screen Size", value: (product as MobileProduct).screen_size },
-                { label: "Resolution", value: (product as MobileProduct).resolution },
-                { label: "Aspect Ratio", value: (product as MobileProduct).aspect_ratio },
-                { label: "Pixel Density", value: (product as MobileProduct).pixel_density },
-                { label: "Screen Protection", value: (product as MobileProduct).screen_protection },
-                { label: "Bezel-less Display", value: (product as MobileProduct).bezel_less },
-                { label: "Touch Screen", value: (product as MobileProduct).touch_screen },
-                { label: "Peak Brightness", value: (product as MobileProduct).peak_brightness },
-                { label: "HDR Support", value: (product as MobileProduct).hdr_support },
-                { label: "Refresh Rate", value: (product as MobileProduct).refresh_rate },
-              ]}
-            />
-            
-            <SpecificationSection
-              title="Design"
-              specs={[
-                { label: "Height", value: (product as MobileProduct).height },
-                { label: "Width", value: (product as MobileProduct).width },
-                { label: "Thickness", value: (product as MobileProduct).thickness },
-                { label: "Weight", value: (product as MobileProduct).weight },
-                { label: "Build Material", value: (product as MobileProduct).build_material },
-                { label: "Colors", value: product.color },
-                { label: "Waterproof", value: (product as MobileProduct).waterproof },
-                { label: "Ruggedness", value: (product as MobileProduct).ruggedness },
-              ]}
-            />
-            
-            <SpecificationSection
-              title="Camera"
-              specs={[
-                { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
-                { label: "Autofocus", value: (product as MobileProduct).camera_autofocus },
-                { label: "OIS", value: (product as MobileProduct).camera_ois },
-                { label: "Flash", value: (product as MobileProduct).camera_flash },
-                { label: "Camera Modes", value: (product as MobileProduct).camera_modes },
-                { label: "Video Recording", value: (product as MobileProduct).video_recording },
-              ]}
-            />
-            
-            <SpecificationSection
-              title="Front Camera"
-              specs={[
-                { label: "Camera Setup", value: (product as MobileProduct).front_camera_setup },
-                { label: "Resolution", value: (product as MobileProduct).front_camera },
-                { label: "Video Recording", value: (product as MobileProduct).front_camera_video },
-              ]}
-            />
-          </>
-        )}
+
+        <SpecificationSection
+          title="Launch"
+          specs={[
+            { label: "Announced", value: (product as MobileProduct).announced },
+            { label: "Status", value: (product as MobileProduct).status },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Body"
+          specs={[
+            { label: "Dimensions", value: (product as MobileProduct).dimensions },
+            { label: "Build", value: (product as MobileProduct).build_details },
+            { label: "SIM", value: (product as MobileProduct).sim },
+            { label: "Protection", value: (product as MobileProduct).protection_details },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Display"
+          specs={[
+            { label: "Type", value: (product as MobileProduct).display_type_details },
+            { label: "Resolution", value: (product as MobileProduct).display_resolution_details },
+            { label: "Protection", value: (product as MobileProduct).display_protection },
+            { label: "Features", value: (product as MobileProduct).display_features },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Platform"
+          specs={[
+            { label: "OS", value: product.os },
+            { label: "Chipset", value: (product as MobileProduct).chipset },
+            { label: "CPU", value: (product as MobileProduct).cpu },
+            { label: "GPU", value: (product as MobileProduct).gpu },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Memory"
+          specs={[
+            { label: "Card slot", value: (product as MobileProduct).card_slot },
+            { label: "Internal", value: (product as MobileProduct).internal_storage },
+            { label: "Storage type", value: (product as MobileProduct).storage_type },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Main Camera"
+          specs={[
+            { label: "Features", value: (product as MobileProduct).main_camera_features },
+            { label: "Video", value: (product as MobileProduct).main_camera_video },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Selfie Camera"
+          specs={[
+            { label: "Features", value: (product as MobileProduct).selfie_camera_features },
+            { label: "Video", value: (product as MobileProduct).selfie_camera_video },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Sound"
+          specs={[
+            { label: "Loudspeaker", value: (product as MobileProduct).loudspeaker },
+            { label: "3.5mm jack", value: (product as MobileProduct).audio_jack },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Communications"
+          specs={[
+            { label: "WLAN", value: (product as MobileProduct).wlan_details },
+            { label: "Bluetooth", value: (product as MobileProduct).bluetooth_details },
+            { label: "Radio", value: (product as MobileProduct).radio },
+            { label: "Infrared", value: (product as MobileProduct).infrared },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Features"
+          specs={[
+            { label: "Sensors", value: (product as MobileProduct).sensors_list },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Battery"
+          specs={[
+            { label: "Type", value: (product as MobileProduct).battery_type },
+            { label: "Charging", value: (product as MobileProduct).charging_details },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Misc"
+          specs={[
+            { label: "Models", value: (product as MobileProduct).models_list },
+            { label: "Colors", value: (product as MobileProduct).colors_list },
+            { label: "Price", value: (product as MobileProduct).price_details },
+          ]}
+        />
       </CardContent>
     </Card>
   );
