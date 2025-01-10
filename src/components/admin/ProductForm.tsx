@@ -103,6 +103,13 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
             input.value = '';
           });
         }
+        
+        // Show success toast with more details
+        toast({
+          title: "Success!",
+          description: `Product "${data.name}" has been ${initialData ? 'updated' : 'added'} successfully.`,
+          duration: 5000,
+        });
       }
       
     } catch (error: any) {
@@ -147,7 +154,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                 disabled={isLoading}
                 className="w-full mb-4"
               >
-                {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="animate-spin">⌛</span>
+                    Saving...
+                  </span>
+                ) : (
+                  `${initialData ? 'Update' : 'Add'} ${productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}`
+                )}
               </Button>
 
               {(initialData?.id || tempProductId) && (
