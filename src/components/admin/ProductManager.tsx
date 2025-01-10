@@ -30,7 +30,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
+      setProducts(data as (LaptopProduct | MobileProduct)[] || []);
     } catch (error: any) {
       toast({
         variant: "destructive",
