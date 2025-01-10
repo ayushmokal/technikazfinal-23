@@ -44,6 +44,16 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         title: "Success",
         description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
       });
+      
+      // Reset form only for new products
+      if (!initialData) {
+        form.reset();
+        // Reset file inputs
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach((input: any) => {
+          input.value = '';
+        });
+      }
     }, 
     productType: propProductType 
   });
@@ -64,38 +74,10 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       }
 
       // Submit form data
-      const result = await onSubmit({
-        ...data,
-        // Ensure all specification fields are included
-        display_specs: data.display_specs || '',
-        processor: data.processor || '',
-        ram: data.ram || '',
-        storage: data.storage || '',
-        battery: data.battery || '',
-        ...(productType === 'mobile' ? {
-          camera: (data as MobileProductData).camera || '',
-          network_technology: (data as MobileProductData).network_technology || '',
-          resolution: (data as MobileProductData).resolution || '',
-          screen_size: (data as MobileProductData).screen_size || '',
-          charging_specs: (data as MobileProductData).charging_specs || '',
-        } : {
-          graphics: (data as LaptopProductData).graphics || '',
-          ports: (data as LaptopProductData).ports || '',
-        })
-      });
+      const result = await onSubmit(data);
       
       if (result) {
         setTempProductId(result.id);
-        // Reset form only on successful submission of new products
-        if (!initialData) {
-          form.reset();
-          // Clear any file inputs
-          const fileInputs = document.querySelectorAll('input[type="file"]');
-          fileInputs.forEach((input: any) => {
-            input.value = '';
-          });
-        }
-        
         toast({
           title: "Success!",
           description: `Product "${data.name}" has been ${initialData ? 'updated' : 'added'} successfully.`,
@@ -171,7 +153,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                   {showExpertReview && (
                     <ExpertReviewForm 
                       productId={initialData?.id || tempProductId} 
-                      className="mt-6"
                       onSuccess={() => {
                         toast({
                           title: "Success",
