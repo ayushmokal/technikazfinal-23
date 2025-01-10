@@ -103,12 +103,8 @@ export interface MobileProduct extends BaseProduct {
   video_recording: string | null;
   front_camera_setup: string | null;
   front_camera_video: string | null;
-  nfc: string | null;
-  usb: string | null;
-  sensors: string | null;
+  nfc: string | null;  // Added missing property
+  usb: string | null;  // Added missing property
+  sensors: string | null;  // Added missing property
   positioning: string | null;
-  launch_date: string | null;
-  custom_ui: string | null;
-  software_support: string | null;
-  models: string | null;
 }
