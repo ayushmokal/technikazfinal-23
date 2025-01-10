@@ -52,6 +52,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       setIsLoading(true);
       console.log("Starting form submission with data:", data);
 
+      // Check authentication
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         throw new Error("Please login to continue");
@@ -98,9 +99,8 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       }
 
       console.log("Operation completed successfully");
-      form.reset();
       if (onSuccess) {
-        onSuccess(result.id);
+        await onSuccess(result.id);
       }
       return result;
     } catch (error: any) {

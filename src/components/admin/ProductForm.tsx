@@ -41,9 +41,10 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
         });
         if (onSuccess) {
-          onSuccess();
+          await onSuccess();
         }
       } catch (error: any) {
+        console.error("Error in onSuccess callback:", error);
         toast({
           variant: "destructive",
           title: "Error",
@@ -57,6 +58,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
   const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       console.log("Form submission started with data:", data);
+      
+      // Basic validation
       if (!data.name || !data.brand || !data.price) {
         toast({
           variant: "destructive",
@@ -66,8 +69,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         return;
       }
 
+      // Submit form data
       const result = await onSubmit(data);
       console.log("Form submission completed with result:", result);
+      
+      // Reset form and show success message
+      form.reset();
+      setShowExpertReview(false);
+      
     } catch (error: any) {
       console.error("Form submission error:", error);
       toast({
