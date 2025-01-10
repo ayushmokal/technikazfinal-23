@@ -87,25 +87,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
-        const { data: updatedData, error } = await supabase
-          .from(table)
-          .update(transformedData)
-          .eq('id', initialData.id)
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = updatedData;
+        result = await updateProduct(table, initialData.id, transformedData, productType);
       } else {
         console.log("Inserting new product");
-        const { data: insertedData, error } = await supabase
-          .from(table)
-          .insert([transformedData])
-          .select()
-          .single();
-
-        if (error) throw error;
-        result = insertedData;
+        result = await insertProduct(table, transformedData, productType);
       }
 
       if (!result) {
@@ -114,7 +99,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
       console.log("Operation completed successfully");
       form.reset();
-      onSuccess?.(result.id);
+      if (onSuccess) {
+        onSuccess(result.id);
+      }
+      return result;
     } catch (error: any) {
       console.error('Error submitting form:', error);
       throw error;
