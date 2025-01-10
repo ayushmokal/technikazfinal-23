@@ -11,6 +11,7 @@ import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
 import type { MobileProductData, LaptopProductData } from "./types/productTypes";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ProductFormProps {
   initialData?: (MobileProductData | LaptopProductData) & { id?: string };
@@ -21,6 +22,7 @@ interface ProductFormProps {
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const [showExpertReview, setShowExpertReview] = useState(false);
   const [tempProductId, setTempProductId] = useState<string>("");
+  const { toast } = useToast();
   
   const {
     form,
@@ -34,10 +36,43 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     initialData, 
     onSuccess: (productId) => {
       setTempProductId(productId);
+      toast({
+        title: "Success",
+        description: `Product ${initialData ? 'updated' : 'added'} successfully`,
+      });
       onSuccess?.();
     }, 
     productType: propProductType 
   });
+
+  const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
+    try {
+      // Ensure all form data is included
+      const formData = {
+        ...data,
+        multimedia_specs: data.multimedia_specs || {},
+        connectivity_specs: data.connectivity_specs || {},
+        design_specs: data.design_specs || {},
+        performance_specs: data.performance_specs || {},
+        display_details: data.display_details || {},
+        ...(productType === 'mobile' && {
+          sensor_specs: (data as MobileProductData).sensor_specs || {},
+          network_specs: (data as MobileProductData).network_specs || {},
+          camera_details: (data as MobileProductData).camera_details || {},
+          general_specs: (data as MobileProductData).general_specs || {},
+        }),
+      };
+
+      await onSubmit(formData);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to save product. Please try again.",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -47,7 +82,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <div className="grid gap-8">
                 <div className="space-y-6">
                   <BasicInfoSection form={form} />
