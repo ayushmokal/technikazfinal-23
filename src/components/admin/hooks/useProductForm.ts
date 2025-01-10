@@ -7,6 +7,7 @@ import { useAuthCheck } from "./useAuthCheck";
 import { useProductData } from "./useProductData";
 import { supabase } from "@/integrations/supabase/client";
 import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
+import { useToast } from "@/hooks/use-toast";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,8 +62,16 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         return;
       }
 
+      // Transform numeric string to number for price
+      const transformedData = {
+        ...data,
+        price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
+      };
+
+      // Handle image uploads
       if (mainImageFile) {
-        data.image_url = await uploadImage(mainImageFile, 'main');
+        const imageUrl = await uploadImage(mainImageFile, 'main');
+        transformedData.image_url = imageUrl;
       }
 
       if (galleryImageFiles.length > 0) {
@@ -71,21 +80,30 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         );
         const newGalleryImages = await Promise.all(uploadPromises);
         
-        const existingGalleryImages = data.gallery_images || [];
-        data.gallery_images = [...existingGalleryImages, ...newGalleryImages];
+        const existingGalleryImages = transformedData.gallery_images || [];
+        transformedData.gallery_images = [...existingGalleryImages, ...newGalleryImages];
       }
 
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
       let result;
       if (initialData?.id) {
-        result = await updateProduct(table, initialData.id, data, productType);
+        result = await updateProduct(table, initialData.id, transformedData, productType);
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
         });
       } else {
-        result = await insertProduct(table, data, productType);
+        // For new products
+        const { data: insertedData, error } = await supabase
+          .from(table)
+          .insert([transformedData])
+          .select()
+          .single();
+
+        if (error) throw error;
+        result = insertedData;
+
         toast({
           title: "Success",
           description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
