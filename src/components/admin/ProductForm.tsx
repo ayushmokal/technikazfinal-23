@@ -1,29 +1,15 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card } from "@/components/ui/card";
+import { useProductForm } from "./hooks/useProductForm";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
-import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
-import { CameraSection } from "./form-sections/CameraSection";
 import { ImageSection } from "./form-sections/ImageSection";
-import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
-import { useProductForm } from "./hooks/useProductForm";
-import type { MobileProductData, LaptopProductData } from "./types/productTypes";
-import { useToast } from "@/components/ui/use-toast";
-
-interface ProductFormProps {
-  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
-  onSuccess?: () => void;
-  productType?: 'mobile' | 'laptop';
-}
+import { CameraSection } from "./form-sections/CameraSection";
+import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
+import type { ProductFormProps } from "./types/productTypes";
 
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
-  const [showExpertReview, setShowExpertReview] = useState(false);
-  const [tempProductId, setTempProductId] = useState<string>("");
-  const { toast } = useToast();
-  
   const {
     form,
     isLoading,
@@ -32,107 +18,67 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     handleGalleryImagesChange,
     handleRemoveGalleryImage,
     onSubmit,
-  } = useProductForm({ 
-    initialData, 
-    onSuccess: (productId) => {
-      setTempProductId(productId);
-      toast({
-        title: "Success",
-        description: `Product ${initialData ? 'updated' : 'added'} successfully`,
-      });
-      onSuccess?.();
-    }, 
-    productType: propProductType 
-  });
+  } = useProductForm({ initialData, onSuccess, productType: propProductType });
 
-  const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
+  const handleFormSubmit = async (data: any) => {
     try {
       const formData = {
-        ...(initialData?.id ? { id: initialData.id } : {}),
         ...data,
+        id: initialData?.id,
         multimedia_specs: data.multimedia_specs || {},
         design_specs: data.design_specs || {},
         performance_specs: data.performance_specs || {},
         display_details: data.display_details || {},
         ...(productType === 'mobile' ? {
-          sensor_specs: (data as MobileProductData).sensor_specs || {},
-          network_specs: (data as MobileProductData).network_specs || {},
-          camera_details: (data as MobileProductData).camera_details || {},
-          general_specs: (data as MobileProductData).general_specs || {},
+          sensor_specs: data.sensor_specs || {},
+          network_specs: data.network_specs || {},
+          camera_details: data.camera_details || {},
+          general_specs: data.general_specs || {},
         } : {
-          connectivity_specs: (data as LaptopProductData).connectivity_specs || {},
+          connectivity_specs: data.connectivity_specs || {},
         })
       };
 
       await onSubmit(formData);
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to save product",
-      });
+      throw error;
     }
   };
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{initialData ? 'Edit' : 'Add'} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-              <div className="grid gap-8">
-                <div className="space-y-6">
-                  <BasicInfoSection form={form} />
-                  <Separator />
-                  <SpecificationsSection form={form} productType={productType} />
-                  <Separator />
-                  <AdditionalSpecsSection form={form} productType={productType} />
-                  <Separator />
-                  {productType === 'mobile' && (
-                    <>
-                      <CameraSection form={form} productType={productType} />
-                      <Separator />
-                    </>
-                  )}
-                  <ImageSection 
-                    onMainImageChange={handleMainImageChange}
-                    onGalleryImagesChange={handleGalleryImagesChange}
-                    currentImageUrl={initialData?.image_url}
-                    currentGalleryImages={initialData?.gallery_images}
-                    onRemoveGalleryImage={handleRemoveGalleryImage}
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowExpertReview(!showExpertReview)}
-                className="w-full"
-              >
-                {showExpertReview ? 'Hide' : 'Add'} Expert Review
-              </Button>
-
-              {showExpertReview && (
-                <ExpertReviewForm 
-                  productId={initialData?.id || tempProductId} 
-                  className="mt-6"
-                />
-              )}
-
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <form onSubmit={form.handleSubmit(handleFormSubmit)}>
+        <Card className="p-6 space-y-8">
+          <BasicInfoSection form={form} />
+          
+          <ImageSection
+            form={form}
+            onMainImageChange={handleMainImageChange}
+            onGalleryImagesChange={handleGalleryImagesChange}
+            onRemoveGalleryImage={handleRemoveGalleryImage}
+          />
+          
+          <SpecificationsSection form={form} productType={productType} />
+          
+          {productType === 'mobile' && (
+            <>
+              <CameraSection form={form} />
+              <AdditionalSpecsSection form={form} />
+            </>
+          )}
+          
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : initialData ? 'Update Product' : 'Add Product'}
+            </button>
+          </div>
+        </Card>
+      </form>
     </div>
   );
 }

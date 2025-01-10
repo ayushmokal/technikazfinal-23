@@ -46,7 +46,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: MobileProductData | LaptopProductData & { id?: string }) => {
+  const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
 
@@ -86,6 +86,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
       onSuccess?.(result.id);
       form.reset();
+      
+      toast({
+        title: "Success",
+        description: `Product ${data.id ? 'updated' : 'created'} successfully`,
+      });
     } catch (error: any) {
       console.error('Error submitting form:', error);
       if (error.message?.includes('JWT')) {
@@ -96,7 +101,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         });
         navigate("/admin/login");
       } else {
-        throw error;
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to save product",
+        });
       }
     } finally {
       setIsLoading(false);
@@ -109,7 +118,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     productType,
     handleMainImageChange,
     handleGalleryImagesChange,
-    handleRemoveGalleryImage: (index: number) => handleRemoveGalleryImage(index, form),
+    handleRemoveGalleryImage,
     onSubmit,
   };
 }
