@@ -43,23 +43,25 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group h-full">
             <div className="relative h-full flex flex-col">
-              <div className="h-[300px]"> {/* Fixed height container */}
+              <div className="aspect-[16/9]"> {/* Using aspect ratio instead of fixed height */}
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="mt-4 flex flex-col justify-end"> {/* Changed to justify-end */}
-                <span className="text-sm font-medium text-primary uppercase mb-2">
-                  {articles[1].category}
-                </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
-                  {articles[1].title}
-                </h2>
-                <p className="mt-2 text-gray-600 line-clamp-2">
-                  {articles[1].meta_description || ''}
-                </p>
+              <div className="mt-4 flex flex-col flex-1 justify-between"> {/* Using justify-between for better alignment */}
+                <div>
+                  <span className="text-sm font-medium text-primary uppercase mb-2">
+                    {articles[1].category}
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-primary/90 transition-colors line-clamp-2">
+                    {articles[1].title}
+                  </h2>
+                  <p className="mt-2 text-gray-600 line-clamp-2">
+                    {articles[1].meta_description || ''}
+                  </p>
+                </div>
               </div>
             </div>
           </Link>
