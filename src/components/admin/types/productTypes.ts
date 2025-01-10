@@ -30,7 +30,6 @@ export type MobileProductData = BaseProductData & {
   sensor_specs?: Json;
   network_specs?: Json;
   general_specs?: Json;
-  // Adding the missing properties that caused TypeScript errors
   network_technology?: string;
   display_type?: string;
   dimensions?: string;

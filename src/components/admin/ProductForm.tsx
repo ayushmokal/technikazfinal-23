@@ -80,10 +80,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         battery: data.battery || '',
         ...(productType === 'mobile' ? {
           camera: (data as MobileProductData).camera || '',
-          network_technology: (data as MobileProductData).network_technology || '',
-          display_type: (data as MobileProductData).display_type || '',
-          dimensions: (data as MobileProductData).dimensions || '',
-          weight: (data as MobileProductData).weight || '',
         } : {
           graphics: (data as LaptopProductData).graphics || '',
           ports: (data as LaptopProductData).ports || '',
