@@ -15,7 +15,7 @@ export interface BaseProduct {
   updated_at: string;
   gallery_images: string[] | null;
   model_name: string | null;
-  release_date: string | null;
+  release_date: string | null;  // Make it optional (null)
 }
 
 export interface LaptopProduct extends BaseProduct {
