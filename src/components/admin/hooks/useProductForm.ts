@@ -78,22 +78,14 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
       let result;
-      if (initialData?.id) {
-        result = await updateProduct(table, initialData.id, data, productType);
-        toast({
-          title: "Success",
-          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
-        });
+      if ('id' in data) {
+        result = await updateProduct(table, data.id, data, productType);
       } else {
         result = await insertProduct(table, data, productType);
-        toast({
-          title: "Success",
-          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
-        });
       }
 
-      form.reset();
       onSuccess?.(result.id);
+      form.reset();
     } catch (error: any) {
       console.error('Error submitting form:', error);
       if (error.message?.includes('JWT')) {
