@@ -57,7 +57,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
   const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
-      console.log("Form submission started with data:", data);
+      console.log("Starting form submission with data:", data);
       
       // Basic validation
       if (!data.name || !data.brand || !data.price) {
@@ -75,11 +75,15 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       
       if (result) {
         setTempProductId(result.id);
-        // Reset form only on successful submission
+        // Reset form only on successful submission of new products
         if (!initialData) {
           form.reset();
+          // Clear any file inputs
+          const fileInputs = document.querySelectorAll('input[type="file"]');
+          fileInputs.forEach((input: any) => {
+            input.value = '';
+          });
         }
-        setShowExpertReview(false);
       }
       
     } catch (error: any) {

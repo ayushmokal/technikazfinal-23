@@ -98,7 +98,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         throw new Error("No result returned from database operation");
       }
 
-      console.log("Operation completed successfully");
+      console.log("Operation completed successfully:", result);
       if (onSuccess) {
         await onSuccess(result.id);
       }
