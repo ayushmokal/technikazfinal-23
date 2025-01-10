@@ -9,6 +9,7 @@ import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
+import { useToast } from "@/hooks/use-toast";
 import type { MobileProductData, LaptopProductData } from "./types/productTypes";
 
 interface ProductFormProps {
@@ -20,6 +21,7 @@ interface ProductFormProps {
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const [showExpertReview, setShowExpertReview] = useState(false);
   const [tempProductId, setTempProductId] = useState<string>("");
+  const { toast } = useToast();
   
   const {
     form,
@@ -31,12 +33,36 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     onSubmit,
   } = useProductForm({ 
     initialData, 
-    onSuccess: (productId) => {
-      setTempProductId(productId);
-      onSuccess?.();
+    onSuccess: async (productId) => {
+      try {
+        setTempProductId(productId);
+        toast({
+          title: "Success",
+          description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
+        });
+        onSuccess?.();
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to process product",
+        });
+      }
     }, 
     productType: propProductType 
   });
+
+  const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
+    try {
+      await onSubmit(data);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to submit form",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -46,7 +72,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <div className="grid gap-8">
                 <div className="space-y-6">
                   <BasicInfoSection form={form} />
@@ -74,10 +100,17 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                 {showExpertReview ? 'Hide' : 'Add'} Expert Review
               </Button>
 
-              {showExpertReview && (
+              {showExpertReview && tempProductId && (
                 <ExpertReviewForm 
                   productId={initialData?.id || tempProductId} 
                   className="mt-6"
+                  onSuccess={() => {
+                    toast({
+                      title: "Success",
+                      description: "Expert review added successfully",
+                    });
+                    setShowExpertReview(false);
+                  }}
                 />
               )}
 
