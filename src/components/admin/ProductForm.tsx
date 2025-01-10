@@ -73,9 +73,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       const result = await onSubmit(data);
       console.log("Form submission completed with result:", result);
       
-      // Reset form and show success message
-      form.reset();
-      setShowExpertReview(false);
+      if (result) {
+        setTempProductId(result.id);
+        // Reset form only on successful submission
+        if (!initialData) {
+          form.reset();
+        }
+        setShowExpertReview(false);
+      }
       
     } catch (error: any) {
       console.error("Form submission error:", error);
@@ -115,33 +120,39 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
               </div>
 
               <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowExpertReview(!showExpertReview)}
-                className="w-full"
+                type="submit"
+                disabled={isLoading}
+                className="w-full mb-4"
               >
-                {showExpertReview ? 'Hide' : 'Add'} Expert Review
+                {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
               </Button>
 
-              {showExpertReview && tempProductId && (
-                <ExpertReviewForm 
-                  productId={initialData?.id || tempProductId} 
-                  className="mt-6"
-                  onSuccess={() => {
-                    toast({
-                      title: "Success",
-                      description: "Expert review added successfully",
-                    });
-                    setShowExpertReview(false);
-                  }}
-                />
-              )}
+              {(initialData?.id || tempProductId) && (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowExpertReview(!showExpertReview)}
+                    className="w-full"
+                  >
+                    {showExpertReview ? 'Hide' : 'Add'} Expert Review
+                  </Button>
 
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
-                </Button>
-              </div>
+                  {showExpertReview && (
+                    <ExpertReviewForm 
+                      productId={initialData?.id || tempProductId} 
+                      className="mt-6"
+                      onSuccess={() => {
+                        toast({
+                          title: "Success",
+                          description: "Expert review added successfully",
+                        });
+                        setShowExpertReview(false);
+                      }}
+                    />
+                  )}
+                </>
+              )}
             </form>
           </Form>
         </CardContent>
