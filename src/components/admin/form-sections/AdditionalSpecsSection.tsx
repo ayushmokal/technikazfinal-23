@@ -2,6 +2,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface AdditionalSpecsSectionProps {
@@ -10,124 +12,31 @@ interface AdditionalSpecsSectionProps {
 }
 
 export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSectionProps) {
+  if (productType !== 'mobile') return null;
+
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Additional Specifications</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FormField
-          control={form.control}
-          name="os"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Operating System</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter OS details" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {productType === 'mobile' ? (
-          <>
+    <Card>
+      <CardHeader>
+        <CardTitle>Additional Specifications</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Platform Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Platform</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="launch_date"
+              name="os"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Launch Date</FormLabel>
+                  <FormLabel>Operating System</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter launch date" {...field} />
+                    <Input placeholder="e.g., iOS 18" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="custom_ui"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Custom UI</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter custom UI details" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="software_support"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Software Support</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter software support details" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="architecture"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Architecture</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter architecture details" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="fabrication"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Fabrication</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter fabrication details" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="graphics"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Graphics</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter graphics details" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="ram_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>RAM Type</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter RAM type" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="chipset"
@@ -135,55 +44,69 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Chipset</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter chipset details" {...field} />
+                    <Input placeholder="e.g., Apple A18" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+        </div>
 
+        <Separator />
+
+        {/* Memory Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Memory</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="charging_specs"
+              name="ram_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Charging Specifications</FormLabel>
+                  <FormLabel>RAM Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter charging specifications" {...field} />
+                    <Input placeholder="e.g., 8GB RAM" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="storage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Storage</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 256GB" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
+        <Separator />
+
+        {/* Display Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Display</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="display_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Display Type</FormLabel>
+                  <FormLabel>Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter display type" {...field} />
+                    <Input placeholder="e.g., Super Retina XDR OLED" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="screen_size"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Screen Size</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter screen size" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="resolution"
@@ -191,89 +114,25 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter resolution" {...field} />
+                    <Input placeholder="e.g., 1290 x 2796 pixels" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="aspect_ratio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Aspect Ratio</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter aspect ratio" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="pixel_density"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pixel Density</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter pixel density (PPI)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="screen_protection"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Screen Protection</FormLabel>
+                  <FormLabel>Protection</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter screen protection details" {...field} />
+                    <Input placeholder="e.g., Ceramic Shield glass" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="bezel_less"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bezel-less Display</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="touch_screen"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Touch Screen</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="peak_brightness"
@@ -281,83 +140,34 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Peak Brightness</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter peak brightness (nits)" {...field} />
+                    <Input placeholder="e.g., 2000 nits" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+        </div>
 
+        <Separator />
+
+        {/* Body Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Body</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="hdr_support"
+              name="dimensions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>HDR Support</FormLabel>
+                  <FormLabel>Dimensions</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter HDR support details" {...field} />
+                    <Input placeholder="e.g., 160.9 x 77.8 x 7.8 mm" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="refresh_rate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Refresh Rate</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter refresh rate (Hz)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="height"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Height</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter height (mm)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="width"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Width</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter width (mm)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="thickness"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Thickness</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter thickness (mm)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="weight"
@@ -365,73 +175,76 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Weight</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter weight (g)" {...field} />
+                    <Input placeholder="e.g., 199 g" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="build_material"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Build Material</FormLabel>
+                  <FormLabel>Build</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter build material" {...field} />
+                    <Input placeholder="e.g., Glass front, aluminum frame" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="waterproof"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Waterproof</FormLabel>
+                  <FormLabel>Protection Rating</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter waterproof rating" {...field} />
+                    <Input placeholder="e.g., IP68 dust/water resistant" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+        </div>
 
+        <Separator />
+
+        {/* Battery Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Battery</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="ruggedness"
+              name="battery"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ruggedness</FormLabel>
+                  <FormLabel>Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter ruggedness details" {...field} />
+                    <Input placeholder="e.g., Li-Ion 4000 mAh" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </>
-        ) : (
-          <>
             <FormField
               control={form.control}
-              name="ports"
+              name="charging_specs"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ports</FormLabel>
+                  <FormLabel>Charging</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter available ports" {...field} />
+                    <Input placeholder="e.g., 25W wired, 15W wireless" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

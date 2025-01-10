@@ -30,7 +30,7 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 <FormItem>
                   <FormLabel>Camera Setup</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Triple Camera Setup" {...field} />
+                    <Input placeholder="e.g., Dual 48 MP, f/1.6" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -44,7 +44,49 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 <FormItem>
                   <FormLabel>Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 48MP + 12MP + 5MP" {...field} />
+                    <Input placeholder="e.g., 48 MP + 12 MP" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="camera_flash"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Flash</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Dual-LED dual-tone flash" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="camera_modes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Features</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., HDR, panorama" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="video_recording"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Video Recording</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 4K@24/25/30/60fps" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,55 +130,13 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="camera_flash"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Flash</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Dual LED Flash" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="camera_modes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Shooting Modes</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Night Mode, Portrait" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="video_recording"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Video Recording</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 4K@60fps" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
         </div>
 
         <Separator />
 
         <div>
-          <h3 className="text-lg font-semibold mb-4">Front Camera</h3>
+          <h3 className="text-lg font-semibold mb-4">Selfie Camera</h3>
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -145,7 +145,7 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 <FormItem>
                   <FormLabel>Camera Setup</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Single Camera" {...field} />
+                    <Input placeholder="e.g., Single 12 MP, f/1.9" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,7 +159,7 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 <FormItem>
                   <FormLabel>Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 32MP" {...field} />
+                    <Input placeholder="e.g., 12 MP" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -173,7 +173,7 @@ export function CameraSection({ form, productType }: CameraSectionProps) {
                 <FormItem>
                   <FormLabel>Video Recording</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 1080p@30fps" {...field} />
+                    <Input placeholder="e.g., 4K@24/25/30/60fps" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
