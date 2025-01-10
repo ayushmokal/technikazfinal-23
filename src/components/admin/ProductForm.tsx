@@ -22,9 +22,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     productType,
     handleMainImageChange,
     handleGalleryImagesChange,
-    handleRemoveGalleryImage,
+    handleRemoveGalleryImage: originalHandleRemoveGalleryImage,
     onSubmit,
   } = useProductForm({ initialData, onSuccess, productType: propProductType });
+
+  // Create a wrapper function that only takes the index parameter
+  const handleRemoveGalleryImage = (index: number) => {
+    originalHandleRemoveGalleryImage(index, form);
+  };
 
   const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
