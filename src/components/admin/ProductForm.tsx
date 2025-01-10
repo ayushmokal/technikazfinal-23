@@ -74,13 +74,15 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         battery: data.battery || '',
         ...(productType === 'mobile' ? {
           camera: (data as MobileProductData).camera || '',
+          network_technology: (data as MobileProductData).network_technology || '',
+          resolution: (data as MobileProductData).resolution || '',
+          screen_size: (data as MobileProductData).screen_size || '',
+          charging_specs: (data as MobileProductData).charging_specs || '',
         } : {
           graphics: (data as LaptopProductData).graphics || '',
           ports: (data as LaptopProductData).ports || '',
         })
       });
-      
-      console.log("Form submission completed with result:", result);
       
       if (result) {
         setTempProductId(result.id);
@@ -94,7 +96,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           });
         }
         
-        // Show success toast with more details
         toast({
           title: "Success!",
           description: `Product "${data.name}" has been ${initialData ? 'updated' : 'added'} successfully.`,
