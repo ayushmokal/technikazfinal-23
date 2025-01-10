@@ -1,7 +1,10 @@
 import { ImageUpload } from "../ImageUpload";
 import { FormLabel } from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface ImageSectionProps {
+  form: UseFormReturn<ProductFormData>;
   onMainImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onGalleryImagesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   currentImageUrl?: string;
