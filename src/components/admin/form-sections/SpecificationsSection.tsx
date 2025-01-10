@@ -1,5 +1,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 import { Separator } from "@/components/ui/separator";
@@ -607,7 +608,10 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             <FormItem>
               <FormLabel>Infrared</FormLabel>
               <FormControl>
-                <Input placeholder="Enter infrared details" {...field} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
