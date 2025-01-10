@@ -1,6 +1,7 @@
 import type { Json } from "@/integrations/supabase/types";
 
 export type BaseProductData = {
+  id?: string;
   name: string;
   brand: string;
   model_name?: string;
