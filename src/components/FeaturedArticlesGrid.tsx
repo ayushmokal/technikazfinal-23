@@ -43,7 +43,7 @@ export function FeaturedArticlesGrid({ articles }: FeaturedArticlesGridProps) {
         <div className="col-span-12 lg:col-span-5">
           <Link to={`/article/${articles[1].slug}`} className="block group">
             <div className="relative flex flex-col h-full">
-              <div className="relative w-full h-0 pb-[56.25%] mb-4">
+              <div className="relative w-full h-0 pb-[100%] mb-4">
                 <img
                   src={articles[1].image_url || '/placeholder.svg'}
                   alt={articles[1].title}
