@@ -20,7 +20,49 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
         <CardTitle>Additional Specifications</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Platform Section */}
+        {/* Launch Details Section */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Launch Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="launch_date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Announced</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="e.g., 2024, September 09" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="release_date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="e.g., Coming soon, Exp. release 2024, September 20" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <Separator />
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Platform</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,8 +94,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
             />
           </div>
         </div>
-
-        <Separator />
 
         {/* Memory Section */}
         <div>
@@ -87,8 +127,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
             />
           </div>
         </div>
-
-        <Separator />
 
         {/* Display Section */}
         <div>
@@ -148,8 +186,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
             />
           </div>
         </div>
-
-        <Separator />
 
         {/* Body Section */}
         <div>
@@ -235,8 +271,6 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
             />
           </div>
         </div>
-
-        <Separator />
 
         {/* Battery Section */}
         <div>
