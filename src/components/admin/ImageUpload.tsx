@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { FormLabel } from "@/components/ui/form";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -41,11 +41,11 @@ export function ImageUpload({
   };
 
   // Clean up object URLs when component unmounts
-  useState(() => {
+  useEffect(() => {
     return () => {
       previewUrls.forEach(url => URL.revokeObjectURL(url));
     };
-  }, []);
+  }, [previewUrls]);
 
   return (
     <div className="space-y-4">
