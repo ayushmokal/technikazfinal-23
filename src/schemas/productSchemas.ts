@@ -15,6 +15,8 @@ const baseProductSchema = z.object({
   os: z.string().optional(),
   color: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional()
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -40,6 +42,8 @@ export const expertReviewSchema = z.object({
   cons: z.array(z.string()),
   verdict: z.string().min(1, "Verdict is required"),
   date: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional()
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
