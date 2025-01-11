@@ -28,30 +28,32 @@ export type MobileProductData = BaseProductData & {
   build_details?: string;
   sim?: string;
   protection_details?: string;
+  display_type?: string;
   display_type_details?: string;
   display_resolution_details?: string;
   display_protection?: string;
   display_features?: string;
+  screen_protection?: string;
   main_camera_features?: string;
+  main_camera_video?: string;
   selfie_camera_features?: string;
+  selfie_camera_video?: string;
   launch_date?: string;
   announced?: string;
+  wlan?: string;
+  bluetooth?: string;
+  network_technology?: string;
+  network_2g_bands?: string;
+  network_3g_bands?: string;
+  network_4g_bands?: string;
+  network_5g_bands?: string;
+  network_speed?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
   graphics?: string;
   ports?: string;
 };
-
-export interface ExpertReviewData {
-  product_id: string;
-  rating: number;
-  author: string;
-  summary: string;
-  pros: string[];
-  cons: string[];
-  verdict: string;
-}
 
 export type ProductFormData = MobileProductData | LaptopProductData;
 
