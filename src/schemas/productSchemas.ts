@@ -2,15 +2,15 @@ import { z } from "zod";
 
 const baseProductSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, "Name is required"),
-  brand: z.string().min(1, "Brand is required"),
+  name: z.string().optional(),
+  brand: z.string().optional(),
   model_name: z.string().optional(),
-  price: z.number().min(0, "Price must be a positive number"),
-  display_specs: z.string().min(1, "Display specifications are required"),
-  processor: z.string().min(1, "Processor is required"),
-  ram: z.string().min(1, "RAM is required"),
-  storage: z.string().min(1, "Storage is required"),
-  battery: z.string().min(1, "Battery is required"),
+  price: z.number().optional(),
+  display_specs: z.string().optional(),
+  processor: z.string().optional(),
+  ram: z.string().optional(),
+  storage: z.string().optional(),
+  battery: z.string().optional(),
   os: z.string().optional(),
   color: z.string().optional(),
   image_url: z.string().optional(),
@@ -18,7 +18,7 @@ const baseProductSchema = z.object({
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera is required"),
+  camera: z.string().optional(),
   chipset: z.string().optional(),
   resolution: z.string().optional(),
   screen_size: z.string().optional(),
@@ -52,14 +52,14 @@ export const laptopProductSchema = baseProductSchema.extend({
 });
 
 export const expertReviewSchema = z.object({
-  product_id: z.string().uuid(),
-  rating: z.number().min(0).max(10),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()),
-  cons: z.array(z.string()),
-  verdict: z.string().min(1, "Verdict is required"),
+  product_id: z.string().uuid().optional(),
+  rating: z.number().min(0).max(10).optional(),
+  author: z.string().optional(),
+  summary: z.string().optional(),
+  pros: z.array(z.string()).optional(),
+  cons: z.array(z.string()).optional(),
+  verdict: z.string().optional(),
 });
 
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
+export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
