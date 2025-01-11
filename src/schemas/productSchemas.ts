@@ -3,7 +3,7 @@ import { z } from "zod";
 const baseProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
-  model_name: z.string(),
+  model_name: z.string().min(1, "Model name is required"),
   price: z.number().min(0, "Price must be a positive number"),
   color: z.string().optional(),
   image_url: z.string().optional(),
@@ -14,28 +14,23 @@ const baseProductSchema = z.object({
   storage: z.string().min(1, "Storage is required"),
   battery: z.string().min(1, "Battery is required"),
   os: z.string().optional(),
-  // Network fields
+  display_type: z.string().optional(),
+  screen_protection: z.string().optional(),
+  display_features: z.string().optional(),
+});
+
+export const mobileProductSchema = baseProductSchema.extend({
+  camera: z.string().min(1, "Camera is required"),
+  chipset: z.string().optional(),
+  charging_specs: z.string().optional(),
+  screen_size: z.string().optional(),
+  resolution: z.string().optional(),
   network_technology: z.string().optional(),
   network_2g_bands: z.string().optional(),
   network_3g_bands: z.string().optional(),
   network_4g_bands: z.string().optional(),
   network_5g_bands: z.string().optional(),
   network_speed: z.string().optional(),
-  // Additional specs
-  chipset: z.string().optional(),
-  charging_specs: z.string().optional(),
-  screen_size: z.string().optional(),
-  resolution: z.string().optional(),
-  // Camera fields
-  main_camera_features: z.string().optional(),
-  main_camera_video: z.string().optional(),
-  selfie_camera_features: z.string().optional(),
-  selfie_camera_video: z.string().optional(),
-  status: z.string().optional(),
-});
-
-export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera is required"),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
