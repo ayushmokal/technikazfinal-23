@@ -61,23 +61,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
-      // Only validate required fields based on database schema
-      const requiredFields = ['name', 'brand', 'price', 'display_specs', 'processor', 'ram', 'storage', 'battery'];
-      if (productType === 'mobile') {
-        requiredFields.push('camera');
-      }
-
-      const missingFields = requiredFields.filter(field => !data[field as keyof typeof data]);
-      
-      if (missingFields.length > 0) {
-        toast({
-          variant: "destructive",
-          title: "Validation Error",
-          description: `Please fill in these required fields: ${missingFields.join(', ')}`,
-        });
-        return;
-      }
-
       const formattedData = {
         ...data,
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price

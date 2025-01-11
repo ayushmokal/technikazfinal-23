@@ -115,10 +115,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="announced"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Announced
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Announced</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter announcement date" {...field} />
                 </FormControl>
@@ -131,10 +128,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Status
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Status</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter status" {...field} />
                 </FormControl>
@@ -156,10 +150,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="os"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Operating System
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Operating System</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter OS details" {...field} />
                 </FormControl>
@@ -172,10 +163,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="chipset"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Chipset
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Chipset</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter chipset details" {...field} />
                 </FormControl>
@@ -188,10 +176,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="ram"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  RAM
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>RAM</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter RAM specifications" {...field} />
                 </FormControl>
@@ -204,10 +189,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="storage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Storage
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Storage</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter storage specifications" {...field} />
                 </FormControl>
@@ -229,10 +211,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="display_type_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Display Type
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Display Type</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter display type" {...field} />
                 </FormControl>
@@ -245,10 +224,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="display_resolution_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Resolution
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Resolution</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter display resolution" {...field} />
                 </FormControl>
@@ -261,10 +237,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="display_protection"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Protection
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Protection</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter display protection" {...field} />
                 </FormControl>
@@ -286,10 +259,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="camera_setup"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Camera Setup
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Camera Setup</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter camera setup details" {...field} />
                 </FormControl>
@@ -302,10 +272,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="main_camera_features"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Features
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Features</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter camera features" {...field} />
                 </FormControl>
@@ -318,10 +285,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="main_camera_video"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Video Recording
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Video Recording</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter video recording capabilities" {...field} />
                 </FormControl>
@@ -343,10 +307,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="front_camera_setup"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Front Camera
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Front Camera</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter front camera details" {...field} />
                 </FormControl>
@@ -359,10 +320,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="selfie_camera_features"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Features
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Features</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter selfie camera features" {...field} />
                 </FormControl>
@@ -375,10 +333,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="selfie_camera_video"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Video
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Video</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter selfie video capabilities" {...field} />
                 </FormControl>
@@ -400,10 +355,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="dimensions"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Dimensions
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Dimensions</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter dimensions" {...field} />
                 </FormControl>
@@ -416,10 +368,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="weight"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Weight
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Weight</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter weight" {...field} />
                 </FormControl>
@@ -432,10 +381,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="build_material"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Build
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Build</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter build material" {...field} />
                 </FormControl>
@@ -448,10 +394,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="sim"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  SIM
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>SIM</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter SIM details" {...field} />
                 </FormControl>
@@ -473,10 +416,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="battery_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Type
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Type</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter battery type" {...field} />
                 </FormControl>
@@ -489,10 +429,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="charging_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Charging
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Charging</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter charging specifications" {...field} />
                 </FormControl>
@@ -514,10 +451,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="wlan_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  WLAN
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>WLAN</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter WLAN specifications" {...field} />
                 </FormControl>
@@ -530,10 +464,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="bluetooth_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Bluetooth
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Bluetooth</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter Bluetooth specifications" {...field} />
                 </FormControl>
@@ -546,10 +477,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="positioning"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  GPS
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>GPS</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter GPS details" {...field} />
                 </FormControl>
@@ -562,10 +490,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="nfc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  NFC
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>NFC</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter NFC details" {...field} />
                 </FormControl>
@@ -578,10 +503,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="radio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Radio
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Radio</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter radio specifications" {...field} />
                 </FormControl>
@@ -594,10 +516,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="usb"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  USB
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>USB</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter USB specifications" {...field} />
                 </FormControl>
@@ -619,10 +538,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_technology"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Technology
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Technology</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter network technology" {...field} />
                 </FormControl>
@@ -635,10 +551,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_2g_bands"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  2G bands
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>2G bands</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter 2G bands" {...field} />
                 </FormControl>
@@ -651,10 +564,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_3g_bands"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  3G bands
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>3G bands</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter 3G bands" {...field} />
                 </FormControl>
@@ -667,10 +577,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_4g_bands"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  4G bands
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>4G bands</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter 4G bands" {...field} />
                 </FormControl>
@@ -683,10 +590,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_5g_bands"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  5G bands
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>5G bands</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter 5G bands" {...field} />
                 </FormControl>
@@ -699,10 +603,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="network_speed"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Speed
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Speed</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter network speed" {...field} />
                 </FormControl>
@@ -724,10 +625,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="loudspeaker"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Loudspeaker
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Loudspeaker</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter loudspeaker details" {...field} />
                 </FormControl>
@@ -740,10 +638,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="audio_jack"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  3.5mm jack
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>3.5mm jack</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter audio jack details" {...field} />
                 </FormControl>
@@ -765,10 +660,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="sensors_list"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Sensors
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Sensors</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter sensors list" {...field} />
                 </FormControl>
@@ -781,10 +673,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="protection_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Protection
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Protection</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter protection details" {...field} />
                 </FormControl>
@@ -806,10 +695,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="models_list"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Models
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Models</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter models list" {...field} />
                 </FormControl>
@@ -822,10 +708,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="colors_list"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Colors
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Colors</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter colors list" {...field} />
                 </FormControl>
@@ -838,10 +721,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="price_details"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Price Details
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Price Details</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter price details" {...field} />
                 </FormControl>
