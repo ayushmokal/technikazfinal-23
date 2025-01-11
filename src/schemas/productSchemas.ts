@@ -56,22 +56,28 @@ export const mobileProductSchema = baseProductSchema.extend({
   models_list: z.string().optional(),
   colors_list: z.string().optional(),
   price_details: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  sensor_specs: z.any().optional(),
+  network_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  camera_details: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
+  general_specs: z.any().optional(),
+  display_type: z.string().optional(),
+  screen_protection: z.string().optional(),
+  wlan: z.string().optional(),
+  bluetooth: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
-});
-
-export const expertReviewSchema = z.object({
-  product_id: z.string().uuid().optional(),
-  rating: z.number().min(0).max(10).optional(),
-  author: z.string().optional(),
-  summary: z.string().optional(),
-  pros: z.array(z.string()).optional(),
-  cons: z.array(z.string()).optional(),
-  verdict: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  connectivity_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
