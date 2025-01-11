@@ -3,7 +3,7 @@ import type { Json } from "@/integrations/supabase/types";
 export type BaseProductData = {
   name: string;
   brand: string;
-  model_name?: string;
+  model_name: string;
   price: number;
   display_specs: string;
   processor: string;
@@ -14,10 +14,6 @@ export type BaseProductData = {
   color?: string;
   image_url?: string;
   gallery_images?: string[];
-  design_specs?: Json;
-  display_details?: Json;
-  performance_specs?: Json;
-  multimedia_specs?: Json;
 };
 
 export type MobileProductData = BaseProductData & {
@@ -26,17 +22,24 @@ export type MobileProductData = BaseProductData & {
   charging_specs?: string;
   resolution?: string;
   screen_size?: string;
-  camera_details?: Json;
-  sensor_specs?: Json;
-  network_specs?: Json;
-  general_specs?: Json;
 };
 
 export type LaptopProductData = BaseProductData & {
   graphics?: string;
   ports?: string;
-  connectivity_specs?: Json;
 };
+
+export interface ExpertReviewData {
+  product_id: string;
+  rating: number;
+  author: string;
+  summary: string;
+  pros: string[];
+  cons: string[];
+  verdict: string;
+}
+
+export type ProductFormData = MobileProductData | LaptopProductData;
 
 export interface UseProductFormProps {
   initialData?: (MobileProductData | LaptopProductData) & { id?: string };
