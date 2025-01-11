@@ -9,7 +9,7 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
-import type { UseProductFormProps } from "./types/productTypes";
+import type { UseProductFormProps, MobileProductData, LaptopProductData } from "./types/productTypes";
 
 export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: UseProductFormProps) {
   const { toast } = useToast();
@@ -29,6 +29,28 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
       battery: "",
       os: "",
       color: "",
+      ...(productType === 'mobile' ? {
+        camera: "",
+        chipset: "",
+        resolution: "",
+        screen_size: "",
+        charging_specs: "",
+        status: "",
+        dimensions: "",
+        build_details: "",
+        sim: "",
+        protection_details: "",
+        display_type_details: "",
+        display_resolution_details: "",
+        display_protection: "",
+        display_features: "",
+        main_camera_features: "",
+        selfie_camera_features: "",
+        launch_date: "",
+      } : {
+        graphics: "",
+        ports: "",
+      })
     },
   });
 
@@ -49,7 +71,6 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         camera: "108MP Main + 12MP Ultra Wide",
         chipset: "Latest Snapdragon",
         charging_specs: "45W Fast Charging",
-        announced: "2024",
         status: "Available",
         dimensions: "164.3 x 75.4 x 8.9 mm",
         build_details: "Glass front and back, aluminum frame",
@@ -59,33 +80,9 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         display_resolution_details: "1440 x 3200 pixels",
         display_protection: "Gorilla Glass Victus",
         display_features: "120Hz, HDR10+",
-        cpu: "Octa-core",
-        gpu: "Adreno 740",
-        card_slot: "No",
-        internal_storage: "256GB/512GB",
-        storage_type: "UFS 4.0",
         main_camera_features: "LED flash, auto-HDR, panorama",
-        main_camera_video: "8K@24fps, 4K@60fps",
         selfie_camera_features: "Dual video call, Auto-HDR",
-        selfie_camera_video: "4K@60fps",
-        loudspeaker: "Stereo speakers",
-        audio_jack: "No",
-        wlan_details: "Wi-Fi 802.11 a/b/g/n/ac/6e",
-        bluetooth_details: "5.3, A2DP, LE",
-        radio: "No",
-        infrared: false,
-        sensors_list: "Fingerprint, accelerometer, gyro, proximity, compass",
-        battery_type: "Li-Ion 5000 mAh",
-        charging_details: "45W wired, 15W wireless",
-        models_list: "SM-A001, SM-A002",
-        colors_list: "Phantom Black, Cream, Green, Lavender",
-        price_details: "Starting from $999",
-        network_technology: "GSM / HSPA / LTE / 5G",
-        network_2g_bands: "GSM 850 / 900 / 1800 / 1900",
-        network_3g_bands: "HSDPA 850 / 900 / 1700(AWS) / 1900 / 2100",
-        network_4g_bands: "1, 2, 3, 4, 5, 7, 8, 12, 13, 17, 18, 19, 20, 25, 26, 28, 32, 38, 39, 40, 41, 66",
-        network_5g_bands: "1, 3, 5, 7, 8, 20, 28, 38, 41, 66, 71, 77, 78 SA/NSA/Sub6",
-        network_speed: "HSPA 42.2/5.76 Mbps, LTE-A (7CA) Cat20 2000/200 Mbps, 5G"
+        launch_date: "2024",
       });
     } else {
       form.reset({
@@ -106,17 +103,19 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
       
+      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
+      
       const { error } = initialData
         ? await supabase
-            .from(productType === 'mobile' ? 'mobile_products' : 'laptop_products')
+            .from(table)
             .update(data)
             .eq('id', initialData.id)
         : await supabase
-            .from(productType === 'mobile' ? 'mobile_products' : 'laptop_products')
+            .from(table)
             .insert(data)
             .select();
 

@@ -3,7 +3,7 @@ import type { Json } from "@/integrations/supabase/types";
 export type BaseProductData = {
   name: string;
   brand: string;
-  model_name: string;
+  model_name?: string;
   price: number;
   display_specs: string;
   processor: string;
@@ -14,28 +14,6 @@ export type BaseProductData = {
   color?: string;
   image_url?: string;
   gallery_images?: string[];
-  launch_date?: string;
-  status?: string;
-  display_type?: string;
-  screen_protection?: string;
-  display_features?: string;
-  main_camera_features?: string;
-  selfie_camera_features?: string;
-  dimensions?: string;
-  build_details?: string;
-  wlan?: string;
-  bluetooth?: string;
-  display_type_details?: string;
-  display_resolution_details?: string;
-  display_protection?: string;
-  main_camera_video?: string;
-  selfie_camera_video?: string;
-  network_technology?: string;
-  network_2g_bands?: string;
-  network_3g_bands?: string;
-  network_4g_bands?: string;
-  network_5g_bands?: string;
-  network_speed?: string;
 };
 
 export type MobileProductData = BaseProductData & {
@@ -44,6 +22,18 @@ export type MobileProductData = BaseProductData & {
   charging_specs?: string;
   resolution?: string;
   screen_size?: string;
+  status?: string;
+  dimensions?: string;
+  build_details?: string;
+  sim?: string;
+  protection_details?: string;
+  display_type_details?: string;
+  display_resolution_details?: string;
+  display_protection?: string;
+  display_features?: string;
+  main_camera_features?: string;
+  selfie_camera_features?: string;
+  launch_date?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
