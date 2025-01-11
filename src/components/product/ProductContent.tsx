@@ -160,26 +160,26 @@ export function ProductContent({ product: initialProduct, type }: ProductContent
 
       {/* Compare Section */}
       <section id="comparison" className="scroll-mt-24">
-        <h2 className="text-2xl font-bold mb-6">Compare Products</h2>
-        <div className="bg-white rounded-lg p-8 border shadow-sm hover:shadow-md transition-shadow duration-200">
-          <div className="flex items-center gap-8">
-            <div className="flex-shrink-0 bg-gray-50 p-4 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4 md:mb-6">Compare Products</h2>
+        <div className="bg-white rounded-lg p-4 md:p-8 border shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+            <div className="flex-shrink-0 bg-gray-50 p-4 rounded-lg mx-auto md:mx-0">
               <img 
                 src={currentProduct.image_url || "/placeholder.svg"} 
                 alt={currentProduct.name} 
-                className="w-32 h-32 object-contain"
+                className="w-24 h-24 md:w-32 md:h-32 object-contain"
               />
-              <h3 className="text-sm font-medium text-center mt-2">{currentProduct.name}</h3>
+              <h3 className="text-sm font-medium text-center mt-2 line-clamp-2">{currentProduct.name}</h3>
             </div>
-            <div className="flex-grow space-y-4">
+            <div className="flex-grow space-y-3 md:space-y-4 text-center md:text-left">
               <div className="flex flex-col">
-                <h4 className="text-lg font-semibold text-gray-900">Add devices to compare</h4>
-                <p className="text-gray-600">Compare {currentProduct.name} with other devices to find the best match for you</p>
+                <h4 className="text-base md:text-lg font-semibold text-gray-900">Add devices to compare</h4>
+                <p className="text-sm md:text-base text-gray-600">Compare {currentProduct.name} with other devices to find the best match for you</p>
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-center md:justify-end">
                 <Button 
                   variant="default" 
-                  className="bg-teal-600 hover:bg-teal-700 px-6 py-2 text-base font-medium transition-colors duration-200"
+                  className="bg-teal-600 hover:bg-teal-700 w-full md:w-auto px-4 md:px-6 py-2 text-sm md:text-base font-medium transition-colors duration-200"
                   onClick={handleCompare}
                 >
                   Compare Now
