@@ -12,12 +12,12 @@ export function CameraSection({ form }: CameraSectionProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField
         control={form.control}
-        name="main_camera_features"
+        name="camera_features"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Main Camera Features</FormLabel>
+            <FormLabel>Camera Features</FormLabel>
             <FormControl>
-              <Input placeholder="Enter main camera features" {...field} />
+              <Input placeholder="Enter camera features" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -26,12 +26,12 @@ export function CameraSection({ form }: CameraSectionProps) {
 
       <FormField
         control={form.control}
-        name="main_camera_video"
+        name="camera_video"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Main Camera Video</FormLabel>
+            <FormLabel>Camera Video</FormLabel>
             <FormControl>
-              <Input placeholder="Enter main camera video capabilities" {...field} />
+              <Input placeholder="Enter camera video capabilities" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -40,12 +40,12 @@ export function CameraSection({ form }: CameraSectionProps) {
 
       <FormField
         control={form.control}
-        name="selfie_camera_features"
+        name="front_camera_features"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Selfie Camera Features</FormLabel>
+            <FormLabel>Front Camera Features</FormLabel>
             <FormControl>
-              <Input placeholder="Enter selfie camera features" {...field} />
+              <Input placeholder="Enter front camera features" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -54,12 +54,12 @@ export function CameraSection({ form }: CameraSectionProps) {
 
       <FormField
         control={form.control}
-        name="selfie_camera_video"
+        name="front_camera_video"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Selfie Camera Video</FormLabel>
+            <FormLabel>Front Camera Video</FormLabel>
             <FormControl>
-              <Input placeholder="Enter selfie camera video capabilities" {...field} />
+              <Input placeholder="Enter front camera video capabilities" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
