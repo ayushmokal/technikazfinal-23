@@ -14,6 +14,28 @@ export type BaseProductData = {
   color?: string;
   image_url?: string;
   gallery_images?: string[];
+  launch_date?: string;
+  status?: string;
+  display_type?: string;
+  screen_protection?: string;
+  display_features?: string;
+  main_camera_features?: string;
+  selfie_camera_features?: string;
+  dimensions?: string;
+  build_details?: string;
+  wlan?: string;
+  bluetooth?: string;
+  display_type_details?: string;
+  display_resolution_details?: string;
+  display_protection?: string;
+  main_camera_video?: string;
+  selfie_camera_video?: string;
+  network_technology?: string;
+  network_2g_bands?: string;
+  network_3g_bands?: string;
+  network_4g_bands?: string;
+  network_5g_bands?: string;
+  network_speed?: string;
 };
 
 export type MobileProductData = BaseProductData & {
