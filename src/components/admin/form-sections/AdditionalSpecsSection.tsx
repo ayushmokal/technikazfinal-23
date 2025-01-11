@@ -1,6 +1,5 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
@@ -51,21 +50,7 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Charging Specifications</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter charging specifications" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="screen_size"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Screen Size</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter screen size" {...field} />
+                    <Input placeholder="e.g. 45W Fast Charging" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +64,63 @@ export function AdditionalSpecsSection({ form, productType }: AdditionalSpecsSec
                 <FormItem>
                   <FormLabel>Screen Resolution</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter screen resolution" {...field} />
+                    <Input placeholder="e.g. 2400 x 1080" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="screen_size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Screen Size</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 6.7 inches" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ram"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>RAM</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 8GB" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="storage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Storage</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. 256GB" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Midnight Black" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
