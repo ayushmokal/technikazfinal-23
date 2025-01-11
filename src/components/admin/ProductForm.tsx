@@ -18,8 +18,8 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
-  const [showExpertReview, setShowExpertReview] = useState(false);
-  const [tempProductId, setTempProductId] = useState<string>("");
+  const [showExpertReview, setShowExpertReview] = useState(true);
+  const [productId, setProductId] = useState<string>(initialData?.id || "");
   
   const {
     form,
@@ -31,8 +31,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     onSubmit,
   } = useProductForm({ 
     initialData, 
-    onSuccess: (productId) => {
-      setTempProductId(productId);
+    onSuccess: (newProductId) => {
+      setProductId(newProductId);
       onSuccess?.();
     }, 
     productType: propProductType 
@@ -71,12 +71,12 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                 onClick={() => setShowExpertReview(!showExpertReview)}
                 className="w-full"
               >
-                {showExpertReview ? 'Hide' : 'Add'} Expert Review
+                {showExpertReview ? 'Hide' : 'Show'} Expert Review
               </Button>
 
               {showExpertReview && (
                 <ExpertReviewForm 
-                  productId={initialData?.id || tempProductId} 
+                  productId={productId} 
                   className="mt-6"
                 />
               )}
