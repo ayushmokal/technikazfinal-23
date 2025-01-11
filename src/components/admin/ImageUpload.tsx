@@ -75,13 +75,13 @@ export function ImageUpload({
           (currentImageUrl ? [currentImageUrl] : [])
         ).map((url, index) => (
           <div key={url + index} className="relative group">
-            <AspectRatio ratio={1}>
+            <div className="w-[200px] h-[200px] relative">
               <img
                 src={url}
                 alt={`Preview ${index + 1}`}
-                className="object-contain w-full h-full rounded-md border border-gray-200"
+                className="w-full h-full object-contain rounded-md border border-gray-200"
               />
-            </AspectRatio>
+            </div>
             {onRemoveImage && (
               <Button
                 variant="destructive"
