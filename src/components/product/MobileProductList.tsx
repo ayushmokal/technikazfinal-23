@@ -36,7 +36,6 @@ export function MobileProductList({
     rootMargin: "100px",
   });
 
-  // Get unique brands from products
   const { data: brands = [] } = useQuery({
     queryKey: ['mobile-brands'],
     queryFn: async () => {
@@ -57,7 +56,6 @@ export function MobileProductList({
     }
   }, [inView, hasMore, isLoading, onLoadMore]);
 
-  // Filter and sort products
   const filteredProducts = initialProducts
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -138,9 +136,7 @@ export function MobileProductList({
           <Link 
             key={product.id}
             to={`/product/${product.id}?type=mobile`}
-            className={`block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow ${
-              viewMode === "grid" ? "" : ""
-            }`}
+            className={`block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow`}
           >
             <div className={viewMode === "grid" ? "flex flex-col" : "flex gap-6"}>
               <div className={`${
@@ -178,6 +174,36 @@ export function MobileProductList({
                     <span className="font-medium">Battery:</span>
                     <span>{product.battery}</span>
                   </div>
+                  {product.chipset && (
+                    <div className="flex gap-2">
+                      <span className="font-medium">Chipset:</span>
+                      <span>{product.chipset}</span>
+                    </div>
+                  )}
+                  {product.screen_size && (
+                    <div className="flex gap-2">
+                      <span className="font-medium">Screen Size:</span>
+                      <span>{product.screen_size}</span>
+                    </div>
+                  )}
+                  {product.resolution && (
+                    <div className="flex gap-2">
+                      <span className="font-medium">Resolution:</span>
+                      <span>{product.resolution}</span>
+                    </div>
+                  )}
+                  {product.charging_specs && (
+                    <div className="flex gap-2">
+                      <span className="font-medium">Charging:</span>
+                      <span>{product.charging_specs}</span>
+                    </div>
+                  )}
+                  {product.os && (
+                    <div className="flex gap-2">
+                      <span className="font-medium">OS:</span>
+                      <span>{product.os}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="mt-4">
                   <Link 
