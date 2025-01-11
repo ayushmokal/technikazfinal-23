@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import { ProductImage } from "./ProductImage";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   id: string;
@@ -49,20 +48,6 @@ export function ProductTable({
   onAddReview,
   onDelete,
 }: ProductTableProps) {
-  const { toast } = useToast();
-
-  const handleEdit = (product: Product) => {
-    try {
-      onEdit(product);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to edit product. Please try again.",
-      });
-    }
-  };
-
   return (
     <div className="border rounded-md">
       <Table>
@@ -101,7 +86,7 @@ export function ProductTable({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleEdit(product)}
+                      onClick={() => onEdit(product)}
                     >
                       Edit
                     </Button>

@@ -162,12 +162,12 @@ export type Database = {
       expert_reviews: {
         Row: {
           author: string
-          cons: string[] | null
+          cons: string[]
           created_at: string | null
           date: string | null
           id: string
           product_id: string
-          pros: string[] | null
+          pros: string[]
           rating: number
           summary: string
           updated_at: string | null
@@ -175,12 +175,12 @@ export type Database = {
         }
         Insert: {
           author: string
-          cons?: string[] | null
+          cons?: string[]
           created_at?: string | null
           date?: string | null
           id?: string
           product_id: string
-          pros?: string[] | null
+          pros?: string[]
           rating: number
           summary: string
           updated_at?: string | null
@@ -188,33 +188,46 @@ export type Database = {
         }
         Update: {
           author?: string
-          cons?: string[] | null
+          cons?: string[]
           created_at?: string | null
           date?: string | null
           id?: string
           product_id?: string
-          pros?: string[] | null
+          pros?: string[]
           rating?: number
           summary?: string
           updated_at?: string | null
           verdict?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "expert_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       laptops: {
         Row: {
           battery: string
           brand: string
           color: string | null
+          connectivity_specs: Json | null
           created_at: string
+          design_specs: Json | null
+          display_details: Json | null
           display_specs: string
           gallery_images: string[] | null
           graphics: string | null
           id: string
           image_url: string | null
           model_name: string | null
+          multimedia_specs: Json | null
           name: string
           os: string | null
+          performance_specs: Json | null
           ports: string | null
           price: number
           processor: string
@@ -226,15 +239,20 @@ export type Database = {
           battery: string
           brand: string
           color?: string | null
+          connectivity_specs?: Json | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs: string
           gallery_images?: string[] | null
           graphics?: string | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name: string
           os?: string | null
+          performance_specs?: Json | null
           ports?: string | null
           price: number
           processor: string
@@ -246,15 +264,20 @@ export type Database = {
           battery?: string
           brand?: string
           color?: string | null
+          connectivity_specs?: Json | null
           created_at?: string
+          design_specs?: Json | null
+          display_details?: Json | null
           display_specs?: string
           gallery_images?: string[] | null
           graphics?: string | null
           id?: string
           image_url?: string | null
           model_name?: string | null
+          multimedia_specs?: Json | null
           name?: string
           os?: string | null
+          performance_specs?: Json | null
           ports?: string | null
           price?: number
           processor?: string
@@ -266,73 +289,322 @@ export type Database = {
       }
       mobile_products: {
         Row: {
+          announced: string | null
+          architecture: string | null
+          aspect_ratio: string | null
+          audio_jack: string | null
           battery: string
-          brand: string
-          camera: string | null
+          battery_type: string | null
+          bezel_less: boolean | null
+          bluetooth: string | null
+          bluetooth_details: string | null
+          brand: string | null
+          build_details: string | null
+          build_material: string | null
+          camera: string
+          camera_autofocus: boolean | null
+          camera_details: Json | null
+          camera_flash: string | null
+          camera_modes: string | null
+          camera_ois: boolean | null
+          camera_setup: string | null
+          card_slot: string | null
+          charging_details: string | null
           charging_specs: string | null
           chipset: string | null
           color: string | null
+          colors_list: string | null
+          cpu: string | null
           created_at: string
+          custom_ui: string | null
+          design_specs: Json | null
+          dimensions: string | null
+          display_details: Json | null
+          display_features: string | null
+          display_protection: string | null
+          display_resolution_details: string | null
           display_specs: string
+          display_type: string | null
+          display_type_details: string | null
+          fabrication: string | null
+          front_camera: string | null
+          front_camera_setup: string | null
+          front_camera_video: string | null
           gallery_images: string[] | null
+          general_specs: Json | null
+          gpu: string | null
+          hdr_support: string | null
+          height: string | null
           id: string
           image_url: string | null
+          infrared: boolean | null
+          internal_storage: string | null
+          launch_date: string | null
+          loudspeaker: string | null
+          main_camera_features: string | null
+          main_camera_video: string | null
           model_name: string | null
+          models: string | null
+          models_list: string | null
+          multimedia_specs: Json | null
           name: string
+          network_2g_bands: string | null
+          network_3g_bands: string | null
+          network_4g_bands: string | null
+          network_5g_bands: string | null
+          network_specs: Json | null
+          network_speed: string | null
+          network_technology: string | null
+          nfc: string | null
           os: string | null
+          peak_brightness: string | null
+          performance_specs: Json | null
+          pixel_density: string | null
+          positioning: string | null
           price: number
+          price_details: string | null
           processor: string
-          ram: string
+          protection_details: string | null
+          radio: string | null
+          ram: string | null
+          ram_type: string | null
+          refresh_rate: string | null
           resolution: string | null
+          ruggedness: string | null
+          screen_protection: string | null
           screen_size: string | null
-          storage: string
+          selfie_camera_features: string | null
+          selfie_camera_video: string | null
+          sensor_specs: Json | null
+          sensors: string | null
+          sensors_list: string | null
+          sim: string | null
+          software_support: string | null
+          status: string | null
+          storage: string | null
+          storage_type: string | null
+          thickness: string | null
+          touch_screen: boolean | null
           updated_at: string
+          usb: string | null
+          video_recording: string | null
+          waterproof: string | null
+          weight: string | null
+          width: string | null
+          wlan: string | null
+          wlan_details: string | null
         }
         Insert: {
+          announced?: string | null
+          architecture?: string | null
+          aspect_ratio?: string | null
+          audio_jack?: string | null
           battery: string
-          brand: string
-          camera?: string | null
+          battery_type?: string | null
+          bezel_less?: boolean | null
+          bluetooth?: string | null
+          bluetooth_details?: string | null
+          brand?: string | null
+          build_details?: string | null
+          build_material?: string | null
+          camera: string
+          camera_autofocus?: boolean | null
+          camera_details?: Json | null
+          camera_flash?: string | null
+          camera_modes?: string | null
+          camera_ois?: boolean | null
+          camera_setup?: string | null
+          card_slot?: string | null
+          charging_details?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          colors_list?: string | null
+          cpu?: string | null
           created_at?: string
+          custom_ui?: string | null
+          design_specs?: Json | null
+          dimensions?: string | null
+          display_details?: Json | null
+          display_features?: string | null
+          display_protection?: string | null
+          display_resolution_details?: string | null
           display_specs: string
+          display_type?: string | null
+          display_type_details?: string | null
+          fabrication?: string | null
+          front_camera?: string | null
+          front_camera_setup?: string | null
+          front_camera_video?: string | null
           gallery_images?: string[] | null
+          general_specs?: Json | null
+          gpu?: string | null
+          hdr_support?: string | null
+          height?: string | null
           id?: string
           image_url?: string | null
+          infrared?: boolean | null
+          internal_storage?: string | null
+          launch_date?: string | null
+          loudspeaker?: string | null
+          main_camera_features?: string | null
+          main_camera_video?: string | null
           model_name?: string | null
+          models?: string | null
+          models_list?: string | null
+          multimedia_specs?: Json | null
           name: string
+          network_2g_bands?: string | null
+          network_3g_bands?: string | null
+          network_4g_bands?: string | null
+          network_5g_bands?: string | null
+          network_specs?: Json | null
+          network_speed?: string | null
+          network_technology?: string | null
+          nfc?: string | null
           os?: string | null
+          peak_brightness?: string | null
+          performance_specs?: Json | null
+          pixel_density?: string | null
+          positioning?: string | null
           price: number
+          price_details?: string | null
           processor: string
-          ram: string
+          protection_details?: string | null
+          radio?: string | null
+          ram?: string | null
+          ram_type?: string | null
+          refresh_rate?: string | null
           resolution?: string | null
+          ruggedness?: string | null
+          screen_protection?: string | null
           screen_size?: string | null
-          storage: string
+          selfie_camera_features?: string | null
+          selfie_camera_video?: string | null
+          sensor_specs?: Json | null
+          sensors?: string | null
+          sensors_list?: string | null
+          sim?: string | null
+          software_support?: string | null
+          status?: string | null
+          storage?: string | null
+          storage_type?: string | null
+          thickness?: string | null
+          touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
+          video_recording?: string | null
+          waterproof?: string | null
+          weight?: string | null
+          width?: string | null
+          wlan?: string | null
+          wlan_details?: string | null
         }
         Update: {
+          announced?: string | null
+          architecture?: string | null
+          aspect_ratio?: string | null
+          audio_jack?: string | null
           battery?: string
-          brand?: string
-          camera?: string | null
+          battery_type?: string | null
+          bezel_less?: boolean | null
+          bluetooth?: string | null
+          bluetooth_details?: string | null
+          brand?: string | null
+          build_details?: string | null
+          build_material?: string | null
+          camera?: string
+          camera_autofocus?: boolean | null
+          camera_details?: Json | null
+          camera_flash?: string | null
+          camera_modes?: string | null
+          camera_ois?: boolean | null
+          camera_setup?: string | null
+          card_slot?: string | null
+          charging_details?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          colors_list?: string | null
+          cpu?: string | null
           created_at?: string
+          custom_ui?: string | null
+          design_specs?: Json | null
+          dimensions?: string | null
+          display_details?: Json | null
+          display_features?: string | null
+          display_protection?: string | null
+          display_resolution_details?: string | null
           display_specs?: string
+          display_type?: string | null
+          display_type_details?: string | null
+          fabrication?: string | null
+          front_camera?: string | null
+          front_camera_setup?: string | null
+          front_camera_video?: string | null
           gallery_images?: string[] | null
+          general_specs?: Json | null
+          gpu?: string | null
+          hdr_support?: string | null
+          height?: string | null
           id?: string
           image_url?: string | null
+          infrared?: boolean | null
+          internal_storage?: string | null
+          launch_date?: string | null
+          loudspeaker?: string | null
+          main_camera_features?: string | null
+          main_camera_video?: string | null
           model_name?: string | null
+          models?: string | null
+          models_list?: string | null
+          multimedia_specs?: Json | null
           name?: string
+          network_2g_bands?: string | null
+          network_3g_bands?: string | null
+          network_4g_bands?: string | null
+          network_5g_bands?: string | null
+          network_specs?: Json | null
+          network_speed?: string | null
+          network_technology?: string | null
+          nfc?: string | null
           os?: string | null
+          peak_brightness?: string | null
+          performance_specs?: Json | null
+          pixel_density?: string | null
+          positioning?: string | null
           price?: number
+          price_details?: string | null
           processor?: string
-          ram?: string
+          protection_details?: string | null
+          radio?: string | null
+          ram?: string | null
+          ram_type?: string | null
+          refresh_rate?: string | null
           resolution?: string | null
+          ruggedness?: string | null
+          screen_protection?: string | null
           screen_size?: string | null
-          storage?: string
+          selfie_camera_features?: string | null
+          selfie_camera_video?: string | null
+          sensor_specs?: Json | null
+          sensors?: string | null
+          sensors_list?: string | null
+          sim?: string | null
+          software_support?: string | null
+          status?: string | null
+          storage?: string | null
+          storage_type?: string | null
+          thickness?: string | null
+          touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
+          video_recording?: string | null
+          waterproof?: string | null
+          weight?: string | null
+          width?: string | null
+          wlan?: string | null
+          wlan_details?: string | null
         }
         Relationships: []
       }
@@ -358,7 +630,15 @@ export type Database = {
           rating?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "product_ratings_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_reviews: {
         Row: {
