@@ -7,7 +7,7 @@ import { ProductEditDialog } from "./ProductEditDialog";
 import { ExpertReviewForm } from "./ExpertReviewForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { Product } from "@/types/product";
+import type { LaptopProduct, MobileProduct } from "@/types/product";
 
 interface ProductManagerProps {
   productType: 'mobile' | 'laptop';
@@ -15,20 +15,19 @@ interface ProductManagerProps {
 
 export function ProductManager({ productType }: ProductManagerProps) {
   const { toast } = useToast();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<(LaptopProduct | MobileProduct)[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<LaptopProduct | MobileProduct | null>(null);
+  const [editingProduct, setEditingProduct] = useState<LaptopProduct | MobileProduct | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showExpertReview, setShowExpertReview] = useState(false);
-  const [selectedProductForReview, setSelectedProductForReview] = useState<Product | null>(null);
+  const [selectedProductForReview, setSelectedProductForReview] = useState<LaptopProduct | MobileProduct | null>(null);
 
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('products')
+        .from(productType === 'mobile' ? 'mobile_products' : 'laptops')
         .select('*')
-        .eq('type', productType)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -44,6 +43,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
+  // Set up real-time subscription for product updates
   useEffect(() => {
     const channel = supabase
       .channel('product-changes')
@@ -52,7 +52,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         {
           event: '*',
           schema: 'public',
-          table: 'products'
+          table: productType === 'mobile' ? 'mobile_products' : 'laptops'
         },
         () => {
           fetchProducts();
@@ -65,6 +65,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
     };
   }, [productType]);
 
+  // Initial fetch
   useEffect(() => {
     fetchProducts();
   }, [productType]);
@@ -72,7 +73,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
   const handleDelete = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('products')
+        .from(productType === 'mobile' ? 'mobile_products' : 'laptops')
         .delete()
         .eq('id', id);
 
@@ -83,7 +84,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         description: "Product deleted successfully",
       });
 
-      await fetchProducts();
+      await fetchProducts(); // Refresh the list after deletion
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -93,15 +94,15 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
-  const handleView = (product: Product) => {
+  const handleView = (product: LaptopProduct | MobileProduct) => {
     setSelectedProduct(product);
   };
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: LaptopProduct | MobileProduct) => {
     setEditingProduct(product);
   };
 
-  const handleAddReview = (product: Product) => {
+  const handleAddReview = (product: LaptopProduct | MobileProduct) => {
     setSelectedProductForReview(product);
     setShowExpertReview(true);
   };
@@ -135,7 +136,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
           onClose={() => setEditingProduct(null)}
           onSuccess={async () => {
             setEditingProduct(null);
-            await fetchProducts();
+            await fetchProducts(); // Refresh the list after successful edit
             toast({
               title: "Success",
               description: "Product updated successfully",

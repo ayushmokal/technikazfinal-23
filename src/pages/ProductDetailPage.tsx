@@ -7,6 +7,7 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductSidebar } from "@/components/product/ProductSidebar";
 import { ProductContent } from "@/components/product/ProductContent";
 import { useToast } from "@/hooks/use-toast";
+import { LaptopProduct, MobileProduct } from "@/types/product";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type ProductType = 'mobile' | 'laptop';
@@ -27,15 +28,14 @@ export default function ProductDetailPage() {
         throw new Error('Product ID is required');
       }
 
+      const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
       const { data, error } = await supabase
-        .from('products')
+        .from(tableName)
         .select('*')
         .eq('id', id)
-        .eq('type', type)
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching product:', error);
         toast({
           variant: "destructive",
           title: "Error",
@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
         return null;
       }
 
-      return data;
+      return data as LaptopProduct | MobileProduct;
     },
     enabled: !!id,
   });

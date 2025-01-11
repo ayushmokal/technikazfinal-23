@@ -9,13 +9,7 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
-import type { ProductFormData } from "@/schemas/productSchemas";
-
-interface UseProductFormProps {
-  initialData?: ProductFormData;
-  onSuccess?: () => void;
-  productType?: 'mobile' | 'laptop';
-}
+import type { UseProductFormProps, MobileProductData, LaptopProductData, ProductFormData } from "./types/productTypes";
 
 export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: UseProductFormProps) {
   const { toast } = useToast();
@@ -35,13 +29,25 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
       battery: "",
       os: "",
       color: "",
-      type: productType,
       ...(productType === 'mobile' ? {
         camera: "",
         chipset: "",
         resolution: "",
         screen_size: "",
         charging_specs: "",
+        status: "",
+        dimensions: "",
+        build_details: "",
+        sim: "",
+        protection_details: "",
+        display_type_details: "",
+        display_resolution_details: "",
+        display_protection: "",
+        display_features: "",
+        main_camera_features: "",
+        selfie_camera_features: "",
+        launch_date: "",
+        announced: "",
       } : {
         graphics: "",
         ports: "",
@@ -63,13 +69,23 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         battery: "5000mAh",
         os: "Android 14",
         color: "Phantom Black",
-        type: 'mobile',
         camera: "108MP Main + 12MP Ultra Wide",
         chipset: "Latest Snapdragon",
-        resolution: "1440 x 3200",
-        screen_size: "6.7 inch",
         charging_specs: "45W Fast Charging",
-      });
+        status: "Available",
+        dimensions: "164.3 x 75.4 x 8.9 mm",
+        build_details: "Glass front and back, aluminum frame",
+        sim: "Dual SIM (Nano-SIM)",
+        protection_details: "IP68 dust/water resistant",
+        display_type_details: "Dynamic AMOLED 2X",
+        display_resolution_details: "1440 x 3200 pixels",
+        display_protection: "Gorilla Glass Victus",
+        display_features: "120Hz, HDR10+",
+        main_camera_features: "LED flash, auto-HDR, panorama",
+        selfie_camera_features: "Dual video call, Auto-HDR",
+        launch_date: "2024",
+        announced: "2024",
+      } as MobileProductData);
     } else {
       form.reset({
         name: "Sample Laptop",
@@ -83,10 +99,9 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         battery: "90Wh",
         os: "Windows 11 Home",
         color: "Space Gray",
-        type: 'laptop',
         graphics: "NVIDIA RTX 3060 6GB",
         ports: "2x USB-C, 3x USB-A, HDMI, SD Card Reader"
-      });
+      } as LaptopProductData);
     }
   };
 
@@ -94,13 +109,15 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
     try {
       setIsLoading(true);
       
+      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
+      
       const { error } = initialData
         ? await supabase
-            .from('products')
+            .from(table)
             .update(data)
             .eq('id', initialData.id)
         : await supabase
-            .from('products')
+            .from(table)
             .insert(data)
             .select();
 
