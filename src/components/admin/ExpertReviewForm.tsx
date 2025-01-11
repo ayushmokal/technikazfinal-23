@@ -13,10 +13,9 @@ import { expertReviewSchema, type ExpertReviewFormData } from "@/schemas/product
 interface ExpertReviewFormProps {
   productId: string;
   onSuccess?: () => void;
-  className?: string; // Added className prop
 }
 
-export function ExpertReviewForm({ productId, onSuccess, className }: ExpertReviewFormProps) {
+export function ExpertReviewForm({ productId, onSuccess }: ExpertReviewFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [pros, setPros] = useState<string[]>([""]);
@@ -89,7 +88,7 @@ export function ExpertReviewForm({ productId, onSuccess, className }: ExpertRevi
   };
 
   return (
-    <Card className={className}>
+    <Card>
       <CardHeader>
         <CardTitle>Add Expert Review</CardTitle>
       </CardHeader>

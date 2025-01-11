@@ -10,19 +10,37 @@ export const useProductData = () => {
     data: MobileProductData | LaptopProductData,
     productType: 'mobile' | 'laptop'
   ) => {
-    console.log("Updating product with data:", { table, id, data, productType });
+    const updateData = productType === 'mobile'
+      ? {
+          ...data,
+          camera: (data as MobileProductData).camera,
+          battery: data.battery,
+          brand: data.brand,
+          display_specs: data.display_specs,
+          processor: data.processor,
+          ram: data.ram,
+          storage: data.storage,
+          name: data.name,
+        }
+      : {
+          ...data,
+          battery: data.battery,
+          brand: data.brand,
+          display_specs: data.display_specs,
+          processor: data.processor,
+          ram: data.ram,
+          storage: data.storage,
+          name: data.name,
+        };
+
     const { data: updatedData, error } = await supabase
       .from(table)
-      .update(data)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
 
-    if (error) {
-      console.error("Error updating product:", error);
-      throw error;
-    }
-    console.log("Product updated successfully:", updatedData);
+    if (error) throw error;
     return updatedData;
   };
 
@@ -31,18 +49,36 @@ export const useProductData = () => {
     data: MobileProductData | LaptopProductData,
     productType: 'mobile' | 'laptop'
   ) => {
-    console.log("Inserting new product with data:", { table, data, productType });
+    const insertData = productType === 'mobile'
+      ? {
+          ...data,
+          camera: (data as MobileProductData).camera,
+          battery: data.battery,
+          brand: data.brand,
+          display_specs: data.display_specs,
+          processor: data.processor,
+          ram: data.ram,
+          storage: data.storage,
+          name: data.name,
+        }
+      : {
+          ...data,
+          battery: data.battery,
+          brand: data.brand,
+          display_specs: data.display_specs,
+          processor: data.processor,
+          ram: data.ram,
+          storage: data.storage,
+          name: data.name,
+        };
+
     const { data: insertedData, error } = await supabase
       .from(table)
-      .insert(data)
+      .insert(insertData)
       .select()
       .single();
 
-    if (error) {
-      console.error("Error inserting product:", error);
-      throw error;
-    }
-    console.log("Product inserted successfully:", insertedData);
+    if (error) throw error;
     return insertedData;
   };
 

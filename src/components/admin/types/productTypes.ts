@@ -30,10 +30,6 @@ export type MobileProductData = BaseProductData & {
   sensor_specs?: Json;
   network_specs?: Json;
   general_specs?: Json;
-  network_technology?: string;
-  display_type?: string;
-  dimensions?: string;
-  weight?: string;
 };
 
 export type LaptopProductData = BaseProductData & {

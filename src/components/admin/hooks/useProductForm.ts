@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
 import { useImageUpload } from "./useImageUpload";
+import { useAuthCheck } from "./useAuthCheck";
 import { useProductData } from "./useProductData";
 import { supabase } from "@/integrations/supabase/client";
 import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
+import { useToast } from "@/hooks/use-toast";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
+  const { toast } = useAuthCheck();
   const { updateProduct, insertProduct } = useProductData();
   const { 
     mainImageFile, 
@@ -49,10 +52,15 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       setIsLoading(true);
       console.log("Starting form submission with data:", data);
 
-      // Check authentication
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        throw new Error("Please login to continue");
+        console.log("No active session found");
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please login again to continue.",
+        });
+        return;
       }
 
       // Transform numeric string to number for price
@@ -60,6 +68,8 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         ...data,
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
       };
+
+      console.log("Transformed data:", transformedData);
 
       // Handle image uploads
       if (mainImageFile) {
@@ -85,24 +95,69 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
-        result = await updateProduct(table, initialData.id, transformedData, productType);
+        const { data: updatedData, error } = await supabase
+          .from(table)
+          .update(transformedData)
+          .eq('id', initialData.id)
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error updating product:", error);
+          throw error;
+        }
+        
+        console.log("Product updated successfully:", updatedData);
+        result = updatedData;
+        
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
+        });
       } else {
         console.log("Inserting new product");
-        result = await insertProduct(table, transformedData, productType);
+        const { data: insertedData, error } = await supabase
+          .from(table)
+          .insert([transformedData])
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error inserting product:", error);
+          throw error;
+        }
+        
+        console.log("Product inserted successfully:", insertedData);
+        result = insertedData;
+
+        toast({
+          title: "Success",
+          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
+        });
       }
 
-      if (!result) {
+      if (result) {
+        console.log("Operation completed successfully, resetting form");
+        form.reset();
+        onSuccess?.(result.id);
+      } else {
         throw new Error("No result returned from database operation");
       }
-
-      console.log("Operation completed successfully:", result);
-      if (onSuccess) {
-        await onSuccess(result.id);
-      }
-      return result;
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      throw error;
+      if (error.message?.includes('JWT')) {
+        toast({
+          variant: "destructive",
+          title: "Session Expired",
+          description: "Please login again to continue.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to save product",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
