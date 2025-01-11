@@ -159,13 +159,52 @@ export type Database = {
           },
         ]
       }
-      products: {
+      expert_reviews: {
+        Row: {
+          author: string
+          cons: string[] | null
+          created_at: string | null
+          date: string | null
+          id: string
+          product_id: string
+          pros: string[] | null
+          rating: number
+          summary: string
+          updated_at: string | null
+          verdict: string
+        }
+        Insert: {
+          author: string
+          cons?: string[] | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          product_id: string
+          pros?: string[] | null
+          rating: number
+          summary: string
+          updated_at?: string | null
+          verdict: string
+        }
+        Update: {
+          author?: string
+          cons?: string[] | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          product_id?: string
+          pros?: string[] | null
+          rating?: number
+          summary?: string
+          updated_at?: string | null
+          verdict?: string
+        }
+        Relationships: []
+      }
+      laptops: {
         Row: {
           battery: string
           brand: string
-          camera: string | null
-          charging_specs: string | null
-          chipset: string | null
           color: string | null
           created_at: string
           display_specs: string
@@ -180,18 +219,12 @@ export type Database = {
           price: number
           processor: string
           ram: string
-          resolution: string | null
-          screen_size: string | null
           storage: string
-          type: string
           updated_at: string
         }
         Insert: {
           battery: string
           brand: string
-          camera?: string | null
-          charging_specs?: string | null
-          chipset?: string | null
           color?: string | null
           created_at?: string
           display_specs: string
@@ -206,18 +239,12 @@ export type Database = {
           price: number
           processor: string
           ram: string
-          resolution?: string | null
-          screen_size?: string | null
           storage: string
-          type: string
           updated_at?: string
         }
         Update: {
           battery?: string
           brand?: string
-          camera?: string | null
-          charging_specs?: string | null
-          chipset?: string | null
           color?: string | null
           created_at?: string
           display_specs?: string
@@ -232,11 +259,134 @@ export type Database = {
           price?: number
           processor?: string
           ram?: string
+          storage?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mobile_products: {
+        Row: {
+          battery: string
+          brand: string
+          camera: string | null
+          charging_specs: string | null
+          chipset: string | null
+          color: string | null
+          created_at: string
+          display_specs: string
+          gallery_images: string[] | null
+          id: string
+          image_url: string | null
+          model_name: string | null
+          name: string
+          os: string | null
+          price: number
+          processor: string
+          ram: string
+          resolution: string | null
+          screen_size: string | null
+          storage: string
+          updated_at: string
+        }
+        Insert: {
+          battery: string
+          brand: string
+          camera?: string | null
+          charging_specs?: string | null
+          chipset?: string | null
+          color?: string | null
+          created_at?: string
+          display_specs: string
+          gallery_images?: string[] | null
+          id?: string
+          image_url?: string | null
+          model_name?: string | null
+          name: string
+          os?: string | null
+          price: number
+          processor: string
+          ram: string
+          resolution?: string | null
+          screen_size?: string | null
+          storage: string
+          updated_at?: string
+        }
+        Update: {
+          battery?: string
+          brand?: string
+          camera?: string | null
+          charging_specs?: string | null
+          chipset?: string | null
+          color?: string | null
+          created_at?: string
+          display_specs?: string
+          gallery_images?: string[] | null
+          id?: string
+          image_url?: string | null
+          model_name?: string | null
+          name?: string
+          os?: string | null
+          price?: number
+          processor?: string
+          ram?: string
           resolution?: string | null
           screen_size?: string | null
           storage?: string
-          type?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      product_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      product_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          review_text: string | null
+          updated_at: string
+          user_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          review_text?: string | null
+          updated_at?: string
+          user_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          review_text?: string | null
+          updated_at?: string
+          user_name?: string
         }
         Relationships: []
       }

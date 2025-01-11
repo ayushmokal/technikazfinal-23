@@ -69,151 +69,66 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
         <CardTitle>Product Specifications</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {isMobile && (
-          <SpecificationSection
-            title="Network"
-            specs={[
-              { label: "Technology", value: product.network_technology },
-              { label: "2G bands", value: product.network_2g_bands },
-              { label: "3G bands", value: product.network_3g_bands },
-              { label: "4G bands", value: product.network_4g_bands },
-              { label: "5G bands", value: product.network_5g_bands },
-              { label: "Speed", value: product.network_speed },
-            ]}
-          />
-        )}
-
-        {isMobile && (
-          <SpecificationSection
-            title="Launch"
-            specs={[
-              { label: "Announced", value: product.announced },
-              { label: "Status", value: product.status },
-            ]}
-          />
-        )}
-
-        {isMobile && (
-          <SpecificationSection
-            title="Body"
-            specs={[
-              { label: "Dimensions", value: product.dimensions },
-              { label: "Build", value: product.build_details },
-              { label: "SIM", value: product.sim },
-              { label: "Protection", value: product.protection_details },
-            ]}
-          />
-        )}
-
         <SpecificationSection
           title="Display"
-          specs={isMobile ? [
-            { label: "Type", value: product.display_type_details },
-            { label: "Resolution", value: product.display_resolution_details },
-            { label: "Protection", value: product.display_protection },
-            { label: "Features", value: product.display_features },
-          ] : [
+          specs={[
             { label: "Display", value: product.display_specs },
+            { label: "Resolution", value: isMobile ? product.resolution : undefined },
+            { label: "Screen Size", value: isMobile ? product.screen_size : undefined },
           ]}
         />
 
         <SpecificationSection
           title="Platform"
-          specs={isMobile ? [
-            { label: "OS", value: product.os },
-            { label: "Chipset", value: product.chipset },
-            { label: "CPU", value: product.cpu },
-            { label: "GPU", value: product.gpu },
-          ] : [
+          specs={[
             { label: "OS", value: product.os },
             { label: "Processor", value: product.processor },
-            { label: "Graphics", value: (product as LaptopProduct).graphics },
+            { label: "Chipset", value: isMobile ? product.chipset : undefined },
+            { label: "Graphics", value: isMobile ? undefined : (product as LaptopProduct).graphics },
           ]}
         />
 
         <SpecificationSection
           title="Memory"
-          specs={isMobile ? [
-            { label: "Card slot", value: product.card_slot },
-            { label: "Internal", value: product.internal_storage },
-            { label: "Storage type", value: product.storage_type },
-          ] : [
+          specs={[
             { label: "RAM", value: product.ram },
             { label: "Storage", value: product.storage },
           ]}
         />
 
         {isMobile && (
-          <>
-            <SpecificationSection
-              title="Main Camera"
-              specs={[
-                { label: "Features", value: product.main_camera_features },
-                { label: "Video", value: product.main_camera_video },
-              ]}
-            />
-
-            <SpecificationSection
-              title="Selfie Camera"
-              specs={[
-                { label: "Features", value: product.selfie_camera_features },
-                { label: "Video", value: product.selfie_camera_video },
-              ]}
-            />
-          </>
-        )}
-
-        <SpecificationSection
-          title="Sound"
-          specs={isMobile ? [
-            { label: "Loudspeaker", value: product.loudspeaker },
-            { label: "3.5mm jack", value: product.audio_jack },
-          ] : [
-            { label: "Audio", value: "Integrated audio" },
-          ]}
-        />
-
-        <SpecificationSection
-          title="Communications"
-          specs={isMobile ? [
-            { label: "WLAN", value: product.wlan_details },
-            { label: "Bluetooth", value: product.bluetooth_details },
-            { label: "Radio", value: product.radio },
-            { label: "Infrared", value: product.infrared },
-          ] : [
-            { label: "Ports", value: (product as LaptopProduct).ports },
-          ]}
-        />
-
-        {isMobile && (
           <SpecificationSection
-            title="Features"
+            title="Camera"
             specs={[
-              { label: "Sensors", value: product.sensors_list },
+              { label: "Camera", value: product.camera },
             ]}
           />
         )}
 
         <SpecificationSection
           title="Battery"
-          specs={isMobile ? [
-            { label: "Type", value: product.battery_type },
-            { label: "Charging", value: product.charging_details },
-          ] : [
+          specs={[
             { label: "Battery", value: product.battery },
+            { label: "Charging", value: isMobile ? product.charging_specs : undefined },
           ]}
         />
 
-        {isMobile && (
+        {!isMobile && (
           <SpecificationSection
-            title="Misc"
+            title="Ports & Connectivity"
             specs={[
-              { label: "Models", value: product.models_list },
-              { label: "Colors", value: product.colors_list },
-              { label: "Price", value: product.price_details },
+              { label: "Ports", value: (product as LaptopProduct).ports },
             ]}
           />
         )}
+
+        <SpecificationSection
+          title="Additional Info"
+          specs={[
+            { label: "Color", value: product.color },
+            { label: "Model", value: product.model_name },
+          ]}
+        />
       </CardContent>
     </Card>
   );
