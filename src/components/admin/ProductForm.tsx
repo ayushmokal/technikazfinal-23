@@ -9,13 +9,13 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
-import type { UseProductFormProps, MobileProductData, LaptopProductData } from "./types/productTypes";
+import type { UseProductFormProps, MobileProductData, LaptopProductData, ProductFormData } from "./types/productTypes";
 
 export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: UseProductFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<ProductFormData>({
     resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
     defaultValues: initialData || {
       name: "",
@@ -47,11 +47,12 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         main_camera_features: "",
         selfie_camera_features: "",
         launch_date: "",
+        announced: "",
       } : {
         graphics: "",
         ports: "",
       })
-    },
+    } as ProductFormData,
   });
 
   const fillSampleData = () => {
@@ -83,7 +84,8 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         main_camera_features: "LED flash, auto-HDR, panorama",
         selfie_camera_features: "Dual video call, Auto-HDR",
         launch_date: "2024",
-      });
+        announced: "2024",
+      } as MobileProductData);
     } else {
       form.reset({
         name: "Sample Laptop",
@@ -99,11 +101,11 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         color: "Space Gray",
         graphics: "NVIDIA RTX 3060 6GB",
         ports: "2x USB-C, 3x USB-A, HDMI, SD Card Reader"
-      });
+      } as LaptopProductData);
     }
   };
 
-  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
+  const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
       

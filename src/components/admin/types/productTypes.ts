@@ -1,6 +1,7 @@
 import type { Json } from "@/integrations/supabase/types";
 
 export type BaseProductData = {
+  id?: string;
   name: string;
   brand: string;
   model_name?: string;
@@ -34,6 +35,7 @@ export type MobileProductData = BaseProductData & {
   main_camera_features?: string;
   selfie_camera_features?: string;
   launch_date?: string;
+  announced?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
@@ -54,7 +56,7 @@ export interface ExpertReviewData {
 export type ProductFormData = MobileProductData | LaptopProductData;
 
 export interface UseProductFormProps {
-  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
+  initialData?: ProductFormData & { id?: string };
   onSuccess?: (productId: string) => void;
   productType?: 'mobile' | 'laptop';
 }
