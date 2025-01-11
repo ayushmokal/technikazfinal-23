@@ -51,26 +51,41 @@ export const mobileProductSchema = baseProductSchema.extend({
   radio: z.string().optional(),
   infrared: z.boolean().optional(),
   sensors_list: z.string().optional(),
-  battery_type: z.string().optional(),
-  charging_details: z.string().optional(),
   models_list: z.string().optional(),
   colors_list: z.string().optional(),
   price_details: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  sensor_specs: z.any().optional(),
+  network_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  camera_details: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
+  general_specs: z.any().optional(),
+  display_type: z.string().optional(),
+  screen_protection: z.string().optional(),
+  wlan: z.string().optional(),
+  bluetooth: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
+  multimedia_specs: z.any().optional(),
+  connectivity_specs: z.any().optional(),
+  design_specs: z.any().optional(),
+  performance_specs: z.any().optional(),
+  display_details: z.any().optional(),
 });
 
 export const expertReviewSchema = z.object({
   product_id: z.string().uuid().optional(),
-  rating: z.number().min(0).max(10).optional(),
-  author: z.string().optional(),
-  summary: z.string().optional(),
-  pros: z.array(z.string()).optional(),
-  cons: z.array(z.string()).optional(),
-  verdict: z.string().optional(),
+  rating: z.number().min(0).max(10),
+  author: z.string().min(1),
+  summary: z.string().min(1),
+  pros: z.array(z.string()),
+  cons: z.array(z.string()),
+  verdict: z.string().min(1),
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
