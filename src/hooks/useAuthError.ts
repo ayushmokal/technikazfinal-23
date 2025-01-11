@@ -4,7 +4,17 @@ type Toast = ReturnType<typeof useToast>["toast"];
 export const handleAuthError = (error: any, toast: Toast) => {
   console.log("Auth error details:", error);
 
-  if (error.message.includes('rate_limit')) {
+  if (error.message?.includes('refresh_token_not_found') || 
+      error.message?.includes('Invalid Refresh Token')) {
+    toast({
+      variant: "destructive",
+      title: "Session Expired",
+      description: "Your session has expired. Please login again to continue.",
+    });
+    return;
+  }
+
+  if (error.message?.includes('rate_limit')) {
     toast({
       variant: "destructive",
       title: "Rate Limit Exceeded",
@@ -13,7 +23,8 @@ export const handleAuthError = (error: any, toast: Toast) => {
     return;
   }
 
-  if (error.message.includes('invalid_credentials') || error.message.includes('Invalid login credentials')) {
+  if (error.message?.includes('invalid_credentials') || 
+      error.message?.includes('Invalid login credentials')) {
     toast({
       variant: "destructive",
       title: "Invalid Credentials",
@@ -22,7 +33,8 @@ export const handleAuthError = (error: any, toast: Toast) => {
     return;
   }
 
-  if (error.message.includes('email_not_confirmed') || error.message.includes('Email not confirmed')) {
+  if (error.message?.includes('email_not_confirmed') || 
+      error.message?.includes('Email not confirmed')) {
     toast({
       variant: "destructive",
       title: "Email Not Confirmed",

@@ -14,7 +14,9 @@ export function useAuthCheck() {
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
-          if (error.message?.includes('refresh_token_not_found')) {
+          // Handle refresh token errors explicitly
+          if (error.message?.includes('refresh_token_not_found') || 
+              error.message?.includes('Invalid Refresh Token')) {
             // Clear any stale session data
             await supabase.auth.signOut();
             toast({
@@ -32,8 +34,8 @@ export function useAuthCheck() {
         if (!session) {
           toast({
             variant: "destructive",
-            title: "Authentication Error",
-            description: "Please login again to continue.",
+            title: "Authentication Required",
+            description: "Please login to continue.",
           });
           navigate("/admin/login");
         }
