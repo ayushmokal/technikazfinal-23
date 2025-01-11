@@ -1,14 +1,14 @@
 export type BaseProductData = {
   id?: string;
-  name: string; // Required
-  brand: string; // Required
+  name: string;
+  brand: string;
   model_name?: string;
-  price: number; // Required
-  display_specs: string; // Required
-  processor: string; // Required
-  ram: string; // Required
-  storage: string; // Required
-  battery: string; // Required
+  price: number;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
   os?: string;
   color?: string;
   image_url?: string;
@@ -18,9 +18,9 @@ export type BaseProductData = {
 export type MobileProductData = BaseProductData & {
   camera: string;
   chipset?: string;
-  charging_specs?: string;
   resolution?: string;
   screen_size?: string;
+  charging_specs?: string;
   status?: string;
   dimensions?: string;
   build_details?: string;

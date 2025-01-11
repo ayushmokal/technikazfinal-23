@@ -3,7 +3,7 @@ import { z } from "zod";
 const baseProductSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
-  brand: z.string().min(1, "Brand is required"),
+  brand: z.string().min(1, "Brand is required"), 
   model_name: z.string().optional(),
   price: z.number().min(0, "Price must be a positive number"),
   display_specs: z.string().min(1, "Display specifications are required"),
