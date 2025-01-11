@@ -29,6 +29,10 @@ export interface MobileProductData extends BaseProductData {
   network_4g_bands?: string;
   network_5g_bands?: string;
   network_speed?: string;
+  main_camera_features?: string;
+  main_camera_video?: string;
+  selfie_camera_features?: string;
+  selfie_camera_video?: string;
 }
 
 export interface LaptopProductData extends BaseProductData {
