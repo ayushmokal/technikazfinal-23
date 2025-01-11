@@ -117,8 +117,8 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   ];
 
   const connectivitySpecs = isMobile ? [
-    { label: "WLAN", value: (product as MobileProduct).wlan },
-    { label: "Bluetooth", value: (product as MobileProduct).bluetooth },
+    { label: "WLAN", value: (product as MobileProduct).wlan_details },
+    { label: "Bluetooth", value: (product as MobileProduct).bluetooth_details },
     { label: "NFC", value: (product as MobileProduct).nfc },
     { label: "USB", value: (product as MobileProduct).usb },
     { label: "Radio", value: (product as MobileProduct).radio },
