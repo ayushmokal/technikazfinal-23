@@ -51,8 +51,6 @@ export interface MobileProductData extends BaseProductData {
   radio?: string;
   infrared?: boolean;
   sensors_list?: string;
-  battery_type?: string;
-  charging_details?: string;
   models_list?: string;
   colors_list?: string;
   price_details?: string;

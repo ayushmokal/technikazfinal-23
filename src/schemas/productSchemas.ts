@@ -51,8 +51,6 @@ export const mobileProductSchema = baseProductSchema.extend({
   radio: z.string().optional(),
   infrared: z.boolean().optional(),
   sensors_list: z.string().optional(),
-  battery_type: z.string().optional(),
-  charging_details: z.string().optional(),
   models_list: z.string().optional(),
   colors_list: z.string().optional(),
   price_details: z.string().optional(),
@@ -80,4 +78,15 @@ export const laptopProductSchema = baseProductSchema.extend({
   display_details: z.any().optional(),
 });
 
+export const expertReviewSchema = z.object({
+  product_id: z.string().uuid().optional(),
+  rating: z.number().min(0).max(10),
+  author: z.string().min(1),
+  summary: z.string().min(1),
+  pros: z.array(z.string()),
+  cons: z.array(z.string()),
+  verdict: z.string().min(1),
+});
+
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
+export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
