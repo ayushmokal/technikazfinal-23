@@ -44,14 +44,6 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         title: "Success",
         description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
       });
-      
-      if (!initialData) {
-        form.reset();
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach((input: any) => {
-          input.value = '';
-        });
-      }
     }, 
     productType: propProductType 
   });
@@ -64,7 +56,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       // Remove empty strings and undefined values
       const cleanedData = Object.fromEntries(
         Object.entries(data).filter(([_, value]) => value !== "" && value !== undefined)
-      );
+      ) as MobileProductData | LaptopProductData;
       
       // Ensure price is a number if present
       if (cleanedData.price) {

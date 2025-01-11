@@ -20,7 +20,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     uploadImage 
   } = useImageUpload();
 
+  const schema = productType === 'mobile' ? mobileProductSchema : laptopProductSchema;
+  
   const form = useForm({
+    resolver: zodResolver(schema),
     defaultValues: initialData || {
       name: "",
       brand: "",
@@ -31,10 +34,18 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       ram: "",
       storage: "",
       battery: "",
-      camera: productType === 'mobile' ? "" : undefined,
-      graphics: productType === 'laptop' ? "" : undefined,
       os: "",
       color: "",
+      ...(productType === 'mobile' ? {
+        camera: "",
+        chipset: "",
+        charging_specs: "",
+        resolution: "",
+        screen_size: "",
+      } : {
+        graphics: "",
+        ports: "",
+      })
     },
   });
 
