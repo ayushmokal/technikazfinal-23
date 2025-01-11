@@ -145,10 +145,10 @@ export function MobileProductList({
             }`}
           >
             <div className={viewMode === "grid" ? "flex flex-col" : "flex gap-4 sm:gap-6"}>
-              <div className={`${
+              <div className={`relative ${
                 viewMode === "grid" 
-                  ? "w-full aspect-square mb-4" 
-                  : "w-32 h-32 sm:w-48 sm:h-48 flex-shrink-0"
+                  ? "w-full h-[200px] mb-4" 
+                  : "w-[200px] h-[200px] flex-shrink-0"
               }`}>
                 <img
                   src={product.image_url || "/placeholder.svg"}
