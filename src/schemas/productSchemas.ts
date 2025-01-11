@@ -1,6 +1,9 @@
 import { z } from "zod";
 import type { Json } from "@/integrations/supabase/types";
 
+// Define a type for specs that can be either Json or Record
+type SpecsType = Record<string, any> | Json;
+
 const baseProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -36,9 +39,18 @@ export const mobileProductSchema = baseProductSchema.extend({
   network_3g_bands: z.string().optional(),
   network_4g_bands: z.string().optional(),
   network_5g_bands: z.string().optional(),
+  network_speed: z.string().optional(),
   dimensions: z.string().optional(),
   weight: z.string().optional(),
   display_type: z.string().optional(),
+  display_type_details: z.string().optional(),
+  display_resolution_details: z.string().optional(),
+  display_protection: z.string().optional(),
+  display_features: z.string().optional(),
+  main_camera_features: z.string().optional(),
+  main_camera_video: z.string().optional(),
+  selfie_camera_features: z.string().optional(),
+  selfie_camera_video: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({
@@ -46,6 +58,8 @@ export const laptopProductSchema = baseProductSchema.extend({
   ports: z.string().optional(),
   connectivity_specs: z.record(z.any()).optional(),
 });
+
+export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
 
 export const expertReviewSchema = z.object({
   product_id: z.string().uuid(),
@@ -57,5 +71,4 @@ export const expertReviewSchema = z.object({
   verdict: z.string().min(1, "Verdict is required"),
 });
 
-export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
 export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
