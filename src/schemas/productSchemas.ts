@@ -15,6 +15,8 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -44,6 +46,16 @@ export const mobileProductSchema = baseProductSchema.extend({
   network_4g_bands: z.string().optional(),
   network_5g_bands: z.string().optional(),
   network_speed: z.string().optional(),
+  wlan_details: z.string().optional(),
+  bluetooth_details: z.string().optional(),
+  radio: z.string().optional(),
+  infrared: z.boolean().optional(),
+  sensors_list: z.string().optional(),
+  battery_type: z.string().optional(),
+  charging_details: z.string().optional(),
+  models_list: z.string().optional(),
+  colors_list: z.string().optional(),
+  price_details: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({

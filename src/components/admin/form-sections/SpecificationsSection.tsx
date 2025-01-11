@@ -111,13 +111,10 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="launch_date"
+            name="announced"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Announced
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Announced</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter announcement date" {...field} />
                 </FormControl>
@@ -130,10 +127,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-1">
-                  Status
-                  <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Status</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter status" {...field} />
                 </FormControl>
@@ -225,7 +219,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="display_type"
+            name="display_type_details"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-1">
@@ -241,7 +235,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
           />
           <FormField
             control={form.control}
-            name="screen_protection"
+            name="display_protection"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-1">
@@ -405,7 +399,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
-            name="wlan"
+            name="wlan_details"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-1">
@@ -421,7 +415,7 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
           />
           <FormField
             control={form.control}
-            name="bluetooth"
+            name="bluetooth_details"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-1">
@@ -430,6 +424,26 @@ export function SpecificationsSection({ form, productType }: SpecificationsSecti
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="Enter Bluetooth specifications" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
+      {/* Features */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Features</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="sensors_list"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sensors</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter sensors list" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

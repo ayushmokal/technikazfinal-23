@@ -13,6 +13,8 @@ export type BaseProductData = {
   color?: string;
   image_url?: string;
   gallery_images?: string[];
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type MobileProductData = BaseProductData & {
@@ -42,14 +44,22 @@ export type MobileProductData = BaseProductData & {
   network_4g_bands?: string;
   network_5g_bands?: string;
   network_speed?: string;
+  wlan_details?: string;
+  bluetooth_details?: string;
+  radio?: string;
+  infrared?: boolean;
+  sensors_list?: string;
+  battery_type?: string;
+  charging_details?: string;
+  models_list?: string;
+  colors_list?: string;
+  price_details?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
   graphics?: string;
   ports?: string;
 };
-
-export type ProductFormData = MobileProductData | LaptopProductData;
 
 export interface UseProductFormProps {
   initialData?: ProductFormData & { id?: string };
