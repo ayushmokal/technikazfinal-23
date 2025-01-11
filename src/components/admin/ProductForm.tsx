@@ -9,6 +9,7 @@ import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
+import { useToast } from "@/hooks/use-toast";
 import type { MobileProductData, LaptopProductData } from "./types/productTypes";
 
 interface ProductFormProps {
@@ -20,6 +21,7 @@ interface ProductFormProps {
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const [showExpertReview, setShowExpertReview] = useState(true);
   const [productId, setProductId] = useState<string>(initialData?.id || "");
+  const { toast } = useToast();
   
   const {
     form,
@@ -33,6 +35,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     initialData, 
     onSuccess: (newProductId) => {
       setProductId(newProductId);
+      toast({
+        title: "Success",
+        description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} ${initialData ? 'updated' : 'added'} successfully!`,
+      });
+      if (!initialData) {
+        form.reset(); // Reset form only for new products
+        setShowExpertReview(true);
+      }
       onSuccess?.();
     }, 
     productType: propProductType 
@@ -162,7 +172,14 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
 
               <div className="flex justify-end">
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Saving..." : initialData ? "Update" : "Add"} {productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}
+                  {isLoading ? (
+                    <>
+                      <span className="animate-spin mr-2">⚪</span>
+                      Saving...
+                    </>
+                  ) : (
+                    `${initialData ? 'Update' : 'Add'} ${productType === 'mobile' ? 'Mobile Phone' : 'Laptop'}`
+                  )}
                 </Button>
               </div>
             </form>
