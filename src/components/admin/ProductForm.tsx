@@ -57,11 +57,19 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       await onSubmit(data);
     } catch (error: any) {
       console.error('Form submission error:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to save product",
-      });
+      if (error.message?.includes('JWT')) {
+        toast({
+          variant: "destructive",
+          title: "Session Expired",
+          description: "Please login again to continue.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to save product",
+        });
+      }
     }
   };
 

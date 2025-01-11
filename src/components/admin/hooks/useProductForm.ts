@@ -5,7 +5,6 @@ import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchem
 import { useImageUpload } from "./useImageUpload";
 import { useAuthCheck } from "./useAuthCheck";
 import { useProductData } from "./useProductData";
-import { supabase } from "@/integrations/supabase/client";
 import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
 import { useToast } from "@/hooks/use-toast";
 
@@ -80,22 +79,14 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       setIsLoading(true);
       console.log("Starting form submission with data:", data);
 
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        console.log("No active session found");
-        toast({
-          variant: "destructive",
-          title: "Authentication Error",
-          description: "Please login again to continue.",
-        });
-        return;
-      }
+      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
+      console.log(`Using table: ${table}`);
 
       const transformedData = {
         ...data,
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
       };
-
+      
       console.log("Transformed data:", transformedData);
 
       if (mainImageFile) {
@@ -115,9 +106,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         transformedData.gallery_images = [...existingGalleryImages, ...newGalleryImages];
       }
 
-      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
-      console.log(`Using table: ${table}`);
-      
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
@@ -136,15 +124,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       }
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      if (error.message?.includes('JWT')) {
-        toast({
-          variant: "destructive",
-          title: "Session Expired",
-          description: "Please login again to continue.",
-        });
-      } else {
-        onError?.(error);
-      }
+      onError?.(error);
     } finally {
       setIsLoading(false);
     }
