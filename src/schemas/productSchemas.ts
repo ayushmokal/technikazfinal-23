@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const jsonRecord = z.record(z.any());
+
 const baseProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -14,10 +16,10 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
-  design_specs: z.record(z.any()).optional(),
-  display_details: z.record(z.any()).optional(),
-  performance_specs: z.record(z.any()).optional(),
-  multimedia_specs: z.record(z.any()).optional(),
+  design_specs: jsonRecord.optional(),
+  display_details: jsonRecord.optional(),
+  performance_specs: jsonRecord.optional(),
+  multimedia_specs: jsonRecord.optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
@@ -26,10 +28,10 @@ export const mobileProductSchema = baseProductSchema.extend({
   charging_specs: z.string().optional(),
   resolution: z.string().optional(),
   screen_size: z.string().optional(),
-  camera_details: z.record(z.any()).optional(),
-  sensor_specs: z.record(z.any()).optional(),
-  network_specs: z.record(z.any()).optional(),
-  general_specs: z.record(z.any()).optional(),
+  camera_details: jsonRecord.optional(),
+  sensor_specs: jsonRecord.optional(),
+  network_specs: jsonRecord.optional(),
+  general_specs: jsonRecord.optional(),
   network_technology: z.string().optional(),
   network_2g_bands: z.string().optional(),
   network_3g_bands: z.string().optional(),
@@ -52,7 +54,7 @@ export const mobileProductSchema = baseProductSchema.extend({
 export const laptopProductSchema = baseProductSchema.extend({
   graphics: z.string().optional(),
   ports: z.string().optional(),
-  connectivity_specs: z.record(z.any()).optional(),
+  connectivity_specs: jsonRecord.optional(),
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;

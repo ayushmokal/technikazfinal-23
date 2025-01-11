@@ -57,8 +57,10 @@ export type LaptopProductData = BaseProductData & {
   connectivity_specs?: JsonRecord;
 };
 
+export type ProductFormData = MobileProductData | LaptopProductData;
+
 export interface UseProductFormProps {
-  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
+  initialData?: ProductFormData & { id?: string };
   onSuccess?: (productId: string) => void;
   productType?: 'mobile' | 'laptop';
 }

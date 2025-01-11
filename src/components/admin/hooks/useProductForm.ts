@@ -5,7 +5,7 @@ import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchem
 import { useImageUpload } from "./useImageUpload";
 import { useProductData } from "./useProductData";
 import { supabase } from "@/integrations/supabase/client";
-import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
+import type { UseProductFormProps, MobileProductData, LaptopProductData, ProductFormData } from "../types/productTypes";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,11 +22,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
   const schema = productType === 'mobile' ? mobileProductSchema : laptopProductSchema;
   
-  const defaultValues = initialData || {
+  const defaultValues: ProductFormData = initialData || {
     name: "",
     brand: "",
     model_name: "",
-    price: undefined,
+    price: 0,
     display_specs: "",
     processor: "",
     ram: "",
@@ -60,7 +60,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     })
   };
 
-  const form = useForm({
+  const form = useForm<ProductFormData>({
     resolver: zodResolver(schema),
     defaultValues,
   });
@@ -71,7 +71,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     }
   }, [propProductType]);
 
-  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
+  const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
       console.log("Starting form submission with data:", data);
