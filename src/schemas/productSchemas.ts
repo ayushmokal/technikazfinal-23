@@ -5,7 +5,7 @@ const baseProductSchema = z.object({
   brand: z.string().min(1, "Brand is required"),
   model_name: z.string(),
   price: z.number().min(0, "Price must be a positive number"),
-  color: z.string(),
+  color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
   display_specs: z.string().min(1, "Display specifications are required"),
@@ -14,10 +14,24 @@ const baseProductSchema = z.object({
   storage: z.string().min(1, "Storage is required"),
   battery: z.string().min(1, "Battery is required"),
   os: z.string().optional(),
-  camera_features: z.string().optional(),
-  camera_video: z.string().optional(),
-  front_camera_features: z.string().optional(),
-  front_camera_video: z.string().optional(),
+  // Network fields
+  network_technology: z.string().optional(),
+  network_2g_bands: z.string().optional(),
+  network_3g_bands: z.string().optional(),
+  network_4g_bands: z.string().optional(),
+  network_5g_bands: z.string().optional(),
+  network_speed: z.string().optional(),
+  // Additional specs
+  chipset: z.string().optional(),
+  charging_specs: z.string().optional(),
+  screen_size: z.string().optional(),
+  resolution: z.string().optional(),
+  // Camera fields
+  main_camera_features: z.string().optional(),
+  main_camera_video: z.string().optional(),
+  selfie_camera_features: z.string().optional(),
+  selfie_camera_video: z.string().optional(),
+  status: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
