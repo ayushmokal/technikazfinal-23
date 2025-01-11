@@ -51,10 +51,7 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="model_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1">
-                Model Name
-                <span className="text-red-500">*</span>
-              </FormLabel>
+              <FormLabel>Model Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter model name" {...field} />
               </FormControl>
@@ -90,10 +87,7 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-1">
-                Color
-                <span className="text-red-500">*</span>
-              </FormLabel>
+              <FormLabel>Color</FormLabel>
               <FormControl>
                 <Input placeholder="Enter color" {...field} />
               </FormControl>

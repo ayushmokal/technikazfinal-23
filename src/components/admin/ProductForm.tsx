@@ -61,7 +61,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
-      // Only validate required fields
+      // Only validate required fields based on database schema
       const requiredFields = ['name', 'brand', 'price', 'display_specs', 'processor', 'ram', 'storage', 'battery'];
       if (productType === 'mobile') {
         requiredFields.push('camera');
