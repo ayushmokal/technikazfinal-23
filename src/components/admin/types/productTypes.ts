@@ -95,4 +95,5 @@ export interface UseProductFormProps {
   initialData?: (MobileProductData | LaptopProductData) & { id?: string };
   onSuccess?: (productId: string) => void;
   productType?: 'mobile' | 'laptop';
+  onError?: (error: Error) => void;
 }

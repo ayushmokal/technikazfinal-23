@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
 import { useToast } from "@/hooks/use-toast";
 
-export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
+export function useProductForm({ initialData, onSuccess, productType: propProductType, onError }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
   const { toast } = useAuthCheck();
@@ -152,11 +152,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
           description: "Please login again to continue.",
         });
       } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message || "Failed to save product",
-        });
+        onError?.(error);
       }
     } finally {
       setIsLoading(false);
