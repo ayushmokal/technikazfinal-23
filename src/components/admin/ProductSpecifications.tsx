@@ -58,6 +58,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     { label: "Brand", value: product.brand },
     { label: "Model", value: product.model_name },
     { label: "Price", value: `₹${product.price.toLocaleString()}` },
+    { label: "Color", value: product.color },
   ];
 
   const displaySpecs = [
@@ -66,6 +67,9 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     { label: "Screen Size", value: isMobile ? (product as MobileProduct).screen_size : undefined },
     { label: "Display Type", value: isMobile ? (product as MobileProduct).display_type : undefined },
     { label: "Refresh Rate", value: isMobile ? (product as MobileProduct).refresh_rate : undefined },
+    { label: "Peak Brightness", value: isMobile ? (product as MobileProduct).peak_brightness : undefined },
+    { label: "HDR Support", value: isMobile ? (product as MobileProduct).hdr_support : undefined },
+    { label: "Screen Protection", value: isMobile ? (product as MobileProduct).screen_protection : undefined },
   ];
 
   const performanceSpecs = [
@@ -74,21 +78,57 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     { label: "Storage", value: product.storage },
     { label: "Graphics", value: isMobile ? undefined : (product as LaptopProduct).graphics },
     { label: "OS", value: product.os },
+    { label: "CPU", value: isMobile ? (product as MobileProduct).cpu : undefined },
+    { label: "Architecture", value: isMobile ? (product as MobileProduct).architecture : undefined },
+    { label: "Fabrication", value: isMobile ? (product as MobileProduct).fabrication : undefined },
+    { label: "RAM Type", value: isMobile ? (product as MobileProduct).ram_type : undefined },
+    { label: "GPU", value: isMobile ? (product as MobileProduct).gpu : undefined },
   ];
 
   const mobileSpecs = isMobile ? [
     { label: "Main Camera", value: (product as MobileProduct).camera },
     { label: "Front Camera", value: (product as MobileProduct).front_camera },
-    { label: "Battery", value: product.battery },
-    { label: "Charging", value: (product as MobileProduct).charging_specs },
+    { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
+    { label: "Camera Autofocus", value: (product as MobileProduct).camera_autofocus },
+    { label: "Camera OIS", value: (product as MobileProduct).camera_ois },
+    { label: "Camera Flash", value: (product as MobileProduct).camera_flash },
+    { label: "Camera Modes", value: (product as MobileProduct).camera_modes },
+    { label: "Video Recording", value: (product as MobileProduct).video_recording },
   ] : [];
 
-  const additionalSpecs = [
-    { label: "Color", value: product.color },
+  const networkSpecs = isMobile ? [
+    { label: "Network Technology", value: (product as MobileProduct).network_technology },
+    { label: "2G Bands", value: (product as MobileProduct).network_2g_bands },
+    { label: "3G Bands", value: (product as MobileProduct).network_3g_bands },
+    { label: "4G Bands", value: (product as MobileProduct).network_4g_bands },
+    { label: "5G Bands", value: (product as MobileProduct).network_5g_bands },
+    { label: "Network Speed", value: (product as MobileProduct).network_speed },
+  ] : [];
+
+  const designSpecs = [
     { label: "Dimensions", value: isMobile ? (product as MobileProduct).dimensions : undefined },
+    { label: "Height", value: isMobile ? (product as MobileProduct).height : undefined },
+    { label: "Width", value: isMobile ? (product as MobileProduct).width : undefined },
+    { label: "Thickness", value: isMobile ? (product as MobileProduct).thickness : undefined },
     { label: "Weight", value: isMobile ? (product as MobileProduct).weight : undefined },
     { label: "Build Material", value: isMobile ? (product as MobileProduct).build_material : undefined },
     { label: "Waterproof", value: isMobile ? (product as MobileProduct).waterproof : undefined },
+    { label: "Ruggedness", value: isMobile ? (product as MobileProduct).ruggedness : undefined },
+  ];
+
+  const connectivitySpecs = isMobile ? [
+    { label: "WLAN", value: (product as MobileProduct).wlan },
+    { label: "Bluetooth", value: (product as MobileProduct).bluetooth },
+    { label: "NFC", value: (product as MobileProduct).nfc },
+    { label: "USB", value: (product as MobileProduct).usb },
+    { label: "Radio", value: (product as MobileProduct).radio },
+    { label: "Audio Jack", value: (product as MobileProduct).audio_jack },
+  ] : [];
+
+  const batterySpecs = [
+    { label: "Battery", value: product.battery },
+    { label: "Battery Type", value: isMobile ? (product as MobileProduct).battery_type : undefined },
+    { label: "Charging Details", value: isMobile ? (product as MobileProduct).charging_details : undefined },
   ];
 
   return (
@@ -105,12 +145,21 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
         
         {isMobile && (
           <>
-            <SpecificationSection title="Mobile Features" specs={mobileSpecs} />
+            <SpecificationSection title="Camera" specs={mobileSpecs} />
             {mobileSpecs.length > 0 && <Separator />}
+            
+            <SpecificationSection title="Network" specs={networkSpecs} />
+            {networkSpecs.length > 0 && <Separator />}
+            
+            <SpecificationSection title="Connectivity" specs={connectivitySpecs} />
+            {connectivitySpecs.length > 0 && <Separator />}
           </>
         )}
         
-        <SpecificationSection title="Additional Information" specs={additionalSpecs} />
+        <SpecificationSection title="Design" specs={designSpecs} />
+        {designSpecs.length > 0 && <Separator />}
+        
+        <SpecificationSection title="Battery" specs={batterySpecs} />
       </CardContent>
     </Card>
   );
