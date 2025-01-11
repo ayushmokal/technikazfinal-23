@@ -9,7 +9,13 @@ import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
-import type { UseProductFormProps, MobileProductData, LaptopProductData, ProductFormData } from "./types/productTypes";
+import type { ProductFormData } from "@/schemas/productSchemas";
+
+interface UseProductFormProps {
+  initialData?: ProductFormData;
+  onSuccess?: (productId: string) => void;
+  productType?: 'mobile' | 'laptop';
+}
 
 export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: UseProductFormProps) {
   const { toast } = useToast();
@@ -35,75 +41,12 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         resolution: "",
         screen_size: "",
         charging_specs: "",
-        status: "",
-        dimensions: "",
-        build_details: "",
-        sim: "",
-        protection_details: "",
-        display_type_details: "",
-        display_resolution_details: "",
-        display_protection: "",
-        display_features: "",
-        main_camera_features: "",
-        selfie_camera_features: "",
-        launch_date: "",
-        announced: "",
       } : {
         graphics: "",
         ports: "",
       })
-    } as ProductFormData,
+    },
   });
-
-  const fillSampleData = () => {
-    if (productType === 'mobile') {
-      form.reset({
-        name: "Sample Mobile Phone",
-        brand: "Sample Brand",
-        model_name: "Sample Model",
-        price: 999,
-        display_specs: "6.7-inch Dynamic AMOLED",
-        processor: "Latest Snapdragon",
-        ram: "8GB",
-        storage: "256GB",
-        battery: "5000mAh",
-        os: "Android 14",
-        color: "Phantom Black",
-        camera: "108MP Main + 12MP Ultra Wide",
-        chipset: "Latest Snapdragon",
-        charging_specs: "45W Fast Charging",
-        status: "Available",
-        dimensions: "164.3 x 75.4 x 8.9 mm",
-        build_details: "Glass front and back, aluminum frame",
-        sim: "Dual SIM (Nano-SIM)",
-        protection_details: "IP68 dust/water resistant",
-        display_type_details: "Dynamic AMOLED 2X",
-        display_resolution_details: "1440 x 3200 pixels",
-        display_protection: "Gorilla Glass Victus",
-        display_features: "120Hz, HDR10+",
-        main_camera_features: "LED flash, auto-HDR, panorama",
-        selfie_camera_features: "Dual video call, Auto-HDR",
-        launch_date: "2024",
-        announced: "2024",
-      } as MobileProductData);
-    } else {
-      form.reset({
-        name: "Sample Laptop",
-        brand: "Sample Brand",
-        model_name: "Sample Model",
-        price: 1299,
-        display_specs: "15.6-inch FHD IPS",
-        processor: "Intel Core i7-12700H",
-        ram: "16GB DDR5",
-        storage: "512GB NVMe SSD",
-        battery: "90Wh",
-        os: "Windows 11 Home",
-        color: "Space Gray",
-        graphics: "NVIDIA RTX 3060 6GB",
-        ports: "2x USB-C, 3x USB-A, HDMI, SD Card Reader"
-      } as LaptopProductData);
-    }
-  };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
@@ -128,7 +71,11 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
         description: `The product has been ${initialData ? 'updated' : 'added'} to the database.`,
       });
 
-      if (onSuccess && !initialData) {
+      if (onSuccess) {
+        onSuccess(initialData?.id || '');
+      }
+      
+      if (!initialData) {
         form.reset();
       }
     } catch (error) {
@@ -162,14 +109,6 @@ export function ProductForm({ initialData, onSuccess, productType = 'mobile' }: 
             ) : (
               <>{initialData ? "Update Product" : "Add Product"}</>
             )}
-          </Button>
-          
-          <Button
-            type="button"
-            variant="outline"
-            onClick={fillSampleData}
-          >
-            Fill Sample Data
           </Button>
         </div>
       </form>
