@@ -22,7 +22,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
   const schema = productType === 'mobile' ? mobileProductSchema : laptopProductSchema;
   
-  const defaultValues: ProductFormData = initialData || {
+  const defaultValues: ProductFormData = {
     name: "",
     brand: "",
     model_name: "",
@@ -44,7 +44,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(schema),
-    defaultValues,
+    defaultValues: initialData || defaultValues,
   });
 
   useEffect(() => {
@@ -86,10 +86,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
-        result = await updateProduct(table, initialData.id, data);
+        result = await updateProduct(table, initialData.id, data, productType);
       } else {
         console.log("Inserting new product");
-        result = await insertProduct(table, data);
+        result = await insertProduct(table, data, productType);
       }
 
       if (!result) {

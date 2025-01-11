@@ -38,9 +38,6 @@ export const mobileProductSchema = baseProductSchema.extend({
   network_4g_bands: z.string().optional(),
   network_5g_bands: z.string().optional(),
   network_speed: z.string().optional(),
-  dimensions: z.string().optional(),
-  weight: z.string().optional(),
-  display_type: z.string().optional(),
   display_type_details: z.string().optional(),
   display_resolution_details: z.string().optional(),
   display_protection: z.string().optional(),
@@ -58,15 +55,3 @@ export const laptopProductSchema = baseProductSchema.extend({
 });
 
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
-
-export const expertReviewSchema = z.object({
-  product_id: z.string().uuid(),
-  rating: z.number().min(0).max(5),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()),
-  cons: z.array(z.string()),
-  verdict: z.string().min(1, "Verdict is required"),
-});
-
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;

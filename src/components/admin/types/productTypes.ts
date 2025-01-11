@@ -38,9 +38,6 @@ export type MobileProductData = BaseProductData & {
   network_4g_bands?: string;
   network_5g_bands?: string;
   network_speed?: string;
-  dimensions?: string;
-  weight?: string;
-  display_type?: string;
   display_type_details?: string;
   display_resolution_details?: string;
   display_protection?: string;
