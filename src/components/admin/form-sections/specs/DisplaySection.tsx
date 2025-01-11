@@ -1,6 +1,5 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
 import type { ProductFormData } from "@/schemas/productSchemas";
 
@@ -13,24 +12,24 @@ export function DisplaySection({ form }: DisplaySectionProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField
         control={form.control}
-        name="display_type_details"
+        name="display_specs"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Display Type</FormLabel>
+            <FormLabel>Display Specifications</FormLabel>
             <FormControl>
-              <Input placeholder="Enter display type" {...field} />
+              <Input placeholder="Enter display specifications" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-
+      
       <FormField
         control={form.control}
-        name="display_resolution_details"
+        name="resolution"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Display Resolution</FormLabel>
+            <FormLabel>Resolution</FormLabel>
             <FormControl>
               <Input placeholder="Enter display resolution" {...field} />
             </FormControl>
@@ -38,29 +37,15 @@ export function DisplaySection({ form }: DisplaySectionProps) {
           </FormItem>
         )}
       />
-
+      
       <FormField
         control={form.control}
-        name="display_protection"
+        name="screen_size"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Display Protection</FormLabel>
+            <FormLabel>Screen Size</FormLabel>
             <FormControl>
-              <Input placeholder="Enter display protection" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="display_features"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Display Features</FormLabel>
-            <FormControl>
-              <Input placeholder="Enter display features" {...field} />
+              <Input placeholder="Enter screen size" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -4,7 +4,7 @@ const baseProductSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
-  model_name: z.string().optional(),
+  model_name: z.string().min(1, "Model name is required"),
   price: z.number().min(0, "Price must be positive"),
   image_url: z.string().optional(),
   display_specs: z.string().min(1, "Display specs are required"),

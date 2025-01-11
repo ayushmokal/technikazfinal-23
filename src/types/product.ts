@@ -2,7 +2,7 @@ export interface BaseProduct {
   id: string;
   name: string;
   brand: string;
-  model_name?: string;
+  model_name: string;
   price: number;
   image_url?: string;
   display_specs: string;
