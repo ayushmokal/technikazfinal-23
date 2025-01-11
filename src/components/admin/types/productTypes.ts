@@ -4,9 +4,9 @@ export interface BaseProductData {
   // Basic Info
   name: string;
   brand: string;
-  model_name?: string;
+  model_name: string;
   price: number;
-  color?: string;
+  color: string;
   image_url?: string;
   gallery_images?: string[];
 
@@ -40,14 +40,15 @@ export interface BaseProductData {
   refresh_rate?: string;
 
   // Camera
-  camera?: string;
-  main_camera_features?: string;
-  main_camera_video?: string;
-  front_camera?: string;
-  selfie_camera_features?: string;
-  selfie_camera_video?: string;
+  camera_resolution?: string;
+  camera_features?: string;
+  camera_video?: string;
+  front_camera_resolution?: string;
+  front_camera_features?: string;
+  front_camera_video?: string;
 
   // Battery
+  battery_capacity?: string;
   battery_type?: string;
   charging_specs?: string;
 
@@ -71,8 +72,8 @@ export interface BaseProductData {
   audio_jack?: string;
 
   // Connectivity
-  wlan_details?: string;
-  bluetooth_details?: string;
+  wlan?: string;
+  bluetooth?: string;
   positioning?: string;
   nfc?: string;
   radio?: string;

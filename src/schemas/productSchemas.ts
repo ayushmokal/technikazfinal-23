@@ -1,14 +1,12 @@
 import { z } from "zod";
 
-const jsonRecord = z.record(z.any());
-
 const baseProductSchema = z.object({
   // Basic Info
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
-  model_name: z.string().optional(),
+  model_name: z.string(),
   price: z.number().min(0, "Price must be a positive number"),
-  color: z.string().optional(),
+  color: z.string(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
 
@@ -42,14 +40,15 @@ const baseProductSchema = z.object({
   refresh_rate: z.string().optional(),
 
   // Camera
-  camera: z.string().optional(),
-  main_camera_features: z.string().optional(),
-  main_camera_video: z.string().optional(),
-  front_camera: z.string().optional(),
-  selfie_camera_features: z.string().optional(),
-  selfie_camera_video: z.string().optional(),
+  camera_resolution: z.string().optional(),
+  camera_features: z.string().optional(),
+  camera_video: z.string().optional(),
+  front_camera_resolution: z.string().optional(),
+  front_camera_features: z.string().optional(),
+  front_camera_video: z.string().optional(),
 
   // Battery
+  battery_capacity: z.string().optional(),
   battery_type: z.string().optional(),
   charging_specs: z.string().optional(),
 
@@ -73,8 +72,8 @@ const baseProductSchema = z.object({
   audio_jack: z.string().optional(),
 
   // Connectivity
-  wlan_details: z.string().optional(),
-  bluetooth_details: z.string().optional(),
+  wlan: z.string().optional(),
+  bluetooth: z.string().optional(),
   positioning: z.string().optional(),
   nfc: z.string().optional(),
   radio: z.string().optional(),
