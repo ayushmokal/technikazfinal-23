@@ -1,16 +1,14 @@
-import type { Json } from "@/integrations/supabase/types";
-
 export type BaseProductData = {
   id?: string;
-  name: string;
-  brand: string;
+  name: string; // Required
+  brand: string; // Required
   model_name?: string;
-  price: number;
-  display_specs: string;
-  processor: string;
-  ram: string;
-  storage: string;
-  battery: string;
+  price: number; // Required
+  display_specs: string; // Required
+  processor: string; // Required
+  ram: string; // Required
+  storage: string; // Required
+  battery: string; // Required
   os?: string;
   color?: string;
   image_url?: string;
