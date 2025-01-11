@@ -42,11 +42,11 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       onSuccess?.();
     }, 
     productType: propProductType,
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Something went wrong",
+        description: error.message || "Failed to save product",
       });
     }
   });
