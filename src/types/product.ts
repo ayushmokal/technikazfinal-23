@@ -1,9 +1,8 @@
-import type { Json } from "@/integrations/supabase/types";
-
 export interface BaseProduct {
   id: string;
   name: string;
   brand: string;
+  model_name: string | null;
   price: number;
   image_url: string | null;
   display_specs: string;
@@ -13,10 +12,9 @@ export interface BaseProduct {
   battery: string;
   os: string | null;
   color: string | null;
+  gallery_images: string[] | null;
   created_at: string;
   updated_at: string;
-  gallery_images: string[] | null;
-  model_name: string | null;
 }
 
 export interface LaptopProduct extends BaseProduct {
@@ -25,85 +23,9 @@ export interface LaptopProduct extends BaseProduct {
 }
 
 export interface MobileProduct extends BaseProduct {
-  camera: string;
+  camera: string | null;
   chipset: string | null;
   charging_specs: string | null;
   resolution: string | null;
   screen_size: string | null;
-  front_camera: string | null;
-  network_technology: string | null;
-  network_2g_bands: string | null;
-  network_3g_bands: string | null;
-  network_4g_bands: string | null;
-  network_5g_bands: string | null;
-  network_speed: string | null;
-  announced: string | null;
-  status: string | null;
-  dimensions: string | null;
-  build_details: string | null;
-  sim: string | null;
-  protection_details: string | null;
-  display_type_details: string | null;
-  display_resolution_details: string | null;
-  display_protection: string | null;
-  display_features: string | null;
-  gpu: string | null;
-  card_slot: string | null;
-  internal_storage: string | null;
-  storage_type: string | null;
-  main_camera_features: string | null;
-  main_camera_video: string | null;
-  selfie_camera_features: string | null;
-  selfie_camera_video: string | null;
-  loudspeaker: string | null;
-  audio_jack: string | null;
-  wlan_details: string | null;
-  bluetooth_details: string | null;
-  radio: string | null;
-  infrared: boolean | null;
-  sensors_list: string | null;
-  battery_type: string | null;
-  charging_details: string | null;
-  models_list: string | null;
-  colors_list: string | null;
-  price_details: string | null;
-  multimedia_specs: Json | null;
-  sensor_specs: Json | null;
-  network_specs: Json | null;
-  design_specs: Json | null;
-  camera_details: Json | null;
-  performance_specs: Json | null;
-  display_details: Json | null;
-  general_specs: Json | null;
-  cpu: string | null;
-  architecture: string | null;
-  fabrication: string | null;
-  ram_type: string | null;
-  display_type: string | null;
-  aspect_ratio: string | null;
-  pixel_density: string | null;
-  screen_protection: string | null;
-  bezel_less: boolean | null;
-  touch_screen: boolean | null;
-  peak_brightness: string | null;
-  hdr_support: string | null;
-  refresh_rate: string | null;
-  height: string | null;
-  width: string | null;
-  thickness: string | null;
-  weight: string | null;
-  build_material: string | null;
-  waterproof: string | null;
-  ruggedness: string | null;
-  camera_setup: string | null;
-  camera_autofocus: boolean | null;
-  camera_ois: boolean | null;
-  camera_flash: string | null;
-  camera_modes: string | null;
-  video_recording: string | null;
-  front_camera_setup: string | null;
-  front_camera_video: string | null;
-  launch_date: string | null;
-  custom_ui: string | null;
-  software_support: string | null;
 }

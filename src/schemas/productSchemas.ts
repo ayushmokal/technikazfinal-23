@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const baseProductSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
   model_name: z.string().optional(),
@@ -14,32 +15,10 @@ const baseProductSchema = z.object({
   color: z.string().optional(),
   image_url: z.string().optional(),
   gallery_images: z.array(z.string()).optional(),
-  launch_date: z.string().optional(),
-  status: z.string().optional(),
-  display_type: z.string().optional(),
-  screen_protection: z.string().optional(),
-  display_features: z.string().optional(),
-  main_camera_features: z.string().optional(),
-  selfie_camera_features: z.string().optional(),
-  dimensions: z.string().optional(),
-  build_details: z.string().optional(),
-  wlan: z.string().optional(),
-  bluetooth: z.string().optional(),
-  display_type_details: z.string().optional(),
-  display_resolution_details: z.string().optional(),
-  display_protection: z.string().optional(),
-  main_camera_video: z.string().optional(),
-  selfie_camera_video: z.string().optional(),
-  network_technology: z.string().optional(),
-  network_2g_bands: z.string().optional(),
-  network_3g_bands: z.string().optional(),
-  network_4g_bands: z.string().optional(),
-  network_5g_bands: z.string().optional(),
-  network_speed: z.string().optional(),
 });
 
 export const mobileProductSchema = baseProductSchema.extend({
-  camera: z.string().min(1, "Camera is required"),
+  camera: z.string().optional(),
   chipset: z.string().optional(),
   charging_specs: z.string().optional(),
   resolution: z.string().optional(),
@@ -52,7 +31,7 @@ export const laptopProductSchema = baseProductSchema.extend({
 });
 
 export const expertReviewSchema = z.object({
-  product_id: z.string().uuid(),
+  product_id: z.string(),
   rating: z.number().min(0).max(10),
   author: z.string().min(1, "Author is required"),
   summary: z.string().min(1, "Summary is required"),
