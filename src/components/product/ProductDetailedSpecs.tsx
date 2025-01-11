@@ -1,104 +1,143 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { MobileProduct } from "@/types/product";
-import { ProductSpecTable } from "./ProductSpecTable";
 
 interface ProductDetailedSpecsProps {
   product: MobileProduct;
 }
 
 export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
-  const specifications = [
+  const sections = [
     {
-      title: "Basic Information",
+      title: "Network",
       specs: [
-        { label: "Brand", value: product.brand },
-        { label: "Model", value: product.model_name },
+        { label: "Technology", value: product.network_technology },
+        { label: "2G bands", value: product.network_2g_bands },
+        { label: "3G bands", value: product.network_3g_bands },
+        { label: "4G bands", value: product.network_4g_bands },
+        { label: "5G bands", value: product.network_5g_bands },
+        { label: "Speed", value: product.network_speed },
       ]
     },
     {
-      title: "Memory",
+      title: "Launch",
       specs: [
-        { label: "RAM", value: product.ram },
-        { label: "Storage", value: product.storage },
-        { label: "Card Slot", value: product.card_slot },
-        { label: "Storage Type", value: product.storage_type }
+        { label: "Announced", value: product.announced },
+        { label: "Status", value: product.status },
       ]
     },
     {
-      title: "Main Camera",
+      title: "Body",
       specs: [
-        { label: "Main Camera", value: product.camera },
-        { label: "Features", value: product.main_camera_features },
-        { label: "Video", value: product.main_camera_video }
-      ]
-    },
-    {
-      title: "Selfie Camera",
-      specs: [
-        { label: "Camera", value: product.front_camera },
-        { label: "Features", value: product.selfie_camera_features },
-        { label: "Video", value: product.front_camera_video }
-      ]
-    },
-    {
-      title: "Battery",
-      specs: [
-        { label: "Capacity", value: product.battery },
-        { label: "Type", value: product.battery_type },
-        { label: "Charging", value: product.charging_specs }
+        { label: "Dimensions", value: product.dimensions },
+        { label: "Build", value: product.build_details },
+        { label: "SIM", value: product.sim },
+        { label: "Protection", value: product.protection_details },
       ]
     },
     {
       title: "Display",
       specs: [
-        { label: "Type", value: product.display_type },
-        { label: "Size", value: product.screen_size },
-        { label: "Resolution", value: product.resolution },
-        { label: "Protection", value: product.screen_protection },
+        { label: "Type", value: product.display_type_details },
+        { label: "Resolution", value: product.display_resolution_details },
+        { label: "Protection", value: product.display_protection },
         { label: "Features", value: product.display_features },
-        { label: "Refresh Rate", value: product.refresh_rate }
       ]
     },
     {
-      title: "Design",
+      title: "Platform",
       specs: [
-        { label: "Dimensions", value: product.dimensions },
-        { label: "Weight", value: product.weight },
-        { label: "Build", value: product.build_material },
-        { label: "Protection", value: product.protection_details },
-        { label: "Colors", value: product.colors_list }
+        { label: "OS", value: product.os },
+        { label: "Chipset", value: product.chipset },
+        { label: "CPU", value: product.cpu },
+        { label: "GPU", value: product.gpu },
       ]
     },
     {
-      title: "Network",
+      title: "Memory",
       specs: [
-        { label: "Technology", value: product.network_technology },
-        { label: "2G Bands", value: product.network_2g_bands },
-        { label: "3G Bands", value: product.network_3g_bands },
-        { label: "4G Bands", value: product.network_4g_bands },
-        { label: "5G Bands", value: product.network_5g_bands },
-        { label: "Speed", value: product.network_speed }
+        { label: "Card slot", value: product.card_slot },
+        { label: "Internal", value: product.internal_storage },
+        { label: "Storage type", value: product.storage_type },
       ]
     },
     {
-      title: "Connectivity",
+      title: "Main Camera",
+      specs: [
+        { label: "Features", value: product.main_camera_features },
+        { label: "Video", value: product.main_camera_video },
+      ]
+    },
+    {
+      title: "Selfie Camera",
+      specs: [
+        { label: "Features", value: product.selfie_camera_features },
+        { label: "Video", value: product.selfie_camera_video },
+      ]
+    },
+    {
+      title: "Sound",
+      specs: [
+        { label: "Loudspeaker", value: product.loudspeaker },
+        { label: "3.5mm jack", value: product.audio_jack },
+      ]
+    },
+    {
+      title: "Communications",
       specs: [
         { label: "WLAN", value: product.wlan_details },
         { label: "Bluetooth", value: product.bluetooth_details },
-        { label: "GPS", value: product.positioning },
-        { label: "NFC", value: product.nfc },
         { label: "Radio", value: product.radio },
-        { label: "USB", value: product.usb }
+        { label: "Infrared", value: product.infrared ? "Yes" : "No" },
       ]
-    }
+    },
+    {
+      title: "Features",
+      specs: [
+        { label: "Sensors", value: product.sensors_list },
+      ]
+    },
+    {
+      title: "Battery",
+      specs: [
+        { label: "Type", value: product.battery_type },
+        { label: "Charging", value: product.charging_details },
+      ]
+    },
+    {
+      title: "Misc",
+      specs: [
+        { label: "Models", value: product.models_list },
+        { label: "Colors", value: product.colors_list },
+        { label: "Price", value: product.price_details },
+      ]
+    },
   ];
 
   return (
     <Card>
-      <CardContent className="space-y-6 p-6">
-        <h2 className="text-2xl font-bold">Detailed Specifications</h2>
-        <ProductSpecTable specifications={specifications} />
+      <CardContent className="p-6">
+        <div className="space-y-6">
+          {sections.map((section, index) => {
+            const filteredSpecs = section.specs.filter(spec => spec.value);
+            if (filteredSpecs.length === 0) return null;
+
+            return (
+              <div key={section.title}>
+                <h3 className="font-semibold text-lg mb-4">{section.title}</h3>
+                <div className="space-y-2">
+                  {filteredSpecs.map((spec, specIndex) => (
+                    <div key={specIndex} className="flex justify-between py-2">
+                      <span className="text-muted-foreground">{spec.label}</span>
+                      <span className="font-medium text-right">{spec.value || "N/A"}</span>
+                    </div>
+                  ))}
+                </div>
+                {index < sections.length - 1 && <Separator className="mt-4" />}
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
