@@ -22,45 +22,47 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
   const schema = productType === 'mobile' ? mobileProductSchema : laptopProductSchema;
   
+  const defaultValues = initialData || {
+    name: "",
+    brand: "",
+    model_name: "",
+    price: undefined,
+    display_specs: "",
+    processor: "",
+    ram: "",
+    storage: "",
+    battery: "",
+    os: "",
+    color: "",
+    ...(productType === 'mobile' ? {
+      camera: "",
+      chipset: "",
+      charging_specs: "",
+      resolution: "",
+      screen_size: "",
+      network_technology: "",
+      network_2g_bands: "",
+      network_3g_bands: "",
+      network_4g_bands: "",
+      network_5g_bands: "",
+      network_speed: "",
+      display_type_details: "",
+      display_resolution_details: "",
+      display_protection: "",
+      display_features: "",
+      main_camera_features: "",
+      main_camera_video: "",
+      selfie_camera_features: "",
+      selfie_camera_video: "",
+    } : {
+      graphics: "",
+      ports: "",
+    })
+  };
+
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: initialData || {
-      name: "",
-      brand: "",
-      model_name: "",
-      price: undefined,
-      display_specs: "",
-      processor: "",
-      ram: "",
-      storage: "",
-      battery: "",
-      os: "",
-      color: "",
-      ...(productType === 'mobile' ? {
-        camera: "",
-        chipset: "",
-        charging_specs: "",
-        resolution: "",
-        screen_size: "",
-        network_technology: "",
-        network_2g_bands: "",
-        network_3g_bands: "",
-        network_4g_bands: "",
-        network_5g_bands: "",
-        network_speed: "",
-        display_type_details: "",
-        display_resolution_details: "",
-        display_protection: "",
-        display_features: "",
-        main_camera_features: "",
-        main_camera_video: "",
-        selfie_camera_features: "",
-        selfie_camera_video: "",
-      } : {
-        graphics: "",
-        ports: "",
-      })
-    },
+    defaultValues,
   });
 
   useEffect(() => {
@@ -74,13 +76,11 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       setIsLoading(true);
       console.log("Starting form submission with data:", data);
 
-      // Check authentication
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         throw new Error("Please login to continue");
       }
 
-      // Handle image uploads
       if (mainImageFile) {
         console.log("Uploading main image");
         const imageUrl = await uploadImage(mainImageFile, 'main');

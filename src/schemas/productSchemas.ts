@@ -1,8 +1,4 @@
 import { z } from "zod";
-import type { Json } from "@/integrations/supabase/types";
-
-// Define a type for specs that can be either Json or Record
-type SpecsType = Record<string, any> | Json;
 
 const baseProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
