@@ -9,6 +9,7 @@ import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
 import { ImageSection } from "./form-sections/ImageSection";
 import { ExpertReviewForm } from "./expert-review/ExpertReviewForm";
 import { useProductForm } from "./hooks/useProductForm";
+import { useToast } from "@/hooks/use-toast";
 import type { MobileProductData, LaptopProductData } from "./types/productTypes";
 
 interface ProductFormProps {
@@ -20,6 +21,7 @@ interface ProductFormProps {
 export function ProductForm({ initialData, onSuccess, productType: propProductType }: ProductFormProps) {
   const [showExpertReview, setShowExpertReview] = useState(false);
   const [tempProductId, setTempProductId] = useState<string>("");
+  const { toast } = useToast();
   
   const {
     form,
@@ -33,10 +35,34 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     initialData, 
     onSuccess: (productId) => {
       setTempProductId(productId);
+      toast({
+        title: "Success",
+        description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} ${initialData ? 'updated' : 'added'} successfully`,
+      });
       onSuccess?.();
     }, 
-    productType: propProductType 
+    productType: propProductType,
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Something went wrong",
+      });
+    }
   });
+
+  const handleFormSubmit = async (data: any) => {
+    try {
+      await onSubmit(data);
+    } catch (error: any) {
+      console.error('Form submission error:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save product",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -46,7 +72,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
               <div className="grid gap-8">
                 <div className="space-y-6">
                   <BasicInfoSection form={form} />
