@@ -1,130 +1,145 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { MobileProduct } from "@/types/product";
-
-interface SpecificationItemProps {
-  label: string;
-  value: string | boolean | null | undefined;
-}
-
-function SpecificationItem({ label, value }: SpecificationItemProps) {
-  if (value === null || value === undefined) return null;
-  
-  if (typeof value === 'boolean') {
-    return (
-      <div className="flex justify-between py-2">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{value ? 'Yes' : 'No'}</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex justify-between py-2">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium">{value}</span>
-    </div>
-  );
-}
-
-interface SpecificationSectionProps {
-  title: string;
-  specs: { label: string; value: string | boolean | null | undefined }[];
-}
-
-function SpecificationSection({ title, specs }: SpecificationSectionProps) {
-  const filteredSpecs = specs.filter(spec => spec.value !== null && spec.value !== undefined);
-  
-  if (filteredSpecs.length === 0) return null;
-
-  return (
-    <div className="space-y-2">
-      <h3 className="font-semibold text-lg">{title}</h3>
-      {filteredSpecs.map((spec, index) => (
-        <SpecificationItem key={index} {...spec} />
-      ))}
-      <Separator className="my-4" />
-    </div>
-  );
-}
+import type { MobileProduct, LaptopProduct } from "@/types/product";
 
 interface ProductDetailedSpecsProps {
-  product: MobileProduct;
+  product: MobileProduct | LaptopProduct;
 }
 
 export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
+  if (!product) return null;
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Detailed Specifications</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <SpecificationSection
-          title="General"
-          specs={[
-            { label: "Launch Date", value: product.launch_date },
-            { label: "Custom UI", value: product.custom_ui },
-            { label: "Software Support", value: product.software_support },
-          ]}
-        />
-        
-        <SpecificationSection
-          title="Performance"
-          specs={[
-            { label: "CPU", value: product.cpu },
-            { label: "Architecture", value: product.architecture },
-            { label: "Fabrication", value: product.fabrication },
-            { label: "RAM Type", value: product.ram_type },
-          ]}
-        />
+      <CardContent className="p-6">
+        <div className="space-y-6">
+          {/* Basic Info */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-500">Brand</span>
+                <p>{product.brand}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">Model</span>
+                <p>{product.model_name}</p>
+              </div>
+            </div>
+          </div>
 
-        <SpecificationSection
-          title="Display"
-          specs={[
-            { label: "Display Type", value: product.display_type },
-            { label: "Aspect Ratio", value: product.aspect_ratio },
-            { label: "Pixel Density", value: product.pixel_density },
-            { label: "Screen Protection", value: product.screen_protection },
-            { label: "Bezel-less Display", value: product.bezel_less },
-            { label: "Touch Screen", value: product.touch_screen },
-            { label: "Peak Brightness", value: product.peak_brightness },
-            { label: "HDR Support", value: product.hdr_support },
-            { label: "Refresh Rate", value: product.refresh_rate },
-          ]}
-        />
+          <Separator />
 
-        <SpecificationSection
-          title="Design"
-          specs={[
-            { label: "Height", value: product.height },
-            { label: "Width", value: product.width },
-            { label: "Thickness", value: product.thickness },
-            { label: "Weight", value: product.weight },
-            { label: "Build Material", value: product.build_material },
-            { label: "Waterproof", value: product.waterproof },
-            { label: "Ruggedness", value: product.ruggedness },
-          ]}
-        />
+          {/* Display */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Display</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-500">Display Specs</span>
+                <p>{product.display_specs}</p>
+              </div>
+              {'resolution' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Resolution</span>
+                  <p>{product.resolution}</p>
+                </div>
+              )}
+              {'screen_size' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Screen Size</span>
+                  <p>{product.screen_size}</p>
+                </div>
+              )}
+            </div>
+          </div>
 
-        <SpecificationSection
-          title="Camera"
-          specs={[
-            { label: "Camera Setup", value: product.camera_setup },
-            { label: "Autofocus", value: product.camera_autofocus },
-            { label: "OIS", value: product.camera_ois },
-            { label: "Flash", value: product.camera_flash },
-            { label: "Camera Modes", value: product.camera_modes },
-            { label: "Video Recording", value: product.video_recording },
-          ]}
-        />
+          <Separator />
 
-        <SpecificationSection
-          title="Front Camera"
-          specs={[
-            { label: "Setup", value: product.front_camera_setup },
-            { label: "Video Recording", value: product.front_camera_video },
-          ]}
-        />
+          {/* Performance */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Performance</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-500">Processor</span>
+                <p>{product.processor}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">RAM</span>
+                <p>{product.ram}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">Storage</span>
+                <p>{product.storage}</p>
+              </div>
+              {'graphics' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Graphics</span>
+                  <p>{product.graphics}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Camera (Mobile Only) */}
+          {'camera' in product && (
+            <>
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Camera</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-sm text-gray-500">Camera Setup</span>
+                    <p>{product.camera}</p>
+                  </div>
+                </div>
+              </div>
+              <Separator />
+            </>
+          )}
+
+          {/* Battery & Charging */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Battery & Charging</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-500">Battery</span>
+                <p>{product.battery}</p>
+              </div>
+              {'charging_specs' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Charging</span>
+                  <p>{product.charging_specs}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Other Features */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Other Features</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm text-gray-500">Operating System</span>
+                <p>{product.os}</p>
+              </div>
+              {'ports' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Ports</span>
+                  <p>{product.ports}</p>
+                </div>
+              )}
+              {'chipset' in product && (
+                <div>
+                  <span className="text-sm text-gray-500">Chipset</span>
+                  <p>{product.chipset}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
