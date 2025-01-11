@@ -12,17 +12,17 @@ function SpecificationItem({ label, value }: SpecificationItemProps) {
   
   if (typeof value === 'boolean') {
     return (
-      <div className="flex justify-between py-2">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{value ? 'Yes' : 'No'}</span>
+      <div className="flex flex-col sm:flex-row sm:justify-between py-2 gap-1">
+        <span className="text-muted-foreground text-sm sm:text-base">{label}</span>
+        <span className="font-medium text-sm sm:text-base">{value ? 'Yes' : 'No'}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex justify-between py-2">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium">{value}</span>
+    <div className="flex flex-col sm:flex-row sm:justify-between py-2 gap-1">
+      <span className="text-muted-foreground text-sm sm:text-base">{label}</span>
+      <span className="font-medium text-sm sm:text-base break-words">{value}</span>
     </div>
   );
 }
@@ -39,7 +39,7 @@ function SpecificationSection({ title, specs }: SpecificationSectionProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="font-semibold text-lg">{title}</h3>
+      <h3 className="font-semibold text-base sm:text-lg mb-2">{title}</h3>
       {filteredSpecs.map((spec, index) => (
         <SpecificationItem key={index} {...spec} />
       ))}
@@ -132,32 +132,32 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   ];
 
   return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
+    <Card className="w-full">
+      <CardContent className="space-y-4 sm:space-y-6 p-3 sm:p-6">
         <SpecificationSection title="Basic Information" specs={basicSpecs} />
-        {basicSpecs.length > 0 && <Separator />}
+        {basicSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
         
         <SpecificationSection title="Display" specs={displaySpecs} />
-        {displaySpecs.length > 0 && <Separator />}
+        {displaySpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
         
         <SpecificationSection title="Performance" specs={performanceSpecs} />
-        {performanceSpecs.length > 0 && <Separator />}
+        {performanceSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
         
         {isMobile && (
           <>
             <SpecificationSection title="Camera" specs={mobileSpecs} />
-            {mobileSpecs.length > 0 && <Separator />}
+            {mobileSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
             
             <SpecificationSection title="Network" specs={networkSpecs} />
-            {networkSpecs.length > 0 && <Separator />}
+            {networkSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
             
             <SpecificationSection title="Connectivity" specs={connectivitySpecs} />
-            {connectivitySpecs.length > 0 && <Separator />}
+            {connectivitySpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
           </>
         )}
         
         <SpecificationSection title="Design" specs={designSpecs} />
-        {designSpecs.length > 0 && <Separator />}
+        {designSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
         
         <SpecificationSection title="Battery" specs={batterySpecs} />
       </CardContent>
