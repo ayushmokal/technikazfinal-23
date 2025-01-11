@@ -61,18 +61,26 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
-      const formattedData = {
-        ...data,
-        price: typeof data.price === 'string' ? parseFloat(data.price) : data.price
-      };
+      // Remove empty strings and undefined values
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => value !== "" && value !== undefined)
+      );
+      
+      // Ensure price is a number if present
+      if (cleanedData.price) {
+        cleanedData.price = typeof cleanedData.price === 'string' 
+          ? parseFloat(cleanedData.price) 
+          : cleanedData.price;
+      }
 
-      const result = await onSubmit(formattedData);
+      console.log("Submitting cleaned data:", cleanedData);
+      const result = await onSubmit(cleanedData);
       
       if (result) {
         setTempProductId(result.id);
         toast({
           title: "Success!",
-          description: `Product "${data.name}" has been ${initialData ? 'updated' : 'added'} successfully.`,
+          description: `Product "${data.name || 'Untitled'}" has been ${initialData ? 'updated' : 'added'} successfully.`,
           duration: 5000,
         });
       }
