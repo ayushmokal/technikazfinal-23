@@ -25,7 +25,7 @@ interface Product {
   color?: string;
   graphics?: string;
   ports?: string;
-  model_name?: string;
+  model_name: string;
   resolution?: string;
   screen_size?: string;
   charging_specs?: string;
