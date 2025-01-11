@@ -1,3 +1,5 @@
+import type { Json } from "@/integrations/supabase/types";
+
 export type JsonRecord = Record<string, any>;
 
 export interface BaseProductData {
