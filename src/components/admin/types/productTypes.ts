@@ -1,43 +1,49 @@
-export interface BaseProductData {
+import type { Json } from "@/integrations/supabase/types";
+
+export type BaseProductData = {
   name: string;
   brand: string;
-  model_name: string;
+  model_name?: string;
   price: number;
-  color?: string;
-  image_url?: string;
-  gallery_images?: string[];
   display_specs: string;
   processor: string;
   ram: string;
   storage: string;
   battery: string;
   os?: string;
-  display_type?: string;
-  screen_protection?: string;
-  display_features?: string;
-}
+  color?: string;
+  image_url?: string;
+  gallery_images?: string[];
+  design_specs?: Json;
+  display_details?: Json;
+  performance_specs?: Json;
+  multimedia_specs?: Json;
+};
 
-export interface MobileProductData extends BaseProductData {
+export type MobileProductData = BaseProductData & {
   camera: string;
   chipset?: string;
   charging_specs?: string;
-  screen_size?: string;
   resolution?: string;
+  screen_size?: string;
+  camera_details?: Json;
+  sensor_specs?: Json;
+  network_specs?: Json;
+  general_specs?: Json;
   network_technology?: string;
-  network_2g_bands?: string;
-  network_3g_bands?: string;
-  network_4g_bands?: string;
-  network_5g_bands?: string;
-  network_speed?: string;
-  main_camera_features?: string;
-  main_camera_video?: string;
-  selfie_camera_features?: string;
-  selfie_camera_video?: string;
-}
+  display_type?: string;
+  dimensions?: string;
+  weight?: string;
+};
 
-export interface LaptopProductData extends BaseProductData {
+export type LaptopProductData = BaseProductData & {
   graphics?: string;
   ports?: string;
-}
+  connectivity_specs?: Json;
+};
 
-export type ProductFormData = MobileProductData | LaptopProductData;
+export interface UseProductFormProps {
+  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
+  onSuccess?: (productId: string) => void;
+  productType?: 'mobile' | 'laptop';
+}

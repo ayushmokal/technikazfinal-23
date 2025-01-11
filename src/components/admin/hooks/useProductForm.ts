@@ -1,25 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "@/integrations/supabase/client";
 import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchemas";
-import type { MobileProductData, LaptopProductData, ProductFormData } from "../types/productTypes";
-
-interface UseProductFormProps {
-  initialData?: (MobileProductData | LaptopProductData) & { id?: string };
-  onSuccess?: (productId: string) => void | Promise<void>;
-  productType?: 'mobile' | 'laptop';
-}
+import { useImageUpload } from "./useImageUpload";
+import { useProductData } from "./useProductData";
+import { supabase } from "@/integrations/supabase/client";
+import type { UseProductFormProps, MobileProductData, LaptopProductData } from "../types/productTypes";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [productType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
-  const [mainImage, setMainImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<File[]>([]);
-  
-  const schema = productType === 'mobile' ? mobileProductSchema : laptopProductSchema;
-  
-  const defaultValues: ProductFormData = {
+  const [productType, setProductType] = useState<'mobile' | 'laptop'>(propProductType || 'mobile');
+  const { updateProduct, insertProduct } = useProductData();
+  const { 
+    mainImageFile, 
+    galleryImageFiles, 
+    handleMainImageChange, 
+    handleGalleryImagesChange, 
+    handleRemoveGalleryImage,
+    uploadImage 
+  } = useImageUpload();
+
+  const defaultValues = initialData || {
     name: "",
     brand: "",
     model_name: "",
@@ -29,86 +30,78 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     ram: "",
     storage: "",
     battery: "",
-    camera: productType === 'mobile' ? "" : undefined,
-    os: "",
-    color: "",
-    image_url: "",
-    gallery_images: [],
+    ...(productType === 'mobile' ? { camera: "" } : {}),
   };
 
-  const form = useForm<ProductFormData>({
-    resolver: zodResolver(schema),
-    defaultValues: initialData || defaultValues,
+  const form = useForm({
+    resolver: zodResolver(productType === 'mobile' ? mobileProductSchema : laptopProductSchema),
+    defaultValues: defaultValues as any,
   });
 
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setMainImage(file);
-    if (file) {
-      form.setValue("image_url", URL.createObjectURL(file));
+  useEffect(() => {
+    if (propProductType) {
+      setProductType(propProductType);
     }
-  };
+  }, [propProductType]);
 
-  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setGalleryImages(files);
-    form.setValue("gallery_images", files.map(file => URL.createObjectURL(file)));
-  };
-
-  const handleRemoveGalleryImage = (index: number) => {
-    const newGalleryImages = [...galleryImages];
-    newGalleryImages.splice(index, 1);
-    setGalleryImages(newGalleryImages);
-    form.setValue("gallery_images", newGalleryImages.map(file => URL.createObjectURL(file)));
-  };
-
-  const insertProduct = async (data: ProductFormData) => {
-    const tableName = productType === 'mobile' ? 'mobile_products' : 'laptops';
-    const { data: result, error } = await supabase
-      .from(tableName)
-      .insert(data)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return result;
-  };
-
-  const updateProduct = async (id: string, data: ProductFormData) => {
-    const tableName = productType === 'mobile' ? 'mobile_products' : 'laptops';
-    const { data: result, error } = await supabase
-      .from(tableName)
-      .update(data)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return result;
-  };
-
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
       setIsLoading(true);
+      console.log("Starting form submission with data:", data);
+
+      // Check authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please login to continue");
+      }
+
+      // Transform numeric string to number for price
+      const transformedData = {
+        ...data,
+        price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
+      };
+
+      // Handle image uploads
+      if (mainImageFile) {
+        console.log("Uploading main image");
+        const imageUrl = await uploadImage(mainImageFile, 'main');
+        transformedData.image_url = imageUrl;
+      }
+
+      if (galleryImageFiles.length > 0) {
+        console.log("Uploading gallery images");
+        const uploadPromises = galleryImageFiles.map(file => 
+          uploadImage(file, 'gallery')
+        );
+        const newGalleryImages = await Promise.all(uploadPromises);
+        
+        const existingGalleryImages = transformedData.gallery_images || [];
+        transformedData.gallery_images = [...existingGalleryImages, ...newGalleryImages];
+      }
+
+      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
+      console.log(`Using table: ${table}`);
       
       let result;
       if (initialData?.id) {
-        result = await updateProduct(initialData.id, data);
+        console.log("Updating existing product");
+        result = await updateProduct(table, initialData.id, transformedData, productType);
       } else {
-        result = await insertProduct(data);
+        console.log("Inserting new product");
+        result = await insertProduct(table, transformedData, productType);
       }
 
       if (!result) {
-        throw new Error("Failed to save product");
+        throw new Error("No result returned from database operation");
       }
 
+      console.log("Operation completed successfully:", result);
       if (onSuccess) {
         await onSuccess(result.id);
       }
-
       return result;
-    } catch (error) {
-      console.error("Error in onSubmit:", error);
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -121,7 +114,7 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     productType,
     handleMainImageChange,
     handleGalleryImagesChange,
-    handleRemoveGalleryImage,
+    handleRemoveGalleryImage: (index: number) => handleRemoveGalleryImage(index, form),
     onSubmit,
   };
 }

@@ -103,11 +103,6 @@ export interface MobileProduct extends BaseProduct {
   video_recording: string | null;
   front_camera_setup: string | null;
   front_camera_video: string | null;
-  nfc: string | null;
-  usb: string | null;
-  sensors: string | null;
-  positioning: string | null;
-  // Add the missing properties that caused TypeScript errors
   launch_date: string | null;
   custom_ui: string | null;
   software_support: string | null;

@@ -1,7 +1,8 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
-import type { ProductFormData } from "@/components/admin/types/productTypes";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface DisplaySectionProps {
   form: UseFormReturn<ProductFormData>;
@@ -12,7 +13,7 @@ export function DisplaySection({ form }: DisplaySectionProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField
         control={form.control}
-        name="display_type"
+        name="display_type_details"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Display Type</FormLabel>
@@ -26,7 +27,7 @@ export function DisplaySection({ form }: DisplaySectionProps) {
 
       <FormField
         control={form.control}
-        name="resolution"
+        name="display_resolution_details"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Display Resolution</FormLabel>
@@ -40,7 +41,7 @@ export function DisplaySection({ form }: DisplaySectionProps) {
 
       <FormField
         control={form.control}
-        name="screen_protection"
+        name="display_protection"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Display Protection</FormLabel>

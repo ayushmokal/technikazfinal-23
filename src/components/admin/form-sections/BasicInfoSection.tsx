@@ -17,7 +17,10 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Product Name
+                <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter product name" {...field} />
               </FormControl>
@@ -31,7 +34,10 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="brand"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Brand</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Brand
+                <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter brand name" {...field} />
               </FormControl>
@@ -45,7 +51,10 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="model_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Model Name</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Model Name
+                <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter model name" {...field} />
               </FormControl>
@@ -59,13 +68,16 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Price (₹)
+                <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input 
                   type="number" 
                   placeholder="Enter price" 
                   {...field}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -78,7 +90,10 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Color</FormLabel>
+              <FormLabel className="flex items-center gap-1">
+                Color
+                <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter color" {...field} />
               </FormControl>

@@ -1,143 +1,130 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { MobileProduct } from "@/types/product";
+
+interface SpecificationItemProps {
+  label: string;
+  value: string | boolean | null | undefined;
+}
+
+function SpecificationItem({ label, value }: SpecificationItemProps) {
+  if (value === null || value === undefined) return null;
+  
+  if (typeof value === 'boolean') {
+    return (
+      <div className="flex justify-between py-2">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="font-medium">{value ? 'Yes' : 'No'}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex justify-between py-2">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">{value}</span>
+    </div>
+  );
+}
+
+interface SpecificationSectionProps {
+  title: string;
+  specs: { label: string; value: string | boolean | null | undefined }[];
+}
+
+function SpecificationSection({ title, specs }: SpecificationSectionProps) {
+  const filteredSpecs = specs.filter(spec => spec.value !== null && spec.value !== undefined);
+  
+  if (filteredSpecs.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <h3 className="font-semibold text-lg">{title}</h3>
+      {filteredSpecs.map((spec, index) => (
+        <SpecificationItem key={index} {...spec} />
+      ))}
+      <Separator className="my-4" />
+    </div>
+  );
+}
 
 interface ProductDetailedSpecsProps {
   product: MobileProduct;
 }
 
 export function ProductDetailedSpecs({ product }: ProductDetailedSpecsProps) {
-  const sections = [
-    {
-      title: "Network",
-      specs: [
-        { label: "Technology", value: product.network_technology },
-        { label: "2G bands", value: product.network_2g_bands },
-        { label: "3G bands", value: product.network_3g_bands },
-        { label: "4G bands", value: product.network_4g_bands },
-        { label: "5G bands", value: product.network_5g_bands },
-        { label: "Speed", value: product.network_speed },
-      ]
-    },
-    {
-      title: "Launch",
-      specs: [
-        { label: "Announced", value: product.announced },
-        { label: "Status", value: product.status },
-      ]
-    },
-    {
-      title: "Body",
-      specs: [
-        { label: "Dimensions", value: product.dimensions },
-        { label: "Build", value: product.build_details },
-        { label: "SIM", value: product.sim },
-        { label: "Protection", value: product.protection_details },
-      ]
-    },
-    {
-      title: "Display",
-      specs: [
-        { label: "Type", value: product.display_type_details },
-        { label: "Resolution", value: product.display_resolution_details },
-        { label: "Protection", value: product.display_protection },
-        { label: "Features", value: product.display_features },
-      ]
-    },
-    {
-      title: "Platform",
-      specs: [
-        { label: "OS", value: product.os },
-        { label: "Chipset", value: product.chipset },
-        { label: "CPU", value: product.cpu },
-        { label: "GPU", value: product.gpu },
-      ]
-    },
-    {
-      title: "Memory",
-      specs: [
-        { label: "Card slot", value: product.card_slot },
-        { label: "Internal", value: product.internal_storage },
-        { label: "Storage type", value: product.storage_type },
-      ]
-    },
-    {
-      title: "Main Camera",
-      specs: [
-        { label: "Features", value: product.main_camera_features },
-        { label: "Video", value: product.main_camera_video },
-      ]
-    },
-    {
-      title: "Selfie Camera",
-      specs: [
-        { label: "Features", value: product.selfie_camera_features },
-        { label: "Video", value: product.selfie_camera_video },
-      ]
-    },
-    {
-      title: "Sound",
-      specs: [
-        { label: "Loudspeaker", value: product.loudspeaker },
-        { label: "3.5mm jack", value: product.audio_jack },
-      ]
-    },
-    {
-      title: "Communications",
-      specs: [
-        { label: "WLAN", value: product.wlan_details },
-        { label: "Bluetooth", value: product.bluetooth_details },
-        { label: "Radio", value: product.radio },
-        { label: "Infrared", value: product.infrared ? "Yes" : "No" },
-      ]
-    },
-    {
-      title: "Features",
-      specs: [
-        { label: "Sensors", value: product.sensors_list },
-      ]
-    },
-    {
-      title: "Battery",
-      specs: [
-        { label: "Type", value: product.battery_type },
-        { label: "Charging", value: product.charging_details },
-      ]
-    },
-    {
-      title: "Misc",
-      specs: [
-        { label: "Models", value: product.models_list },
-        { label: "Colors", value: product.colors_list },
-        { label: "Price", value: product.price_details },
-      ]
-    },
-  ];
-
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="space-y-6">
-          {sections.map((section, index) => {
-            const filteredSpecs = section.specs.filter(spec => spec.value);
-            if (filteredSpecs.length === 0) return null;
+      <CardHeader>
+        <CardTitle>Detailed Specifications</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <SpecificationSection
+          title="General"
+          specs={[
+            { label: "Launch Date", value: product.launch_date },
+            { label: "Custom UI", value: product.custom_ui },
+            { label: "Software Support", value: product.software_support },
+          ]}
+        />
+        
+        <SpecificationSection
+          title="Performance"
+          specs={[
+            { label: "CPU", value: product.cpu },
+            { label: "Architecture", value: product.architecture },
+            { label: "Fabrication", value: product.fabrication },
+            { label: "RAM Type", value: product.ram_type },
+          ]}
+        />
 
-            return (
-              <div key={section.title}>
-                <h3 className="font-semibold text-lg mb-4">{section.title}</h3>
-                <div className="space-y-2">
-                  {filteredSpecs.map((spec, specIndex) => (
-                    <div key={specIndex} className="flex justify-between py-2">
-                      <span className="text-muted-foreground">{spec.label}</span>
-                      <span className="font-medium text-right">{spec.value || "N/A"}</span>
-                    </div>
-                  ))}
-                </div>
-                {index < sections.length - 1 && <Separator className="mt-4" />}
-              </div>
-            );
-          })}
-        </div>
+        <SpecificationSection
+          title="Display"
+          specs={[
+            { label: "Display Type", value: product.display_type },
+            { label: "Aspect Ratio", value: product.aspect_ratio },
+            { label: "Pixel Density", value: product.pixel_density },
+            { label: "Screen Protection", value: product.screen_protection },
+            { label: "Bezel-less Display", value: product.bezel_less },
+            { label: "Touch Screen", value: product.touch_screen },
+            { label: "Peak Brightness", value: product.peak_brightness },
+            { label: "HDR Support", value: product.hdr_support },
+            { label: "Refresh Rate", value: product.refresh_rate },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Design"
+          specs={[
+            { label: "Height", value: product.height },
+            { label: "Width", value: product.width },
+            { label: "Thickness", value: product.thickness },
+            { label: "Weight", value: product.weight },
+            { label: "Build Material", value: product.build_material },
+            { label: "Waterproof", value: product.waterproof },
+            { label: "Ruggedness", value: product.ruggedness },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Camera"
+          specs={[
+            { label: "Camera Setup", value: product.camera_setup },
+            { label: "Autofocus", value: product.camera_autofocus },
+            { label: "OIS", value: product.camera_ois },
+            { label: "Flash", value: product.camera_flash },
+            { label: "Camera Modes", value: product.camera_modes },
+            { label: "Video Recording", value: product.video_recording },
+          ]}
+        />
+
+        <SpecificationSection
+          title="Front Camera"
+          specs={[
+            { label: "Setup", value: product.front_camera_setup },
+            { label: "Video Recording", value: product.front_camera_video },
+          ]}
+        />
       </CardContent>
     </Card>
   );

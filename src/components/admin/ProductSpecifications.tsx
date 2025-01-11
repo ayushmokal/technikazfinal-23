@@ -12,37 +12,17 @@ function SpecificationItem({ label, value }: SpecificationItemProps) {
   
   if (typeof value === 'boolean') {
     return (
-      <div className="flex flex-col sm:flex-row sm:justify-between py-2 gap-1">
-        <span className="text-muted-foreground text-sm sm:text-base">{label}</span>
-        <span className="font-medium text-sm sm:text-base">{value ? 'Yes' : 'No'}</span>
+      <div className="flex justify-between py-2">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="font-medium">{value ? 'Yes' : 'No'}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between py-2 gap-1">
-      <span className="text-muted-foreground text-sm sm:text-base">{label}</span>
-      <span className="font-medium text-sm sm:text-base break-words">{value}</span>
-    </div>
-  );
-}
-
-interface SpecificationSectionProps {
-  title: string;
-  specs: { label: string; value: string | number | boolean | null | undefined }[];
-}
-
-function SpecificationSection({ title, specs }: SpecificationSectionProps) {
-  const filteredSpecs = specs.filter(spec => spec.value !== null && spec.value !== undefined && spec.value !== '');
-  
-  if (filteredSpecs.length === 0) return null;
-
-  return (
-    <div className="space-y-2">
-      <h3 className="font-semibold text-base sm:text-lg mb-2">{title}</h3>
-      {filteredSpecs.map((spec, index) => (
-        <SpecificationItem key={index} {...spec} />
-      ))}
+    <div className="flex justify-between py-2">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">{value}</span>
     </div>
   );
 }
@@ -57,8 +37,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   const basicSpecs = [
     { label: "Brand", value: product.brand },
     { label: "Model", value: product.model_name },
-    { label: "Price", value: `₹${product.price.toLocaleString()}` },
-    { label: "Color", value: product.color },
+    { label: "Price", value: `$${product.price}` },
   ];
 
   const displaySpecs = [
@@ -67,9 +46,6 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     { label: "Screen Size", value: isMobile ? (product as MobileProduct).screen_size : undefined },
     { label: "Display Type", value: isMobile ? (product as MobileProduct).display_type : undefined },
     { label: "Refresh Rate", value: isMobile ? (product as MobileProduct).refresh_rate : undefined },
-    { label: "Peak Brightness", value: isMobile ? (product as MobileProduct).peak_brightness : undefined },
-    { label: "HDR Support", value: isMobile ? (product as MobileProduct).hdr_support : undefined },
-    { label: "Screen Protection", value: isMobile ? (product as MobileProduct).screen_protection : undefined },
   ];
 
   const performanceSpecs = [
@@ -78,88 +54,91 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
     { label: "Storage", value: product.storage },
     { label: "Graphics", value: isMobile ? undefined : (product as LaptopProduct).graphics },
     { label: "OS", value: product.os },
-    { label: "CPU", value: isMobile ? (product as MobileProduct).cpu : undefined },
-    { label: "Architecture", value: isMobile ? (product as MobileProduct).architecture : undefined },
-    { label: "Fabrication", value: isMobile ? (product as MobileProduct).fabrication : undefined },
-    { label: "RAM Type", value: isMobile ? (product as MobileProduct).ram_type : undefined },
-    { label: "GPU", value: isMobile ? (product as MobileProduct).gpu : undefined },
   ];
 
   const mobileSpecs = isMobile ? [
-    { label: "Main Camera", value: (product as MobileProduct).camera },
+    { label: "Camera", value: (product as MobileProduct).camera },
     { label: "Front Camera", value: (product as MobileProduct).front_camera },
-    { label: "Camera Setup", value: (product as MobileProduct).camera_setup },
-    { label: "Camera Autofocus", value: (product as MobileProduct).camera_autofocus },
-    { label: "Camera OIS", value: (product as MobileProduct).camera_ois },
-    { label: "Camera Flash", value: (product as MobileProduct).camera_flash },
-    { label: "Camera Modes", value: (product as MobileProduct).camera_modes },
-    { label: "Video Recording", value: (product as MobileProduct).video_recording },
-  ] : [];
-
-  const networkSpecs = isMobile ? [
-    { label: "Network Technology", value: (product as MobileProduct).network_technology },
-    { label: "2G Bands", value: (product as MobileProduct).network_2g_bands },
-    { label: "3G Bands", value: (product as MobileProduct).network_3g_bands },
-    { label: "4G Bands", value: (product as MobileProduct).network_4g_bands },
-    { label: "5G Bands", value: (product as MobileProduct).network_5g_bands },
-    { label: "Network Speed", value: (product as MobileProduct).network_speed },
-  ] : [];
-
-  const designSpecs = [
-    { label: "Dimensions", value: isMobile ? (product as MobileProduct).dimensions : undefined },
-    { label: "Height", value: isMobile ? (product as MobileProduct).height : undefined },
-    { label: "Width", value: isMobile ? (product as MobileProduct).width : undefined },
-    { label: "Thickness", value: isMobile ? (product as MobileProduct).thickness : undefined },
-    { label: "Weight", value: isMobile ? (product as MobileProduct).weight : undefined },
-    { label: "Build Material", value: isMobile ? (product as MobileProduct).build_material : undefined },
-    { label: "Waterproof", value: isMobile ? (product as MobileProduct).waterproof : undefined },
-    { label: "Ruggedness", value: isMobile ? (product as MobileProduct).ruggedness : undefined },
-  ];
-
-  const connectivitySpecs = isMobile ? [
-    { label: "WLAN", value: (product as MobileProduct).wlan_details },
-    { label: "Bluetooth", value: (product as MobileProduct).bluetooth_details },
-    { label: "NFC", value: (product as MobileProduct).nfc },
-    { label: "USB", value: (product as MobileProduct).usb },
-    { label: "Radio", value: (product as MobileProduct).radio },
-    { label: "Audio Jack", value: (product as MobileProduct).audio_jack },
-  ] : [];
-
-  const batterySpecs = [
     { label: "Battery", value: product.battery },
-    { label: "Battery Type", value: isMobile ? (product as MobileProduct).battery_type : undefined },
-    { label: "Charging Details", value: isMobile ? (product as MobileProduct).charging_details : undefined },
+    { label: "Charging", value: (product as MobileProduct).charging_specs },
+    { label: "Network", value: (product as MobileProduct).network_technology },
+  ] : [];
+
+  const laptopSpecs = !isMobile ? [
+    { label: "Battery", value: product.battery },
+    { label: "Ports", value: (product as LaptopProduct).ports },
+  ] : [];
+
+  const additionalSpecs = isMobile ? [
+    { label: "Dimensions", value: (product as MobileProduct).dimensions },
+    { label: "Weight", value: (product as MobileProduct).weight },
+    { label: "Build Material", value: (product as MobileProduct).build_material },
+    { label: "Waterproof", value: (product as MobileProduct).waterproof },
+    { label: "Color", value: product.color },
+  ] : [
+    { label: "Color", value: product.color },
   ];
 
   return (
-    <Card className="w-full">
-      <CardContent className="space-y-4 sm:space-y-6 p-3 sm:p-6">
-        <SpecificationSection title="Basic Information" specs={basicSpecs} />
-        {basicSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
+    <Card>
+      <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <h3 className="font-semibold text-lg">Basic Information</h3>
+          {basicSpecs.map((spec, index) => (
+            <SpecificationItem key={index} {...spec} />
+          ))}
+        </div>
         
-        <SpecificationSection title="Display" specs={displaySpecs} />
-        {displaySpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
+        <Separator />
         
-        <SpecificationSection title="Performance" specs={performanceSpecs} />
-        {performanceSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
+        <div className="space-y-2">
+          <h3 className="font-semibold text-lg">Display</h3>
+          {displaySpecs.map((spec, index) => (
+            <SpecificationItem key={index} {...spec} />
+          ))}
+        </div>
         
-        {isMobile && (
+        <Separator />
+        
+        <div className="space-y-2">
+          <h3 className="font-semibold text-lg">Performance</h3>
+          {performanceSpecs.map((spec, index) => (
+            <SpecificationItem key={index} {...spec} />
+          ))}
+        </div>
+        
+        {isMobile && mobileSpecs.length > 0 && (
           <>
-            <SpecificationSection title="Camera" specs={mobileSpecs} />
-            {mobileSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
-            
-            <SpecificationSection title="Network" specs={networkSpecs} />
-            {networkSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
-            
-            <SpecificationSection title="Connectivity" specs={connectivitySpecs} />
-            {connectivitySpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
+            <Separator />
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">Mobile Features</h3>
+              {mobileSpecs.map((spec, index) => (
+                <SpecificationItem key={index} {...spec} />
+              ))}
+            </div>
           </>
         )}
         
-        <SpecificationSection title="Design" specs={designSpecs} />
-        {designSpecs.length > 0 && <Separator className="my-2 sm:my-4" />}
+        {!isMobile && laptopSpecs.length > 0 && (
+          <>
+            <Separator />
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">Laptop Features</h3>
+              {laptopSpecs.map((spec, index) => (
+                <SpecificationItem key={index} {...spec} />
+              ))}
+            </div>
+          </>
+        )}
         
-        <SpecificationSection title="Battery" specs={batterySpecs} />
+        <Separator />
+        
+        <div className="space-y-2">
+          <h3 className="font-semibold text-lg">Additional Information</h3>
+          {additionalSpecs.map((spec, index) => (
+            <SpecificationItem key={index} {...spec} />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

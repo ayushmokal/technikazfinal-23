@@ -6,7 +6,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
-import type { MobileProductData, LaptopProductData } from "@/components/admin/types/productTypes";
+import type { ProductFormData } from "@/schemas/productSchemas";
 
 interface Product {
   id: string;
@@ -25,7 +25,7 @@ interface Product {
   color?: string;
   graphics?: string;
   ports?: string;
-  model_name: string;
+  model_name?: string;
   resolution?: string;
   screen_size?: string;
   charging_specs?: string;
@@ -41,13 +41,6 @@ interface ProductEditDialogProps {
 export function ProductEditDialog({ product, onClose, onSuccess, productType }: ProductEditDialogProps) {
   if (!product) return null;
 
-  // Convert the product data to the correct type based on productType
-  const formattedProduct = {
-    ...product,
-    model_name: product.model_name || '', // Ensure model_name is not undefined
-    camera: productType === 'mobile' ? (product.camera || '') : undefined,
-  } as (MobileProductData | LaptopProductData) & { id: string };
-
   return (
     <Dialog open={!!product} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -58,7 +51,7 @@ export function ProductEditDialog({ product, onClose, onSuccess, productType }: 
           </DialogDescription>
         </DialogHeader>
         <ProductForm 
-          initialData={formattedProduct}
+          initialData={product}
           onSuccess={onSuccess}
           productType={productType}
         />

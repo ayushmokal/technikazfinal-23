@@ -42,26 +42,26 @@ export function ComparisonTable({ selectedProducts, currentProduct, type, onRemo
   const displayProducts = selectedProducts.slice(1, 3);
 
   return (
-    <div className="mt-3 md:mt-6">
-      <div className="mt-4 md:mt-8">
+    <div className="mt-4 md:mt-6">
+      <div className="mt-6 md:mt-8">
         {specs.map((spec) => (
           <div key={spec.key}>
-            <div className={`grid ${isMobile ? 'grid-cols-2 gap-2' : 'grid-cols-4 gap-4'} py-2 md:py-3`}>
-              <div className="font-medium text-gray-700 text-sm md:text-base">{spec.title}</div>
-              <div className="text-gray-600 text-sm md:text-base break-words">
+            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-4'} gap-3 md:gap-4 py-3`}>
+              <div className="font-medium text-gray-700">{spec.title}</div>
+              <div className="text-gray-600">
                 {spec.key === 'price' 
                   ? `₹${currentProduct[spec.key]?.toLocaleString()}` 
                   : currentProduct[spec.key as keyof typeof currentProduct]?.toString() || 'N/A'}
               </div>
               {!isMobile && displayProducts.map((product) => (
-                <div key={`${product.id}-${spec.key}`} className="text-gray-600 text-sm md:text-base break-words">
+                <div key={`${product.id}-${spec.key}`} className="text-gray-600">
                   {spec.key === 'price' 
                     ? `₹${product[spec.key]?.toLocaleString()}` 
                     : product[spec.key as keyof typeof product]?.toString() || 'N/A'}
                 </div>
               ))}
             </div>
-            <Separator className="my-1 md:my-2" />
+            <Separator />
           </div>
         ))}
       </div>
