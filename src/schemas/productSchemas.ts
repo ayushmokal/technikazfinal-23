@@ -55,15 +55,4 @@ export const laptopProductSchema = baseProductSchema.extend({
   ports: z.string().optional(),
 });
 
-export const expertReviewSchema = z.object({
-  product_id: z.string().uuid(),
-  rating: z.number().min(0).max(10),
-  author: z.string().min(1, "Author is required"),
-  summary: z.string().min(1, "Summary is required"),
-  pros: z.array(z.string()),
-  cons: z.array(z.string()),
-  verdict: z.string().min(1, "Verdict is required"),
-});
-
-export type ExpertReviewFormData = z.infer<typeof expertReviewSchema>;
 export type ProductFormData = z.infer<typeof mobileProductSchema> | z.infer<typeof laptopProductSchema>;
