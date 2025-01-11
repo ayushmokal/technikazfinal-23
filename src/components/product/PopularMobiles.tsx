@@ -2,49 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import type { Product } from "@/types/product";
 
-export function PopularMobiles() {
-  const { toast } = useToast();
+interface PopularMobilesProps {
+  products: Product[];
+}
 
-  const { data: popularMobiles = [], error } = useQuery({
-    queryKey: ['popular-mobiles'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('mobile_products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching mobiles:', error);
-        throw error;
-      }
-      
-      return data || [];
-    },
-    meta: {
-      onError: () => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load mobile products. Please try again.",
-        });
-      }
-    }
-  });
-
-  if (error) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-red-500">Failed to load mobile products. Please try again later.</p>
-      </div>
-    );
-  }
-
+export function PopularMobiles({ products }: PopularMobilesProps) {
   return (
     <section className="mt-16">
       <h2 className="text-2xl font-bold mb-6">Popular Mobiles</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {popularMobiles.map((mobile) => (
+        {products.map((mobile) => (
           <Link 
             key={mobile.id} 
             to={`/product/${mobile.id}?type=mobile`}
