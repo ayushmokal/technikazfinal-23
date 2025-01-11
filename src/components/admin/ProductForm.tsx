@@ -53,12 +53,10 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
-      // Remove empty strings and undefined values
       const cleanedData = Object.fromEntries(
         Object.entries(data).filter(([_, value]) => value !== "" && value !== undefined)
       ) as MobileProductData | LaptopProductData;
       
-      // Ensure price is a number if present
       if (cleanedData.price) {
         cleanedData.price = typeof cleanedData.price === 'string' 
           ? parseFloat(cleanedData.price) 

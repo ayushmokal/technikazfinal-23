@@ -32,20 +32,6 @@ export const mobileProductSchema = baseProductSchema.extend({
   sensor_specs: jsonRecord.optional(),
   network_specs: jsonRecord.optional(),
   general_specs: jsonRecord.optional(),
-  network_technology: z.string().optional(),
-  network_2g_bands: z.string().optional(),
-  network_3g_bands: z.string().optional(),
-  network_4g_bands: z.string().optional(),
-  network_5g_bands: z.string().optional(),
-  network_speed: z.string().optional(),
-  display_type_details: z.string().optional(),
-  display_resolution_details: z.string().optional(),
-  display_protection: z.string().optional(),
-  display_features: z.string().optional(),
-  main_camera_features: z.string().optional(),
-  main_camera_video: z.string().optional(),
-  selfie_camera_features: z.string().optional(),
-  selfie_camera_video: z.string().optional(),
 });
 
 export const laptopProductSchema = baseProductSchema.extend({

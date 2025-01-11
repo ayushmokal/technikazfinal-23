@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,6 +30,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     storage: "",
     battery: "",
     camera: productType === 'mobile' ? "" : undefined,
+    os: "",
+    color: "",
+    image_url: "",
+    gallery_images: [],
   };
 
   const form = useForm<ProductFormData>({
@@ -37,12 +41,16 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     defaultValues: initialData || defaultValues,
   });
 
-  const handleMainImageChange = (file: File | null) => {
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
     setMainImage(file);
-    form.setValue("image_url", file ? URL.createObjectURL(file) : "");
+    if (file) {
+      form.setValue("image_url", URL.createObjectURL(file));
+    }
   };
 
-  const handleGalleryImagesChange = (files: File[]) => {
+  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
     setGalleryImages(files);
     form.setValue("gallery_images", files.map(file => URL.createObjectURL(file)));
   };
@@ -54,9 +62,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     form.setValue("gallery_images", newGalleryImages.map(file => URL.createObjectURL(file)));
   };
 
-  const insertProduct = async (table: string, data: ProductFormData) => {
+  const insertProduct = async (data: ProductFormData) => {
+    const tableName = productType === 'mobile' ? 'mobile_products' : 'laptops';
     const { data: result, error } = await supabase
-      .from(table)
+      .from(tableName)
       .insert(data)
       .select()
       .single();
@@ -65,9 +74,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     return result;
   };
 
-  const updateProduct = async (table: string, id: string, data: ProductFormData) => {
+  const updateProduct = async (id: string, data: ProductFormData) => {
+    const tableName = productType === 'mobile' ? 'mobile_products' : 'laptops';
     const { data: result, error } = await supabase
-      .from(table)
+      .from(tableName)
       .update(data)
       .eq('id', id)
       .select()
@@ -80,15 +90,12 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
   const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
-      const table = productType === 'mobile' ? 'mobile_products' : 'laptops';
       
       let result;
       if (initialData?.id) {
-        console.log("Updating existing product");
-        result = await updateProduct(table, initialData.id, data);
+        result = await updateProduct(initialData.id, data);
       } else {
-        console.log("Inserting new product");
-        result = await insertProduct(table, data);
+        result = await insertProduct(data);
       }
 
       if (!result) {
