@@ -44,6 +44,34 @@ export type MobileProductData = BaseProductData & {
   charging_specs?: string;
   resolution?: string;
   screen_size?: string;
+  custom_ui?: string;
+  software_support?: string;
+  cpu?: string;
+  architecture?: string;
+  fabrication?: string;
+  ram_type?: string;
+  aspect_ratio?: string;
+  pixel_density?: string;
+  bezel_less?: boolean;
+  touch_screen?: boolean;
+  peak_brightness?: string;
+  hdr_support?: string;
+  refresh_rate?: string;
+  height?: string;
+  width?: string;
+  thickness?: string;
+  weight?: string;
+  build_material?: string;
+  waterproof?: string;
+  ruggedness?: string;
+  camera_setup?: string;
+  camera_autofocus?: string;
+  camera_ois?: string;
+  camera_flash?: string;
+  camera_modes?: string;
+  video_recording?: string;
+  front_camera_setup?: string;
+  front_camera_video?: string;
 };
 
 export type LaptopProductData = BaseProductData & {
