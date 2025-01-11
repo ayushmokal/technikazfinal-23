@@ -51,8 +51,9 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
     }
   });
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: MobileProductData | LaptopProductData) => {
     try {
+      console.log("Form data before submission:", data);
       await onSubmit(data);
     } catch (error: any) {
       console.error('Form submission error:', error);
@@ -100,7 +101,7 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
                 {showExpertReview ? 'Hide' : 'Add'} Expert Review
               </Button>
 
-              {showExpertReview && (
+              {showExpertReview && tempProductId && (
                 <ExpertReviewForm 
                   productId={initialData?.id || tempProductId} 
                   className="mt-6"

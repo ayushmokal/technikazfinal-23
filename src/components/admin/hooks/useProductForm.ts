@@ -33,7 +33,35 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     ram: "",
     storage: "",
     battery: "",
-    ...(productType === 'mobile' ? { camera: "" } : {}),
+    os: "",
+    color: "",
+    ...(productType === 'mobile' ? {
+      camera: "",
+      chipset: "",
+      resolution: "",
+      screen_size: "",
+      charging_specs: "",
+      network_technology: "",
+      network_2g_bands: "",
+      network_3g_bands: "",
+      network_4g_bands: "",
+      network_5g_bands: "",
+      network_speed: "",
+      launch_date: "",
+      dimensions: "",
+      weight: "",
+      build_material: "",
+      display_type: "",
+      screen_protection: "",
+      display_features: "",
+      camera_features: "",
+      video_recording: "",
+      front_camera_setup: "",
+      front_camera_video: "",
+    } : {
+      graphics: "",
+      ports: "",
+    }),
   };
 
   const form = useForm({
@@ -63,7 +91,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
         return;
       }
 
-      // Transform numeric string to number for price
       const transformedData = {
         ...data,
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
@@ -71,7 +98,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
 
       console.log("Transformed data:", transformedData);
 
-      // Handle image uploads
       if (mainImageFile) {
         console.log("Uploading main image");
         const imageUrl = await uploadImage(mainImageFile, 'main');
@@ -95,45 +121,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
-        const { data: updatedData, error } = await supabase
-          .from(table)
-          .update(transformedData)
-          .eq('id', initialData.id)
-          .select()
-          .single();
-
-        if (error) {
-          console.error("Error updating product:", error);
-          throw error;
-        }
-        
-        console.log("Product updated successfully:", updatedData);
-        result = updatedData;
-        
-        toast({
-          title: "Success",
-          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} updated successfully`,
-        });
+        result = await updateProduct(table, initialData.id, transformedData, productType);
       } else {
         console.log("Inserting new product");
-        const { data: insertedData, error } = await supabase
-          .from(table)
-          .insert([transformedData])
-          .select()
-          .single();
-
-        if (error) {
-          console.error("Error inserting product:", error);
-          throw error;
-        }
-        
-        console.log("Product inserted successfully:", insertedData);
-        result = insertedData;
-
-        toast({
-          title: "Success",
-          description: `${productType === 'mobile' ? 'Mobile phone' : 'Laptop'} added successfully`,
-        });
+        result = await insertProduct(table, transformedData, productType);
       }
 
       if (result) {
