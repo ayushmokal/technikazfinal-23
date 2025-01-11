@@ -27,6 +27,26 @@ function SpecificationItem({ label, value }: SpecificationItemProps) {
   );
 }
 
+interface SpecificationSectionProps {
+  title: string;
+  specs: { label: string; value: string | number | boolean | null | undefined }[];
+}
+
+function SpecificationSection({ title, specs }: SpecificationSectionProps) {
+  const filteredSpecs = specs.filter(spec => spec.value !== null && spec.value !== undefined && spec.value !== '');
+  
+  if (filteredSpecs.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <h3 className="font-semibold text-lg">{title}</h3>
+      {filteredSpecs.map((spec, index) => (
+        <SpecificationItem key={index} {...spec} />
+      ))}
+    </div>
+  );
+}
+
 interface ProductSpecificationsProps {
   product: LaptopProduct | MobileProduct;
 }
@@ -37,7 +57,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   const basicSpecs = [
     { label: "Brand", value: product.brand },
     { label: "Model", value: product.model_name },
-    { label: "Price", value: `$${product.price}` },
+    { label: "Price", value: `₹${product.price.toLocaleString()}` },
   ];
 
   const displaySpecs = [
@@ -57,88 +77,40 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
   ];
 
   const mobileSpecs = isMobile ? [
-    { label: "Camera", value: (product as MobileProduct).camera },
+    { label: "Main Camera", value: (product as MobileProduct).camera },
     { label: "Front Camera", value: (product as MobileProduct).front_camera },
     { label: "Battery", value: product.battery },
     { label: "Charging", value: (product as MobileProduct).charging_specs },
-    { label: "Network", value: (product as MobileProduct).network_technology },
   ] : [];
 
-  const laptopSpecs = !isMobile ? [
-    { label: "Battery", value: product.battery },
-    { label: "Ports", value: (product as LaptopProduct).ports },
-  ] : [];
-
-  const additionalSpecs = isMobile ? [
-    { label: "Dimensions", value: (product as MobileProduct).dimensions },
-    { label: "Weight", value: (product as MobileProduct).weight },
-    { label: "Build Material", value: (product as MobileProduct).build_material },
-    { label: "Waterproof", value: (product as MobileProduct).waterproof },
+  const additionalSpecs = [
     { label: "Color", value: product.color },
-  ] : [
-    { label: "Color", value: product.color },
+    { label: "Dimensions", value: isMobile ? (product as MobileProduct).dimensions : undefined },
+    { label: "Weight", value: isMobile ? (product as MobileProduct).weight : undefined },
+    { label: "Build Material", value: isMobile ? (product as MobileProduct).build_material : undefined },
+    { label: "Waterproof", value: isMobile ? (product as MobileProduct).waterproof : undefined },
   ];
 
   return (
     <Card>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Basic Information</h3>
-          {basicSpecs.map((spec, index) => (
-            <SpecificationItem key={index} {...spec} />
-          ))}
-        </div>
+      <CardContent className="space-y-6 p-6">
+        <SpecificationSection title="Basic Information" specs={basicSpecs} />
+        {basicSpecs.length > 0 && <Separator />}
         
-        <Separator />
+        <SpecificationSection title="Display" specs={displaySpecs} />
+        {displaySpecs.length > 0 && <Separator />}
         
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Display</h3>
-          {displaySpecs.map((spec, index) => (
-            <SpecificationItem key={index} {...spec} />
-          ))}
-        </div>
+        <SpecificationSection title="Performance" specs={performanceSpecs} />
+        {performanceSpecs.length > 0 && <Separator />}
         
-        <Separator />
-        
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Performance</h3>
-          {performanceSpecs.map((spec, index) => (
-            <SpecificationItem key={index} {...spec} />
-          ))}
-        </div>
-        
-        {isMobile && mobileSpecs.length > 0 && (
+        {isMobile && (
           <>
-            <Separator />
-            <div className="space-y-2">
-              <h3 className="font-semibold text-lg">Mobile Features</h3>
-              {mobileSpecs.map((spec, index) => (
-                <SpecificationItem key={index} {...spec} />
-              ))}
-            </div>
+            <SpecificationSection title="Mobile Features" specs={mobileSpecs} />
+            {mobileSpecs.length > 0 && <Separator />}
           </>
         )}
         
-        {!isMobile && laptopSpecs.length > 0 && (
-          <>
-            <Separator />
-            <div className="space-y-2">
-              <h3 className="font-semibold text-lg">Laptop Features</h3>
-              {laptopSpecs.map((spec, index) => (
-                <SpecificationItem key={index} {...spec} />
-              ))}
-            </div>
-          </>
-        )}
-        
-        <Separator />
-        
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Additional Information</h3>
-          {additionalSpecs.map((spec, index) => (
-            <SpecificationItem key={index} {...spec} />
-          ))}
-        </div>
+        <SpecificationSection title="Additional Information" specs={additionalSpecs} />
       </CardContent>
     </Card>
   );
