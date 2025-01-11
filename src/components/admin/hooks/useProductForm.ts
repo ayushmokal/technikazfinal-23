@@ -5,7 +5,7 @@ import { mobileProductSchema, laptopProductSchema } from "@/schemas/productSchem
 import { useImageUpload } from "./useImageUpload";
 import { useProductData } from "./useProductData";
 import { supabase } from "@/integrations/supabase/client";
-import type { UseProductFormProps, MobileProductData, LaptopProductData, ProductFormData } from "../types/productTypes";
+import type { UseProductFormProps, ProductFormData } from "../types/productTypes";
 
 export function useProductForm({ initialData, onSuccess, productType: propProductType }: UseProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,24 +36,6 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
     color: "",
     ...(productType === 'mobile' ? {
       camera: "",
-      chipset: "",
-      charging_specs: "",
-      resolution: "",
-      screen_size: "",
-      network_technology: "",
-      network_2g_bands: "",
-      network_3g_bands: "",
-      network_4g_bands: "",
-      network_5g_bands: "",
-      network_speed: "",
-      display_type_details: "",
-      display_resolution_details: "",
-      display_protection: "",
-      display_features: "",
-      main_camera_features: "",
-      main_camera_video: "",
-      selfie_camera_features: "",
-      selfie_camera_video: "",
     } : {
       graphics: "",
       ports: "",
@@ -104,10 +86,10 @@ export function useProductForm({ initialData, onSuccess, productType: propProduc
       let result;
       if (initialData?.id) {
         console.log("Updating existing product");
-        result = await updateProduct(table, initialData.id, data, productType);
+        result = await updateProduct(table, initialData.id, data);
       } else {
         console.log("Inserting new product");
-        result = await insertProduct(table, data, productType);
+        result = await insertProduct(table, data);
       }
 
       if (!result) {
