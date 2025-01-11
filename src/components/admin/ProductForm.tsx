@@ -45,10 +45,8 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
         description: `${initialData ? 'Updated' : 'Added'} ${productType === 'mobile' ? 'mobile phone' : 'laptop'} successfully!`,
       });
       
-      // Reset form only for new products
       if (!initialData) {
         form.reset();
-        // Reset file inputs
         const fileInputs = document.querySelectorAll('input[type="file"]');
         fileInputs.forEach((input: any) => {
           input.value = '';
@@ -63,23 +61,28 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
       setIsSubmitting(true);
       console.log("Starting form submission with data:", data);
       
-      // Basic validation
-      if (!data.name || !data.brand || !data.price) {
+      // Only validate required fields
+      const requiredFields = ['name', 'brand', 'price', 'display_specs', 'processor', 'ram', 'storage', 'battery'];
+      if (productType === 'mobile') {
+        requiredFields.push('camera');
+      }
+
+      const missingFields = requiredFields.filter(field => !data[field as keyof typeof data]);
+      
+      if (missingFields.length > 0) {
         toast({
           variant: "destructive",
           title: "Validation Error",
-          description: "Please fill in all required fields",
+          description: `Please fill in these required fields: ${missingFields.join(', ')}`,
         });
         return;
       }
 
-      // Ensure numeric price
       const formattedData = {
         ...data,
         price: typeof data.price === 'string' ? parseFloat(data.price) : data.price
       };
 
-      // Submit form data
       const result = await onSubmit(formattedData);
       
       if (result) {
