@@ -56,8 +56,12 @@ interface ProductSpecificationsProps {
   product: LaptopProduct | MobileProduct;
 }
 
+function isMobileProduct(product: LaptopProduct | MobileProduct): product is MobileProduct {
+  return 'camera' in product;
+}
+
 export function ProductSpecifications({ product }: ProductSpecificationsProps) {
-  const isMobile = 'camera' in product;
+  const isMobile = isMobileProduct(product);
 
   return (
     <Card>
@@ -65,62 +69,77 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
         <CardTitle>Product Specifications</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <SpecificationSection
-          title="Network"
-          specs={[
-            { label: "Technology", value: product.network_technology },
-            { label: "2G bands", value: product.network_2g_bands },
-            { label: "3G bands", value: product.network_3g_bands },
-            { label: "4G bands", value: product.network_4g_bands },
-            { label: "5G bands", value: product.network_5g_bands },
-            { label: "Speed", value: product.network_speed },
-          ]}
-        />
+        {isMobile && (
+          <SpecificationSection
+            title="Network"
+            specs={[
+              { label: "Technology", value: product.network_technology },
+              { label: "2G bands", value: product.network_2g_bands },
+              { label: "3G bands", value: product.network_3g_bands },
+              { label: "4G bands", value: product.network_4g_bands },
+              { label: "5G bands", value: product.network_5g_bands },
+              { label: "Speed", value: product.network_speed },
+            ]}
+          />
+        )}
 
-        <SpecificationSection
-          title="Launch"
-          specs={[
-            { label: "Announced", value: product.announced },
-            { label: "Status", value: product.status },
-          ]}
-        />
+        {isMobile && (
+          <SpecificationSection
+            title="Launch"
+            specs={[
+              { label: "Announced", value: product.announced },
+              { label: "Status", value: product.status },
+            ]}
+          />
+        )}
 
-        <SpecificationSection
-          title="Body"
-          specs={[
-            { label: "Dimensions", value: product.dimensions },
-            { label: "Build", value: product.build_details },
-            { label: "SIM", value: product.sim },
-            { label: "Protection", value: product.protection_details },
-          ]}
-        />
+        {isMobile && (
+          <SpecificationSection
+            title="Body"
+            specs={[
+              { label: "Dimensions", value: product.dimensions },
+              { label: "Build", value: product.build_details },
+              { label: "SIM", value: product.sim },
+              { label: "Protection", value: product.protection_details },
+            ]}
+          />
+        )}
 
         <SpecificationSection
           title="Display"
-          specs={[
+          specs={isMobile ? [
             { label: "Type", value: product.display_type_details },
             { label: "Resolution", value: product.display_resolution_details },
             { label: "Protection", value: product.display_protection },
             { label: "Features", value: product.display_features },
+          ] : [
+            { label: "Display", value: product.display_specs },
           ]}
         />
 
         <SpecificationSection
           title="Platform"
-          specs={[
+          specs={isMobile ? [
             { label: "OS", value: product.os },
             { label: "Chipset", value: product.chipset },
             { label: "CPU", value: product.cpu },
             { label: "GPU", value: product.gpu },
+          ] : [
+            { label: "OS", value: product.os },
+            { label: "Processor", value: product.processor },
+            { label: "Graphics", value: (product as LaptopProduct).graphics },
           ]}
         />
 
         <SpecificationSection
           title="Memory"
-          specs={[
+          specs={isMobile ? [
             { label: "Card slot", value: product.card_slot },
             { label: "Internal", value: product.internal_storage },
             { label: "Storage type", value: product.storage_type },
+          ] : [
+            { label: "RAM", value: product.ram },
+            { label: "Storage", value: product.storage },
           ]}
         />
 
@@ -146,45 +165,55 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
 
         <SpecificationSection
           title="Sound"
-          specs={[
+          specs={isMobile ? [
             { label: "Loudspeaker", value: product.loudspeaker },
             { label: "3.5mm jack", value: product.audio_jack },
+          ] : [
+            { label: "Audio", value: "Integrated audio" },
           ]}
         />
 
         <SpecificationSection
           title="Communications"
-          specs={[
+          specs={isMobile ? [
             { label: "WLAN", value: product.wlan_details },
             { label: "Bluetooth", value: product.bluetooth_details },
             { label: "Radio", value: product.radio },
             { label: "Infrared", value: product.infrared },
+          ] : [
+            { label: "Ports", value: (product as LaptopProduct).ports },
           ]}
         />
 
-        <SpecificationSection
-          title="Features"
-          specs={[
-            { label: "Sensors", value: product.sensors_list },
-          ]}
-        />
+        {isMobile && (
+          <SpecificationSection
+            title="Features"
+            specs={[
+              { label: "Sensors", value: product.sensors_list },
+            ]}
+          />
+        )}
 
         <SpecificationSection
           title="Battery"
-          specs={[
+          specs={isMobile ? [
             { label: "Type", value: product.battery_type },
             { label: "Charging", value: product.charging_details },
+          ] : [
+            { label: "Battery", value: product.battery },
           ]}
         />
 
-        <SpecificationSection
-          title="Misc"
-          specs={[
-            { label: "Models", value: product.models_list },
-            { label: "Colors", value: product.colors_list },
-            { label: "Price", value: product.price_details },
-          ]}
-        />
+        {isMobile && (
+          <SpecificationSection
+            title="Misc"
+            specs={[
+              { label: "Models", value: product.models_list },
+              { label: "Colors", value: product.colors_list },
+              { label: "Price", value: product.price_details },
+            ]}
+          />
+        )}
       </CardContent>
     </Card>
   );
