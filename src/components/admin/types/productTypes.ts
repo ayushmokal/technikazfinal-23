@@ -1,8 +1,6 @@
-import type { Json } from "@/integrations/supabase/types";
+export type JsonRecord = Record<string, any>;
 
-type JsonRecord = Record<string, any>;
-
-export type BaseProductData = {
+export interface BaseProductData {
   name: string;
   brand: string;
   model_name?: string;
@@ -20,9 +18,9 @@ export type BaseProductData = {
   display_details?: JsonRecord;
   performance_specs?: JsonRecord;
   multimedia_specs?: JsonRecord;
-};
+}
 
-export type MobileProductData = BaseProductData & {
+export interface MobileProductData extends BaseProductData {
   camera: string;
   chipset?: string;
   charging_specs?: string;
@@ -46,18 +44,12 @@ export type MobileProductData = BaseProductData & {
   main_camera_video?: string;
   selfie_camera_features?: string;
   selfie_camera_video?: string;
-};
+}
 
-export type LaptopProductData = BaseProductData & {
+export interface LaptopProductData extends BaseProductData {
   graphics?: string;
   ports?: string;
   connectivity_specs?: JsonRecord;
-};
+}
 
 export type ProductFormData = MobileProductData | LaptopProductData;
-
-export interface UseProductFormProps {
-  initialData?: ProductFormData & { id?: string };
-  onSuccess?: (productId: string) => void;
-  productType?: 'mobile' | 'laptop';
-}
