@@ -53,7 +53,7 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
         .limit(10);
 
       if (error) throw error;
-      return data;
+      return data as (MobileProduct | LaptopProduct)[];
     },
   });
 
