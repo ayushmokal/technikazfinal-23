@@ -12,7 +12,7 @@ interface ProductContentProps {
   activeSection: string;
 }
 
-export function ProductContent({ product, type }: ProductContentProps) {
+export function ProductContent({ product, type, activeSection }: ProductContentProps) {
   const isLaptop = type === 'laptop';
   const isMobile = type === 'mobile';
 

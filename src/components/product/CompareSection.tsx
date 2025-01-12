@@ -43,9 +43,12 @@ export function CompareSection({ currentProduct, type }: CompareSectionProps) {
     queryKey: ['products', type],
     queryFn: async () => {
       const tableName = type === 'laptop' ? 'laptops' : 'mobile_products';
+      const baseColumns = 'id,name,brand,model_name,price,image_url,display_specs,processor,ram,storage,battery,os,color';
+      const specificColumns = type === 'laptop' ? ',graphics,ports' : ',camera,chipset';
+      
       const { data, error } = await supabase
         .from(tableName)
-        .select('*')
+        .select(`${baseColumns}${specificColumns}`)
         .neq('id', currentProduct.id)
         .limit(10);
 
