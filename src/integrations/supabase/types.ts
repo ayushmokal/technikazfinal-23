@@ -269,6 +269,7 @@ export type Database = {
           architecture: string | null
           aspect_ratio: string | null
           battery: string
+          battery_type: string | null
           bezel_less: boolean | null
           bluetooth: string | null
           brand: string
@@ -280,9 +281,11 @@ export type Database = {
           camera_modes: string | null
           camera_ois: string | null
           camera_setup: string | null
+          card_slot: string | null
           charging_specs: string | null
           chipset: string | null
           color: string | null
+          colors: string | null
           cpu: string | null
           created_at: string
           custom_ui: string | null
@@ -294,13 +297,20 @@ export type Database = {
           front_camera_setup: string | null
           front_camera_video: string | null
           gallery_images: string[] | null
+          gps: string | null
+          gpu: string | null
           hdr_support: string | null
           height: string | null
           id: string
           image_url: string | null
+          internal_storage: string | null
+          jack_3_5mm: string | null
           launch_date: string | null
+          loudspeaker: string | null
           main_camera_features: string | null
+          main_camera_video: string | null
           model_name: string | null
+          models: string | null
           name: string
           network_2g_bands: string | null
           network_3g_bands: string | null
@@ -308,25 +318,34 @@ export type Database = {
           network_5g_bands: string | null
           network_speed: string | null
           network_technology: string | null
+          nfc: string | null
           os: string | null
           peak_brightness: string | null
+          performance: string | null
           pixel_density: string | null
           price: number
           processor: string
+          radio: string | null
           ram: string
           ram_type: string | null
           refresh_rate: string | null
           resolution: string | null
           ruggedness: string | null
+          sar: string | null
+          sar_eu: string | null
           screen_protection: string | null
           screen_size: string | null
           selfie_camera_features: string | null
+          selfie_camera_video: string | null
+          sensors: string | null
+          sim: string | null
           software_support: string | null
           status: string | null
           storage: string
           thickness: string | null
           touch_screen: boolean | null
           updated_at: string
+          usb: string | null
           video_recording: string | null
           waterproof: string | null
           weight: string | null
@@ -337,6 +356,7 @@ export type Database = {
           architecture?: string | null
           aspect_ratio?: string | null
           battery: string
+          battery_type?: string | null
           bezel_less?: boolean | null
           bluetooth?: string | null
           brand: string
@@ -348,9 +368,11 @@ export type Database = {
           camera_modes?: string | null
           camera_ois?: string | null
           camera_setup?: string | null
+          card_slot?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          colors?: string | null
           cpu?: string | null
           created_at?: string
           custom_ui?: string | null
@@ -362,13 +384,20 @@ export type Database = {
           front_camera_setup?: string | null
           front_camera_video?: string | null
           gallery_images?: string[] | null
+          gps?: string | null
+          gpu?: string | null
           hdr_support?: string | null
           height?: string | null
           id?: string
           image_url?: string | null
+          internal_storage?: string | null
+          jack_3_5mm?: string | null
           launch_date?: string | null
+          loudspeaker?: string | null
           main_camera_features?: string | null
+          main_camera_video?: string | null
           model_name?: string | null
+          models?: string | null
           name: string
           network_2g_bands?: string | null
           network_3g_bands?: string | null
@@ -376,25 +405,34 @@ export type Database = {
           network_5g_bands?: string | null
           network_speed?: string | null
           network_technology?: string | null
+          nfc?: string | null
           os?: string | null
           peak_brightness?: string | null
+          performance?: string | null
           pixel_density?: string | null
           price: number
           processor: string
+          radio?: string | null
           ram: string
           ram_type?: string | null
           refresh_rate?: string | null
           resolution?: string | null
           ruggedness?: string | null
+          sar?: string | null
+          sar_eu?: string | null
           screen_protection?: string | null
           screen_size?: string | null
           selfie_camera_features?: string | null
+          selfie_camera_video?: string | null
+          sensors?: string | null
+          sim?: string | null
           software_support?: string | null
           status?: string | null
           storage: string
           thickness?: string | null
           touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
           video_recording?: string | null
           waterproof?: string | null
           weight?: string | null
@@ -405,6 +443,7 @@ export type Database = {
           architecture?: string | null
           aspect_ratio?: string | null
           battery?: string
+          battery_type?: string | null
           bezel_less?: boolean | null
           bluetooth?: string | null
           brand?: string
@@ -416,9 +455,11 @@ export type Database = {
           camera_modes?: string | null
           camera_ois?: string | null
           camera_setup?: string | null
+          card_slot?: string | null
           charging_specs?: string | null
           chipset?: string | null
           color?: string | null
+          colors?: string | null
           cpu?: string | null
           created_at?: string
           custom_ui?: string | null
@@ -430,13 +471,20 @@ export type Database = {
           front_camera_setup?: string | null
           front_camera_video?: string | null
           gallery_images?: string[] | null
+          gps?: string | null
+          gpu?: string | null
           hdr_support?: string | null
           height?: string | null
           id?: string
           image_url?: string | null
+          internal_storage?: string | null
+          jack_3_5mm?: string | null
           launch_date?: string | null
+          loudspeaker?: string | null
           main_camera_features?: string | null
+          main_camera_video?: string | null
           model_name?: string | null
+          models?: string | null
           name?: string
           network_2g_bands?: string | null
           network_3g_bands?: string | null
@@ -444,25 +492,34 @@ export type Database = {
           network_5g_bands?: string | null
           network_speed?: string | null
           network_technology?: string | null
+          nfc?: string | null
           os?: string | null
           peak_brightness?: string | null
+          performance?: string | null
           pixel_density?: string | null
           price?: number
           processor?: string
+          radio?: string | null
           ram?: string
           ram_type?: string | null
           refresh_rate?: string | null
           resolution?: string | null
           ruggedness?: string | null
+          sar?: string | null
+          sar_eu?: string | null
           screen_protection?: string | null
           screen_size?: string | null
           selfie_camera_features?: string | null
+          selfie_camera_video?: string | null
+          sensors?: string | null
+          sim?: string | null
           software_support?: string | null
           status?: string | null
           storage?: string
           thickness?: string | null
           touch_screen?: boolean | null
           updated_at?: string
+          usb?: string | null
           video_recording?: string | null
           waterproof?: string | null
           weight?: string | null

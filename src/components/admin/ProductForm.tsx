@@ -9,6 +9,11 @@ import { Form } from "@/components/ui/form";
 import { BasicInfoSection } from "./form-sections/BasicInfoSection";
 import { SpecificationsSection } from "./form-sections/SpecificationsSection";
 import { AdditionalSpecsSection } from "./form-sections/AdditionalSpecsSection";
+import { NetworkSection } from "./form-sections/NetworkSection";
+import { DisplaySection } from "./form-sections/DisplaySection";
+import { CameraSection } from "./form-sections/CameraSection";
+import { ConnectivitySection } from "./form-sections/ConnectivitySection";
+import { BatterySection } from "./form-sections/BatterySection";
 
 export interface ProductFormData {
   id?: string;
@@ -31,6 +36,55 @@ export interface ProductFormData {
   charging_specs?: string;
   graphics?: string;
   ports?: string;
+  // Network
+  network_technology?: string;
+  network_2g_bands?: string;
+  network_3g_bands?: string;
+  network_4g_bands?: string;
+  network_5g_bands?: string;
+  network_speed?: string;
+  // Launch
+  launch_date?: string;
+  status?: string;
+  // Body
+  dimensions?: string;
+  build_details?: string;
+  build_material?: string;
+  sim?: string;
+  // Display
+  display_type?: string;
+  screen_protection?: string;
+  display_features?: string;
+  // Camera
+  main_camera_features?: string;
+  selfie_camera_features?: string;
+  main_camera_video?: string;
+  selfie_camera_video?: string;
+  // Sound
+  loudspeaker?: string;
+  jack_3_5mm?: string;
+  // Connectivity
+  wlan?: string;
+  bluetooth?: string;
+  gps?: string;
+  nfc?: string;
+  radio?: string;
+  usb?: string;
+  // Features
+  sensors?: string;
+  // Battery
+  battery_type?: string;
+  // Misc
+  colors?: string;
+  models?: string;
+  sar?: string;
+  sar_eu?: string;
+  // Performance
+  performance?: string;
+  cpu?: string;
+  gpu?: string;
+  internal_storage?: string;
+  card_slot?: string;
 }
 
 interface ProductFormProps {
@@ -153,6 +207,16 @@ export function ProductForm({ initialData, onSuccess, productType: propProductTy
           <BasicInfoSection form={form} />
           <SpecificationsSection form={form} />
           <AdditionalSpecsSection form={form} productType={productType} />
+          
+          {productType === 'mobile' && (
+            <>
+              <NetworkSection form={form} />
+              <DisplaySection form={form} />
+              <CameraSection form={form} />
+              <ConnectivitySection form={form} />
+              <BatterySection form={form} />
+            </>
+          )}
           
           <ImageUpload 
             onChange={handleImageChange} 
