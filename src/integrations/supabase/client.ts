@@ -10,12 +10,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-// Clean and validate URL format
-const cleanUrl = supabaseUrl.trim().replace(/\/$/, ''); // Remove trailing slash
+// Clean and validate URL format - remove any trailing colons or slashes
+const cleanUrl = supabaseUrl.trim().replace(/[:\/]+$/, '');
 if (!cleanUrl.startsWith('https://')) {
   throw new Error('Invalid Supabase URL format');
 }
 
+// Create and export the Supabase client
 export const supabase = createClient<Database>(
   cleanUrl,
   supabaseAnonKey.trim(),
