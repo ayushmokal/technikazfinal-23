@@ -1,51 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { FormLabel } from "@/components/ui/form";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 
 interface ImageUploadProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   currentImageUrl?: string;
-  currentGalleryImages?: string[];
-  multiple?: boolean;
-  onRemoveImage?: (index: number) => void;
 }
 
-export function ImageUpload({ 
-  onChange, 
-  label = "Product Image", 
-  currentImageUrl, 
-  currentGalleryImages = [],
-  multiple = false,
-  onRemoveImage 
-}: ImageUploadProps) {
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+export function ImageUpload({ onChange, label = "Product Image", currentImageUrl }: ImageUploadProps) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      const urls = files.map(file => URL.createObjectURL(file));
-      
-      if (multiple) {
-        setPreviewUrls(prevUrls => [...prevUrls, ...urls]);
-      } else {
-        // Clean up previous preview URLs to prevent memory leaks
-        previewUrls.forEach(url => URL.revokeObjectURL(url));
-        setPreviewUrls([urls[0]]);
-      }
-    }
     onChange(e);
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewUrl(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
-
-  // Clean up object URLs when component unmounts
-  useEffect(() => {
-    return () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
-    };
-  }, [previewUrls]);
 
   return (
     <div className="space-y-4">
@@ -56,45 +33,29 @@ export function ImageUpload({
           className="relative overflow-hidden"
           type="button"
         >
-          Choose file{multiple ? 's' : ''}
+          Choose file
           <Input
             type="file"
             accept="image/*"
-            multiple={multiple}
             onChange={handleImageChange}
             className="absolute inset-0 opacity-0 cursor-pointer"
           />
         </Button>
         <span className="text-sm text-muted-foreground">
-          {previewUrls.length > 0 ? `${previewUrls.length} file(s) selected` : "No file chosen"}
+          {previewUrl ? "File selected" : "No file chosen"}
         </span>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {(previewUrls.length > 0 ? previewUrls : 
-          multiple ? currentGalleryImages : 
-          (currentImageUrl ? [currentImageUrl] : [])
-        ).map((url, index) => (
-          <div key={url + index} className="relative group">
-            <AspectRatio ratio={1}>
-              <img
-                src={url}
-                alt={`Preview ${index + 1}`}
-                className="object-contain w-full h-full rounded-md border border-gray-200"
-              />
-            </AspectRatio>
-            {onRemoveImage && (
-              <Button
-                variant="destructive"
-                size="icon"
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => onRemoveImage(index)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        ))}
-      </div>
+      {(previewUrl || currentImageUrl) && (
+        <div className="w-full max-w-[200px]">
+          <AspectRatio ratio={1}>
+            <img
+              src={previewUrl || currentImageUrl}
+              alt="Preview"
+              className="object-contain w-full h-full rounded-md"
+            />
+          </AspectRatio>
+        </div>
+      )}
     </div>
   );
 }

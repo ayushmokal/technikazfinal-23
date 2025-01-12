@@ -1,33 +1,21 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Get environment variables
-const supabaseUrl = 'https://iovmjhrcmveftdokffrf.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlvdm1qaHJjbXZlZnRkb2tmZnJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3OTIzMzMsImV4cCI6MjA1MDM2ODMzM30.CSwFapyih5AroslJ6VVNBpOU1MT4MAKTX9cuDPLPsjY';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.error('Missing Supabase environment variables');
 }
 
-// Clean and validate URL format - remove any trailing colons or slashes
-const cleanUrl = supabaseUrl.trim().replace(/[:\/]+$/, '');
-if (!cleanUrl.startsWith('https://')) {
-  throw new Error('Invalid Supabase URL format');
-}
-
-// Create and export the Supabase client
 export const supabase = createClient<Database>(
-  cleanUrl,
-  supabaseAnonKey.trim(),
+  supabaseUrl || '',
+  supabaseAnonKey || '',
   {
     auth: {
-      autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: true,
-      flowType: 'pkce',
-      storage: window.localStorage,
-      storageKey: 'supabase.auth.token',
+      autoRefreshToken: true,
+      detectSessionInUrl: true
     },
     global: {
       headers: {
@@ -37,47 +25,14 @@ export const supabase = createClient<Database>(
   }
 );
 
-// Add better error handling for auth state changes
-supabase.auth.onAuthStateChange(async (event, session) => {
-  console.log('Auth state changed:', event);
-  
-  if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
-    console.log('Session state:', session);
-  }
-
-  if (event === 'TOKEN_REFRESHED' && !session) {
-    console.error('Token refresh failed');
-    // Clear any stale session data
-    await supabase.auth.signOut();
-    window.location.href = '/admin/login';
+// Add error handling for auth state changes
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') {
+    // Clear any cached data
+    console.log('User signed out');
+  } else if (event === 'SIGNED_IN') {
+    console.log('User signed in:', session?.user?.id);
+  } else if (event === 'TOKEN_REFRESHED') {
+    console.log('Token refreshed');
   }
 });
-
-// Handle token refresh errors
-supabase.auth.onAuthStateChange(async (event) => {
-  if (event === 'TOKEN_REFRESHED') {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error || !session) {
-      console.error('Token refresh failed:', error);
-      // Force a new sign in if token refresh fails
-      await supabase.auth.signOut();
-      window.location.href = '/admin/login';
-    }
-  }
-});
-
-// Add a custom error handler for auth errors
-const handleAuthError = async (error: any) => {
-  console.error('Auth error:', error);
-  
-  if (error.message?.includes('refresh_token_not_found') || 
-      error.message?.includes('invalid_grant') ||
-      error.message?.includes('Token expired')) {
-    console.log('Invalid or expired token, signing out...');
-    await supabase.auth.signOut();
-    window.location.href = '/admin/login';
-  }
-};
-
-// Export the error handler for use in components
-export { handleAuthError };

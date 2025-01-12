@@ -3,10 +3,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { ProductForm } from "./ProductForm";
-import type { ProductFormData } from "@/schemas/productSchemas";
+import { ProductFormData } from "./ProductForm";
 
 interface Product {
   id: string;
@@ -25,7 +24,7 @@ interface Product {
   color?: string;
   graphics?: string;
   ports?: string;
-  model_name: string;
+  model_name?: string;
   resolution?: string;
   screen_size?: string;
   charging_specs?: string;
@@ -43,12 +42,9 @@ export function ProductEditDialog({ product, onClose, onSuccess, productType }: 
 
   return (
     <Dialog open={!!product} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
-          <DialogDescription>
-            Make changes to your product here. Click save when you're done.
-          </DialogDescription>
         </DialogHeader>
         <ProductForm 
           initialData={product}

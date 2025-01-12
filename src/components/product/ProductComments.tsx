@@ -77,6 +77,18 @@ export function ProductComments({ productId }: { productId: string }) {
 
   return (
     <div className="space-y-4">
+      <h3 className="text-lg font-semibold">Comments</h3>
+      
+      <div className="space-y-2">
+        <Textarea
+          placeholder="Write a comment..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className="min-h-[100px]"
+        />
+        <Button onClick={handleSubmitComment}>Post Comment</Button>
+      </div>
+
       <div className="space-y-4 mt-6">
         {comments?.map((comment: Comment) => (
           <div key={comment.id} className="border rounded-lg p-4">

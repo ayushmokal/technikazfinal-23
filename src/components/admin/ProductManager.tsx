@@ -1,13 +1,41 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ProductTable } from "./ProductTable";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ProductImage } from "./ProductImage";
 import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
-import { ExpertReviewForm } from "./ExpertReviewForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import type { LaptopProduct, MobileProduct } from "@/types/product";
+
+interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  image_url?: string;
+  display_specs: string;
+  processor: string;
+  ram: string;
+  storage: string;
+  battery: string;
+  camera?: string;
+  os?: string;
+  chipset?: string;
+  color?: string;
+  graphics?: string;
+  ports?: string;
+  model_name?: string;
+  resolution?: string;
+  screen_size?: string;
+  charging_specs?: string;
+}
 
 interface ProductManagerProps {
   productType: 'mobile' | 'laptop';
@@ -15,16 +43,17 @@ interface ProductManagerProps {
 
 export function ProductManager({ productType }: ProductManagerProps) {
   const { toast } = useToast();
-  const [products, setProducts] = useState<(LaptopProduct | MobileProduct)[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<LaptopProduct | MobileProduct | null>(null);
-  const [editingProduct, setEditingProduct] = useState<LaptopProduct | MobileProduct | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showExpertReview, setShowExpertReview] = useState(false);
-  const [selectedProductForReview, setSelectedProductForReview] = useState<LaptopProduct | MobileProduct | null>(null);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [productType]);
 
   const fetchProducts = async () => {
     try {
-      setIsLoading(true);
       const { data, error } = await supabase
         .from(productType === 'mobile' ? 'mobile_products' : 'laptops')
         .select('*')
@@ -43,33 +72,6 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
-  // Set up real-time subscription for product updates
-  useEffect(() => {
-    const channel = supabase
-      .channel('product-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: productType === 'mobile' ? 'mobile_products' : 'laptops'
-        },
-        () => {
-          fetchProducts();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [productType]);
-
-  // Initial fetch
-  useEffect(() => {
-    fetchProducts();
-  }, [productType]);
-
   const handleDelete = async (id: string) => {
     try {
       const { error } = await supabase
@@ -84,7 +86,7 @@ export function ProductManager({ productType }: ProductManagerProps) {
         description: "Product deleted successfully",
       });
 
-      await fetchProducts(); // Refresh the list after deletion
+      setProducts(products.filter((product) => product.id !== id));
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -94,89 +96,79 @@ export function ProductManager({ productType }: ProductManagerProps) {
     }
   };
 
-  const handleView = (product: LaptopProduct | MobileProduct) => {
-    setSelectedProduct(product);
-  };
-
-  const handleEdit = (product: LaptopProduct | MobileProduct) => {
-    setEditingProduct(product);
-  };
-
-  const handleAddReview = (product: LaptopProduct | MobileProduct) => {
-    setSelectedProductForReview(product);
-    setShowExpertReview(true);
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="space-y-6">
-      <ScrollArea className="h-[600px] rounded-md border">
-        <ProductTable
-          products={products}
-          onView={handleView}
-          onEdit={handleEdit}
-          onAddReview={handleAddReview}
-          onDelete={handleDelete}
-        />
-      </ScrollArea>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Image</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Brand</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell>
+                {product.image_url && (
+                  <div className="w-20 h-20">
+                    <ProductImage imageUrl={product.image_url} productName={product.name} />
+                  </div>
+                )}
+              </TableCell>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>{product.brand}</TableCell>
+              <TableCell>₹{product.price.toLocaleString()}</TableCell>
+              <TableCell>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedProduct(product)}
+                  >
+                    View Details
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setEditingProduct(product)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDelete(product.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-      {selectedProduct && (
-        <ProductDetailsDialog 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-        />
-      )}
+      <ProductDetailsDialog 
+        product={selectedProduct} 
+        onClose={() => setSelectedProduct(null)} 
+      />
 
-      {editingProduct && (
-        <ProductEditDialog
-          product={editingProduct}
-          onClose={() => setEditingProduct(null)}
-          onSuccess={async () => {
-            setEditingProduct(null);
-            await fetchProducts(); // Refresh the list after successful edit
-            toast({
-              title: "Success",
-              description: "Product updated successfully",
-            });
-          }}
-          productType={productType}
-        />
-      )}
-
-      <Dialog 
-        open={showExpertReview} 
-        onOpenChange={(open) => {
-          if (!open) {
-            setShowExpertReview(false);
-            setSelectedProductForReview(null);
-          }
+      <ProductEditDialog
+        product={editingProduct}
+        onClose={() => setEditingProduct(null)}
+        onSuccess={() => {
+          setEditingProduct(null);
+          fetchProducts();
         }}
-      >
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Add Expert Review</DialogTitle>
-            <DialogDescription>
-              Add a detailed expert review for this product
-            </DialogDescription>
-          </DialogHeader>
-          {selectedProductForReview && (
-            <ExpertReviewForm
-              productId={selectedProductForReview.id}
-              onSuccess={() => {
-                setShowExpertReview(false);
-                setSelectedProductForReview(null);
-                toast({
-                  title: "Success",
-                  description: "Expert review added successfully",
-                });
-              }}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+        productType={productType}
+      />
     </div>
   );
 }

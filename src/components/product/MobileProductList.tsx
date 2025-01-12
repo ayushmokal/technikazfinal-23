@@ -1,149 +1,38 @@
 import { Link } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 import { MobileProduct } from "@/types/product";
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Search, LayoutGrid, List } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useInView } from "react-intersection-observer";
 
 interface MobileProductListProps {
   products: MobileProduct[];
-  onLoadMore: () => void;
-  hasMore: boolean;
-  isLoading: boolean;
 }
 
-export function MobileProductList({ 
-  products: initialProducts,
-  onLoadMore,
-  hasMore,
-  isLoading
-}: MobileProductListProps) {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
-  const [sortBy, setSortBy] = useState("default");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("all");
-  const { ref, inView } = useInView({
-    threshold: 0,
-    rootMargin: "100px",
-  });
-
-  const { data: brands = [] } = useQuery({
-    queryKey: ['mobile-brands'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('mobile_products')
-        .select('brand')
-        .not('brand', 'is', null)
-        .order('brand');
-      
-      const uniqueBrands = [...new Set(data?.map(item => item.brand))];
-      return uniqueBrands;
-    }
-  });
-
-  useEffect(() => {
-    if (inView && hasMore && !isLoading) {
-      onLoadMore();
-    }
-  }, [inView, hasMore, isLoading, onLoadMore]);
-
-  const filteredProducts = initialProducts
-    .filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesBrand = selectedBrand === "all" || product.brand === selectedBrand;
-      return matchesSearch && matchesBrand;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "price-low-high":
-          return a.price - b.price;
-        case "price-high-low":
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
-
+export function MobileProductList({ products }: MobileProductListProps) {
   return (
     <section className="mb-12">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Latest Mobile Phones</h2>
         <div className="flex gap-4">
-          <button 
-            className={`p-2 border rounded ${viewMode === "list" ? "bg-primary text-white" : ""}`}
-            onClick={() => setViewMode("list")}
-          >
-            <List className="h-5 w-5" />
+          <button className="p-2 border rounded">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 9H21M3 15H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </button>
-          <button 
-            className={`p-2 border rounded ${viewMode === "grid" ? "bg-primary text-white" : ""}`}
-            onClick={() => setViewMode("grid")}
-          >
-            <LayoutGrid className="h-5 w-5" />
+          <button className="p-2 border rounded">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3H10V10H3V3ZM14 3H21V10H14V3ZM3 14H10V21H3V14ZM14 14H21V21H14V14Z" stroke="currentColor" strokeWidth="2"/>
+            </svg>
           </button>
         </div>
       </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-grow">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-          <Input
-            type="search"
-            placeholder="Search mobiles..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        
-        <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by price" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="default">Default</SelectItem>
-            <SelectItem value="price-low-high">Price: Low to High</SelectItem>
-            <SelectItem value="price-high-low">Price: High to Low</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={selectedBrand} onValueChange={setSelectedBrand}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select brand" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Brands</SelectItem>
-            {brands.map((brand) => (
-              <SelectItem key={brand} value={brand}>
-                {brand}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-6"}>
-        {filteredProducts.map((product) => (
+      <div className="space-y-6">
+        {products.map((product) => (
           <Link 
             key={product.id}
             to={`/product/${product.id}?type=mobile`}
-            className={`block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow`}
+            className="block bg-white rounded-lg p-4 hover:shadow-lg transition-shadow"
           >
-            <div className={viewMode === "grid" ? "flex flex-col" : "flex gap-6"}>
-              <div className={`${
-                viewMode === "grid" 
-                  ? "w-full aspect-square mb-4" 
-                  : "w-48 h-48 flex-shrink-0"
-              }`}>
+            <div className="flex gap-6">
+              <div className="w-48 h-48 flex-shrink-0">
                 <img
                   src={product.image_url || "/placeholder.svg"}
                   alt={product.name}
@@ -174,57 +63,29 @@ export function MobileProductList({
                     <span className="font-medium">Battery:</span>
                     <span>{product.battery}</span>
                   </div>
-                  {product.chipset && (
-                    <div className="flex gap-2">
-                      <span className="font-medium">Chipset:</span>
-                      <span>{product.chipset}</span>
-                    </div>
-                  )}
-                  {product.screen_size && (
-                    <div className="flex gap-2">
-                      <span className="font-medium">Screen Size:</span>
-                      <span>{product.screen_size}</span>
-                    </div>
-                  )}
-                  {product.resolution && (
-                    <div className="flex gap-2">
-                      <span className="font-medium">Resolution:</span>
-                      <span>{product.resolution}</span>
-                    </div>
-                  )}
-                  {product.charging_specs && (
-                    <div className="flex gap-2">
-                      <span className="font-medium">Charging:</span>
-                      <span>{product.charging_specs}</span>
-                    </div>
-                  )}
-                  {product.os && (
-                    <div className="flex gap-2">
-                      <span className="font-medium">OS:</span>
-                      <span>{product.os}</span>
-                    </div>
-                  )}
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 flex justify-between items-center">
                   <Link 
                     to={`/product/${product.id}?type=mobile`}
                     className="text-primary hover:underline"
                   >
                     View Details →
                   </Link>
+                  <div className="flex items-center gap-2">
+                    <Checkbox id={`compare-${product.id}`} />
+                    <label 
+                      htmlFor={`compare-${product.id}`}
+                      className="text-sm text-gray-600"
+                    >
+                      Add to Compare
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
           </Link>
         ))}
       </div>
-
-      {/* Infinite scroll trigger */}
-      {(hasMore || isLoading) && (
-        <div ref={ref} className="py-4 text-center">
-          {isLoading && <p>Loading more products...</p>}
-        </div>
-      )}
     </section>
   );
 }

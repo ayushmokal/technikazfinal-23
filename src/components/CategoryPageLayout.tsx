@@ -65,30 +65,26 @@ export function CategoryPageLayout({
 
         {children}
 
-        {/* Only show ArticleGrid if not on Gadgets page */}
-        {category !== "GADGETS" && <ArticleGrid articles={articles.slice(0, 4)} />}
+        <ArticleGrid articles={articles.slice(0, 4)} />
 
         <div className="w-full h-[200px] bg-gray-200 flex items-center justify-center my-8">
           <span className="text-gray-500">Advertisement</span>
         </div>
 
-        {/* Only show ArticleTabs if not on Gadgets page */}
-        {category !== "GADGETS" && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8">
-              <ArticleTabs
-                popularArticles={popularArticles}
-                recentArticles={recentArticles}
-                onTabChange={setActiveTab}
-                category={category}
-              />
-            </div>
-
-            <div className="lg:col-span-4">
-              <BlogSidebar />
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8">
+            <ArticleTabs
+              popularArticles={popularArticles}
+              recentArticles={recentArticles}
+              onTabChange={setActiveTab}
+              category={category}
+            />
           </div>
-        )}
+
+          <div className="lg:col-span-4">
+            <BlogSidebar />
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

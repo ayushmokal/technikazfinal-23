@@ -1,5 +1,5 @@
 import { BlogFormData } from "@/types/blog";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface CategoryHeroProps {
@@ -8,10 +8,7 @@ interface CategoryHeroProps {
 }
 
 export function CategoryHero({ featuredArticle, gridArticles }: CategoryHeroProps) {
-  const location = useLocation();
-  const isGadgetsPage = location.pathname === "/gadgets";
-  
-  if (!featuredArticle || isGadgetsPage) return null;
+  if (!featuredArticle) return null;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 animate-fadeIn">
